@@ -12,7 +12,9 @@ RUN apk update && \
 		postgresql-bdr-dev \
 		openblas-dev \
 		libjpeg-turbo-dev \
-		hdf5-dev && \
+		hdf5-dev \
+  		rust \
+    		cargo && \
 	rm -rf /var/cache/apk/* && \
 	ln -s /usr/include/locale.h /usr/include/xlocale.h
 
@@ -83,9 +85,7 @@ RUN apk update && \
 		# nes dependencies \\
 		graphviz \
 		openblas-dev \
-		hdf5-dev \
-  		rust \
-    		cargo && \
+		hdf5-dev && \
 	rm -rf /var/cache/apk/*
 
 # SETUP POSTGRESQL ##################################################
