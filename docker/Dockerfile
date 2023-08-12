@@ -83,7 +83,9 @@ RUN apk update && \
 		# nes dependencies \\
 		graphviz \
 		openblas-dev \
-		hdf5-dev && \
+		hdf5-dev \
+  		rust \
+    		cargo && \
 	rm -rf /var/cache/apk/*
 
 # SETUP POSTGRESQL ##################################################
