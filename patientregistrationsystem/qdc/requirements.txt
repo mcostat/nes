@@ -1,4 +1,4 @@
-pip>=18.1
+pip>=20.3
 setuptools>=40.6.3
 
 Django==1.11.23
