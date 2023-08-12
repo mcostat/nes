@@ -1,4 +1,4 @@
-FROM python:3.8-alpine3.12 as wheeler
+FROM python:3.8-alpine3.17 as wheeler
 ENV PYTHONUNBUFFERED=1
 
 
@@ -50,7 +50,7 @@ RUN pip3 install -U pip setuptools wheel && \
 	pip3 install -r requirement/requirements.txt && \
 	pip3 wheel -r requirement/requirements.txt
 
-FROM alpine:3.12
+FROM alpine:3.17
 
 SHELL ["/bin/sh","-exc"]
 
