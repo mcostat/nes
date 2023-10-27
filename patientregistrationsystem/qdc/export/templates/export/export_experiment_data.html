@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeExport %}class="active"{% endblock %}
 
@@ -13,7 +13,7 @@
 {% block content %}
 
     <div class="tab-content">
-        {% if messages %}
+        {% comment %} {% if messages %}
             {% for message in messages %}
 
                 {% if message.tags == "success" %}
@@ -33,7 +33,7 @@
                 {% endif %}
 
             {% endfor %}
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         {% if export_form.errors %}
             <script type="text/javascript">
@@ -42,7 +42,7 @@
         {% endif %}
 
         <div class="tab-pane fade in active" id="selectedParticipantBreadCrumb">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <ol class="breadcrumb">
                     <li><a href="/home">{% trans "Home" %}</a></li>
                     <li><a href="/export">{% trans "Export" %}</a></li>
@@ -52,7 +52,7 @@
         </div>
 
         <div class="tab-pane fade in active" id="menuUserTab">
-            <div class="col-md-10">
+            <div class="col-md-12">
 
                 <h4>{% trans "Structure and fields selection for exportation" %}</h4>
 
@@ -74,13 +74,13 @@
                 <div class="tab-content">
                     <div id="general_information" {% if tab == '1' %}class="tab-pane fade in active"{% else %}class="tab-pane fade"{% endif %}>
                         {% if perms.patient.export_patient %}
-                            <div class="container span6 offset3 well ">
+                            <div class="container-fluid well">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12">
                                         <h4>{% trans "Organization of the information for exportation" %}</h4>
                                     </div>
                                 </div>
-                                <div class="container span6 offset3 well ">
+                                <div class="container-fluid well">
 
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-7">
@@ -147,12 +147,12 @@
                                     </div>
                                 </div>
                                 {% if component_list %}
-                                    <div class="container span6 offset3 well ">
+                                    <div class="container-fluid well">
                                         <div class="row">
                                             <div class="col-xs-12 col-sm-7">
                                                 <label data-toggle="tooltip" data-placement="auto left"
                                                        for="experiment_data_collection"
-                                                       class="control-label">{% trans "Experiment data collection" %} </label>
+                                                       class="control-label">{% trans "Experiment/Project data collection" %} </label>
                                                 {% if 'eeg' in component_list %}
                                                     <div class="checkbox">
                                                         {{ export_form.per_eeg_raw_data }}
@@ -209,6 +209,13 @@
                                                         <div class="help-block with-errors"></div>
                                                     </div>
                                                 {% endif %}
+                                                {% if 'media_data' in component_list %}
+                                                    <div class="checkbox">
+                                                        {{ export_form.per_media_data }}
+                                                        <label for="per_media_data" class="control-label">{% trans "Media Data" %}</label>
+                                                        <div class="help-block with-errors"></div>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -221,8 +228,8 @@
                     <div id="questionnaire_from_entrance_evaluation" {% if tab == '2' %}class="tab-pane fade in active"{% else %}class="tab-pane fade"{% endif %}>
                         {% if perms.patient.export_patient %}
                             {% if questionnaires_fields_list %}
-                                <div class="container span6 offset3 well ">
-                                    <div class="container span6 offset3 well ">
+                                <div class="container-fluid well">
+                                    <div class="container-fluid well">
                                         <h4>{% trans "Questionnaire information" %}</h4>
                                         <div class="row">
                                             <div class="panel-group" id="accordion">
@@ -264,16 +271,16 @@
                                                                 <div class="col-md-2 col-sm-2">
                                                                     <button type="button" id="multiselect_{{ survey.index }}_rightAll"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-forward"></i></button>
+                                                                            class="fa fa-forward"></i></button>
                                                                     <button type="button" id="multiselect_{{ survey.index }}_rightSelected"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-chevron-right"></i></button>
+                                                                            class="fa fa-arrow-right"></i></button>
                                                                     <button type="button" id="multiselect_{{ survey.index }}_leftSelected"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-chevron-left"></i></button>
+                                                                            class="fa fa-arrow-left"></i></button>
                                                                     <button type="button" id="multiselect_{{ survey.index }}_leftAll"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-backward"></i></button>
+                                                                            class="fa fa-backward"></i></button>
                                                                 </div>
 
                                                                 <div class="col-md-5 col-sm-10">
@@ -310,8 +317,8 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div class="container span6 offset3 well ">
-                                    <div class="container span6 offset3 well ">
+                                <div class="container-fluid well">
+                                    <div class="container-fluid well">
                                         <h4>{% trans "There is no questionnaires for the filtered participants" %}</h4>
                                     </div>
                                 </div>
@@ -322,8 +329,8 @@
                     <div id="questionnaires_from_experiments" {% if tab == '3' %}class="tab-pane fade in active"{% else %}class="tab-pane fade"{% endif %}>
                         {% if perms.patient.export_patient %}
                             {% if questionnaires_experiment_fields_list %}
-                                <div class="container span6 offset3 well ">
-                                    <div class="container span6 offset3 well ">
+                                <div class="container-fluid well">
+                                    <div class="container-fluid well">
                                         <h4>{% trans "Questionnaire information" %}</h4>
                                         <div class="row">
                                             <div class="panel-group" id="accordion">
@@ -368,16 +375,16 @@
                                                                 <div class="col-md-2 col-sm-2">
                                                                     <button type="button" id="multiselect_{{ survey.index }}_rightAll"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-forward"></i></button>
+                                                                            class="fa fa-forward"></i></button>
                                                                     <button type="button" id="multiselect_{{ survey.index }}_rightSelected"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-chevron-right"></i></button>
+                                                                            class="fa fa-arrow-right"></i></button>
                                                                     <button type="button" id="multiselect_{{ survey.index }}_leftSelected"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-chevron-left"></i></button>
+                                                                            class="fa fa-arrow-left"></i></button>
                                                                     <button type="button" id="multiselect_{{ survey.index }}_leftAll"
                                                                             class="btn btn-block"><i
-                                                                            class="glyphicon glyphicon-backward"></i></button>
+                                                                            class="fa fa-backward"></i></button>
                                                                 </div>
 
                                                                 <div class="col-md-5 col-sm-10">
@@ -422,7 +429,7 @@
                     </div>
 
                     <div id="participants_and_diagnosis" {% if tab == '4' %}class="tab-pane fade in active"{% else %}class="tab-pane fade"{% endif %}>
-                        <div class="container span6 offset3 well ">
+                        <div class="container-fluid well">
                             {% if perms.patient.export_patient %}
                                 <h4>{% trans "Participants" %}</h4>
                                 <div class="row">
@@ -443,7 +450,7 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="container span6 offset3 well ">
+                        <div class="container-fluid well">
                             {% if perms.patient.export_medicalrecorddata and diagnosis_fields %}
                                 <h4>{% trans "Diagnosis" %}</h4>
 
@@ -487,8 +494,8 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/multiselect/multiselect.min.js' %}"></script>
-    <script src="{% static 'quiz/js/questionnaire_export.js' %}"></script>
+    <script src="{% static 'site/multiselect/multiselect.min.js' %}"></script>
+    <script src="{% static 'site/js/questionnaire_export.js' %}"></script>
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();

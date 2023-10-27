@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeSetup %}class="active"{% endblock %}
 
@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-
+{% comment %} 
     {% if messages %}
         {% for message in messages %}
 
@@ -32,7 +32,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if equipment_form.errors %}
         <script type="text/javascript">
@@ -42,7 +42,7 @@
 
 
     <div class="tab-pane fade in active" id="equipmentBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/setup">{% trans "Set up" %}</a></li>
@@ -63,8 +63,8 @@
     </div>
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
                 <h4>{% trans "EEG electrode net" %}</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
@@ -117,7 +117,7 @@
                     <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
                             <label class="control-label">{% trans "Localization system" %}</label>
-                            <div class="container span6 offset3 well ">
+                            <div class="container-fluid well">
                                 <div class="form-group">
                                     <table class="table table-striped">
                                         <tbody>
@@ -149,7 +149,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
-                            <div class="container span6 offset3 well ">
+                            <div class="container-fluid well">
 
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12">
@@ -175,7 +175,7 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12">
                                             <div class="form-group">
-                                                <div class="container span6 offset3 well ">
+                                                <div class="container-fluid well">
 
                                                     <table class="table table-striped">
                                                         <thead>
@@ -201,7 +201,7 @@
                                                                     {{ cap_size.electrode_adjacent_distance|default:"" }}
 {#                                                                    {% if can_change %}#}
 {#                                                        <a href="/experiment/eeg_electrode_cap_size/remove/{{ cap_size.id }}"#}
-{#                                                           class="btn glyphicon glyphicon-remove" data-toggle="tooltip"#}
+{#                                                           class="btn fa fa-remove" data-toggle="tooltip"#}
 {#                                                           data-placement="right"#}
 {#                                                           style="color: indianred; position: relative; float: right; padding: 0"#}
 {#                                                           title="{% trans "Delete cap size" %}"#}
@@ -290,6 +290,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/equipment.js' %}"></script>
-    <script src="{% static 'quiz/js/eeg_electrode_net_register.js' %}"></script>
+    <script src="{% static 'site/js/equipment.js' %}"></script>
+    <script src="{% static 'site/js/eeg_electrode_net_register.js' %}"></script>
 {% endblock %}

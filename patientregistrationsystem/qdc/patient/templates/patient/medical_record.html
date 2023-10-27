@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activePatient %}class="active"{% endblock %}
 
@@ -20,7 +20,7 @@
     <div class="col-md-1">
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-12">
 
     <ol class="breadcrumb">
         <li><a href="/home">{% trans "Home" %}</a></li>
@@ -56,7 +56,7 @@
         </div>
     {% endif %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -76,7 +76,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if medical_record_form.errors %}
         <script type="text/javascript">
@@ -87,7 +87,7 @@
     <div class="tab-content">
         <div class="row">
             <div class="col-md-12">
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
                     {% if editing %}
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
@@ -95,7 +95,7 @@
                                 <input id="patient_id" value="{{ patient_id }}" style="display: none;">
                                 <input id="medical_record_id" value="{{ record_id }}" style="display: none;">
                                 <div class="input-group  input-group-sm "><span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-edit"></span></span>
+                                    <span class="fa fa-edit"></span></span>
                                     <input class="form-control" placeholder="{% trans "Specify diagnosis or disease code (ICD-10)" %}"
                                            id="id_whichComplementaryExam" type="text">
                                 </div>
@@ -129,7 +129,7 @@
                                                 <td>
                                                     <b>{{ diagnosis.classification_of_diseases }}</b>
                                                     {% if editing %}
-                                                        <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                                        <a class="btn fa fa-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                            onclick="show_modal_remove({{ patient_id }}, {{ diagnosis.id }});"></a>
                                                     {% endif %}
                                                     <br/>
@@ -153,24 +153,24 @@
                                                                             </h4>
                                                                         </div>
                                                                         <div class="modal-body">
-                                                                            <div class="row">
+                                                                            {% comment %} <div class="row"> {% endcomment %}
                                                                                 <div class="form-group">
                                                                                     <label id="description-label-{{ diagnosis.id }}">{% trans "Observation" %}</label>
-                                                                                        <textarea class="form-control" cols="100" rows="3" id="diagnosis_description" name="description-{{ diagnosis.id }}" placeholder="{% trans "Observation" %}">{% if diagnosis.description %}{{ diagnosis.description }}{% endif %}</textarea>
+                                                                                    <textarea class="form-control" cols="100" rows="3" id="diagnosis_description" name="description-{{ diagnosis.id }}" placeholder="{% trans 'Observation' %}">{% if diagnosis.description %}{{ diagnosis.description }}{% endif %}</textarea>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="row">
+                                                                            {% comment %} </div> {% endcomment %}
+                                                                            {% comment %} <div class="row"> {% endcomment %}
                                                                                 <div class="form-group">
                                                                                     <label id="date-label-{{ diagnosis.id }}">{% trans "Date" %}</label>
                                                                                     <div class="input-group  input-group-sm">
-                                                                                        <input value="{{ diagnosis.date|date:'d/m/Y' }}" class="form-control" id="diagnosis_date-{{ diagnosis.id }}" name="date-{{ diagnosis.id }}" placeholder="{% trans "Date" %}" type="text">
+                                                                                        <input value="{{ diagnosis.date|date:'d/m/Y' }}" class="form-control" id="diagnosis_date-{{ diagnosis.id }}" name="date-{{ diagnosis.id }}" placeholder="{% trans 'Date' %}" >
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
+                                                                            {% comment %} </div> {% endcomment %}
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-                                                                            <button class="btn btn-primary" style="background-color: blue; color: #ffffff" id="confirm-{{ diagnosis.id }}" type="submit" name="action" value="detail-{{ diagnosis.id }}">{% trans "Save" %}</button>
+                                                                            <button class="btn btn-primary" id="confirm-{{ diagnosis.id }}" type="submit" name="action" value="detail-{{ diagnosis.id }}">{% trans "Save" %}</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -266,5 +266,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/medical_record.js' %}"></script>
+    <script src="{% static 'site/js/medical_record.js' %}"></script>
 {% endblock %}

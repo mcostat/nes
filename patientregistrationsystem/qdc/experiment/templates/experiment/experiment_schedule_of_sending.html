@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block form %}
     <div class="row">
@@ -12,7 +12,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -32,10 +32,10 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="tab-pane fade in active">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -47,14 +47,14 @@
     </div>
 
     <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-10">
+        <div class="col-md-12">
 
-            <div class="container span6 offset3 well ">
+            <div class="container-fluid well">
 
                 {% if experiment.last_sending %}
-                    <h4>{% trans "Resend experiment to Portal" %}</h4>
+                    <h4>{% trans "Resend experiment/project to Portal" %}</h4>
                 {% else %}
-                    <h4>{% trans "Send experiment to Portal" %}</h4>
+                    <h4>{% trans "Send experiment/project to Portal" %}</h4>
                 {% endif %}
 
                 <div class="form-group">
@@ -64,8 +64,8 @@
                             <h3 class="panel-title">{% trans "Committee responsible for the Portal" %}</h3>
                         </div>
                         <div class="panel-body">
-                            {% trans "When the experiment is sent to the Portal, its information is verified by a committee before it is publicly available." %}
-                            {% trans "Then, after be approved, an email will be sent to the experiment owner." %}
+                            {% trans "When the experiment/project is sent to the Portal, its information is verified by a committee before it is publicly available." %}
+                            {% trans "Then, after be approved, an email will be sent to the experiment/project owner." %}
                         </div>
                     </div>
 
@@ -124,16 +124,16 @@
                                     <div class="col-md-2 col-sm-2">
                                         <button type="button" id="multiselect_{{ survey_key }}_rightAll"
                                                 class="btn btn-default btn-block"><i
-                                                class="glyphicon glyphicon-forward"></i></button>
+                                                class="fa fa-forward"></i></button>
                                         <button type="button" id="multiselect_{{ survey_key }}_rightSelected"
                                                 class="btn btn-default btn-block"><i
-                                                class="glyphicon glyphicon-chevron-right"></i></button>
+                                                class="fa fa-arrow-right"></i></button>
                                         <button type="button" id="multiselect_{{ survey_key }}_leftSelected"
                                                 class="btn btn-default btn-block"><i
-                                                class="glyphicon glyphicon-chevron-left"></i></button>
+                                                class="fa fa-arrow-left"></i></button>
                                         <button type="button" id="multiselect_{{ survey_key }}_leftAll"
                                                 class="btn btn-default btn-block"><i
-                                                class="glyphicon glyphicon-backward"></i></button>
+                                                class="fa fa-backward"></i></button>
                                     </div>
 
                                     <div class="col-md-5 col-sm-10">
@@ -175,8 +175,8 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/multiselect/multiselect.min.js' %}"></script>
-    <script src="{% static 'quiz/js/questionnaire_export.js' %}"></script>
+    <script src="{% static 'site/multiselect/multiselect.min.js' %}"></script>
+    <script src="{% static 'site/js/questionnaire_export.js' %}"></script>
     <script>
         $(function(){
             $("[data-toggle=tooltip]").tooltip();

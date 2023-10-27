@@ -1,4 +1,4 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
 {% load i18n %}
 
@@ -12,7 +12,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -32,10 +32,10 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="tab-pane fade in active">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -45,15 +45,15 @@
     </div>
 
     <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-10">
+        <div class="col-md-12">
 
-            <div class="container span6 offset3 well ">
+            <div class="container-fluid well">
                 <h4>{% trans "List of experiments to send to Portal" %}</h4>
                 <div class="form-group">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>{% trans "Experiment title" %}</th>
+                                <th>{% trans "Experiment/Project title" %}</th>
                                 <th>{% trans "Study title" %}</th>
                                 <th>{% trans "Schedule time" %}</th>
                                 <th>{% trans "Responsible" %}</th>

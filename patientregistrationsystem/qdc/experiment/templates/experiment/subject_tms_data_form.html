@@ -1,7 +1,7 @@
 {% extends "experiment/subject_tms_data_form_template.html" %}
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 {% load subjects_tags %}
 
 {% block header %}
@@ -50,7 +50,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="tmsDataProjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -91,7 +91,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if tms_data_form.errors %}
         <script type="text/javascript">
@@ -100,8 +100,8 @@
     {% endif %}
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
 
                 <h4>{% trans "TMS stimulation setting" %}</h4>
 
@@ -295,7 +295,7 @@
 
                                 <div class="row">
                                     <div class="panel-body">
-                                        <img src="{% static 'quiz/imgs/coil_orientation2.svg' %}" class="img-responsive center-block" width="800" height="600" style="margin: auto" >
+                                        <img src="{% static 'imgs/coil_orientation2.svg' %}" class="img-responsive center-block" width="800" height="600" style="margin: auto" >
                                     </div>
                                 </div>
 
@@ -310,7 +310,7 @@
 
                             <div class="btn-toolbar pull-right">
                                 <div class="btn-group">
-                                    <a href="/experiment/tms_data/{{ tms_data.id }}/position_setting_view" class="btn btn-default">{% trans "Next" %} <span class="glyphicon glyphicon-chevron-right"></span></a>
+                                    <a href="/experiment/tms_data/{{ tms_data.id }}/position_setting_view" class="btn btn-default">{% trans "Next" %} <span class="fa fa-arrow-right"></span></a>
                                 </div>
                             </div>
                         {% endif %}
@@ -325,7 +325,7 @@
                 </div>
             </div>
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                     {% if not editing and can_change %}
                         <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
@@ -385,7 +385,7 @@
 
 {% block script %}
 {{ block.super }}
-    <script src="{% static 'quiz/js/research_project.js' %}"></script>
+    <script src="{% static 'site/js/research_project.js' %}"></script>
     <script>
         $(document).ready(function () {
             var select_tms_setting = $("#id_tms_setting");

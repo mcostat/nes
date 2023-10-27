@@ -1,0 +1,58 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
+            "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
+            "args": [
+                "runserver",
+                "0.0.0.0:80"
+            ],
+            "django": true,
+            "justMyCode": true,
+            "env": {
+                "DEBUG": "true"
+            }
+        },
+        {
+            "name": "Python: Django Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
+            "args": [
+                "test",
+                "export"
+            ],
+            "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
+            "django": true,
+            "justMyCode": true,
+            "env": {
+                "DEBUG": "true"
+            }
+        },
+        {
+            "name": "Python: Coverage",
+            "type": "python",
+            "request": "launch",
+            //"program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
+            "module": "coverage",
+            "args": [
+                "run",
+                "manage.py",
+                "test"
+            ],
+            "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
+            "django": true,
+            "justMyCode": true,
+            "env": {
+                "DEBUG": "true"
+            }
+        }
+    ]
+}

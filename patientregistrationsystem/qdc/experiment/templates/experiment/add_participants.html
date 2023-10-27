@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {#information from http://stackoverflow.com/questions/6451304/django-simple-custom-template-tag-example#}
 {% load subjects_tags %}
@@ -16,7 +16,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="subjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -51,9 +51,9 @@
     {% endif %}
 
     <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-10">
+        <div class="col-md-12">
             {% if perms.experiment.add_subject and can_change %}
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
                             <div class="form-group">
@@ -61,9 +61,9 @@
                                 <label>{% trans "Add participant" %}</label>
 
                                 <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"> <span class="glyphicon glyphicon-search"></span></span>
+                                    <span class="input-group-addon"> <span class="fa fa-search"></span></span>
                                     <input class="form-control" {% if perms.patient.sensitive_data_patient %}
-                                    placeholder="{% trans "Type participant name, CPF or code" %}" {% else %} placeholder="{% trans "Type participant code" %}"
+                                    placeholder="{% trans 'Type participant name, CPF or code' %}" {% else %} placeholder="{% trans 'Type participant code' %}"
                                 {% endif %} id="subject_name" type="text" autofocus="true">
                                 </div>
                                 {% csrf_token %}
@@ -126,6 +126,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/subjects.js' %}"></script>
-    <script src="{% static 'quiz/js/participant_selection.js' %}"></script>
+    <script src="{% static 'site/js/subjects.js' %}"></script>
+    <script src="{% static 'site/js/participant_selection.js' %}"></script>
 {% endblock %}

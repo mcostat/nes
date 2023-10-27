@@ -1,6 +1,6 @@
 {% extends "patient/register.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block sub_content %}
 
@@ -8,7 +8,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -128,11 +128,11 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
 
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
-                            <h4>{% trans "Experiment questionnaires" %}</h4>
+                            <h4>{% trans "Experiment/Project questionnaires" %}</h4>
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@
                             <thead>
                             <tr>
                                 <th>{% trans "Research project" %}</th>
-                                <th>{% trans "Experiment" %}</th>
+                                <th>{% trans "Experiment/Project" %}</th>
                                 <th>{% trans "Group" %}</th>
                                 <th>{% trans "Questionnaire" %}</th>
                                 <th>{% trans "Fill" %}</th>
@@ -212,5 +212,5 @@
 
 {% block script %}
 {{ block.super }}
-    <script src="{% static 'quiz/js/patient_questinonaires.js' %}"></script>
+    <script src="{% static 'site/js/patient_questinonaires.js' %}"></script>
 {% endblock %}

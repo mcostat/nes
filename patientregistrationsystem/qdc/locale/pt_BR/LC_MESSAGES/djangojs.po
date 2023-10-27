@@ -4,17 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-13 14:58-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2023-10-02 12:25-0300\n"
+"PO-Revision-Date: 2023-10-02 12:35-0300\n"
+"Last-Translator: Mateus Costa <nes_admin@nesmail.com>\n"
+"Language-Team: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: admin/js/SelectFilter2.js:45
 #, javascript-format
@@ -82,8 +84,8 @@ msgstr "Click to remove all chosen %s at once."
 #: admin/js/actions.js:18 admin/js/actions.min.js:1
 msgid "%(sel)s of %(cnt)s selected"
 msgid_plural "%(sel)s of %(cnt)s selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(sel)s de %(cnt)s selecionado"
+msgstr[1] "%(sel)s de %(cnt)s selecionado"
 
 #: admin/js/actions.js:109 admin/js/actions.min.js:5
 msgid ""
@@ -162,8 +164,8 @@ msgstr "Amanhã"
 
 #: admin/js/calendar.js:8
 msgid ""
-"January February March April May June July August September October November "
-"December"
+"January February March April May June July August September October November"
+" December"
 msgstr ""
 "Janeiro Fevereiro Março Abril Maio Junho Julho Agosto Setembro Outubro "
 "Novembro Dezembro"
@@ -179,6 +181,9 @@ msgstr "Mostrar"
 #: admin/js/collapse.js:16 admin/js/collapse.min.js:1
 msgid "Hide"
 msgstr "Esconder"
+
+#~ msgid "Search Results"
+#~ msgstr "Resultados da busca"
 
 #~ msgid "Password incompatible with defined standard."
 #~ msgstr "Senha incompatível com o padrão definido."

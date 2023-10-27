@@ -1,7 +1,7 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 {% load subjects_tags %}
 
 {% block header %}
@@ -50,7 +50,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="eegDataProjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -91,7 +91,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if eeg_data_form.errors %}
         <script type="text/javascript">
@@ -100,8 +100,8 @@
     {% endif %}
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
 
                 <h4>{% trans "EEG data collection" %}</h4>
 
@@ -242,7 +242,7 @@
                                                 <tr>
                                                 <td>{{ eeg_file.file.url }}</td>
                                                 <td>
-                                                    <button class="btn btn-default" type="button" onclick="location.href='{{ eeg_file.file.url }}'"><span class="glyphicon glyphicon-download-alt" style="color: royalblue"></span></button>
+                                                    <button class="btn btn-default" type="button" onclick="location.href='{{ eeg_file.file.url }}'"><span class="fa fa-download-alt" style="color: royalblue"></span></button>
                                                 </td>
                                                 <td>{{ eeg_file.file.size|filesizeformat }}</td>
                                                 {% if editing %}
@@ -302,12 +302,12 @@
 
                                         <td class="text-right col-md-1">
                                             {% if not forloop.last %}
-                                                <a class="btn glyphicon glyphicon-arrow-down" href="/experiment/eeg_electrode_position_collection_status/change_the_order/{{ position_status.id }}/down/"></a>
+                                                <a class="btn fa fa-arrow-down" href="/experiment/eeg_electrode_position_collection_status/change_the_order/{{ position_status.id }}/down/"></a>
                                             {% endif %}
                                         </td>
                                         <td class="col-md-1">
                                             {% if not forloop.first %}
-                                                <a class="btn glyphicon glyphicon-arrow-up" href="/experiment/eeg_electrode_position_collection_status/change_the_order/{{ position_status.id }}/up/"></a>
+                                                <a class="btn fa fa-arrow-up" href="/experiment/eeg_electrode_position_collection_status/change_the_order/{{ position_status.id }}/up/"></a>
                                             {% endif %}
                                         </td>
 
@@ -339,13 +339,13 @@
                         {% else %}
 
                             {% if image %}
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <div hidden="hidden">
                                         <input id="eeg_electrode_position" type="text" value="{{ json_list }}">
                                         <input id="image_status" type="text" value="{{ editing }}">
                                         <input id="map_file" type="text" value="{{ eeg_data.eeg_setting.eeg_electrode_layout_setting.eeg_electrode_net_system.eeg_electrode_localization_system.map_image_file.url }}">
                                     </div>
-                                    <div class="container span6 offset3 well ">
+                                    <div class="container-fluid well">
                                         <h4>{% trans "EEG electrode localization system basic information" %}</h4>
                                         <div class="row">
                                             <div style="width:100%;">
@@ -413,7 +413,7 @@
                 </div>
             </div>
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                     {% if not editing and perms.experiment.delete_researchproject and can_change %}
                         <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
@@ -465,9 +465,9 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/research_project.js' %}"></script>
-    <script src="{% static 'quiz/js/subject_eeg_data_form.js' %}"></script>
-    <script src="{% static 'quiz/js/eeg_electrode_worked_setted.js' %}"></script>
+    <script src="{% static 'site/js/research_project.js' %}"></script>
+    <script src="{% static 'site/js/subject_eeg_data_form.js' %}"></script>
+    <script src="{% static 'site/js/eeg_electrode_worked_setted.js' %}"></script>
     <script>
         $(document).ready(function () {
             var $id_file_format = $("#id_file_format");
@@ -508,9 +508,11 @@
                         $id_file.removeAttr("accept");
                         {% if editing %}
                             $id_file_format_description.prop( "disabled", false );
+                            $id_file_format_description.prop( "required", true );
                             $div_file_format_description.show();
                         {% else %}
                             $id_file_format_description.prop( "disabled", true );
+                            $id_file_format_description.prop( "required", false );
                             $div_file_format_description.show();
                         {% endif %}
                     }
@@ -518,18 +520,21 @@
                     {
                         $id_file.attr("accept", $txt_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                     else if ($id_file_format.val() == $raw_code)
                     {
                         $id_file.attr("accept", $raw_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                     else
                     {
                         $id_file.removeAttr("accept");
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                 }));
@@ -539,6 +544,7 @@
                     {
                         $id_file.removeAttr("accept");
                         $id_file_format_description.prop( "disabled", false );
+                        $id_file_format_description.prop( "required", true );
                         $div_info_raw_data.hide();
                         $div_file_format_description.show();
                     }
@@ -546,6 +552,7 @@
                     {
                         $id_file.attr("accept", $txt_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                         $div_info_raw_data.hide();
                     }
@@ -553,6 +560,7 @@
                     {
                         $id_file.attr("accept", $raw_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                         $div_info_raw_data.show();
                         $div_info_raw_data.html("Upload the three files(.avg, .vhdr, .vmrk) to visualize the raw data" +
@@ -563,18 +571,21 @@
                     {
                         $id_file.removeAttr("accept");
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                         $div_info_raw_data.hide();
                     }
                 }));
             {% else %}
                 $id_file_format_description.prop( "disabled", true );
+                $id_file_format_description.prop( "required", false );
                 $div_file_format_description.hide();
             {% endif %}
 
             $id_eeg_setting.each((function() {
                     if ($id_eeg_setting.val() == $eeg_setting_default_id){
                         $id_eeg_setting_reason_for_change.prop( "disabled", true );
+                        $id_eeg_setting_reason_for_change.prop( "required", false );
                         $div_reason_for_change.hide();
                     }
             }));
@@ -582,10 +593,12 @@
             $id_eeg_setting.on('change', (function() {
                 if ($id_eeg_setting.val() == $eeg_setting_default_id){
                     $id_eeg_setting_reason_for_change.prop( "disabled", true );
+                    $id_eeg_setting_reason_for_change.prop( "required", false );
                     $div_reason_for_change.hide();
                 }
                 else {
                     $id_eeg_setting_reason_for_change.prop( "disabled", false );
+                    $id_eeg_setting_reason_for_change.prop( "required", true );
                     $div_reason_for_change.show();
                 }
             }));

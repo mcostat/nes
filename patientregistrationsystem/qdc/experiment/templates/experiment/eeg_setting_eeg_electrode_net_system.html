@@ -1,5 +1,5 @@
 {% extends "experiment/eeg_setting_eeg_electrode_net_system_template.html" %}
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block subcontent %}
 {{ block.super }}
@@ -82,10 +82,10 @@
         {% if not editing and not creating and can_change %}
             <div class="btn-toolbar pull-right">
                 <div class="btn-group">
-                    <a disabled="" href="#" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> {% trans "Previous" %}</a>
+                    <a disabled="" href="#" class="btn btn-default"><span class="fa fa-arrow-left"></span> {% trans "Previous" %}</a>
                 </div>
                 <div class="btn-group">
-                    <a href="/experiment/eeg_setting/eeg_electrode_position_status/{{ eeg_setting.id }}" class="btn btn-default">{% trans "Next" %} <span class="glyphicon glyphicon-chevron-right"></span></a>
+                    <a href="/experiment/eeg_setting/eeg_electrode_position_status/{{ eeg_setting.id }}" class="btn btn-default">{% trans "Next" %} <span class="fa fa-arrow-right"></span></a>
                 </div>
             </div>
         {% endif %}

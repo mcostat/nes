@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 {% load subjects_tags %}
 
 {% block header %}
@@ -48,7 +48,7 @@
 
 {% block content %}
     <div class="tab-pane fade in active" id="eegDataProjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -89,15 +89,15 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div hidden="hidden">
                 <input id="eeg_electrode_position" type="text" value="{{ json_list }}">
                 <input id="map_file" type="text" value="{{ eeg_data.eeg_setting.eeg_electrode_layout_setting.eeg_electrode_net_system.eeg_electrode_localization_system.map_image_file.url }}">
             </div>
-            <div class="container span6 offset3 well ">
+            <div class="container-fluid well">
                 <h4>{% trans "EEG electrode localization system basic information" %}</h4>
                 <div class="row">
                     <div style="width:100%;">
@@ -156,5 +156,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/eeg_electrode_worked_setted.js' %}"></script>
+    <script src="{% static 'site/js/eeg_electrode_worked_setted.js' %}"></script>
 {% endblock %}

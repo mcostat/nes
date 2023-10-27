@@ -1,5 +1,5 @@
 {% extends "experiment/eeg_setting_eeg_electrode_net_system_template.html" %}
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block header %}
 {{ block.super }}
@@ -112,10 +112,10 @@
 
         <div class="btn-toolbar pull-right">
             <div class="btn-group">
-                <a href="/experiment/eeg_setting/{{ eeg_setting.id }}/eeg_electrode_net_system" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> {% trans "Previous" %}</a>
+                <a href="/experiment/eeg_setting/{{ eeg_setting.id }}/eeg_electrode_net_system" class="btn btn-default"><span class="fa fa-arrow-left"></span> {% trans "Previous" %}</a>
             </div>
             <div class="btn-group">
-                <a href="/experiment/eeg_setting/eeg_electrode_position_status_model/{{ eeg_setting.id }}" class="btn btn-default">{% trans "Next" %} <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a href="/experiment/eeg_setting/eeg_electrode_position_status_model/{{ eeg_setting.id }}" class="btn btn-default">{% trans "Next" %} <span class="fa fa-arrow-right"></span></a>
             </div>
         </div>
 
@@ -125,6 +125,6 @@
 
 {% block script %}
 {{ block.super }}
-    <script src="{% static 'quiz/js/eeg_electrode_position_map.js' %}"></script>
+    <script src="{% static 'site/js/eeg_electrode_position_map.js' %}"></script>
 {% endblock %}
 

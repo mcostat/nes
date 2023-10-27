@@ -1,0 +1,67 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+
+    "[django-html]": {},
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.variableTypes": true,
+    "python.languageServer": "Default",
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.fixAll": [
+        "source.convertImportFormat",
+        "source.unusedImports"
+    ],
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "django",
+            "depth": 10,
+            "includeAllSymbols": true,
+        },
+        {
+            "name": "custom_user",
+            "depth": 10,
+            "includeAllSymbols": true,
+        }
+    ],
+    "pylint.args": [
+        "--disable=C0111",
+        "--disable=reportGeneralTypeIssues",
+        "--load-plugins",
+        // "pylint_django",
+        //"--django-settings-module=patientregistrationsystem.qdc.qdc.settings"
+    ],
+    "pylint.path": [],
+    "python.analysis.include": [],
+    "python.analysis.exclude": [
+        "../docs/",
+        ".git",
+        "docs/"
+    ],
+    "python.autoComplete.extraPaths": [
+        "${localWorkspaceFolder}, /usr/local/bin/python"
+    ],
+    "python.defaultInterpreterPath": "/usr/local/bin/python",
+
+    "python.analysis.extraPaths": [
+        "${localWorkspaceFolder}",
+        "patientregistrationsystem/qdc"
+    ],
+    "[dockerfile]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
+    "mypy-type-checker.reportingScope":"workspace",
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./patientregistrationsystem/qdc",
+        "-p",
+        "test*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+}

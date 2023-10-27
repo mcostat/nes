@@ -1,20 +1,20 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 {% load subjects_tags_survey %}
 
 {% block activeAdvancedSurvey %}class="active"{% endblock %}
 
 {% block form %}
     <div class="row">
-    <form id="survey_form" method="post" data-toggle="validator">
-    {% csrf_token %}
+        <form id="survey_form" method="post" data-toggle="validator">
+            {% csrf_token %}
 {% endblock %}
 
 {% block content %}
     <div class="tab-content">
         <div class="tab-pane fade in active" id="surveyBreadCrumb">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <ol class="breadcrumb">
                     <li><a href="/home">{% trans "Home" %}</a></li>
                     <li><a href="/survey/list">{% trans "Questionnaires" %}</a></li>
@@ -34,14 +34,15 @@
         </div>
 
         <div class="tab-pane fade in active" id="menuUserTab">
-            <div class="col-md-10">
-                <div class="container span6 offset3 well ">
+            <div class="col-md-12">
+                <div class="container-fluid well">
                     <h4>{% trans "Questionnaire information" %}</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
                             <div class="form-group">
                                 <label class="control-label">{% trans "Questionnaire" %}</label>
-                                <select class="form-control" required="" id="questionnaire_selected" name="questionnaire_selected" data-error={% trans "Please, select a questionnaire from the list." %} {% if not creating %}disabled{% endif %}>
+                                <select class="form-control" required="" id="questionnaire_selected" name="questionnaire_selected" {% if not creating %} disabled {% endif %} 
+                                data-error={% trans "Please, select a questionnaire from the list." %} >
                                     {% if creating %}
                                         <option selected="selected" value="">---------</option>
                                         {% for survey in questionnaires_list %}
@@ -78,7 +79,7 @@
                 {% if not creating and not editing %}
 
                     {# Sensitive questions table #}
-                    <div class="container span6 offset3 well ">
+                    <div class="container-fluid well">
                         <div class="row">
                             <div class="col-xs-12 col-md-12">
                                 <h4>{% trans "Sensitive questions" %}</h4>
@@ -112,7 +113,7 @@
                     </div>
 
                     {# Answers #}
-                    <div class="container span6 offset3 well ">
+                    <div class="container-fluid well">
                         <div class="row">
                             <div class="col-xs-12 col-md-12">
                                 <h4>{% trans "Answered by participants" %}</h4>
@@ -128,8 +129,7 @@
                                         <a href="/survey/update_acquisitiondate/{{ survey.id }}"
                                            class="btn btn-primary"
                                            data-toggle="tooltip" data- title="{% trans "Update LimeSurvey Fill date" %}"><span
-                                                class="glyphicon
-                                            glyphicon-refresh"></span></a></th>
+                                                class="fa fa-refresh"></span></a></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -174,14 +174,14 @@
                     </div>
 
                     {% if perms.experiment.view_researchproject %}
-                        <div class="container span6 offset3 well ">
+                        <div class="container-fluid well">
                             <div class="row">
                                 <div class="col-xs-12 col-md-12">
                                     <h4>{% trans "Used in experiments" %}</h4>
                                 </div>
                             </div>
                             {% for dict in experiments_questionnaire_data_list %}
-                                <div class="container span6 offset3 well ">
+                                <div class="container-fluid well">
                                     <div class="row" style="margin-bottom: 5px">
                                         <div class="col-xs-12 col-md-8">
                                             <strong>{% trans "Experiment:" %}</strong><br/>
@@ -217,8 +217,7 @@
                                                     <a href="/survey/update_acquisitiondate/{{ survey.id }}"
                                                        class="btn btn-primary"
                                                        data-toggle="tooltip" data- title="{% trans "Update LimeSurvey Fill date" %}"><span
-                                                            class="glyphicon
-                                            glyphicon-refresh"></span></a>
+                                                            class="fa fa-refresh"></span></a>
                                                 </th>
                                             </tr>
                                             </thead>
@@ -312,5 +311,11 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/survey.js' %}"></script>
+    <script>
+        {% if survey_form.errors %}
+            showErrorMessage(gettext('Please, correct the highlighted fields.'))
+        {% endif %}
+    </script>
+
+    <script src="{% static 'site/js/survey.js' %}"></script>
 {% endblock %}

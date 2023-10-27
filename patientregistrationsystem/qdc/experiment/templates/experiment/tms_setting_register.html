@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
@@ -12,7 +12,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -32,7 +32,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if experiment_form.errors %}
         <script type="text/javascript">
@@ -42,7 +42,7 @@
 
 
     <div class="tab-pane fade in active" id="experimentBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -64,9 +64,9 @@
     </div>
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
-                <h4><span class="glyphicon glyphicon-stats"></span> {% trans "TMS Setting" %}</h4>
+        <div class="col-md-12">
+            <div class="container-fluid well">
+                <h4><span class="fa fa-bar-chart"></span> {% trans "TMS Setting" %}</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
@@ -94,8 +94,8 @@
 
             {% if not editing %}
 
-                <div class="container span6 offset3 well ">
-                    <h4><span class="glyphicon glyphicon-cog"></span> {% trans "Settings:" %}</h4>
+                <div class="container-fluid well">
+                    <h4><span class="fa fa-cog"></span> {% trans "Settings:" %}</h4>
                     <div class="form-group">
                         <table class="table table-striped col-xs-12 col-md-12">
                             <thead>
@@ -130,7 +130,7 @@
                                     </td>
                                     <td>
                                         {% if tms_setting.tms_device_setting %}
-                                            <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                            <a class="btn fa fa-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                onclick="show_modal_remove_setting('tms_device');"></a>
                                         {% endif %}
                                     </td>
@@ -207,5 +207,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/tms_setting_register.js' %}"></script>
+    <script src="{% static 'site/js/tms_setting_register.js' %}"></script>
 {% endblock %}

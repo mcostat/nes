@@ -1,11 +1,11 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
 {% block header %}
-<link rel="stylesheet" href="{% static 'quiz/magnific-popup/magnific-popup.css' %}">
+<link rel="stylesheet" href="{% static 'site/magnific-popup/magnific-popup.css' %}">
 {% endblock %}
 
 {% block form %}
@@ -16,7 +16,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -36,7 +36,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if experiment_form.errors %}
         <script type="text/javascript">
@@ -46,7 +46,7 @@
 
 
     <div class="tab-pane fade in active" id="experimentBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -68,8 +68,8 @@
     </div>
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
                 <h4>{% trans "Group basic information" %}</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
@@ -90,6 +90,18 @@
                     </div>
                 </div>
 
+                {% if editing %}
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">{% trans "Other inclusion description" %}</label>
+                                {{ group_form.inclusion_description }}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 {% if not editing and can_change %}
                     <div class="btn-group pull-left">
                         <a href="/experiment/group/edit/{{ group.id }}" class="btn btn-primary">{% trans "Edit" %}</a>
@@ -98,7 +110,7 @@
             </div>
 
             {% if not editing %}
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
                     <h4>{% trans "Inclusion criteria" %}</h4>
                     {% if can_change %}
                         <div class="row">
@@ -106,7 +118,7 @@
                                 <div class="form-group">
                                     <input id="group_id" value="{{ group.id }}" style="display: none;">
                                     <div class="input-group  input-group-sm "><span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-edit"></span></span>
+                                            <span class="fa fa-edit"></span></span>
                                         <input class="form-control" id="get_diseases" type="text"
                                                placeholder="{%  trans "Inform disease diagnosis or disease code (ICD-10)" %}">
                                     </div>
@@ -140,7 +152,7 @@
                                                 <td>
                                                     {{ classification_of_diseases.abbreviated_description }}
                                                     {% if can_change %}
-                                                        <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip"
+                                                        <a class="btn fa fa-remove" data-toggle="tooltip"
                                                            data-placement="right" title="{% trans "Delete" %}" style="color: indianred;
                                                        position: relative; float: right; padding: 0"
                                                            onclick="show_modal_remove({{ group.id }}, {{ classification_of_diseases.id }});"></a>
@@ -154,9 +166,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">{% trans "Other inclusion description" %}</label>
+                                {{ group_form.inclusion_description }}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
                     <h4>{% trans "Questionnaires of experimental protocol" %}</h4>
                     <div class="form-group">
                         <table class="table table-striped col-xs-12 col-md-12">
@@ -221,7 +242,7 @@
                     </div>
                 </div>
 
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
                     <h4>{% trans "Participants and data collections" %}</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
@@ -252,7 +273,7 @@
                     </div>
                 </div>
 
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
                     <h4>{% trans "Experimental protocol" %}</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
@@ -278,11 +299,11 @@
 
                                                     {% if can_change %}
                                                        {% if group_has_data_collection %}
-                                                        <a class="btn glyphicon glyphicon-ban-circle" data-toggle="tooltip" data-placement="right" style="color: indianred; position: relative; float: right; padding: 0"
+                                                        <a class="btn fa fa-ban" data-toggle="tooltip" data-placement="right" style="color: indianred; position: relative; float: right; padding: 0"
                                                            title="{% trans "There is data collection related to this experimental protocol. Alternatively, make a copy of the experiment." %}">
                                                         </a>
                                                        {% else %}
-                                                            <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" style="color: indianred; position: relative; float: right; padding: 0"
+                                                            <a class="btn fa fa-remove" data-toggle="tooltip" data-placement="right" style="color: indianred; position: relative; float: right; padding: 0"
                                                                title="{% trans "UnConfigure experimental protocol" %}" onclick="show_modal_remove_experimental_protocol();">
                                                             </a>
                                                        {% endif %}
@@ -334,7 +355,7 @@
                 </div>
             {% endif %}
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                     {% if not editing and perms.experiment.delete_experiment and can_change %}
                         <button type="button" class="btn btn-danger" onclick="show_modal_remove_group()">{% trans "Delete" %}</button>
@@ -413,7 +434,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-                    <button type="submit" class="btn btn-primary" value="copy_experiment" name="action">{% trans "Copy experiment" %}</button>
+                    <button type="submit" class="btn btn-primary" value="copy_experiment" name="action">{% trans "Copy experiment/project" %}</button>
                 </div>
             </div>
         </div>
@@ -441,8 +462,8 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/group_register.js' %}"></script>
-    <script src="{% static 'quiz/magnific-popup/jquery.magnific-popup.js' %}"></script>
+    <script src="{% static 'site/js/group_register.js' %}"></script>
+    <script src="{% static 'site/magnific-popup/jquery.magnific-popup.js' %}"></script>
     <script>
         $(document).ready(function() {
             $('.experimental-protocol-image-popup-link').magnificPopup({

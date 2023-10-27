@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
@@ -12,7 +12,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -32,7 +32,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if research_project_form.errors %}
         <script type="text/javascript">
@@ -42,7 +42,7 @@
 
 
     <div class="tab-pane fade in active" id="researchProjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -62,8 +62,8 @@
     </div>
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
                 <h4>{% trans "Study basic information" %}</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
@@ -125,7 +125,7 @@
 
             </div>
             {% if not editing %}
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
                     <h4>{% trans "Keywords" %}</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
@@ -137,7 +137,7 @@
                                             {{ keyword.name }}
                                             {% if can_change %}
                                                 <a href="/experiment/keyword/remove/{{ research_project.id }}/{{keyword.id}}">
-                                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip"
+                                                    <span class="fa fa-remove" data-toggle="tooltip"
                                                           style="color: indianred; vertical-align: -10%;" title="{% trans "Delete" %}" />
                                                 </a>
                                             {% endif %}
@@ -147,7 +147,7 @@
                                 {% if can_change %}
                                     <div class="form-group">
                                         <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                                            <span class="input-group-addon"><span class="fa fa-search"></span></span>
                                             <input class="form-control" placeholder="
                                                     {% trans "Type a keyword to include an existent or new" %}"
                                                    id="keywords" type="text" autocomplete="off" maxlength="50">
@@ -162,8 +162,8 @@
                     </div>
                 </div>
 
-                <div class="container span6 offset3 well ">
-                    <h4>{% trans "Experiments" %}</h4>
+                <div class="container-fluid well">
+                    <h4>{% trans "Experiments/Projects" %}</h4>
                     <div class="form-group">
                         <table class="table table-striped">
                             <thead>
@@ -212,7 +212,7 @@
                 </div>
             {% endif %}
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                     {% if not editing and perms.experiment.delete_researchproject and can_change %}
                         <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
@@ -299,12 +299,19 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-                    <button type="submit" class="btn btn-primary" value="copy_experiment" name="action">{% trans "Copy experiment" %}</button>
-                    <button type="submit" class="btn btn-primary" value="copy_experiment_with_data" name="action">{% trans "Copy experiment with data" %}</button>
+                    <button type="submit" class="btn btn-primary" value="copy_experiment" name="action">{% trans "Copy experiment/project" %}</button>
+                    <button type="submit" class="btn btn-primary" value="copy_experiment_with_data" name="action">{% trans "Copy experiment/project with data" %}</button>
                 </div>
             </div>
         </div>
     </div>
+
+{% endblock %}
+
+{% block end_form %}
+    </form>
+    </div>
+{% endblock %}
 
 {% block script %}
     <script>
@@ -315,12 +322,5 @@
             modal.find('#id_experiment_hidden').attr('value', experiment_id);
         });
     </script>
-    <script src="{% static 'quiz/js/research_project.js' %}"></script>
-{% endblock %}
-
-{% endblock %}
-
-{% block end_form %}
-    </form>
-    </div>
+    <script src="{% static 'site/js/research_project.js' %}"></script>
 {% endblock %}

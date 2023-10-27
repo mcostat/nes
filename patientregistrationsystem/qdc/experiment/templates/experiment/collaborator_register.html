@@ -1,7 +1,7 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block form %}
     <div class="row">
@@ -11,7 +11,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -31,7 +31,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if collaborator_form.errors %}
         <script type="text/javascript">
@@ -41,7 +41,7 @@
 
 
     <div class="tab-pane fade in active" id="collaboratorBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -56,8 +56,8 @@
     </div>
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
                 <h4>{% trans "Add researchers" %}</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                  {% if editing %}
                     <div class="btn-group pull-right">
                         <button type="submit" name="action" value="save" class="btn btn-primary" id="add_researcher">{% trans "Save" %}</button>
@@ -102,5 +102,5 @@
 {% endblock %}
 
 {% block script %}
-         <script src="{% static 'quiz/js/experiment_collaborator.js' %}"></script>
+         <script src="{% static 'site/js/experiment_collaborator.js' %}"></script>
 {% endblock %}

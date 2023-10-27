@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeSetup %}class="active"{% endblock %}
 
@@ -12,7 +12,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -32,10 +32,10 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="tab-pane fade in active" id="breadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/setup">{% trans "Set up" %}</a></li>
@@ -77,5 +77,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/mycanvas.js' %}"></script>
+    <script src="{% static 'site/js/mycanvas.js' %}"></script>
 {% endblock %}

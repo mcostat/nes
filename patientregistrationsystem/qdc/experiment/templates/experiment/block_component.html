@@ -1,6 +1,6 @@
 {% extends "experiment/component_template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block breadcrumb %}
 
@@ -38,8 +38,7 @@
                     {% trans "Sub-steps will be executed one after another" as text_1 %}
                     {% trans "Sub-steps will be executed at the same time" as text_2 %}
                     {% for radio in specific_form.type %}
-                        <span style="margin-right: 15px;" data-toggle="tooltip" data-placement="bottom" title="
-                        {% cycle text_1 text_2 %}">
+                        <span style="margin-right: 15px;" data-toggle="tooltip" data-placement="bottom" title="{% cycle text_1 text_2 %}">
                             <div class="radio-inline">{{ radio }}</div>
                         </span>
                     {% endfor %}
@@ -54,7 +53,7 @@
                 <div class="radio-inline" style="vertical-align: top">
                     <input id="id_all_mandatory" name="radio_number_of_mandatory_components" type="radio" value="all"
                             {% if not updating and not creating or reusing or component_configuration %} disabled="True" {% endif %}>
-                        {% trans "All" %}
+                    <label for="id_all_mandatory" class="control-label"> {% trans "All" %}</label>
                 </div>
                 <div class="radio-inline">
                     <input id="id_not_all_mandatory" name="radio_number_of_mandatory_components" type="radio" value="not_all"
@@ -75,7 +74,7 @@
     {% if not updating and not creating %}
         <div class="row">
             <div class="col-xs-12 col-sm-12">
-                <div class="container span6 offset3 well ">
+                <div class="container-fluid well">
 
                     {% if component.type == "sequence" %}
                         <h4>{% trans "Steps with fixed position" %}</h4>
@@ -123,32 +122,32 @@
                                                                                 </td>
                                                                                 {% if component.type == "sequence" %}
                                                                                     <td class="col-md-3">
-                                                                                        <span class="glyphicon glyphicon-chevron-right btn-link"></span>
+                                                                                        <span class="fa fa-arrow-right btn-link"></span>
                                                                                         {{ accordion|length }} {% trans "uses grouped" %}
                                                                                     </td>
                                                                                     <td  class="text-right col-md-1">
                                                                                         {% if accordion != configuration_list|last %}
                                                                                             {# onclick is needed because if we use href nothing happens, because of the collapse and expand actions of the accordion. #}
-                                                                                            <a class="btn glyphicon glyphicon-arrow-down" onclick="move_accordion('/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.counter0 }}/down/');"></a>
+                                                                                            <a class="btn fa fa-arrow-down" onclick="move_accordion('/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.counter0 }}/down/');"></a>
                                                                                         {% endif %}
                                                                                     </td>
                                                                                     <td class="col-md-1">
                                                                                         {% if accordion != configuration_list|first %}
                                                                                             {# onclick is needed because if we use href nothing happens, because of the collapse and expand actions of the accordion. #}
-                                                                                            <a class="btn glyphicon glyphicon-arrow-up" onclick="move_accordion('/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.counter0 }}/up/');"></a>
+                                                                                            <a class="btn fa fa-arrow-up" onclick="move_accordion('/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.counter0 }}/up/');"></a>
                                                                                         {% endif %}
                                                                                     </td>
                                                                                 {% else %}
                                                                                     <td class="col-md-5">
-                                                                                        <span class="glyphicon glyphicon-chevron-right btn-link"></span>
+                                                                                        <span class="fa fa-arrow-right btn-link"></span>
                                                                                         {{ accordion|length }} {% trans "uses grouped" %}
                                                                                     </td>
                                                                                 {% endif %}
                                                                                 <td class="text-center col-md-1">
                                                                                     {% if accordion.0.id in protected_uses_of_step %}
-                                                                                        <a class="btn glyphicon glyphicon-ban-circle" style="color: indianred;" data-toggle="tooltip" data-placement="right" title="{% trans "There is data collection related to this experimental protocol. Alternatively, make a copy of the experiment." %}"></a>
+                                                                                        <a class="btn fa fa-ban" style="color: indianred;" data-toggle="tooltip" data-placement="right" title="{% trans "There is data collection related to this experimental protocol. Alternatively, make a copy of the experiment." %}"></a>
                                                                                     {% else %}
-                                                                                        <a class="btn glyphicon glyphicon-remove" style="color: indianred;" data-toggle="tooltip" data-placement="right" onclick="show_modal_remove_many('fixed', {{ forloop.counter0 }}, {{ accordion|length }});" title="{% trans "Delete uses from list" %}"></a>
+                                                                                        <a class="btn fa fa-remove" style="color: indianred;" data-toggle="tooltip" data-placement="right" onclick="show_modal_remove_many('fixed', {{ forloop.counter0 }}, {{ accordion|length }});" title="{% trans "Delete uses from list" %}"></a>
                                                                                     {% endif %}
                                                                                 </td>
                                                                             {% else %}
@@ -156,14 +155,14 @@
                                                                                     {{ accordion.0.component.identification }}
                                                                                 </td>
                                                                                 <td class="col-md-5">
-                                                                                    <span class="glyphicon glyphicon-chevron-right btn-link"></span>
+                                                                                    <span class="fa fa-arrow-right btn-link"></span>
                                                                                     {{ accordion|length }} {% trans "uses grouped" %}
                                                                                 </td>
                                                                             {% endif %}
                                                                         </tr>
                                                                     {% else %}
                                                                         <td class="text-center" colspan="{% if not component_configuration and can_change %}6{% else %}3{% endif %}">
-                                                                            <span class="glyphicon glyphicon-chevron-right btn-link"></span>
+                                                                            <span class="fa fa-arrow-right btn-link"></span>
                                                                             {{ accordion|length }} {% trans "positions for random step grouped" %}
                                                                         </td>
                                                                     {% endif %}
@@ -213,7 +212,10 @@
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                 {% for type, type_name, icon in component_type_choices %}
                                     <li {% if type == "questionnaire" and not limesurvey_available %}class="disabled"{% endif %} role="presentation">
-                                        <a role="menuitem" tabindex="-1" class="{{ icon }}" {% if type == "questionnaire" and not limesurvey_available %}href="#"{% else %}href="/experiment/component/{{ path_of_the_components }}/add_new/{{ type }}{% if component.type == "sequence" %}?position=fixed{% endif %}"{% endif %}> {{ type_name }}</a>
+                                        <a role="menuitem" tabindex="-1" {% if type == "questionnaire" and not limesurvey_available %}href="#"{% else %}href="/experiment/component/{{ path_of_the_components }}/add_new/{{ type }}{% if component.type == "sequence" %}?position=fixed{% endif %}"{% endif %}> 
+                                            <span  class="{{ icon }}"> </span>
+                                            {{ type_name }}
+                                        </a>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -223,7 +225,7 @@
                 </div>
 
                 {% if component.type == "sequence" %}
-                    <div class="container span6 offset3 well ">
+                    <div class="container-fluid well">
                         <div class="form-group">
 
                             <h4>{% trans "Steps with random position" %}</h4>
@@ -261,15 +263,15 @@
                                                                                 {{ accordion.0.component.identification }}
                                                                             </td>
                                                                             <td class="col-md-5">
-                                                                                <span class="glyphicon glyphicon-chevron-right btn-link"></span>
+                                                                                <span class="fa fa-arrow-right btn-link"></span>
                                                                                 {{ accordion|length }} {% trans "uses grouped" %}
                                                                             </td>
                                                                             {% if not component_configuration and can_change %}
                                                                                 <td class="text-center col-md-1">
                                                                                     {% if accordion.0.id in protected_uses_of_step %}
-                                                                                        <a class="btn glyphicon glyphicon-ban-circle" style="color: indianred;" data-toggle="tooltip" data-placement="right" title="{% trans "There is data collection related to this experimental protocol. Alternatively, make a copy of the experiment." %}"></a>
+                                                                                        <a class="btn fa fa-ban" style="color: indianred;" data-toggle="tooltip" data-placement="right" title="{% trans "There is data collection related to this experimental protocol. Alternatively, make a copy of the experiment." %}"></a>
                                                                                     {% else %}
-                                                                                        <a class="btn glyphicon glyphicon-remove" style="color: indianred;" data-toggle="tooltip" data-placement="right" onclick="show_modal_remove_many('random', {{ forloop.counter0 }}, {{ accordion|length }});" title="{% trans "Delete uses from list" %}"></a>
+                                                                                        <a class="btn fa fa-remove" style="color: indianred;" data-toggle="tooltip" data-placement="right" onclick="show_modal_remove_many('random', {{ forloop.counter0 }}, {{ accordion|length }});" title="{% trans "Delete uses from list" %}"></a>
                                                                                     {% endif %}
                                                                                 </td>
                                                                             {% endif %}
@@ -321,7 +323,10 @@
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                     {% for type, type_name, icon in component_type_choices %}
                                         <li {% if type == "questionnaire" and not limesurvey_available %}class="disabled"{% endif %} role="presentation">
-                                            <a role="menuitem" tabindex="-1" class="{{ icon }}" {% if type == "questionnaire" and not limesurvey_available %}href="#"{% else %}href="/experiment/component/{{ path_of_the_components }}/add_new/{{ type }}?position=random"{% endif %}> {{ type_name }}</a>
+                                            <a role="menuitem" tabindex="-1" {% if type == "questionnaire" and not limesurvey_available %}href="#"{% else %}href="/experiment/component/{{ path_of_the_components }}/add_new/{{ type }}?position=random"{% endif %}> 
+                                                <span class="{{ icon }}"></span>
+                                                {{ type_name }}
+                                            </a>
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -359,12 +364,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    {% trans "This experiment is in use, you can not change it! Do you want to copy this experiment?" %}
+                    {% trans "This experiment/project is in use, you can not change it! Do you want to copy this experiment/project?" %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-                    <button type="submit" class="btn btn-primary" value="copy_experiment" name="action">{% trans "Copy experiment" %}</button>
-                    <button type="submit" class="btn btn-primary" value="copy_experiment_with_data" name="action">{% trans "Copy experiment with data" %}</button>
+                    <button type="submit" class="btn btn-primary" value="copy_experiment" name="action">{% trans "Copy experiment/project" %}</button>
+                    <button type="submit" class="btn btn-primary" value="copy_experiment_with_data" name="action">{% trans "Copy experiment/project with data" %}</button>
                 </div>
             </div>
         </div>
@@ -372,6 +377,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/component.js' %}"></script>
-    <script src="{% static 'quiz/js/block_component.js' %}"></script>
+    <script src="{% static 'site/js/component.js' %}"></script>
+    <script src="{% static 'site/js/block_component.js' %}"></script>
 {% endblock %}

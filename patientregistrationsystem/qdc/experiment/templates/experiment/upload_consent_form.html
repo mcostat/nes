@@ -1,7 +1,7 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block form %}
     <div class="row">
@@ -12,7 +12,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="subjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -45,10 +45,10 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="row">
                 <div class="col-xs-12 col-md-12">
                     <div class="form-group">
@@ -71,8 +71,8 @@
                                 <div class="col-xs-4 col-sm-6">
                                     <div class="btn-toolbar">
                                         {% if perms.patient.sensitive_data_patient %}
-                                            <button class="btn btn-default" type="button" onclick="location.href='{{ file_list.url }}'"><span class="glyphicon glyphicon-download-alt" style="color: royalblue"></span></button>
-                                            <button class="btn btn-default" type="button" onclick="$('#modalRemove').modal('show')"><span class="glyphicon glyphicon-remove" style="color: indianred"></span></button>
+                                            <button class="btn btn-default" type="button" onclick="location.href='{{ file_list.url }}'"><span class="fa fa-download-alt" style="color: royalblue"></span></button>
+                                            <button class="btn btn-default" type="button" onclick="$('#modalRemove').modal('show')"><span class="fa fa-remove" style="color: indianred"></span></button>
                                         {% endif %}
                                     </div>
                                 </div>

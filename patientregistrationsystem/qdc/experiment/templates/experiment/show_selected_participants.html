@@ -1,4 +1,4 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
 {% load i18n %}
 
@@ -13,7 +13,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="selectedParticipantBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -26,8 +26,8 @@
     </div>
 
     <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
 
                 <h4>{% trans "List of participants" %}</h4>
 
@@ -52,7 +52,7 @@
                             <tbody>
                             {% for participant in participants_list %}
                                 <tr>
-                                    <td><a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="left" title="{% trans "Delete participant" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                    <td><a class="btn fa fa-remove" data-toggle="tooltip" data-placement="left" title="{% trans "Delete participant" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                    onclick="show_modal_remove({{ participant.id }});"></a>{{ participant.code }}</td>
                                     <td>{{ participant.date_birth|timesince }}</td>
                                     <td>{{ participant.gender }}</td>
@@ -68,7 +68,7 @@
                 {% endif %}
             </div>
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
 
                 <div class="btn-group pull-left">
                 </div>
@@ -76,13 +76,13 @@
                 <div class="btn-group pull-right">
                     <button type="submit" name="action" value="next-step-2" class="btn btn-primary"
                             {% if not participants_list|length %}disabled{% endif %}>{% trans "Add participants" %}
-                        <span class="glyphicon glyphicon-forward"></span>
+                        <span class="fa fa-forward"></span>
                     </button>
                 </div>
 
                 <div class="btn-group pull-right">
                     <button type="submit" name="action" value="previous-step-2" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-backward"></span>
+                        <span class="fa fa-backward"></span>
                         {% trans "Previous" %}
                     </button>
                 </div>
@@ -120,5 +120,5 @@
 
 {% block script %}
     {% load static %}
-    <script src="{% static 'quiz/js/participant_selection.js' %}"></script>
+    <script src="{% static 'site/js/participant_selection.js' %}"></script>
 {% endblock %}

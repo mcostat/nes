@@ -68,27 +68,26 @@
     }
   },
   {
+    "model": "experiment.tag",
+    "pk": 3,
     "fields": {
-      "tags": [
-        1
-      ],
-      "name_en": "EEG raw data - EGI simple binary (MNE)",
-      "name": "EEG raw data - EGI simple binary (MNE)",
-      "description_en": null,
-      "description": null,
-      "name_pt_br": "Dados brutos de EEG - arquivo binário EGI (MNE)",
-      "extension": ".raw .egi",
-      "nes_code": "MNE-RawFromEGI",
-      "description_pt_br": null
-    },
-    "pk": 1,
-    "model": "experiment.fileformat"
+      "name": "generic"
+    }
+  },
+  {
+    "model": "experiment.tag",
+    "pk": 4,
+    "fields": {
+      "name": "media"
+    }
   },
   {
     "fields": {
       "tags": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "name_en": "Other",
       "name": "Outro",
@@ -99,14 +98,15 @@
       "nes_code": "other",
       "description_pt_br": null
     },
-    "pk": 2,
+    "pk": 1,
     "model": "experiment.fileformat"
   },
   {
     "fields": {
       "tags": [
         1,
-        2
+        2,
+        3
       ],
       "name_en": "Text file",
       "name": "Text file",
@@ -115,6 +115,23 @@
       "name_pt_br": "Arquivo texto",
       "extension": ".txt",
       "nes_code": "txt",
+      "description_pt_br": null
+    },
+    "pk": 2,
+    "model": "experiment.fileformat"
+  },
+  {
+    "fields": {
+      "tags": [
+        2
+      ],
+      "name_en": "EEG raw data - EGI simple binary (MNE)",
+      "name": "EEG raw data - EGI simple binary (MNE)",
+      "description_en": null,
+      "description": null,
+      "name_pt_br": "Dados brutos de EEG - arquivo binário EGI (MNE)",
+      "extension": ".raw, .egi",
+      "nes_code": "MNE-RawFromEGI",
       "description_pt_br": null
     },
     "pk": 3,
@@ -131,11 +148,47 @@
       "description_en": "File format to stores the three different filetypes (.vhdr, .eeg, .vmrk) from Brain Vision Recorder Software",
       "description": null,
       "name_pt_br": "Dados brutos de EEG - Brain Vision (MNE)",
-      "extension": ".eeg .vhdr .vmrk",
+      "extension": ".eeg, .vhdr, .vmrk",
       "nes_code": "MNE-RawFromBrainVision",
       "description_pt_br": "Formato de arquivo para armazenar três tipos de arquivos diferentes (.vhdr, .eeg, .vmrk) do software Brain Vision Recorder"
     },
     "pk": 4,
+    "model": "experiment.fileformat"
+  },
+  {
+    "fields": {
+      "tags": [
+        1,
+        2
+      ],
+      "name_en": ".peb raw File",
+      "name": ".peb raw File",
+      "description_en": "File format from PEB/UFRJ",
+      "description": null,
+      "name_pt_br": "Dados brutos .peb",
+      "extension": ".peb, .peb2",
+      "nes_code": "PEB-RawFile",
+      "description_pt_br": "Formato de arquivo do PEB/UFRJ"
+    },
+    "pk": 5,
+    "model": "experiment.fileformat"
+  },
+  {
+    "fields": {
+      "tags": [
+        3,
+        4
+      ],
+      "name_en": "Media file",
+      "name": "Media file",
+      "description_en": "File format to store images and video",
+      "description": "File format to store images and video",
+      "name_pt_br": "Arquivo de mídia",
+      "extension": ".jpg, .jpeg, .png, .tiff, .mp4, .avi, .mkv, .wmv, .mov, .webm",
+      "nes_code": "media",
+      "description_pt_br": "Tipo de arquivo ustilizado para armazenar imagens e vídeos"
+    },
+    "pk": 6,
     "model": "experiment.fileformat"
   },
   {
@@ -1833,5 +1886,41 @@
       "name_en": "Multiunit recording"
     },
     "pk": 8
+  },
+  {
+    "model": "experiment.informationtypemedia",
+    "fields": {
+      "name": "Video",
+      "description_en": "Video recording",
+      "description_pt_br": "Registro de vídeo",
+      "description": "Video recording",
+      "name_pt_br": "Vídeo",
+      "name_en": "Video"
+    },
+    "pk": 1
+  },
+  {
+    "model": "experiment.informationtypemedia",
+    "fields": {
+      "name": "Image",
+      "description_en": "Image ",
+      "description_pt_br": "Registro de imagem",
+      "description": "Image ",
+      "name_pt_br": "Imagem",
+      "name_en": "Image"
+    },
+    "pk": 2
+  },
+  {
+    "model": "experiment.informationtypemedia",
+    "fields": {
+      "name": "Other media type",
+      "description_en": "Other media recording ",
+      "description_pt_br": "Outro tipo de registro de midia",
+      "description": "Other media recording  ",
+      "name_pt_br": "Other media type",
+      "name_en": "Outro tipo de midia"
+    },
+    "pk": 3
   }
 ]

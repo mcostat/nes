@@ -1,7 +1,7 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 {% load subjects_tags %}
 
 {% block form %}
@@ -13,7 +13,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="subjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -46,11 +46,11 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
                 <div class="row">
                     <div class="col-md-4">
                         <label>{% trans "Institution" %}</label>
@@ -111,7 +111,7 @@
             </div>
         </div>
 
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
                     <div class="form-group">
@@ -195,7 +195,7 @@
                 </div>
             </div>
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                 </div>
                 <div class="btn-group pull-right">

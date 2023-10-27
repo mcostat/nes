@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
@@ -12,7 +12,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -32,7 +32,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if experiment_form.errors %}
         <script type="text/javascript">
@@ -42,7 +42,7 @@
 
 
     <div class="tab-pane fade in active" id="experimentBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -64,9 +64,9 @@
     </div>
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
-                <h4><span class="glyphicon glyphicon-stats"></span> {% trans "EMG Setting" %}</h4>
+        <div class="col-md-12">
+            <div class="container-fluid well">
+                <h4><span class="fa fa-bar-chart"></span> {% trans "EMG Setting" %}</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
@@ -110,8 +110,8 @@
 
             {% if not editing %}
 
-                <div class="container span6 offset3 well ">
-                    <h4><span class="glyphicon glyphicon-cog"></span> {% trans "Electrode settings:" %}</h4>
+                <div class="container-fluid well">
+                    <h4><span class="fa fa-cog"></span> {% trans "Electrode settings:" %}</h4>
                     <div class="form-group">
                         <table class="table table-striped col-xs-12 col-md-12">
                             <thead>
@@ -165,7 +165,7 @@
                                             </blockquote>
                                         </td>
                                         <td>
-                                            <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                            <a class="btn fa fa-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                onclick="show_modal_remove_setting('electrode-{{ electrode_setting.id }}');"></a>
                                         </td>
                                     </tr>
@@ -184,8 +184,8 @@
                     </div>
                 </div>
 
-                <div class="container span6 offset3 well ">
-                    <h4><span class="glyphicon glyphicon-cog"></span> {% trans "More settings:" %}</h4>
+                <div class="container-fluid well">
+                    <h4><span class="fa fa-cog"></span> {% trans "More settings:" %}</h4>
                     <div class="form-group">
                         <table class="table table-striped col-xs-12 col-md-12">
                             <thead>
@@ -221,7 +221,7 @@
                                     </td>
                                     <td>
                                         {% if emg_setting.emg_digital_filter_setting %}
-                                            <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                            <a class="btn fa fa-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                onclick="show_modal_remove_setting('digital_filter');"></a>
                                         {% endif %}
                                     </td>
@@ -246,7 +246,7 @@
                                     </td>
                                     <td>
                                         {% if emg_setting.emg_ad_converter_setting %}
-                                            <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                            <a class="btn fa fa-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                onclick="show_modal_remove_setting('ad_converter');"></a>
                                         {% endif %}
                                     </td>
@@ -260,7 +260,7 @@
 
             {% endif %}
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                     {% if not editing and perms.experiment.delete_experiment and can_change %}
                         <button type="button" class="btn btn-danger" onclick="$('#modalRemove').modal('show')">{% trans "Delete EMG setting" %}</button>
@@ -323,5 +323,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/emg_setting_register.js' %}"></script>
+    <script src="{% static 'site/js/emg_setting_register.js' %}"></script>
 {% endblock %}

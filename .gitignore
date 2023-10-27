@@ -1,7 +1,14 @@
 
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+
 *.pyc
 patientregistrationsystem/qdc/.idea
-patientregistrationsystem/qdc/qdc/settings.py
+*.placeholder
 
 *.DS_Store
 patientregistrationsystem/qdc/.DS_Store

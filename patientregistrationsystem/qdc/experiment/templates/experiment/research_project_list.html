@@ -1,4 +1,4 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
 {% load i18n %}
 
@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -26,10 +26,10 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="tab-pane fade in active" id="researchProjectBreadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li class="active">{% trans "Studies" %}</li>
@@ -38,9 +38,9 @@
     </div>
 
     <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-10">
+        <div class="col-md-12">
 
-            <div class="container span6 offset3 well ">
+            <div class="container-fluid well">
                 <h4>{% trans "Studies list" %}</h4>
                 <div class="form-group">
                     <table class="table table-striped">
@@ -91,7 +91,7 @@
             {% if can_send_to_portal and perms.experiment.add_researchproject %}
                 <div class="btn-group pull-left">
                     <a href="/experiment/schedule_of_sending/list/" class="btn btn-success">
-                        <span class="glyphicon glyphicon-send"></span> {% trans "Send experiments to Portal" %}
+                        <span class="fa fa-send"></span> {% trans "Send experiments/projects to Portal" %}
                     </a>
                 </div>
             {% endif %}

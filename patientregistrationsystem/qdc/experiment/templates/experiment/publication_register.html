@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activeAdvancedPublication %}class="active"{% endblock %}
 
@@ -20,7 +20,7 @@
 
 {% block content %}
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -40,7 +40,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if publication_form.errors %}
         <script type="text/javascript">
@@ -50,7 +50,7 @@
 
 
     <div class="tab-pane fade in active">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/publication/list">{% trans "Publications" %}</a></li>
@@ -70,14 +70,23 @@
     </div>
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
                 <h4>{% trans "Publication" %}</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
                             <label class="control-label">{% trans "Title" %} <b style="color: red;">*</b></label>
                             {{ publication_form.title }}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label">{% trans "Publication Type" %} <b style="color: red;">*</b></label>
+                            {{ publication_form.publication_type }}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -100,18 +109,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label">{% trans "File" %}</label>
+                            {% if editing %}
+                                {{ publication_form.file }}
+                            {% else %}
+                                {{ publication_form.file.value }}
+                                <button class="btn btn-default" type="button" onclick="location.href='{{ publication_form.file.url }}'"><span class="fa fa-download-alt" style="color: royalblue"></span></button>
+                            {% endif %}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
 
                 {% if not editing and can_change %}
                     <div class="btn-group pull-left">
-                        <a href="/experiment/publication/edit/{{ publication.id }}" class="btn btn-primary">{% trans "Edit" %}</a>
+                        <a href="/experiment/publication/edit/{{ publication.id }}/" class="btn btn-primary">{% trans "Edit" %}</a>
                     </div>
                 {% endif %}
 
             </div>
 
             {% if not editing %}
-                <div class="container span6 offset3 well ">
-                    <h4>{% trans "Related experiments" %}</h4>
+                <div class="container-fluid well">
+                    <h4>{% trans "Related experiments/Projects" %}</h4>
                     <div class="form-group">
                         <table class="table table-striped">
                             <thead>
@@ -126,12 +149,20 @@
                             <tbody>
                             {% for experiment in publication.experiments.all %}
                                 <tr>
-                                    <td>{{ experiment.title }}</td>
+                                    <td>
+                                        {% if perms.experiment.view_researchproject %}<a data-toggle="tooltip" data-placement="left" title="{% trans 'Visualize' %}"
+                                            href="/experiment/{{ experiment.id }}">
+                                            {{ experiment.title }}
+                                        </a>
+                                        {% else %}
+                                            {{ experiment.title }}
+                                        {% endif %}
+                                    </td>
                                     <td>{{ experiment.description }}</td>
-                                    <td style="text-align: center">{% if experiment.is_public %}<span class="glyphicon glyphicon-ok" style="color: royalblue"></span> {% endif %}</td>
-                                    <td style="text-align: center">{% if experiment.data_acquisition_is_concluded %}<span class="glyphicon glyphicon-ok" style="color: royalblue"></span> {% endif %}</td>
+                                    <td style="text-align: center">{% if experiment.is_public %}<span class="fa fa-check" style="color: royalblue"></span> {% endif %}</td>
+                                    <td style="text-align: center">{% if experiment.data_acquisition_is_concluded %}<span class="fa fa-check" style="color: royalblue"></span> {% endif %}</td>
                                     <td class="text-center col-md-1">
-                                        <a class="btn glyphicon glyphicon-remove" style="color: indianred;" data-toggle="tooltip" data-placement="right" onclick="show_modal_remove_experiment_from_publication('{{ experiment.id }}');" title="{% trans "Remove experiment from list" %}"></a>
+                                        <a class="btn fa fa-remove" style="color: indianred;" data-toggle="tooltip" data-placement="right" onclick="show_modal_remove_experiment_from_publication('{{ experiment.id }}');" title="{% trans 'Remove experiment/project from list' %}"></a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -146,7 +177,7 @@
                 </div>
             {% endif %}
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                     {% if not editing and perms.experiment.delete_researchproject and can_change %}
                         <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
@@ -162,7 +193,7 @@
                     </div>
                 {% else %}
                     <div class="btn-group pull-right">
-                        <a href="/experiment/publication/list" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+                        <a href="/experiment/publication/list/" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
                     </div>
                 {% endif %}
             </div>
@@ -188,7 +219,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    {% trans "Are you sure you want to remove experiment from list?" %}
+                    {% trans "Are you sure you want to remove experiment/project from list?" %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
@@ -206,5 +237,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/publication_register.js' %}"></script>
+    <script src="{% static 'site/js/publication_register.js' %}"></script>
 {% endblock %}

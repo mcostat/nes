@@ -1,6 +1,6 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block activePatient %}class="active"{% endblock %}
 
@@ -14,7 +14,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="examTab">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/patient/find/">{% trans "Participants" %}</a></li>
@@ -44,7 +44,7 @@
                 {% endif %}
             </ol>
 
-            {% if messages %}
+            {% comment %} {% if messages %}
                 {% for message in messages %}
                     {% if message.tags == "success" %}
                         <script>showSuccessMessage('{{ message }}')</script>
@@ -59,7 +59,7 @@
                         <script>showInfoMessage('{{ message }}')</script>
                     {% endif %}
                 {% endfor %}
-            {% endif %}
+            {% endif %} {% endcomment %}
 
             {% if complementary_exam_form.errors %}
                 {% for field in complementary_exam_form %}
@@ -76,7 +76,7 @@
             <div class="tab-content">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="container span6 offset3 well ">
+                        <div class="container-fluid well">
                             <div class="row">
                                 <div class="col-xs-5 col-sm-4">
                                     <div class="form-group {% if complementary_exam_form.errors.date %}has-error{% endif %}">
@@ -141,9 +141,9 @@
                                                         <td>
                                                             {{ exam_file.content.name }}
                                                             <div class="btn-toolbar pull-right">
-                                                            <button class="btn btn-default pull-left" type="button" onclick="location.href='{{ exam_file.content.url }}'"><span class="glyphicon glyphicon-download-alt" style="color: royalblue"></span></button>
+                                                            <button class="btn btn-default pull-left" type="button" onclick="location.href='{{ exam_file.content.url }}'"><span class="fa fa-download-alt" style="color: royalblue"></span></button>
                                                                 {% if not viewing %}
-                                                                    <button class="btn btn-default pull-right" type="button" onclick="show_modal_remove({{ exam_file.id }})"><span class="glyphicon glyphicon-remove" style="color: indianred"></span></button>
+                                                                    <button class="btn btn-default pull-right" type="button" onclick="show_modal_remove({{ exam_file.id }})"><span class="fa fa-remove" style="color: indianred"></span></button>
                                                                 {% endif %}
                                                             </div>
                                                         </td>

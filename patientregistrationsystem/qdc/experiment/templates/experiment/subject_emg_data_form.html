@@ -1,7 +1,7 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 {% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 {% load subjects_tags %}
 
 {% block form %}
@@ -13,7 +13,7 @@
 {% block content %}
 
     <div class="tab-pane fade in active" id="breadCrumb">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="/home">{% trans "Home" %}</a></li>
                 <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
 
             {% if message.tags == "success" %}
@@ -54,7 +54,7 @@
             {% endif %}
 
         {% endfor %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if emg_data_form.errors %}
         <script type="text/javascript">
@@ -63,8 +63,8 @@
     {% endif %}
 
     <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
+        <div class="col-md-12">
+            <div class="container-fluid well">
 
                 <h4>{% trans "EMG data collection" %}</h4>
 
@@ -164,7 +164,7 @@
                                         <tr>
                                         <td>{{ emg_file.file.url }}</td>
                                         <td>
-                                            <button class="btn btn-default" type="button" onclick="location.href='{{ emg_file.file.url }}'"><span class="glyphicon glyphicon-download-alt" style="color: royalblue"></span></button>
+                                            <button class="btn btn-default" type="button" onclick="location.href='{{ emg_file.file.url }}'"><span class="fa fa-download-alt" style="color: royalblue"></span></button>
                                         </td>
                                         <td>{{ emg_file.file.size|filesizeformat }}</td>
                                         {% if editing %}
@@ -191,7 +191,7 @@
 
             </div>
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group pull-left">
                     {% if not editing and perms.experiment.delete_researchproject and can_change %}
                         <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
@@ -243,7 +243,7 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'quiz/js/research_project.js' %}"></script>
+    <script src="{% static 'site/js/research_project.js' %}"></script>
     <script>
         $(document).ready(function () {
             var $id_file_format = $("#id_file_format");
@@ -283,9 +283,11 @@
                         $id_file.removeAttr("accept");
                         {% if editing %}
                             $id_file_format_description.prop( "disabled", false );
+                            $id_file_format_description.prop( "required", true );
                             $div_file_format_description.show();
                         {% else %}
                             $id_file_format_description.prop( "disabled", true );
+                            $id_file_format_description.prop( "required", false );
                             $div_file_format_description.show();
                         {% endif %}
                     }
@@ -293,18 +295,21 @@
                     {
                         $id_file.attr("accept", $txt_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                     else if ($id_file_format.val() == $raw_code)
                     {
                         $id_file.attr("accept", $raw_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                     else
                     {
                         $id_file.removeAttr("accept");
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                 }));
@@ -314,35 +319,41 @@
                     {
                         $id_file.removeAttr("accept");
                         $id_file_format_description.prop( "disabled", false );
+                        $id_file_format_description.prop( "required", true );
                         $div_file_format_description.show();
                     }
                     else if ($id_file_format.val() == $txt_code)
                     {
                         $id_file.attr("accept", $txt_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                     else if ($id_file_format.val() == $raw_code)
                     {
                         $id_file.attr("accept", $raw_extension);
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                     else
                     {
                         $id_file.removeAttr("accept");
                         $id_file_format_description.prop( "disabled", true );
+                        $id_file_format_description.prop( "required", false );
                         $div_file_format_description.hide();
                     }
                 }));
             {% else %}
                 $id_file_format_description.prop( "disabled", true );
+                $id_file_format_description.prop( "required", false );
                 $div_file_format_description.hide();
             {% endif %}
 
             $id_emg_setting.each((function() {
                     if ($id_emg_setting.val() == $emg_setting_default_id){
                         $id_emg_setting_reason_for_change.prop( "disabled", true );
+                        $id_emg_setting_reason_for_change.prop( "required", false );
                         $div_reason_for_change.hide();
                     }
             }));
@@ -350,10 +361,12 @@
             $id_emg_setting.on('change', (function() {
                 if ($id_emg_setting.val() == $emg_setting_default_id){
                     $id_emg_setting_reason_for_change.prop( "disabled", true );
+                    $id_emg_setting_reason_for_change.prop( "required", false );
                     $div_reason_for_change.hide();
                 }
                 else {
                     $id_emg_setting_reason_for_change.prop( "disabled", false );
+                    $id_emg_setting_reason_for_change.prop( "required", true );
                     $div_reason_for_change.show();
                 }
             }));

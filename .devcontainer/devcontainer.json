@@ -1,0 +1,72 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/postgres
+{
+	"name": "Python 3 & PostgreSQL",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "nes",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// This can be used to network with other containers or the host.
+	"forwardPorts": [
+		80,
+		5432,
+		8080
+	],
+	"portsAttributes": {
+		"80": {
+			"label": "NES port",
+			"onAutoForward": "openBrowser"
+		},
+		"5432": {
+			"label": "NES-Postgres port",
+			"onAutoForward": "silent"
+		},
+		"8080": {
+			"label": "Limesurvey port",
+			"onAutoForward": "openBrowserOnce"
+		}
+	},
+	"containerEnv": {
+		"NES_DIR": "/workspaces/${localWorkspaceFolderBasename}"
+	},
+	"remoteEnv": {
+		"NES_DIR": "/workspaces/${localWorkspaceFolderBasename}",
+		"PGDATA": "/var/lib/postgresql/data"
+	},
+	// Use 'postCreateCommand' to run commands after the container is created.
+	//"postCreateCommand": "sudo /entrypoint.sh",
+	"mounts": [
+		//"source=${localWorkspaceFolder}/app-data,target=/data,type=bind,consistency=cached"
+	],
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mutantdino.resourcemonitor",
+				"dbaeumer.vscode-eslint",
+				"njpwerner.autodocstring",
+				"redhat.fabric8-analytics",
+				"batisteo.vscode-django",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"VisualStudioExptTeam.intellicode-api-usage-examples",
+				"ms-azuretools.vscode-docker",
+				"ms-python.python",
+				"ms-python.black-formatter",
+				"ms-python.isort",
+				"ms-python.vscode-pylance",
+				"ms-python.pylint",
+				"ms-python.mypy-type-checker",
+				"donjayamanne.python-extension-pack",
+				"mrmlnc.vscode-apache",
+				"shakram02.bash-beautify",
+				"bibhasdn.django-html",
+				"matangover.mypy",
+				"VisualStudioExptTeam.vscodeintellicode-completions"
+			]
+		}
+	}
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	//"remoteUser": "root"
+}

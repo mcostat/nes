@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from json import dump, load
+from typing import Any
+
 from survey.abc_search_engine import Questionnaires
 from survey.views import get_questionnaire_language
-
 
 BASE_DIRECTORY = "data"
 PER_PARTICIPANT_DIRECTORY = "Per_participant"
@@ -26,11 +27,11 @@ OUTPUT_FILENAME_DIAGNOSIS = "Diagnosis"
 
 
 class InputExport:
-    def __init__(self):
-        self.data = {}
+    def __init__(self) -> None:
+        self.data: dict[str, Any] = {}
 
-    def read(self, input_filename, update_input_data=True):
-        with open(input_filename.encode('utf-8'), 'r') as input_file:
+    def read(self, input_filename, update_input_data=True) -> dict[str, Any]:
+        with open(input_filename.encode("utf-8"), "r") as input_file:
             input_data_temp = load(self.data, input_file)
 
             if update_input_data:
@@ -38,11 +39,11 @@ class InputExport:
 
         return self.data
 
-    def write(self, output_filename):
-        with open(output_filename.encode('utf-8'), 'w', encoding='UTF-8') as outfile:
+    def write(self, output_filename) -> None:
+        with open(output_filename.encode("utf-8"), "w", encoding="UTF-8") as outfile:
             dump(self.data, outfile)
 
-    def build_header(self, export_per_experiment):
+    def build_header(self, export_per_experiment) -> None:
         # /data
         self.data["base_directory"] = BASE_DIRECTORY
         self.data["per_participant_directory"] = PER_PARTICIPANT_DIRECTORY
@@ -54,16 +55,24 @@ class InputExport:
             self.data["participant_data_directory"] = PARTICIPANT_DATA_DIRECTORY
             self.data["goalkeeper_game_data_directory"] = GOALKEEPER_GAME_DATA_DIRECTORY
 
-    def build_dynamic_header(self, variable_name, variable_data):
+    def build_dynamic_header(self, variable_name, variable_data) -> None:
         self.data[variable_name] = variable_data
 
-    def build_diagnosis_participant(self, strut_name, output_filename, field_header_list):
-        self.data[strut_name] = {"output_filename": output_filename, "output_list": [], "data_list": []}
+    def build_diagnosis_participant(
+        self, strut_name, output_filename, field_header_list
+    ) -> None:
+        self.data[strut_name] = {
+            "output_filename": output_filename,
+            "output_list": [],
+            "data_list": [],
+        }
         for field, header in field_header_list:
             output_data = {"header": header, "field": field}
             self.data[strut_name]["output_list"].append(output_data)
 
-    def build_questionnaire(self, questionnaire_list, language, entrance_questionnaire):
+    def build_questionnaire(
+        self, questionnaire_list, language, entrance_questionnaire
+    ) -> None:
         questionnaire_lime_survey = Questionnaires()
         if "questionnaire_language" not in self.data:
             self.data["questionnaire_language"] = {}
@@ -72,16 +81,18 @@ class InputExport:
             self.data["questionnaires"] = []
 
             for index, sid, title, field_header_list in questionnaire_list:
-                output_language = get_questionnaire_language(questionnaire_lime_survey, sid, language)
+                output_language = get_questionnaire_language(
+                    questionnaire_lime_survey, sid, language
+                )
 
                 languages = questionnaire_lime_survey.get_survey_languages(sid)
-                language_list = [languages['language']]
-                if languages['additional_languages']:
-                    additional_language = languages['additional_languages'].split(' ')
+                language_list = [languages["language"]]
+                if languages["additional_languages"]:
+                    additional_language = languages["additional_languages"].split(" ")
                 else:
-                    additional_language = ['']
+                    additional_language = [""]
                 for item in additional_language:
-                    if item != '':
+                    if item != "":
                         language_list.append(item)
 
                 if sid not in self.data["questionnaire_language"]:
@@ -90,13 +101,16 @@ class InputExport:
                         "output_language": output_language,
                     }
 
-                self.data["questionnaires"].append({
-                    "id": sid,
-                    "prefix_filename_fields": PREFIX_FILENAME_FIELDS,
-                    "questionnaire_name": title,
-                    "prefix_filename_responses": PREFIX_FILENAME_RESPONSES,
-                    "output_list": [], "responses_list": []
-                })
+                self.data["questionnaires"].append(
+                    {
+                        "id": sid,
+                        "prefix_filename_fields": PREFIX_FILENAME_FIELDS,
+                        "questionnaire_name": title,
+                        "prefix_filename_responses": PREFIX_FILENAME_RESPONSES,
+                        "output_list": [],
+                        "responses_list": [],
+                    }
+                )
                 for header, field in field_header_list:
                     output_data = {"header": header, "field": field}
                     self.data["questionnaires"][-1]["output_list"].append(output_data)
@@ -105,15 +119,17 @@ class InputExport:
             self.data["questionnaires_from_experiments"] = {}
 
             for index, group_id, sid, title, field_header_list in questionnaire_list:
-                output_language = get_questionnaire_language(questionnaire_lime_survey, sid, language)
+                output_language = get_questionnaire_language(
+                    questionnaire_lime_survey, sid, language
+                )
                 languages = questionnaire_lime_survey.get_survey_languages(sid)
-                language_list = [languages['language']]
-                if languages['additional_languages']:
-                    additional_language = languages['additional_languages'].split(' ')
+                language_list = [languages["language"]]
+                if languages["additional_languages"]:
+                    additional_language = languages["additional_languages"].split(" ")
                 else:
-                    additional_language = ['']
+                    additional_language = [""]
                 for item in additional_language:
-                    if item != '':
+                    if item != "":
                         language_list.append(item)
 
                 if sid not in self.data["questionnaire_language"]:
@@ -122,20 +138,22 @@ class InputExport:
                         "output_language": output_language,
                     }
 
-                if group_id not in self.data['questionnaires_from_experiments']:
-                    self.data['questionnaires_from_experiments'][group_id] = {}
+                if group_id not in self.data["questionnaires_from_experiments"]:
+                    self.data["questionnaires_from_experiments"][group_id] = {}
 
-                if sid not in self.data['questionnaires_from_experiments'][group_id]:
-                    self.data['questionnaires_from_experiments'][group_id][sid] = {
+                if sid not in self.data["questionnaires_from_experiments"][group_id]:
+                    self.data["questionnaires_from_experiments"][group_id][sid] = {
                         "prefix_filename_fields": PREFIX_FILENAME_FIELDS,
                         "questionnaire_name": title,
                         "prefix_filename_responses": PREFIX_FILENAME_RESPONSES,
-                        "output_list": []
+                        "output_list": [],
                     }
 
                 for header, field in field_header_list:
                     output_data = {"header": header, "field": field}
-                    self.data["questionnaires_from_experiments"][group_id][sid]["output_list"].append(output_data)
+                    self.data["questionnaires_from_experiments"][group_id][sid][
+                        "output_list"
+                    ].append(output_data)
 
                 if sid not in self.data["questionnaire_list"]:
                     self.data["questionnaire_list"].append(sid)
@@ -143,22 +161,34 @@ class InputExport:
         questionnaire_lime_survey.release_session_key()
 
 
-def build_partial_export_structure(export_per_participant, participant_field_header_list, output_filename):
-
+def build_partial_export_structure(
+    export_per_participant, participant_field_header_list, output_filename
+) -> None:
     json_data = InputExport()
 
-    json_data.build_header()
+    json_data.build_header(None)
     json_data.build_dynamic_header("export_per_participant", export_per_participant)
-    json_data.build_diagnosis_participant("participants", OUTPUT_FILENAME_PARTICIPANTS, participant_field_header_list)
+    json_data.build_diagnosis_participant(
+        "participants", OUTPUT_FILENAME_PARTICIPANTS, participant_field_header_list
+    )
     json_data.write(output_filename)
 
 
 def build_complete_export_structure(
-        export_per_participant, export_per_questionnaire, export_per_experiment,
-        participant_field_header_list, diagnosis_field_header_list, questionnaires_list,
-        experiment_questionnaires_list, response_type, heading_type,
-        output_filename, component_list, language, filesformat_type):
-
+    export_per_participant,
+    export_per_questionnaire,
+    export_per_experiment,
+    participant_field_header_list,
+    diagnosis_field_header_list,
+    questionnaires_list,
+    experiment_questionnaires_list,
+    response_type,
+    heading_type,
+    output_filename,
+    component_list,
+    language,
+    filesformat_type,
+) -> None:
     json_data = InputExport()
 
     json_data.build_header(export_per_experiment)
@@ -175,16 +205,24 @@ def build_complete_export_structure(
 
     json_data.build_dynamic_header("output_language", language)
 
-    json_data.build_diagnosis_participant("participants", OUTPUT_FILENAME_PARTICIPANTS, participant_field_header_list)
+    json_data.build_diagnosis_participant(
+        "participants", OUTPUT_FILENAME_PARTICIPANTS, participant_field_header_list
+    )
 
-    json_data.build_diagnosis_participant("diagnosis", OUTPUT_FILENAME_DIAGNOSIS, diagnosis_field_header_list)
+    json_data.build_diagnosis_participant(
+        "diagnosis", OUTPUT_FILENAME_DIAGNOSIS, diagnosis_field_header_list
+    )
 
     json_data.data["questionnaire_list"] = []
 
-    json_data.build_questionnaire(questionnaires_list, language, entrance_questionnaire=True)
+    json_data.build_questionnaire(
+        questionnaires_list, language, entrance_questionnaire=True
+    )
 
     if export_per_experiment:
         json_data.build_dynamic_header("export_per_experiment", export_per_experiment)
-        json_data.build_questionnaire(experiment_questionnaires_list, language, entrance_questionnaire=False)
+        json_data.build_questionnaire(
+            experiment_questionnaires_list, language, entrance_questionnaire=False
+        )
         json_data.data["component_list"] = component_list
     json_data.write(output_filename)

@@ -1,4 +1,4 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
 {% load i18n %}
 
@@ -7,4 +7,5 @@
 
 {% block content %}
     <div  class="text-center"><h1>{% trans "Access is not authorized" %}</h1></div>
+    <p>{{ exception }}</p>
 {% endblock %}
