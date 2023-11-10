@@ -5,7 +5,7 @@ htmlcov/
 coverage.xml
 *.cover
 
-*.rdb
+dump.rdb
 
 
 *.pyc
