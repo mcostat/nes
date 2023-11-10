@@ -23,21 +23,20 @@ jobs:
                 ports:
                   - 5432:5432
                 options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      
+        defaults:
+          run:
+            shell: bash
+            working-directory: ./patientregistrationsystem/qdc
         steps:
           - uses: actions/checkout@v4
           - uses: actions/setup-python@v4
             with:
-              working-directory: "patientregistrationsystem/qdc"
               python-version: '3.11'
               cache: 'pip' # caching pip dependencies
           - name: Install requirements
-            working-directory: "patientregistrationsystem/qdc"
             run: pip install -r requirements.txt  
           - name: Run Entrypoint
-            working-directory: "patientregistrationsystem/qdc"
             run: prepare_server.sh
           - name: Run Tests
-            working-directory: "patientregistrationsystem/qdc"
             run: |
               python3 manage.py test
