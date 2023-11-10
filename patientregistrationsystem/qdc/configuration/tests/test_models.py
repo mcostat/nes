@@ -49,3 +49,9 @@ class ContactTest(TestCase):
         contact = Contact.objects.create(name="adm test", email="test@test.com")
 
         self.assertEqual(str(contact), "adm test")
+
+    def test_adding_multiple_Contact(self) -> None:
+        Contact.objects.create(name="adm test", email="test@test.com")
+
+        with self.assertRaises(IntegrityError):
+            Contact.objects.create(name="adm test", email="test@test.com")
