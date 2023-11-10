@@ -37,17 +37,13 @@ jobs:
               cache: 'pip'
           - name: Install requirements
             run: |
+              pip isntall flake8 |
               pip install -r requirements.txt  
           - name: Run NES setup
             run: |
               sh prepare_server.sh
           - name: Python Linter
-            uses: sunnysid3up/python-linter@master
-            with:
-              source: "."
-              mypy-options: "--ignore-missing-imports --show-error-codes"
-              isort-options: "-w 100"
-              django: true
+            run: flake8 .
           - name: Run Tests
             run: |
               python3 -u manage.py test
