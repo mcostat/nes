@@ -1,4 +1,5 @@
 from django.urls import re_path
+
 from survey import views
 
 urlpatterns = [

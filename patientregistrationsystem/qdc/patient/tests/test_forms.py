@@ -1,20 +1,15 @@
-from django.test import TestCase
-from patient.models import (
-    Gender,
-    Payment,
-    FleshTone,
-    Religion,
-    Schooling,
-    AmountCigarettes,
-    AlcoholFrequency,
-    AlcoholPeriod,
-    Telephone,
-)
-from patient.views import *
-from patient.forms import *
-from django.contrib.auth.models import User
-from .test_orig import UtilTests
 import datetime
+
+from django.contrib.auth.models import User
+from django.test import TestCase
+
+from patient.forms import *
+from patient.models import (AlcoholFrequency, AlcoholPeriod, AmountCigarettes,
+                            FleshTone, Gender, Payment, Religion, Schooling,
+                            Telephone)
+from patient.views import *
+
+from .test_orig import UtilTests
 
 USER_USERNAME = "myadmin"
 USER_PWD = "mypassword"

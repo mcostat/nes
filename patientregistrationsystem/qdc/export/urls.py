@@ -1,16 +1,9 @@
 from django.urls import re_path
 
-from .views import (
-    experiment_selection,
-    export_create,
-    export_menu,
-    export_view,
-    filter_participants,
-    search_diagnosis,
-    search_locations,
-    select_groups_by_experiment,
-    select_experiments_by_study,
-)
+from .views import (experiment_selection, export_create, export_menu,
+                    export_view, filter_participants, search_diagnosis,
+                    search_locations, select_experiments_by_study,
+                    select_groups_by_experiment)
 
 urlpatterns = [
     re_path(r"^$", export_menu, name="export_menu"),

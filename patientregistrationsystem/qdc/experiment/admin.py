@@ -2,30 +2,14 @@ from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 from simple_history.admin import SimpleHistoryAdmin
 
-from .models import (
-    ADConverter,
-    AmplifierDetectionType,
-    BrainArea,
-    BrainAreaSystem,
-    CoilOrientation,
-    DirectionOfTheInducedCurrent,
-    ElectrodeConfiguration,
-    ElectrodeShape,
-    FileFormat,
-    GoalkeeperGame,
-    GoalkeeperPhase,
-    InformationType,
-    InformationTypeMedia,
-    MeasureSystem,
-    MeasureUnit,
-    PublicationType,
-    QuestionnaireResponse,
-    SourceCodeFileFormat,
-    StandardizationSystem,
-    StimulusType,
-    Tag,
-    TetheringSystem,
-)
+from .models import (ADConverter, AmplifierDetectionType, BrainArea,
+                     BrainAreaSystem, CoilOrientation,
+                     DirectionOfTheInducedCurrent, ElectrodeConfiguration,
+                     ElectrodeShape, FileFormat, GoalkeeperGame,
+                     GoalkeeperPhase, InformationType, InformationTypeMedia,
+                     MeasureSystem, MeasureUnit, PublicationType,
+                     QuestionnaireResponse, SourceCodeFileFormat,
+                     StandardizationSystem, StimulusType, Tag, TetheringSystem)
 
 admin.site.register(QuestionnaireResponse, SimpleHistoryAdmin)
 

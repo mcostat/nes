@@ -1,31 +1,19 @@
 # coding=utf-8
 from typing import Any, Iterable
 
-from django.db.models import Model
-from custom_user.models import Institution, UserProfile
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from django.forms import (
-    CharField,
-    CheckboxSelectMultiple,
-    ModelForm,
-    PasswordInput,
-    RadioSelect,
-    Select,
-    TextInput,
-    ValidationError,
-)
+from django.db.models import Model
+from django.forms import (CharField, CheckboxSelectMultiple, ModelForm,
+                          PasswordInput, RadioSelect, Select, TextInput,
+                          ValidationError)
 from django.utils.translation import gettext_lazy as _
 
-
-from custom_user.regex_utils import (
-    EMAIL_REGEX,
-    FIRSTNAME_REGEX,
-    LASTNAME_REGEX,
-    PASSWORD_REGEX,
-    USERNAME_REGEX,
-)
+from custom_user.models import Institution, UserProfile
+from custom_user.regex_utils import (EMAIL_REGEX, FIRSTNAME_REGEX,
+                                     LASTNAME_REGEX, PASSWORD_REGEX,
+                                     USERNAME_REGEX)
 
 
 class UserForm(ModelForm):

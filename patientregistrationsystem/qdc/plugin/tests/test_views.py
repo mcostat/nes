@@ -9,21 +9,19 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.messages import get_messages
-from django.urls import reverse, resolve
-from django.utils.translation import gettext_lazy as _
 from django.test import override_settings
+from django.urls import resolve, reverse
+from django.utils.translation import gettext_lazy as _
 
 from export import input_export
 from export.models import Export
 from export.tests.tests_helper import ExportTestCase
-from plugin.models import RandomForests
-from plugin.tests.LimeSurveyAPI_mocks import (
-    set_limesurvey_api_mocks,
-    update_limesurvey_api_mocks,
-    set_limesurvey_api_mocks2,
-)
-from plugin.views import send_to_plugin
 from patient.tests.test_orig import UtilTests
+from plugin.models import RandomForests
+from plugin.tests.LimeSurveyAPI_mocks import (set_limesurvey_api_mocks,
+                                              set_limesurvey_api_mocks2,
+                                              update_limesurvey_api_mocks)
+from plugin.views import send_to_plugin
 from survey.models import Survey
 from survey.tests.tests_helper import create_survey
 

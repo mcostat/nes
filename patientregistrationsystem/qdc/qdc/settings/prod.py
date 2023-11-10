@@ -1,6 +1,5 @@
 from .base import *
 
-
 DEBUG = False
 DEBUG404 = False
 IS_TESTING = False
@@ -76,4 +75,3 @@ LOGGING = {
         },
     },
 }
-

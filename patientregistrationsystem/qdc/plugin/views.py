@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
 from experiment.models import Component, Experiment, Group, Questionnaire
 from experiment.models import QuestionnaireResponse as ExperimentResponse
 from experiment.models import SubjectOfGroup
@@ -18,7 +19,8 @@ from experiment.views import get_block_tree
 from export.forms import ExportForm
 from export.input_export import build_complete_export_structure
 from export.models import Export
-from export.views import PATIENT_FIELDS, export_create, get_questionnaire_fields
+from export.views import (PATIENT_FIELDS, export_create,
+                          get_questionnaire_fields)
 from patient.models import QuestionnaireResponse as IndependentResponse
 from plugin.models import RandomForests
 from survey.abc_search_engine import Questionnaires

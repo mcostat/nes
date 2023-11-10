@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from survey.abc_search_engine import Questionnaires
 
 # This is the survey id of the lss survey file for the integration tests

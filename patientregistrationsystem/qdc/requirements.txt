@@ -53,5 +53,5 @@ types-python-dateutil
 django-stubs[compatible-mypy]
 django-stubs-ext 
 mypy
-djlint
 pylint
+djlint

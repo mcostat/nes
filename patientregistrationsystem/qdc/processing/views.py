@@ -1,7 +1,6 @@
 import tempfile
 from typing import Any
 
-import experiment
 import mne
 from click import Group
 from django.contrib import messages
@@ -11,7 +10,10 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from experiment.models import Experiment, Group, ResearchProject, SubjectOfGroup
+
+import experiment
+from experiment.models import (Experiment, Group, ResearchProject,
+                               SubjectOfGroup)
 from patient.models import Patient
 
 from .forms import UploadFileForm

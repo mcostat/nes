@@ -1,14 +1,12 @@
 # -*- coding: UTF-8 -*-
 from typing import Any
-from custom_user.views import *
+
 from django.contrib.auth.models import Group, User
 from django.test import TestCase
-from custom_user.forms import (
-    CustomPasswordResetForm,
-    InstitutionForm,
-    UserForm,
-    ResearcherForm,
-)
+
+from custom_user.forms import (CustomPasswordResetForm, InstitutionForm,
+                               ResearcherForm, UserForm)
+from custom_user.views import *
 
 USER_USERNAME = "myadmin"
 USER_PWD = "mypassword"

@@ -1,8 +1,8 @@
-from .base import *
-
 import warnings
 
 import django_stubs_ext
+
+from .base import *
 
 django_stubs_ext.monkeypatch()
 

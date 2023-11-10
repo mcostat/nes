@@ -1,25 +1,14 @@
 # coding=utf-8
 from typing import Any
-from django.forms import (
-    CheckboxInput,
-    ModelForm,
-    Form,
-    Select,
-    TextInput,
-    CharField,
-    BooleanField,
-    MultipleChoiceField,
-    CheckboxSelectMultiple,
-    ChoiceField,
-    SelectMultiple,
-    IntegerField,
-    NumberInput,
-    RadioSelect,
-)
 
+from django.forms import (BooleanField, CharField, CheckboxInput,
+                          CheckboxSelectMultiple, ChoiceField, Form,
+                          IntegerField, ModelForm, MultipleChoiceField,
+                          NumberInput, RadioSelect, Select, SelectMultiple,
+                          TextInput)
 from django.utils.translation import gettext_lazy as _
 
-from patient.models import Patient, Diagnosis
+from patient.models import Diagnosis, Patient
 
 HEADINGS_CHOICES = (
     ("code", _("Question code")),

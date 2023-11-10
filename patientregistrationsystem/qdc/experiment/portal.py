@@ -5,70 +5,34 @@ from io import StringIO
 from os import path
 from typing import Any
 
-from django.contrib.auth.models import User
-
 import coreapi
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.utils import translation
+
 from survey.abc_search_engine import Questionnaires
 from survey.survey_utils import QuestionnaireUtils
 from survey.views import questionnaire_evaluation_fields_excluded
 
-from .models import (
-    EEG,
-    EMG,
-    TMS,
-    ADConverter,
-    AdditionalData,
-    Amplifier,
-    Block,
-    CoilModel,
-    ComponentConfiguration,
-    ContextTree,
-    DigitalGamePhase,
-    DigitalGamePhaseData,
-    EEGAmplifierSetting,
-    EEGData,
-    EEGElectrodeLocalizationSystem,
-    EEGElectrodeNet,
-    EEGElectrodePositionSetting,
-    EEGFilterSetting,
-    EEGSetting,
-    EEGSolutionSetting,
-    ElectrodeModel,
-    EMGADConverterSetting,
-    EMGAmplifierSetting,
-    EMGAnalogFilterSetting,
-    EMGData,
-    EMGDigitalFilterSetting,
-    EMGElectrodePlacementSetting,
-    EMGElectrodeSetting,
-    EMGIntramuscularPlacement,
-    EMGNeedlePlacement,
-    EMGPreamplifierFilterSetting,
-    EMGPreamplifierSetting,
-    EMGSetting,
-    EMGSurfacePlacement,
-    Experiment,
-    ExperimentResearcher,
-    GenericDataCollection,
-    GenericDataCollectionData,
-    Group,
-    Instruction,
-    IntramuscularElectrode,
-    MediaCollection,
-    MediaCollectionData,
-    NeedleElectrode,
-    Questionnaire,
-    QuestionnaireResponse,
-    Stimulus,
-    Subject,
-    SurfaceElectrode,
-    TMSData,
-    TMSDevice,
-    TMSDeviceSetting,
-    TMSSetting,
-)
+from .models import (EEG, EMG, TMS, ADConverter, AdditionalData, Amplifier,
+                     Block, CoilModel, ComponentConfiguration, ContextTree,
+                     DigitalGamePhase, DigitalGamePhaseData,
+                     EEGAmplifierSetting, EEGData,
+                     EEGElectrodeLocalizationSystem, EEGElectrodeNet,
+                     EEGElectrodePositionSetting, EEGFilterSetting, EEGSetting,
+                     EEGSolutionSetting, ElectrodeModel, EMGADConverterSetting,
+                     EMGAmplifierSetting, EMGAnalogFilterSetting, EMGData,
+                     EMGDigitalFilterSetting, EMGElectrodePlacementSetting,
+                     EMGElectrodeSetting, EMGIntramuscularPlacement,
+                     EMGNeedlePlacement, EMGPreamplifierFilterSetting,
+                     EMGPreamplifierSetting, EMGSetting, EMGSurfacePlacement,
+                     Experiment, ExperimentResearcher, GenericDataCollection,
+                     GenericDataCollectionData, Group, Instruction,
+                     IntramuscularElectrode, MediaCollection,
+                     MediaCollectionData, NeedleElectrode, Questionnaire,
+                     QuestionnaireResponse, Stimulus, Subject,
+                     SurfaceElectrode, TMSData, TMSDevice, TMSDeviceSetting,
+                     TMSSetting)
 
 
 class RestApiClient(object):

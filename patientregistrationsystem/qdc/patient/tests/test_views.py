@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from .test_orig import QuestionnaireFormValidation, UtilTests
 from ..models import QuestionnaireResponse
+from .test_orig import QuestionnaireFormValidation, UtilTests
 
 USERNAME = "joaopedro"
 PASSWD = "password"

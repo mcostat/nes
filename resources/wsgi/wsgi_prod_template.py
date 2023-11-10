@@ -18,9 +18,15 @@ import sys
 import site
 
 # Add the site-packages of the chosen virtualenv to work with
-site.addsitedir('/var/www/nes-system/lib/python2.7/site-packages')
+site.addsitedir("/var/www/nes-system/lib/python2.7/site-packages")
 
-paths = ['/var/www', '/var/www/nes-system', '/var/www/nes-system/nes', '/var/www/nes-system/nes/patientregistrationsystem', '/var/www/nes-system/nes/patientregistrationsystem/qdc',]
+paths = [
+    "/var/www",
+    "/var/www/nes-system",
+    "/var/www/nes-system/nes",
+    "/var/www/nes-system/nes/patientregistrationsystem",
+    "/var/www/nes-system/nes/patientregistrationsystem/qdc",
+]
 
 for path in paths:
     if path not in sys.path:
@@ -29,7 +35,8 @@ for path in paths:
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "qdc.settings")
 
 # Activate virtual env
-activate_env=os.path.expanduser("/var/www/nes-system/bin/activate_this.py")
+activate_env = os.path.expanduser("/var/www/nes-system/bin/activate_this.py")
 
 from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()

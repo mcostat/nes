@@ -1,11 +1,11 @@
 import re
 
 from django.http import HttpRequest
-
-from custom_user.models import UserProfile
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.deprecation import MiddlewareMixin
+
+from custom_user.models import UserProfile
 
 
 # TODO: This is not very efficient, checks de database every non-auth request

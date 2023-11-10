@@ -5,7 +5,6 @@ from abc import ABC, abstractmethod
 from base64 import b64decode, b64encode
 from typing import Any
 
-
 from django.conf import settings
 from jsonrpclib import Server
 

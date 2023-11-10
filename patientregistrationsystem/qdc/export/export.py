@@ -13,85 +13,44 @@ from sys import modules
 from django.apps import apps
 from django.conf import settings
 from django.core.files import File
-from django.db.models import (
-    BooleanField,
-    CharField,
-    DateField,
-    FloatField,
-    TextField,
-)
+from django.db.models import (BooleanField, CharField, DateField, FloatField,
+                              TextField)
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext as _
-from experiment.models import (
-    AdditionalData,
-    ComponentAdditionalFile,
-    ComponentConfiguration,
-    ContextTree,
-    DataConfigurationTree,
-    DigitalGamePhaseData,
-    EEGData,
-    EEGElectrodePositionSetting,
-    EEGSetting,
-    EMGData,
-    EMGElectrodeSetting,
-    EMGIntramuscularPlacement,
-    EMGNeedlePlacement,
-    EMGSetting,
-    EMGSurfacePlacement,
-    Experiment,
-    GenericDataCollectionData,
-    Group,
-    IntramuscularElectrode,
-    MediaCollectionData,
-    NeedleElectrode,
-    Questionnaire,
-)
-from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
-from experiment.models import (
-    ResearchProject,
-    Stimulus,
-    SubjectOfGroup,
-    SubjectStepData,
-    SurfaceElectrode,
-    TMSData,
-    TMSSetting,
-)
-from experiment.views import (
-    create_nwb_file,
-    date_of_first_data_collection,
-    get_block_tree,
-    get_description_from_experimental_protocol_tree,
-    get_experimental_protocol_image,
-    get_sensors_position,
-    list_data_configuration_tree,
-)
+
+from experiment.models import (AdditionalData, ComponentAdditionalFile,
+                               ComponentConfiguration, ContextTree,
+                               DataConfigurationTree, DigitalGamePhaseData,
+                               EEGData, EEGElectrodePositionSetting,
+                               EEGSetting, EMGData, EMGElectrodeSetting,
+                               EMGIntramuscularPlacement, EMGNeedlePlacement,
+                               EMGSetting, EMGSurfacePlacement, Experiment,
+                               GenericDataCollectionData, Group,
+                               IntramuscularElectrode, MediaCollectionData,
+                               NeedleElectrode, Questionnaire)
+from experiment.models import \
+    QuestionnaireResponse as ExperimentQuestionnaireResponse
+from experiment.models import (ResearchProject, Stimulus, SubjectOfGroup,
+                               SubjectStepData, SurfaceElectrode, TMSData,
+                               TMSSetting)
+from experiment.views import (create_nwb_file, date_of_first_data_collection,
+                              get_block_tree,
+                              get_description_from_experimental_protocol_tree,
+                              get_experimental_protocol_image,
+                              get_sensors_position,
+                              list_data_configuration_tree)
 from export.export_utils import can_export_nwb, create_list_of_trees
-from patient.models import (
-    AlcoholFrequency,
-    AlcoholPeriod,
-    AmountCigarettes,
-    ClassificationOfDiseases,
-    Diagnosis,
-    FleshTone,
-    Gender,
-    MaritalStatus,
-    Patient,
-    Payment,
-    QuestionnaireResponse,
-    Religion,
-    Schooling,
-    SocialDemographicData,
-    SocialHistoryData,
-)
+from patient.models import (AlcoholFrequency, AlcoholPeriod, AmountCigarettes,
+                            ClassificationOfDiseases, Diagnosis, FleshTone,
+                            Gender, MaritalStatus, Patient, Payment,
+                            QuestionnaireResponse, Religion, Schooling,
+                            SocialDemographicData, SocialHistoryData)
 from plugin.models import RandomForests
 from survey.abc_search_engine import Questionnaires
-from survey.survey_utils import (
-    HEADER_EXPLANATION_FIELDS,
-    QUESTION_TYPES,
-    QuestionnaireUtils,
-)
+from survey.survey_utils import (HEADER_EXPLANATION_FIELDS, QUESTION_TYPES,
+                                 QuestionnaireUtils)
 from survey.views import limesurvey_available
 
 DEFAULT_LANGUAGE = "pt-BR"
@@ -1946,7 +1905,11 @@ class ExportExecution:
             for language in language_list:
                 # Get data for datapackage resource questionnaire response table schema
                 rows_participant_data = self.get_input_data("participants")["data_list"]
-                answer_list: dict[str, list] = {"fields": [], "header": [], "header_questionnaire": []}
+                answer_list: dict[str, list] = {
+                    "fields": [],
+                    "header": [],
+                    "header_questionnaire": [],
+                }
                 for question in questionnaire["output_list"]:
                     answer_list["fields"].append(question["field"])
                     answer_list["header"].append(question["header"])
@@ -5095,7 +5058,9 @@ class ExportExecution:
                                     settings.MEDIA_ROOT,
                                     stimulus_data["stimulus_file"].media_file.name,
                                 )
-                                stimulus_filename = path.basename(path_stimulus_filename)
+                                stimulus_filename = path.basename(
+                                    path_stimulus_filename
+                                )
                                 complete_stimulus_data_filename = path.join(
                                     path_stimulus_data, stimulus_filename
                                 )
@@ -5106,7 +5071,8 @@ class ExportExecution:
                                     "name": unique_name,
                                     "title": unique_name,
                                     "path": path.join(
-                                        export_directory_stimulus_data, stimulus_filename
+                                        export_directory_stimulus_data,
+                                        stimulus_filename,
                                     ),
                                     "description": "Stimulus type: %s"
                                     % stimulus_data["stimulus_file"].stimulus_type.name,
