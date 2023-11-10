@@ -54,3 +54,4 @@ django-stubs[compatible-mypy]
 django-stubs-ext 
 mypy
 djlint
+pylint

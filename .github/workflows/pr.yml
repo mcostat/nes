@@ -37,7 +37,7 @@ jobs:
               cache: 'pip'
           - name: Install requirements
             run: |
-              pip isntall flake8 |
+              pip install flake8 |
               pip install -r requirements.txt  
           - name: Run NES setup
             run: |
