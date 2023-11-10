@@ -20,6 +20,8 @@ jobs:
                     POSTGRES_PASSWORD: nes_password
                     PGDATA: /var/lib/postgresql/data
                     PGCLIENTENCODING: UTF8
+                    POSTGRES_HOST_AUTH_METHOD: md5
+                    POSTGRES_INITDB_ARGS: --auth-host=md5
                 ports:
                   - 5432:5432
                 options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -39,6 +41,13 @@ jobs:
           - name: Run NES setup
             run: |
               sh prepare_server.sh
+          - name: Python Linter
+            uses: sunnysid3up/python-linter@master
+            with:
+              source: "."
+              mypy-options: "--ignore-missing-imports --show-error-codes"
+              isort-options: "-w 100"
+              django: true
           - name: Run Tests
             run: |
               python3 -u manage.py test
