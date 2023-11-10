@@ -11,7 +11,6 @@ media/
 static/
 
 qdc/settings/settings_local.py
-qdc/wsgi.py
 
 *.placeholder
 

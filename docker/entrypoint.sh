@@ -14,28 +14,6 @@ fi
 
 mkdir -p $NES_PROJECT_PATH
 
-# NES SETUP ####################################################
-if [ -f $NES_PROJECT_PATH/nes_wsgi.placeholder ]; then
-    echo "INFO: NES wsgi.py file already provisioned"
-else
-    echo "INFO: Creating NES wsgi.py file"
-	cat <<-EOF >$NES_PROJECT_PATH/qdc/wsgi.py
-		import os
-		import sys
-		import site
-		paths = ["$NES_PROJECT_PATH", "$NES_DIR", "/usr/local", "/usr/bin", "/bin", "/usr/local/nes", ]
-		for path in paths:
-		    if path not in sys.path:
-		        sys.path.append(path)
-		os.environ.setdefault("DJANGO_SETTINGS_MODULE", "qdc.settings.prod")
-		from django.core.wsgi import get_wsgi_application
-		application = get_wsgi_application()
-	EOF
-    chown -R nobody $NES_PROJECT_PATH/qdc/wsgi.py
-
-    touch $NES_PROJECT_PATH/nes_wsgi.placeholder
-    chown -R nobody $NES_PROJECT_PATH/nes_wsgi.placeholder
-fi
 
 if [ -f $NES_PROJECT_PATH/nes_settings.placeholder ]; then
     echo "INFO: NES settings_local.py file already provisioned"

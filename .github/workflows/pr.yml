@@ -31,7 +31,9 @@ jobs:
             with:
               python-version: '3.11'
               cache: 'pip' # caching pip dependencies
-          - run: pip install -r patientregistrationsystem/qdc/requirements.txt         
+          - run: pip install -r patientregistrationsystem/qdc/requirements.txt  
+          - name: Run Entrypoint
+            run: patientregistrationsystem/qdc/preprare_server.sh
           - name: Run Tests
             run: |
               python3 patientregistrationsystem/qdc/manage.py test
