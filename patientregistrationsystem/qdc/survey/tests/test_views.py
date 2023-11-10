@@ -8,13 +8,20 @@ from django.test.client import RequestFactory
 from django.urls import reverse
 
 from custom_user.tests.tests_helper import create_user
-from experiment.models import (Block, Component, ComponentConfiguration,
-                               DataConfigurationTree, Experiment,
-                               Questionnaire, QuestionnaireResponse,
-                               ResearchProject, Subject, SubjectOfGroup)
+from experiment.models import (
+    Block,
+    Component,
+    ComponentConfiguration,
+    DataConfigurationTree,
+    Experiment,
+    Questionnaire,
+    QuestionnaireResponse,
+    ResearchProject,
+    Subject,
+    SubjectOfGroup,
+)
 from experiment.tests.tests_helper import ObjectsFactory
-from patient.models import \
-    QuestionnaireResponse as PatientQuestionnaireResponse
+from patient.models import QuestionnaireResponse as PatientQuestionnaireResponse
 from patient.tests.test_orig import UtilTests
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey

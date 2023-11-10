@@ -2,10 +2,21 @@ from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 from simple_history.admin import SimpleHistoryAdmin
 
-from .models import (AlcoholFrequency, AlcoholPeriod, AmountCigarettes,
-                     ClassificationOfDiseases, FleshTone, Gender,
-                     MaritalStatus, Patient, Payment, Religion, Schooling,
-                     SocialDemographicData, SocialHistoryData)
+from .models import (
+    AlcoholFrequency,
+    AlcoholPeriod,
+    AmountCigarettes,
+    ClassificationOfDiseases,
+    FleshTone,
+    Gender,
+    MaritalStatus,
+    Patient,
+    Payment,
+    Religion,
+    Schooling,
+    SocialDemographicData,
+    SocialHistoryData,
+)
 
 # Register your models here.
 search_fields = ["cpf"]

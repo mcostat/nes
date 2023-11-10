@@ -19,39 +19,77 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from goodtables import validate
 
-from experiment.models import (AdditionalData, AdditionalDataFile, BrainArea,
-                               BrainAreaSystem, CoilOrientation, Component,
-                               ComponentAdditionalFile, ComponentConfiguration,
-                               ContextTree, DigitalGamePhaseData,
-                               DigitalGamePhaseFile,
-                               DirectionOfTheInducedCurrent, EEGData, EEGFile,
-                               EMGFile, HotSpot, Stimulus, TMSData,
-                               TMSLocalizationSystem)
+from experiment.models import (
+    AdditionalData,
+    AdditionalDataFile,
+    BrainArea,
+    BrainAreaSystem,
+    CoilOrientation,
+    Component,
+    ComponentAdditionalFile,
+    ComponentConfiguration,
+    ContextTree,
+    DigitalGamePhaseData,
+    DigitalGamePhaseFile,
+    DirectionOfTheInducedCurrent,
+    EEGData,
+    EEGFile,
+    EMGFile,
+    HotSpot,
+    Stimulus,
+    TMSData,
+    TMSLocalizationSystem,
+)
 from experiment.tests.tests_helper import ObjectsFactory
 from export import input_export
-from export.export import (CONTEXT_TREE_DEFAULT, EEG_DEFAULT_SETTING_FILENAME,
-                           EEG_SETTING_FILENAME, EMG_DEFAULT_SETTING,
-                           EMG_SETTING_FILENAME, HOTSPOT_MAP,
-                           PROTOCOL_DESCRIPTION_FILENAME,
-                           PROTOCOL_IMAGE_FILENAME, TMS_DATA_FILENAME,
-                           TMS_DEFAULT_SETTING_FILENAME, ExportExecution)
+from export.export import (
+    CONTEXT_TREE_DEFAULT,
+    EEG_DEFAULT_SETTING_FILENAME,
+    EEG_SETTING_FILENAME,
+    EMG_DEFAULT_SETTING,
+    EMG_SETTING_FILENAME,
+    HOTSPOT_MAP,
+    PROTOCOL_DESCRIPTION_FILENAME,
+    PROTOCOL_IMAGE_FILENAME,
+    TMS_DATA_FILENAME,
+    TMS_DEFAULT_SETTING_FILENAME,
+    ExportExecution,
+)
 from export.export_utils import create_list_of_trees
 from export.models import Export
-from export.tests.mocks import (LIMESURVEY_SURVEY_ID_1, LIMESURVEY_SURVEY_ID_2,
-                                set_mocks1, set_mocks2, set_mocks3, set_mocks4,
-                                set_mocks5, set_mocks6, set_mocks7, set_mocks8,
-                                set_mocks9, set_mocks10, set_mocks11,
-                                update_mocks4_full_and_abbreviated,
-                                update_mocks6_abbreviated, update_mocks6_full,
-                                update_mocks7_abbreviated, update_mocks7_full,
-                                update_mocks9_abbreviated, update_mocks9_full,
-                                update_mocks10_abbreviated,
-                                update_mocks10_full,
-                                update_mocks11_abbreviated,
-                                update_mocks11_full)
+from export.tests.mocks import (
+    LIMESURVEY_SURVEY_ID_1,
+    LIMESURVEY_SURVEY_ID_2,
+    set_mocks1,
+    set_mocks2,
+    set_mocks3,
+    set_mocks4,
+    set_mocks5,
+    set_mocks6,
+    set_mocks7,
+    set_mocks8,
+    set_mocks9,
+    set_mocks10,
+    set_mocks11,
+    update_mocks4_full_and_abbreviated,
+    update_mocks6_abbreviated,
+    update_mocks6_full,
+    update_mocks7_abbreviated,
+    update_mocks7_full,
+    update_mocks9_abbreviated,
+    update_mocks9_full,
+    update_mocks10_abbreviated,
+    update_mocks10_full,
+    update_mocks11_abbreviated,
+    update_mocks11_full,
+)
 from export.tests.tests_helper import ExportTestCase
-from export.views import (DIAGNOSIS_FIELDS, EXPORT_DIRECTORY, PATIENT_FIELDS,
-                          abbreviated_data)
+from export.views import (
+    DIAGNOSIS_FIELDS,
+    EXPORT_DIRECTORY,
+    PATIENT_FIELDS,
+    abbreviated_data,
+)
 from patient.tests.test_orig import UtilTests
 from survey.survey_utils import HEADER_EXPLANATION_FIELDS
 from survey.tests.tests_helper import create_survey

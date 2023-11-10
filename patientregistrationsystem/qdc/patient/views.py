@@ -18,23 +18,38 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from experiment.models import Questionnaire
-from experiment.models import \
-    QuestionnaireResponse as ExperimentQuestionnaireResponse
+from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
 from experiment.models import Subject, SubjectOfGroup
-from patient.forms import (ComplementaryExamForm, ExamFileForm, PatientForm,
-                           QuestionnaireResponseForm,
-                           SocialDemographicDataForm, SocialHistoryDataForm,
-                           TelephoneForm)
-from patient.models import (ClassificationOfDiseases, ComplementaryExam,
-                            Diagnosis, ExamFile, MedicalRecordData, Patient,
-                            QuestionnaireResponse, SocialDemographicData,
-                            SocialHistoryData, Telephone)
+from patient.forms import (
+    ComplementaryExamForm,
+    ExamFileForm,
+    PatientForm,
+    QuestionnaireResponseForm,
+    SocialDemographicDataForm,
+    SocialHistoryDataForm,
+    TelephoneForm,
+)
+from patient.models import (
+    ClassificationOfDiseases,
+    ComplementaryExam,
+    Diagnosis,
+    ExamFile,
+    MedicalRecordData,
+    Patient,
+    QuestionnaireResponse,
+    SocialDemographicData,
+    SocialHistoryData,
+    Telephone,
+)
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 from survey.survey_utils import find_questionnaire_name
-from survey.views import (check_limesurvey_access, csv_to_list,
-                          get_questionnaire_language,
-                          get_questionnaire_responses)
+from survey.views import (
+    check_limesurvey_access,
+    csv_to_list,
+    get_questionnaire_language,
+    get_questionnaire_responses,
+)
 
 # mypy: disable-error-code="misc"
 permission_required = partial(permission_required, raise_exception=True)

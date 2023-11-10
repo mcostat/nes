@@ -12,8 +12,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 import experiment
-from experiment.models import (Experiment, Group, ResearchProject,
-                               SubjectOfGroup)
+from experiment.models import Experiment, Group, ResearchProject, SubjectOfGroup
 from patient.models import Patient
 
 from .forms import UploadFileForm

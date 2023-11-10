@@ -21,16 +21,32 @@ from django.db.models import Count, Q
 from django.utils.translation import gettext as _
 
 from experiment.import_export_model_relations import (
-    EXPERIMENT_JSON_FILES, FOREIGN_RELATIONS, JSON_FILES_DETACHED_MODELS,
-    MODEL_ROOT_NODES, MODELS_WITH_FILE_FIELD,
-    MODELS_WITH_RELATION_TO_AUTH_USER, ONE_TO_ONE_RELATION, PATIENT_JSON_FILES,
-    PRE_LOADED_MODELS_FOREIGN_KEYS, PRE_LOADED_MODELS_INHERITANCE,
-    PRE_LOADED_MODELS_NOT_EDITABLE, PRE_LOADED_MODELS_NOT_EDITABLE_INHERITANCE,
-    PRE_LOADED_PATIENT_MODEL)
-from experiment.models import (Component, EEGElectrodeLocalizationSystem,
-                               Experiment, FileFormat, Group, Keyword,
-                               Questionnaire, QuestionnaireResponse,
-                               ResearchProject, Subject)
+    EXPERIMENT_JSON_FILES,
+    FOREIGN_RELATIONS,
+    JSON_FILES_DETACHED_MODELS,
+    MODEL_ROOT_NODES,
+    MODELS_WITH_FILE_FIELD,
+    MODELS_WITH_RELATION_TO_AUTH_USER,
+    ONE_TO_ONE_RELATION,
+    PATIENT_JSON_FILES,
+    PRE_LOADED_MODELS_FOREIGN_KEYS,
+    PRE_LOADED_MODELS_INHERITANCE,
+    PRE_LOADED_MODELS_NOT_EDITABLE,
+    PRE_LOADED_MODELS_NOT_EDITABLE_INHERITANCE,
+    PRE_LOADED_PATIENT_MODEL,
+)
+from experiment.models import (
+    Component,
+    EEGElectrodeLocalizationSystem,
+    Experiment,
+    FileFormat,
+    Group,
+    Keyword,
+    Questionnaire,
+    QuestionnaireResponse,
+    ResearchProject,
+    Subject,
+)
 from patient.models import ClassificationOfDiseases, Patient
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey

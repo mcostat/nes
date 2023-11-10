@@ -7,9 +7,12 @@ from django.test import TestCase
 
 from custom_user.tests.tests_helper import create_user
 from experiment.models import Component, ScheduleOfSending
-from experiment.portal import (send_experiment_researcher_to_portal,
-                               send_experiment_to_portal,
-                               send_researcher_to_portal, send_steps_to_portal)
+from experiment.portal import (
+    send_experiment_researcher_to_portal,
+    send_experiment_to_portal,
+    send_researcher_to_portal,
+    send_steps_to_portal,
+)
 from experiment.tests.tests_helper import ObjectsFactory
 from experiment.views import get_block_tree
 from survey.abc_search_engine import ABCSearchEngine

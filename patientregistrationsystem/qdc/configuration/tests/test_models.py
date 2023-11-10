@@ -1,8 +1,7 @@
 from django.db.utils import IntegrityError
 from django.test import TestCase
 
-from configuration.models import (Contact, LocalInstitution,
-                                  get_institution_logo_dir)
+from configuration.models import Contact, LocalInstitution, get_institution_logo_dir
 from custom_user.models import Institution
 
 

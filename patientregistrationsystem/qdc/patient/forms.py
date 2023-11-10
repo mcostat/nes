@@ -1,15 +1,28 @@
 # -*- coding: UTF-8 -*-
 from django import forms
 from django.core.validators import EMPTY_VALUES
-from django.forms import (CheckboxInput, DateInput, ModelForm,
-                          NullBooleanSelect, RadioSelect, Select, TextInput,
-                          TypedChoiceField)
+from django.forms import (
+    CheckboxInput,
+    DateInput,
+    ModelForm,
+    NullBooleanSelect,
+    RadioSelect,
+    Select,
+    TextInput,
+    TypedChoiceField,
+)
 from django.forms.widgets import Textarea
 from django.utils.translation import gettext as _
 
-from patient.models import (ComplementaryExam, ExamFile, Patient,
-                            QuestionnaireResponse, SocialDemographicData,
-                            SocialHistoryData, Telephone)
+from patient.models import (
+    ComplementaryExam,
+    ExamFile,
+    Patient,
+    QuestionnaireResponse,
+    SocialDemographicData,
+    SocialHistoryData,
+    Telephone,
+)
 
 NULLBOOLEAN_CHOICE = ((True, _("Yes")), (False, _("No")), (None, _("Unknown")))
 

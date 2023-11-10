@@ -28,26 +28,49 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from faker import Factory
 
-from experiment.models import (Block, ComponentConfiguration,
-                               DataConfigurationTree, Experiment, Group,
-                               Questionnaire)
-from experiment.models import \
-    QuestionnaireResponse as ExperimentQuestionnaireResponse
+from experiment.models import (
+    Block,
+    ComponentConfiguration,
+    DataConfigurationTree,
+    Experiment,
+    Group,
+    Questionnaire,
+)
+from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
 from experiment.models import ResearchProject, Subject, SubjectOfGroup
-from patient.management.commands.import_icd import \
-    import_classification_of_diseases
-from patient.models import (AlcoholFrequency, AlcoholPeriod, AmountCigarettes,
-                            ClassificationOfDiseases, ComplementaryExam,
-                            Diagnosis, ExamFile, Gender, MaritalStatus,
-                            MedicalRecordData, Patient, QuestionnaireResponse,
-                            Schooling, Telephone)
-from patient.tests.update_english_data import (translate_fixtures_into_english,
-                                               update_translated_data)
+from patient.management.commands.import_icd import import_classification_of_diseases
+from patient.models import (
+    AlcoholFrequency,
+    AlcoholPeriod,
+    AmountCigarettes,
+    ClassificationOfDiseases,
+    ComplementaryExam,
+    Diagnosis,
+    ExamFile,
+    Gender,
+    MaritalStatus,
+    MedicalRecordData,
+    Patient,
+    QuestionnaireResponse,
+    Schooling,
+    Telephone,
+)
+from patient.tests.update_english_data import (
+    translate_fixtures_into_english,
+    update_translated_data,
+)
 from patient.validation import CPF
-from patient.views import (diagnosis_create, exam_create, exam_view,
-                           medical_record_create_diagnosis_create,
-                           medical_record_update, medical_record_view,
-                           patient_update, patient_view, restore_patient)
+from patient.views import (
+    diagnosis_create,
+    exam_create,
+    exam_view,
+    medical_record_create_diagnosis_create,
+    medical_record_update,
+    medical_record_view,
+    patient_update,
+    patient_view,
+    restore_patient,
+)
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 from survey.views import check_limesurvey_access

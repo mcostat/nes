@@ -1,8 +1,17 @@
 from modeltranslation.translator import TranslationOptions, translator
 
-from patient.models import (AlcoholFrequency, AlcoholPeriod, AmountCigarettes,
-                            ClassificationOfDiseases, FleshTone, Gender,
-                            MaritalStatus, Payment, Religion, Schooling)
+from patient.models import (
+    AlcoholFrequency,
+    AlcoholPeriod,
+    AmountCigarettes,
+    ClassificationOfDiseases,
+    FleshTone,
+    Gender,
+    MaritalStatus,
+    Payment,
+    Religion,
+    Schooling,
+)
 
 
 class SchoolingTranslationOptions(TranslationOptions):

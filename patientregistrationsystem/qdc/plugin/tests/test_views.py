@@ -18,9 +18,11 @@ from export.models import Export
 from export.tests.tests_helper import ExportTestCase
 from patient.tests.test_orig import UtilTests
 from plugin.models import RandomForests
-from plugin.tests.LimeSurveyAPI_mocks import (set_limesurvey_api_mocks,
-                                              set_limesurvey_api_mocks2,
-                                              update_limesurvey_api_mocks)
+from plugin.tests.LimeSurveyAPI_mocks import (
+    set_limesurvey_api_mocks,
+    set_limesurvey_api_mocks2,
+    update_limesurvey_api_mocks,
+)
 from plugin.views import send_to_plugin
 from survey.models import Survey
 from survey.tests.tests_helper import create_survey

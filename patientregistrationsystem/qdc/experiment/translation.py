@@ -1,11 +1,19 @@
 from modeltranslation.translator import TranslationOptions, translator
 
-from experiment.models import (AmplifierDetectionType, CoilShape,
-                               ElectrodeConfiguration, ElectrodeShape,
-                               FileFormat, InformationType,
-                               InformationTypeMedia, MeasureSystem,
-                               PublicationType, SourceCodeFileFormat,
-                               StimulusType, TetheringSystem)
+from experiment.models import (
+    AmplifierDetectionType,
+    CoilShape,
+    ElectrodeConfiguration,
+    ElectrodeShape,
+    FileFormat,
+    InformationType,
+    InformationTypeMedia,
+    MeasureSystem,
+    PublicationType,
+    SourceCodeFileFormat,
+    StimulusType,
+    TetheringSystem,
+)
 
 
 class PublicationTypeTranslationOptions(TranslationOptions):

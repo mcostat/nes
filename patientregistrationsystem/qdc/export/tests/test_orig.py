@@ -16,8 +16,7 @@ from django.utils.translation import gettext as _
 from custom_user.models import User
 from export.export import is_patient_active
 from export.input_export import InputExport, build_complete_export_structure
-from export.views import (QuestionnaireResponse, Questionnaires, Survey,
-                          create_directory)
+from export.views import QuestionnaireResponse, Questionnaires, Survey, create_directory
 from patient.models import Gender, MaritalStatus, Patient
 
 USER_EDIT = "user_edit"

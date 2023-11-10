@@ -4,9 +4,17 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from patient.forms import *
-from patient.models import (AlcoholFrequency, AlcoholPeriod, AmountCigarettes,
-                            FleshTone, Gender, Payment, Religion, Schooling,
-                            Telephone)
+from patient.models import (
+    AlcoholFrequency,
+    AlcoholPeriod,
+    AmountCigarettes,
+    FleshTone,
+    Gender,
+    Payment,
+    Religion,
+    Schooling,
+    Telephone,
+)
 from patient.views import *
 
 from .test_orig import UtilTests

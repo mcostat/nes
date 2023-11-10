@@ -44,8 +44,7 @@ jobs:
           - uses: psf/black@stable
             with:
               options: "--check --verbose"
-              src: "."
-          - uses: isort/isort-action@v1
+              src: "patientregistrationsystem/qdc/"
           - name: Run NES setup
             run: |
               sh prepare_server.sh

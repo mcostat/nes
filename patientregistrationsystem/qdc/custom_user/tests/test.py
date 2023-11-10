@@ -5,8 +5,10 @@ from typing import Any
 
 from django.conf import settings
 from django.contrib.auth.models import Group, User
-from django.contrib.auth.tokens import (PasswordResetTokenGenerator,
-                                        default_token_generator)
+from django.contrib.auth.tokens import (
+    PasswordResetTokenGenerator,
+    default_token_generator,
+)
 from django.contrib.messages import get_messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
@@ -19,8 +21,12 @@ from django.utils.http import int_to_base36
 from django.utils.translation import gettext as _
 
 from custom_user.models import Institution, UserProfile
-from custom_user.views import (institution_create, institution_update,
-                               institution_view, user_update)
+from custom_user.views import (
+    institution_create,
+    institution_update,
+    institution_view,
+    user_update,
+)
 
 from .tests_helper import create_user
 

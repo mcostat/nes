@@ -1,11 +1,22 @@
 # coding=utf-8
 from typing import Any
 
-from django.forms import (BooleanField, CharField, CheckboxInput,
-                          CheckboxSelectMultiple, ChoiceField, Form,
-                          IntegerField, ModelForm, MultipleChoiceField,
-                          NumberInput, RadioSelect, Select, SelectMultiple,
-                          TextInput)
+from django.forms import (
+    BooleanField,
+    CharField,
+    CheckboxInput,
+    CheckboxSelectMultiple,
+    ChoiceField,
+    Form,
+    IntegerField,
+    ModelForm,
+    MultipleChoiceField,
+    NumberInput,
+    RadioSelect,
+    Select,
+    SelectMultiple,
+    TextInput,
+)
 from django.utils.translation import gettext_lazy as _
 
 from patient.models import Diagnosis, Patient
