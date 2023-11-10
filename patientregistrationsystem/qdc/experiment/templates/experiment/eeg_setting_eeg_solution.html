@@ -1,17 +1,17 @@
 {% extends "experiment/eeg_setting_type_template.html" %}
-{% load i18n static %}
+{% load i18n %}
 
 {% block selection %}
 {{ block.super }}
 
     <h4>{% trans "EEG solution settings" %}</h4>
-
+    <hr>
     <div class="row">
-        <div class="col-xs-1 col-sm-1">
+        <div class="col-1 col-sm-1">
         </div>
-        <div class="col-xs-11 col-sm-11">
+        <div class="col-11 col-sm-11">
             <div class="form-group">
-                <label class="control-label">{% trans "Manufacturer" %} </label>
+                <label class="form-label">{% trans "Manufacturer" %} </label>
 
                 <select class="form-control" name="manufacturer" id="id_manufacturer" {% if not editing and not creating %}disabled{% endif %}>
                     <option value>-------</option>
@@ -20,17 +20,17 @@
                     {% endfor %}
                 </select>
 
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-1 col-sm-1">
+        <div class="col-1 col-sm-1">
         </div>
-        <div class="col-xs-11 col-sm-11">
+        <div class="col-11 col-sm-11">
             <div class="form-group">
-                <label class="control-label">{% trans "Identification" %} </label>
+                <label class="form-label">{% trans "Identification" %} </label>
 
                 <select class="form-control" name="solution_selection" id="id_equipment_selection" required {% if not editing and not creating %}disabled{% endif %}>
                     <option value>-------</option>
@@ -39,22 +39,22 @@
                     {% endfor %}
                 </select>
 
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
 
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-1 col-sm-1">
+        <div class="col-1 col-sm-1">
         </div>
-        <div class="col-xs-11 col-sm-11">
+        <div class="col-11 col-sm-11">
             <div class="form-group">
-                <label class="control-label">{% trans "Description" %} </label>
+                <label class="form-label">{% trans "Description" %} </label>
                 {{ equipment_form.components }}
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
             </div>
         </div>
     </div>
 
-{% endblock %}
+{% endblock selection %}

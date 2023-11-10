@@ -57,7 +57,7 @@ CSRF_TRUSTED_ORIGINS = ["https://localhost:80", "https://$NES_IP", "https://$NES
 		}
 		LIMESURVEY = {
 		    "URL_API": "http://$LIMESURVEY_HOST:$LIMESURVEY_PORT",
-		    "URL_WEB": "http://$LIMESURVEY_HOST:$LIMESURVEY_PORT",
+		    "URL_WEB": "http://$LIMESURVEY_URL_WEB:$LIMESURVEY_PORT",
 		    "USER": "$LIMESURVEY_ADMIN_USER",
 		    "PASSWORD": "$LIMESURVEY_ADMIN_PASSWORD"
 		}
@@ -118,11 +118,14 @@ except:
     python3 -u manage.py shell < /tmp/create_superuser.py || true
     echo "	INFO: import cid10"
     python3 -u manage.py import_icd_cid --file icd10cid10v2017.csv || true
-    
-    mkdir static || true
+
+    mkdir -p static || true
     echo "	INFO: colectstatic"
     python3 -u manage.py collectstatic --no-input || true
 
+    echo "  INFO: compress"
+    python3 -u manage.py compress --force || true
+    
     echo "	INFO: populate_history"
     python3 -u manage.py populate_history --auto || true
 
@@ -174,6 +177,12 @@ else
 
     <Directory $NES_PROJECT_PATH/static>
         Require all granted
+
+        <IfModule mod_headers.c>
+            <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf|svg)$">
+                Header set Cache-Control "max-age=31536000, public"
+            </FilesMatch>
+        </IfModule>
     </Directory>
 
     <Directory $NES_PROJECT_PATH>
@@ -217,6 +226,12 @@ else
 
     <Directory $NES_PROJECT_PATH/static>
         Require all granted
+
+        <IfModule mod_headers.c>
+            <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf|svg|ttf|woff2)$">
+                Header set Cache-Control "max-age=31536000, public"
+            </FilesMatch>
+        </IfModule>
     </Directory>
 
     <Directory $NES_PROJECT_PATH>
@@ -254,6 +269,7 @@ else
 
     a2enmod ssl
     a2enmod http2
+    a2enmod headers
     a2dissite 000-default.conf
     a2ensite nes
     a2ensite nes-ssl

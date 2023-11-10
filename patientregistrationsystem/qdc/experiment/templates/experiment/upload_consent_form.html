@@ -1,121 +1,108 @@
 {% extends "base/template.html" %}
-{% block activeAdvancedResearchProject %}class="active"{% endblock %}
 
-{% load i18n static %}
+{% block activeAdvancedResearchProject %}
+    active
+{% endblock activeAdvancedResearchProject %}
+
+{% load i18n %}
 
 {% block form %}
-    <div class="row">
     <form id="file_form" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-{% endblock %}
+        {% csrf_token %}
+    {% endblock form %}
 
-{% block content %}
-
-    <div class="tab-pane fade in active" id="subjectBreadCrumb">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
-                <li><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}/subjects">{% trans "Participant" %}</a></li>
-                <li class="active">{% trans "Term of consent" %}</li>
-            </ol>
+    {% block content %}
+        <div class="tab-pane fade show active" id="subjectBreadCrumb">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                    <li class="breadcrumb-item">
+                        <a href="{% url "home" %}">{% trans "Home" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/research_project/list">{% trans "Studies" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/group/{{ group.id }}">{{ group.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/group/{{ group.id }}/subjects">{% trans "Participant" %}</a>
+                    </li>
+                    <li class="breadcrumb-item active">{% trans "Term of consent" %}</li>
+                </ol>
+            </nav>
         </div>
-    </div>
 
-    {% comment %} {% if messages %}
-        {% for message in messages %}
-
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %} {% endcomment %}
-
-    <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-xs-12 col-md-12">
-                    <div class="form-group">
-                        <label>{% trans "Term of consent" %}</label>
-                        {% if not file_list %}
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12">
-                                    <div class="form-group">
-                                        {{ file_form.consent_form }}
+        <div class="tab-pane fade show active" id="menuUserTab">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                <div class="row">
+                    <div class="col-12 col-lg-12">
+                        <h4>{% trans "Term of consent" %}</h4>
+                        <hr>
+                        <div class="form-group">
+                            <br>
+                            {% if not file_list %}
+                                <div class="row">
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">{{ file_form.consent_form }}</div>
                                     </div>
                                 </div>
-                            </div>
-                        {% else %}
-                            <div class="row">
-                                <div class="col-xs-8 col-sm-6">
-                                    <div class="form-group">
-                                        {{ file_list.name }}
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-8 col-sm-6">
+                                        <div class="form-group">{{ file_list.name }}</div>
+                                    </div>
+                                    <div class="col-4 col-sm-6">
+                                        <div class="btn-toolbar justify-content-between" role="toolbar">
+                                            {% if perms.patient.sensitive_data_patient %}
+                                                <button class="btn btn-light" type="button" onclick="location.href='{{ file_list.url }}'">
+                                                    <span class="fa-fw fa fa-download-alt text-info"></span>
+                                                </button>
+                                                <button class="btn btn-light" type="button" onclick="$('#modalRemove').modal('show')">
+                                                    <span class="fa-fw fa fa-remove text-danger"></span>
+                                                </button>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-4 col-sm-6">
-                                    <div class="btn-toolbar">
-                                        {% if perms.patient.sensitive_data_patient %}
-                                            <button class="btn btn-default" type="button" onclick="location.href='{{ file_list.url }}'"><span class="fa fa-download-alt" style="color: royalblue"></span></button>
-                                            <button class="btn btn-default" type="button" onclick="$('#modalRemove').modal('show')"><span class="fa fa-remove" style="color: indianred"></span></button>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="btn-toolbar">
-                {% if not file_list %}
-                    {# This div has to exist so that the upload and cancel buttons appear separated from each other. #}
-                    <div class="btn-group pull-left">
-                    </div>
-                    <div class="btn-group pull-right">
-                        <button id="save_file"  type="submit" name="action" value="upload" class="btn btn-primary">{% trans "Upload" %}</button>
-                    </div>
-                {% endif %}
-                <div class="btn-group pull-right">
-                    <a href="/experiment/group/{{ group.id }}/subjects" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                <div class="btn-group">
+                </div>
+                <div class="btn-group">
+                    {% if not file_list %}
+                        {# This div has to exist so that the upload and cancel buttons appear separated from each other. #}
+                        <div class="btn-group">
+                            <button id="save_file"  type="submit" name="action" value="upload" class="btn btn-primary">{% trans "Upload" %}</button>
+                        </div>
+                    {% endif %}
+                    <a href="/experiment/group/{{ group.id }}/subjects" class="btn btn-light">{% trans "Back" %}</a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    {% trans "Are you sure you want to delete attachment?" %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-                    <button type="submit" class="btn btn-primary" value="remove" name="action"
-                        style="background-color: indianred; color: #ffffff">{% trans "Delete" %}</button>
+        <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">{% trans "Are you sure you want to delete attachment?" %}</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                        <button type="submit" class="btn btn-danger" value="remove" name="action">{% trans "Delete" %}</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endblock content %}
 
-{% endblock %}
-
-{% block end_form %}
+    {% block end_form %}
     </form>
-    </div>
-{% endblock %}
+{% endblock end_form %}

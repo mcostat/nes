@@ -1,58 +1,38 @@
 {% extends "base/template.html" %}
-{% block activeAdvancedResearchProject %}class="active"{% endblock %}
+{% block activeAdvancedResearchProject %} active{% endblock activeAdvancedResearchProject  %}
 
-{% load i18n static %}
+{% load i18n %}
 {% load subjects_tags %}
 
 {% block form %}
-    <div class="row">
+    
     <form id="subject_form" method="post">
     {% csrf_token %}
 {% endblock %}
 
 {% block content %}
 
-    <div class="tab-pane fade in active" id="subjectBreadCrumb">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
-                <li><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a></li>
-                <li class="active">{% get_name_or_code subject.patient.id %}</li>
-                <li class="active">{% trans "TMS data files" %}</li>
+    <div class="tab-pane fade show active" id="subjectBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a></li>
+                <li class="breadcrumb-item active">{% get_name_or_code subject.patient.id %}</li>
+                <li class="breadcrumb-item active">{% trans "TMS data files" %}</li>
             </ol>
-        </div>
+        </nav>
     </div>
 
-    {% comment %} {% if messages %}
-        {% for message in messages %}
 
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
 
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %} {% endcomment %}
-
-    <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-12">
+    <div class="tab-pane fade show active" id="menuUserTab">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-xs-12 col-sm-12">
+                <div class="col-12 col-sm-12">
                     <div class="form-group">
                         <table class="table table-striped">
                             <thead>
@@ -87,20 +67,20 @@
                                                 {% for tms_data_file in tms_collection.tms_data_files %}
                                                     <tr>
                                                         <td>
-                                                            <a href="/experiment/tms_data/{{ tms_data_file.id }}" data-toggle="tooltip" data-placement="left" title="{% trans "See details" %}">
+                                                            <a href="/experiment/tms_data/{{ tms_data_file.id }}" data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "See details" %}">
                                                                 {{ tms_data_file.description }}
                                                             </a>
                                                         </td>
                                                         <td>{{ tms_data_file.date }}</td>
                                                         <td>{{ tms_data_file.file_format.name }}</td>
                                                         <td>{{ tms_data_file.file.size|filesizeformat }}</td>
-                                                        <td><a href="{{ tms_data_file.file.url }}"><span class="fa fa-download"></span></a></td>
+                                                        <td><a href="{{ tms_data_file.file.url }}"><span class="fa-fw fa fa-download"></span></a></td>
                                                     </tr>
                                                 {% endfor %}
                                                 <tr>
                                                     <td colspan="5">
                                                         <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/tms/{% for item in tms_collection.path %}{{ item.0 }}{% if not forloop.last %}-{% endif %}{% endfor %}/add_tms_data">
-                                                        <span class="fa fa-plus"></span>
+                                                        <span class="fa-fw fa fa-plus"></span>
                                                             {% trans "New TMS data file" %}
                                                         </a>
                                                     </td>
@@ -116,9 +96,9 @@
                     </div>
                 </div>
             </div>
-            <div class="btn-toolbar">
-                <div class="btn-group pull-right">
-                    <a href="/experiment/group/{{ group.id }}/subjects" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                <div class="btn-group float-end">
+                    <a href="/experiment/group/{{ group.id }}/subjects" class="btn btn-light">{% trans "Back" %}</a>
                 </div>
             </div>
 
@@ -130,13 +110,5 @@
 
 {% block end_form %}
     </form>
-    </div>
 {% endblock %}
 
-{% block script %}
-    <script>
-        $(function(){
-            $("[data-toggle=tooltip]").tooltip();
-        });
-    </script>
-{% endblock %}

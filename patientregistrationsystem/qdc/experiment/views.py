@@ -36,7 +36,12 @@ from django.core.files.base import ContentFile
 from django.core.mail import send_mail
 from django.db.models import Min, Q
 from django.db.models.deletion import ProtectedError
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import (
+    HttpRequest,
+    HttpResponse,
+    HttpResponseRedirect,
+    HttpResponseNotAllowed,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.encoding import smart_str
@@ -132,6 +137,7 @@ from .forms import (
     SoftwareVersionRegisterForm,
     SourceCodeForm,
     StandardizationSystemRegisterForm,
+    StimuliDataForm,
     StimuliEqRegisterForm,
     StimuliEqSettingForm,
     StimulusForm,
@@ -227,6 +233,7 @@ from .models import (
     SoftwareVersion,
     SourceCode,
     StandardizationSystem,
+    StimuliData,
     StimuliEq,
     StimuliEqSetting,
     Stimulus,
@@ -275,22 +282,22 @@ from .portal import (
 # mypy: disable-error-code="misc"
 permission_required = partial(permission_required, raise_exception=True)
 
-icon_class: dict[str, str] = {
-    "block": "fa fa-th-large fa-fw",
-    "instruction": "fa fa-comment fa-fw",
-    "pause": "fa fa-clock-o fa-fw",
-    "questionnaire": "fa fa-list-alt fa-fw",
-    "stimulus": "fa fa-headphones fa-fw",
-    "task": "fa fa-check fa-fw",
-    "task_experiment": "fa fa-wrench fa-fw",
-    "eeg": "fa fa-flash fa-fw",
-    "emg": "fa fa-line-chart fa-fw",
-    "tms": "fa fa-magnet fa-fw",
-    "experimental_protocol": "fa fa-tasks fa-fw",
-    "digital_game_phase": "fa fa-play-circle fa-fw",
-    "generic_data_collection": "fa fa-file fa-fw",
-    "additional_data": "fa fa-puzzle-piece fa-fw",
-    "media_collection": "fa fa-camera fa-fw",
+ICON_CLASS: dict[str, str] = {
+    "block": "fa-fw fa fa-th-large",
+    "instruction": "fa-fw fa fa-comment",
+    "pause": "fa-fw fa fa-clock-o",
+    "questionnaire": "fa-fw fa fa-list-alt",
+    "stimulus": "fa-fw fa fa-headphones",
+    "task": "fa-fw fa fa-check",
+    "task_experiment": "fa-fw fa fa-wrench",
+    "eeg": "fa-fw fa fa-flash",
+    "emg": "fa-fw fa fa-line-chart",
+    "tms": "fa-fw fa fa-magnet",
+    "experimental_protocol": "fa-fw fa fa-tasks",
+    "digital_game_phase": "fa-fw fa fa-play-circle",
+    "generic_data_collection": "fa-fw fa fa-file",
+    "additional_data": "fa-fw fa fa-puzzle-piece",
+    "media_collection": "fa-fw fa fa-camera",
 }
 
 data_type_name: dict[str, str] = {
@@ -304,7 +311,7 @@ data_type_name: dict[str, str] = {
     "media_collection": _("media collection"),
 }
 
-delimiter = "-"
+DELIMITER = "-"
 
 
 class EEGReading:
@@ -316,9 +323,11 @@ class EEGReading:
 @login_required
 @permission_required("experiment.view_researchproject")
 def research_project_list(
-    request, template_name="experiment/research_project_list.html"
-):
-    research_projects = ResearchProject.objects.order_by("start_date")
+    request: HttpRequest, template_name: str = "experiment/research_project_list.html"
+) -> HttpResponse:
+    research_projects = ResearchProject.objects.prefetch_related("owner").order_by(
+        "start_date"
+    )
 
     can_send_to_portal = False
     if settings.PORTAL_API["URL"] and settings.SHOW_SEND_TO_PORTAL_BUTTON:
@@ -394,7 +403,9 @@ def research_project_view(
     research_project_id,
     template_name="experiment/research_project_register.html",
 ):
-    research_project = get_object_or_404(ResearchProject, pk=research_project_id)
+    research_project = get_object_or_404(
+        ResearchProject.objects.prefetch_related(), pk=research_project_id
+    )
 
     research_project_form = ResearchProjectForm(
         request.POST or None, instance=research_project
@@ -466,7 +477,9 @@ def research_project_view(
 
         if request.POST["action"][:10] == "create_pdf":
             experiment_id = request.POST["action"][11:]
-            experiment = get_object_or_404(Experiment, pk=experiment_id)
+            experiment = get_object_or_404(
+                Experiment.objects.select_related(), pk=experiment_id
+            )
             researchers = ExperimentResearcher.objects.filter(experiment=experiment)
             groups = Group.objects.filter(experiment=experiment)
             experimental_protocol_image = []
@@ -584,7 +597,7 @@ def research_project_update(
 @login_required
 @permission_required("experiment.view_researchproject")
 def keyword_search_ajax(request: HttpRequest) -> HttpResponse:
-    keywords_name_list = None
+    keywords_name_list = []
     keywords_list_filtered = None
     search_text = None
 
@@ -660,7 +673,9 @@ def manage_keywords(keyword, research_projects):
 
 @login_required
 @permission_required("experiment.change_researchproject")
-def keyword_remove_ajax(request, research_project_id, keyword_id):
+def keyword_remove_ajax(
+    request: HttpRequest, research_project_id: int, keyword_id: int
+) -> HttpResponseRedirect:
     research_project = get_object_or_404(ResearchProject, pk=research_project_id)
 
     check_can_change(request.user, research_project)
@@ -677,9 +692,11 @@ def keyword_remove_ajax(request, research_project_id, keyword_id):
 @login_required
 @permission_required("experiment.view_researchproject")
 def publication_list(
-    request, template_name="experiment/publication_list.html"
+    request: HttpRequest, template_name: str = "experiment/publication_list.html"
 ) -> HttpResponse:
-    publications = Publication.objects.all().order_by("title")
+    publications = (
+        Publication.objects.all().select_related("publication_type").order_by("title")
+    )
     context = {
         "publications": publications,
     }
@@ -1742,7 +1759,7 @@ def send_all_experiments_to_portal() -> None:
 
                             if isinstance(responses_string, bytes):
                                 reader = csv.reader(
-                                    StringIO(responses_string.decode()), delimiter=","
+                                    StringIO(responses_string.decode()), DELIMITER=","
                                 )
                                 responses_list = []
                                 for row in reader:
@@ -6044,9 +6061,11 @@ def search_cid10_ajax(request):
         else:
             return render(
                 None,
-                "export/diagnoses.html",
+                "export/diagnosis.html",
                 {"classification_of_diseases_list": cid_10_list},
             )
+
+    return HttpResponseNotAllowed(["POST"])
 
 
 @login_required
@@ -6203,6 +6222,7 @@ def subjects(request, group_id, template_name="experiment/subjects.html"):
         "number_of_eeg_data": 0,
         "number_of_emg_data": 0,
         "number_of_tms_data": 0,
+        "number_of_stimuli_data": 0,
         "number_of_digital_game_phase_data": 0,
         "number_of_generic_data_collection_data": 0,
         "number_of_media_collection_data": 0,
@@ -6246,6 +6266,9 @@ def subjects(request, group_id, template_name="experiment/subjects.html"):
         list_of_tms_configuration = create_list_of_trees(
             group.experimental_protocol, "tms"
         )
+        list_of_stimuli_configuration = create_list_of_trees(
+            group.experimental_protocol, "stimuli"
+        )
         list_of_digital_game_phase_configuration = create_list_of_trees(
             group.experimental_protocol, "digital_game_phase"
         )
@@ -6261,6 +6284,7 @@ def subjects(request, group_id, template_name="experiment/subjects.html"):
             "number_of_eeg_data": len(list_of_eeg_configuration),
             "number_of_emg_data": len(list_of_emg_configuration),
             "number_of_tms_data": len(list_of_tms_configuration),
+            "number_of_stimuli_data": len(list_of_stimuli_configuration),
             "number_of_digital_game_phase_data": len(
                 list_of_digital_game_phase_configuration
             ),
@@ -6432,6 +6456,29 @@ def subjects(request, group_id, template_name="experiment/subjects.html"):
                     / len(list_of_tms_configuration)
                 )
 
+            # TMS data files
+            number_of_stimuli_data_files_uploaded = 0
+            # for each component_configuration of tms...
+            for stimuli_configuration in list_of_stimuli_configuration:
+                path = [item[0] for item in stimuli_configuration]
+                data_configuration_tree_id = list_data_configuration_tree(
+                    path[-1], path
+                )
+                stimuli_data_files = StimuliData.objects.filter(
+                    subject_of_group=subject_of_group,
+                    data_configuration_tree_id=data_configuration_tree_id,
+                )
+                if stimuli_data_files.count():
+                    number_of_stimuli_data_files_uploaded += 1
+
+            percentage_of_stimuli_data_files_uploaded = 0.0
+            if len(list_of_stimuli_configuration) > 0:
+                percentage_of_stimuli_data_files_uploaded = (
+                    100.0
+                    * number_of_stimuli_data_files_uploaded
+                    / len(list_of_stimuli_configuration)
+                )
+
             # Digital game phase data files
             number_of_digital_game_phase_data_files_uploaded = 0
             # for each component_configuration of tms...
@@ -6515,6 +6562,7 @@ def subjects(request, group_id, template_name="experiment/subjects.html"):
                 number_of_eeg_data_files_uploaded
                 or number_of_emg_data_files_uploaded
                 or number_of_tms_data_files_uploaded
+                or number_of_stimuli_data_files_uploaded
                 or number_of_digital_game_phase_data_files_uploaded
                 or number_of_generic_data_collection_data_files_uploaded
                 or number_of_media_collection_data_files_uploaded
@@ -6545,6 +6593,11 @@ def subjects(request, group_id, template_name="experiment/subjects.html"):
                     "total_of_tms_data_files": len(list_of_tms_configuration),
                     "percentage_of_tms_data_files_uploaded": int(
                         percentage_of_tms_data_files_uploaded
+                    ),
+                    "number_of_stimuli_data_files_uploaded": number_of_stimuli_data_files_uploaded,
+                    "total_of_stimuli_data_files": len(list_of_stimuli_configuration),
+                    "percentage_of_stimuli_data_files_uploaded": int(
+                        percentage_of_stimuli_data_files_uploaded
                     ),
                     "number_of_digital_game_phase_data_files_uploaded": number_of_digital_game_phase_data_files_uploaded,
                     "total_of_digital_game_phase_data_files": len(
@@ -6646,7 +6699,7 @@ def get_data_collections_from_group(group, data_type=None):
             [
                 {
                     "type": "additional_data",
-                    "icon_class": icon_class["additional_data"],
+                    "icon_class": ICON_CLASS["additional_data"],
                     "description": _("Additional"),
                     "count": additional_data_list.values("subject_of_group__subject")
                     .distinct()
@@ -6661,7 +6714,7 @@ def get_data_collections_from_group(group, data_type=None):
                 "component_configuration": None,
                 "path": None,
                 "data_list": data_list,
-                "icon_class": icon_class["experimental_protocol"],
+                "icon_class": ICON_CLASS["experimental_protocol"],
             }
         )
 
@@ -6690,7 +6743,7 @@ def get_data_collections_from_group(group, data_type=None):
             [
                 {
                     "type": "additional_data",
-                    "icon_class": icon_class["additional_data"],
+                    "icon_class": ICON_CLASS["additional_data"],
                     "description": _("Additional"),
                     "count": participant_quantity,
                 }
@@ -6715,7 +6768,7 @@ def get_data_collections_from_group(group, data_type=None):
                 data_list.append(
                     {
                         "type": "eeg",
-                        "icon_class": icon_class["eeg"],
+                        "icon_class": ICON_CLASS["eeg"],
                         "description": _("EEG"),
                         "count": participant_quantity,
                     }
@@ -6736,7 +6789,7 @@ def get_data_collections_from_group(group, data_type=None):
                 data_list.append(
                     {
                         "type": "emg",
-                        "icon_class": icon_class["emg"],
+                        "icon_class": ICON_CLASS["emg"],
                         "description": _("EMG"),
                         "count": participant_quantity,
                     }
@@ -6757,7 +6810,7 @@ def get_data_collections_from_group(group, data_type=None):
                 data_list.append(
                     {
                         "type": "tms",
-                        "icon_class": icon_class["tms"],
+                        "icon_class": ICON_CLASS["tms"],
                         "description": _("TMS"),
                         "count": participant_quantity,
                     }
@@ -6778,7 +6831,7 @@ def get_data_collections_from_group(group, data_type=None):
                 data_list.append(
                     {
                         "type": "digital_game_phase",
-                        "icon_class": icon_class["digital_game_phase"],
+                        "icon_class": ICON_CLASS["digital_game_phase"],
                         "description": _("Game"),
                         "count": participant_quantity,
                     }
@@ -6802,7 +6855,7 @@ def get_data_collections_from_group(group, data_type=None):
                 data_list.append(
                     {
                         "type": "generic_data_collection",
-                        "icon_class": icon_class["generic_data_collection"],
+                        "icon_class": ICON_CLASS["generic_data_collection"],
                         "description": _("Data collection"),
                         "count": participant_quantity,
                     }
@@ -6823,7 +6876,7 @@ def get_data_collections_from_group(group, data_type=None):
                 data_list.append(
                     {
                         "type": "media_collection",
-                        "icon_class": icon_class["media_collection"],
+                        "icon_class": ICON_CLASS["media_collection"],
                         "description": _("Data collection"),
                         "count": participant_quantity,
                     }
@@ -6844,7 +6897,7 @@ def get_data_collections_from_group(group, data_type=None):
                 data_list.append(
                     {
                         "type": "questionnaire",
-                        "icon_class": icon_class["questionnaire"],
+                        "icon_class": ICON_CLASS["questionnaire"],
                         "description": _("Response"),
                         "count": participant_quantity,
                     }
@@ -6855,7 +6908,7 @@ def get_data_collections_from_group(group, data_type=None):
                 "component_configuration": component_configuration,
                 "path": path,
                 "data_list": data_list,
-                "icon_class": icon_class[
+                "icon_class": ICON_CLASS[
                     component_configuration.component.component_type
                 ],
             }
@@ -6945,7 +6998,7 @@ def search_subjects(request, group_id, template_name="experiment/search_subjects
 
                 if "diagnosis_checkbox" in request.POST:
                     classification_of_diseases_list = request.POST.getlist(
-                        "selected_diagnoses"
+                        "selected_diagnosis"
                     )
 
                     participants_list = participants_list.filter(
@@ -7009,7 +7062,7 @@ def search_subjects(request, group_id, template_name="experiment/search_subjects
             return HttpResponseRedirect(redirect_url)
 
         if request.POST["action"][:7] == "remove-":
-            action_parts = request.POST["action"].split(delimiter)
+            action_parts = request.POST["action"].split(DELIMITER)
             participants_list = request.session["filtered_participant_data"]
             participants_list.remove(int(action_parts[1]))
             participants_list = Patient.objects.filter(pk__in=participants_list)
@@ -7113,7 +7166,7 @@ def subject_questionnaire_response_start_fill_questionnaire(
         return None, None
 
 
-def get_limesurvey_response_url(questionnaire_response):
+def get_limesurvey_response_url(questionnaire_response) -> str:
     survey_component = (
         questionnaire_response.data_configuration_tree.component_configuration.component
     )
@@ -9121,6 +9174,251 @@ def eeg_electrode_position_collection_status_change_the_order(
     return HttpResponseRedirect(redirect_url)
 
 
+# @login_required
+# @permission_required("experiment.view_researchproject")
+# def subject_stimuli_view(
+#     request,
+#     group_id,
+#     subject_id,
+#     template_name="experiment/subject_stimuli_collection_list.html",
+# ):
+#     group = get_object_or_404(Group, id=group_id)
+#     subject = get_object_or_404(Subject, id=subject_id)
+
+#     stimuli_collections = []
+
+#     list_of_paths = create_list_of_trees(group.experimental_protocol, "stimuli")
+
+#     subject_of_group = get_object_or_404(SubjectOfGroup, group=group, subject=subject)
+
+#     for path in list_of_paths:
+#         stimuli_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
+
+#         data_configuration_tree_id = list_data_configuration_tree(
+#             stimuli_configuration.id, [item[0] for item in path]
+#         )
+
+#         stimuli_data_files = StimuliData.objects.filter(
+#             subject_of_group=subject_of_group,
+#             data_configuration_tree__id=data_configuration_tree_id,
+#         )
+
+#         stimuli_collections.append(
+#             {
+#                 "stimuli_configuration": stimuli_configuration,
+#                 "path": path,
+#                 "stimuli_data_files": stimuli_data_files,
+#             }
+#         )
+
+#     context = {
+#         "can_change": get_can_change(request.user, group.experiment.research_project),
+#         "group": group,
+#         "subject": subject,
+#         "stimuli_collections": stimuli_collections,
+#     }
+
+#     return render(request, template_name, context)
+
+
+# @login_required
+# @permission_required("experiment.add_questionnaireresponse")
+# def subject_stimuli_data_create(
+#     request,
+#     group_id,
+#     subject_id,
+#     stimuli_configuration_id,
+#     template_name="experiment/subject_stimuli_data_form.html",
+# ):
+#     group = get_object_or_404(Group, id=group_id)
+
+#     list_of_path = [int(item) for item in stimuli_configuration_id.split("-")]
+#     stimuli_configuration_id = list_of_path[-1]
+
+#     check_can_change(request.user, group.experiment.research_project)
+
+#     stimuli_configuration = get_object_or_404(
+#         ComponentConfiguration, id=stimuli_configuration_id
+#     )
+#     stimuli_step = get_object_or_404(Stimulus, id=stimuli_configuration.component_id)
+
+#     redirect_url = None
+#     stimuli_data_id = None
+
+#     stimuli_data_form = StimuliDataForm(
+#         None,
+#         initial={
+#             "experiment": group.experiment,
+#             "stimuli_setting": stimuli_step.stimuli_setting,
+#         },
+#     )
+
+#     stimuli_setting = get_object_or_404(
+#         StimuliEqSetting, id=stimuli_step.stimuli_setting
+#     )
+
+#     if request.method == "POST":
+#         if request.POST["action"] == "save":
+#             stimuli_data_form = StimuliDataForm(request.POST, request.FILES)
+
+#             if stimuli_data_form.is_valid():
+#                 data_configuration_tree_id = list_data_configuration_tree(
+#                     stimuli_configuration_id, list_of_path
+#                 )
+#                 if not data_configuration_tree_id:
+#                     data_configuration_tree_id = create_data_configuration_tree(
+#                         list_of_path
+#                     )
+
+#                 subject = get_object_or_404(Subject, pk=subject_id)
+#                 subject_of_group = get_object_or_404(
+#                     SubjectOfGroup, subject=subject, group_id=group_id
+#                 )
+
+#                 stimuli_data_added = stimuli_data_form.save(commit=False)
+#                 stimuli_data_added.subject_of_group = subject_of_group
+#                 stimuli_data_added.component_configuration = stimuli_configuration
+#                 stimuli_data_added.data_configuration_tree_id = (
+#                     data_configuration_tree_id
+#                 )
+
+#                 # PS: it was necessary adding these 2 lines because Django raised, I do not why (Evandro),
+#                 # the following error 'TMSData' object has no attribute 'group'
+#                 stimuli_data_added.group = group
+#                 stimuli_data_added.subject = subject
+
+#                 stimuli_data_added.save()
+
+#                 messages.success(
+#                     request, _("Stimuli data collection created successfully.")
+#                 )
+
+#                 redirect_url = reverse(
+#                     "stimuli_data_view", args=(stimuli_data_added.id,)
+#                 )
+#                 # redirect_url = reverse("subjects", args=(group.id,))
+#                 return HttpResponseRedirect(redirect_url)
+
+#     context = {
+#         "can_change": True,
+#         "creating": True,
+#         "editing": True,
+#         "group": group,
+#         "stimuli_configuration": stimuli_configuration,
+#         "stimuli_data_form": stimuli_data_form,
+#         "stimuli_data_id": stimuli_data_id,
+#         "stimuli_setting_default_id": stimuli_step.stimuli_setting.id,
+#         "subject": get_object_or_404(Subject, pk=subject_id),
+#         "URL": redirect_url,
+#         "tab": "1",
+#     }
+
+#     return render(request, template_name, context)
+
+
+# @login_required
+# @permission_required("experiment.change_experiment")
+# def stimuli_data_view(
+#     request, stimuli_data_id, template_name="experiment/subject_stimuli_data_form.html"
+# ):
+#     stimuli_data = get_object_or_404(StimuliData, pk=stimuli_data_id)
+#     stimuli_step = get_object_or_404(
+#         TMS,
+#         id=stimuli_data.data_configuration_tree.component_configuration.component.id,
+#     )
+
+#     stimuli_data_form = StimuliDataForm(request.POST or None, instance=stimuli_data)
+
+#     for field in stimuli_data_form.fields:
+#         stimuli_data_form.fields[field].widget.attrs["disabled"] = True
+
+#     if request.method == "POST":
+#         if request.POST["action"] == "remove":
+#             check_can_change(
+#                 request.user,
+#                 stimuli_data.subject_of_group.group.experiment.research_project,
+#             )
+
+#             subject_of_group = stimuli_data.subject_of_group
+#             stimuli_data.delete()
+#             messages.success(request, _("Stimuli data removed successfully."))
+#             return redirect(
+#                 "subject_stimuli_view",
+#                 group_id=subject_of_group.group_id,
+#                 subject_id=subject_of_group.subject_id,
+#             )
+
+#     context = {
+#         "can_change": get_can_change(
+#             request.user,
+#             stimuli_data.subject_of_group.group.experiment.research_project,
+#         ),
+#         "editing": False,
+#         "group": stimuli_data.subject_of_group.group,
+#         "subject": stimuli_data.subject_of_group.subject,
+#         "stimuli_data_form": stimuli_data_form,
+#         "stimuli_data": stimuli_data,
+#         "stimuli_setting_default_id": stimuli_step.stimuli_setting.id,
+#         "tab": "1",
+#     }
+
+#     return render(request, template_name, context)
+
+
+# @login_required
+# @permission_required("experiment.change_experiment")
+# def stimuli_data_edit(
+#     request, stimuli_data_id, template_name="experiment/subject_stimuli_data_form.html"
+# ):
+#     stimuli_data = get_object_or_404(StimuliData, pk=stimuli_data_id)
+
+#     stimuli_step = get_object_or_404(
+#         Stimulus,
+#         id=stimuli_data.data_configuration_tree.component_configuration.component.id,
+#     )
+
+#     check_can_change(
+#         request.user, stimuli_data.subject_of_group.group.experiment.research_project
+#     )
+
+#     if request.method == "POST":
+#         if request.POST["action"] == "save":
+#             stimuli_data_form = StimuliDataForm(
+#                 request.POST, request.FILES, instance=stimuli_data
+#             )
+#             if stimuli_data_form.is_valid() and stimuli_data_form.has_changed():
+#                 stimuli_data_to_update = stimuli_data_form.save(commit=False)
+#                 stimuli_data_to_update.group = stimuli_data.subject_of_group.group
+#                 stimuli_data_to_update.subject = stimuli_data.subject_of_group.subject
+#                 stimuli_data_to_update.save()
+
+#                 messages.success(request, _("Stimuli data updated successfully."))
+#             else:
+#                 messages.success(request, _("There is no changes to save."))
+
+#             redirect_url = reverse("stimuli_data_view", args=(stimuli_data_id,))
+
+#         return HttpResponseRedirect(redirect_url)
+
+#     else:
+#         stimuli_data_form = StimuliDataForm(
+#             request.POST or None,
+#             instance=stimuli_data,
+#             initial={"experiment": stimuli_data.subject_of_group.group.experiment},
+#         )
+
+#     context = {
+#         "group": stimuli_data.subject_of_group.group,
+#         "subject": stimuli_data.subject_of_group.subject,
+#         "stimuli_data_form": stimuli_data_form,
+#         "stimuli_data": stimuli_data,
+#         "editing": True,
+#         "tab": tab,
+#     }
+
+#     return render(request, template_name, context)
+
+
 @login_required
 @permission_required("experiment.view_researchproject")
 def subject_tms_view(
@@ -9926,7 +10224,7 @@ def create_csv_for_goalkeeper(complete_filename, config, results):
         complete_filename.encode("utf-8"), "w", newline="", encoding="UTF-8"
     ) as csv_file:
         export_writer = csv.writer(
-            csv_file, quotechar='"', quoting=csv.QUOTE_NONNUMERIC, delimiter=","
+            csv_file, quotechar='"', quoting=csv.QUOTE_NONNUMERIC, DELIMITER=","
         )
         for row in rows_to_be_saved:
             export_writer.writerow(row)
@@ -10801,14 +11099,14 @@ def data_collection_manage(
     if path_of_configuration == "0":
         # related to the whole experiment
         component_configuration = None
-        component_icon = icon_class["experimental_protocol"]
+        component_icon = ICON_CLASS["experimental_protocol"]
         data_configuration_tree_id = None
     else:
         list_of_path = [int(item) for item in path_of_configuration.split("-")]
         component_configuration = ComponentConfiguration.objects.get(
             id=int(list_of_path[-1])
         )
-        component_icon = icon_class[component_configuration.component.component_type]
+        component_icon = ICON_CLASS[component_configuration.component.component_type]
         data_configuration_tree_id = list_data_configuration_tree(
             list_of_path[-1], list_of_path
         )
@@ -11310,7 +11608,7 @@ def subject_additional_data_view(
             "additional_data_list": AdditionalData.objects.filter(
                 subject_of_group=subject_of_group, data_configuration_tree=None
             ),
-            "icon_class": icon_class["experimental_protocol"],
+            "icon_class": ICON_CLASS["experimental_protocol"],
         }
     ]
 
@@ -11343,7 +11641,7 @@ def subject_additional_data_view(
                 if subject_step_data_query
                 else None,
                 "additional_data_list": additional_data_list,
-                "icon_class": icon_class[
+                "icon_class": ICON_CLASS[
                     component_configuration.component.component_type
                 ],
             }
@@ -12208,8 +12506,8 @@ def subjects_insert(request, group_id, patient_id):
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def search_patients_ajax(request: HttpRequest):
-    patient_list = None
+def search_patients_ajax(request: HttpRequest) -> HttpResponse | HttpResponseNotAllowed:
+    patient_list = []
 
     if request.method == "POST":
         search_text = request.POST["search_text"]
@@ -12268,6 +12566,8 @@ def search_patients_ajax(request: HttpRequest):
                 "experiment/ajax_search_patients_not_sensitive.html",
                 {"patients": patient_list, "group_id": group_id},
             )
+
+    return HttpResponseNotAllowed(["POST"])
 
 
 @login_required
@@ -12355,7 +12655,7 @@ def component_list(
         components.append(element[0])
 
     for component in components:
-        component.icon_class = icon_class[component.component_type]
+        component.ICON_CLASS = ICON_CLASS[component.component_type]
         component.is_root = False
         component.is_unused = False
         if component.component_type == "block":
@@ -12369,7 +12669,7 @@ def component_list(
 
     for type_element, type_name in Component.COMPONENT_TYPES:
         component_type_choices.append(
-            (type_element, type_name, icon_class.get(type_element))
+            (type_element, type_name, ICON_CLASS.get(type_element))
         )
 
     context = {
@@ -12389,7 +12689,7 @@ def component_change_the_order(
 ):
     # The last id of the list is the one for the current block.
     list_of_ids_of_components_and_configurations = path_of_the_components.split(
-        delimiter
+        DELIMITER
     )
     parent_block = get_object_or_404(
         Block, pk=list_of_ids_of_components_and_configurations[-1]
@@ -12646,7 +12946,7 @@ def create_list_of_breadcrumbs(list_of_ids_of_components_and_configurations):
                     "url": reverse(
                         view_name,
                         args=(
-                            delimiter.join(
+                            DELIMITER.join(
                                 list_of_ids_of_components_and_configurations[: idx + 1]
                             ),
                         ),
@@ -12671,9 +12971,9 @@ def create_back_cancel_url(
     elif len(list_of_ids_of_components_and_configurations) > 1:
         # There is a parent. Remove the current element from the path so that the parent is shown.
         path_without_last = path_of_the_components[
-            : path_of_the_components.rfind(delimiter)
+            : path_of_the_components.rfind(DELIMITER)
         ]
-        last_hyphen_index = path_without_last.rfind(delimiter)
+        last_hyphen_index = path_without_last.rfind(DELIMITER)
 
         if last_hyphen_index == -1:
             parent = path_without_last
@@ -12858,7 +13158,7 @@ def calculate_block_duration(block):
 
 def access_objects_for_view_and_update(request, path_of_the_components, updating=False):
     list_of_ids_of_components_and_configurations = path_of_the_components.split(
-        delimiter
+        DELIMITER
     )
 
     # The last id of the list is the one that we want to show.
@@ -12934,7 +13234,7 @@ def remove_component_and_related_configurations(
         redirect_url = "/experiment/" + str(component.experiment.id) + "/components"
     else:
         path_without_last = path_of_the_components[
-            : path_of_the_components.rfind(delimiter)
+            : path_of_the_components.rfind(DELIMITER)
         ]
 
         if len(list_of_ids_of_components_and_configurations) == 2:
@@ -12945,7 +13245,7 @@ def remove_component_and_related_configurations(
             # The user is viewing/editing a component that is a child of a block. Remove the child and the component
             # configuration that binds it to the block.
             path_without_last_two = path_without_last[
-                : path_without_last.rfind(delimiter)
+                : path_without_last.rfind(DELIMITER)
             ]
             # The parent of the component configuration has to be a block. Then, redirect_url has no "edit" part.
             redirect_url = "/experiment/component/" + path_without_last_two
@@ -14007,7 +14307,7 @@ def component_view(request, path_of_the_components):
             return HttpResponseRedirect(redirect_url)
         elif request.POST["action"][:7] == "remove-":
             # If action starts with 'remove-' it means that a child or some children should be removed.
-            action_parts = request.POST["action"].split(delimiter)
+            action_parts = request.POST["action"].split(DELIMITER)
 
             if action_parts[1] == "random":
                 list_from_which_to_deleted = configuration_list_of_random_components
@@ -14050,7 +14350,7 @@ def component_view(request, path_of_the_components):
     component_type_choices = []
     for type_element, type_name in Component.COMPONENT_TYPES:
         component_type_choices.append(
-            (type_element, type_name, icon_class.get(type_element))
+            (type_element, type_name, ICON_CLASS.get(type_element))
         )
 
     can_change = get_can_change(request.user, experiment.research_project)
@@ -14085,7 +14385,7 @@ def component_view(request, path_of_the_components):
         "experiment": experiment,
         "group": group,
         "has_unlimited": has_unlimited,
-        "icon_class": icon_class,
+        "icon_class": ICON_CLASS,
         "list_of_breadcrumbs": list_of_breadcrumbs,
         "path_of_the_components": path_of_the_components,
         "specific_form": block_form,
@@ -14144,7 +14444,7 @@ def get_protected_steps_and_uses_of_steps(experiment: Experiment, group: Group):
 
 def sort_without_using_order(configuration_list_of_random_components):
     for configuration in configuration_list_of_random_components:
-        configuration.component.icon_class = icon_class[
+        configuration.component.ICON_CLASS = ICON_CLASS[
             configuration.component.component_type
         ]
 
@@ -14182,7 +14482,7 @@ def create_configuration_list(block):
         configuration_list = sort_without_using_order(configuration_list)
 
     for configuration in configuration_list:
-        configuration.component.icon_class = icon_class[
+        configuration.component.ICON_CLASS = ICON_CLASS[
             configuration.component.component_type
         ]
 
@@ -14502,7 +14802,7 @@ def component_update(request, path_of_the_components):
         "configuration_form": configuration_form,
         "configuration_list": configuration_list,
         "configuration_list_of_random_components": configuration_list_of_random_components,
-        "icon_class": icon_class,
+        "icon_class": ICON_CLASS,
         "experiment": experiment,
         "protected_steps": protected_steps,
         "group": group,
@@ -14549,7 +14849,7 @@ def get_recursively_set_of_components_to_exclude(component):
 def access_objects_for_add_new_and_reuse(component_type, path_of_the_components):
     template_name = "experiment/" + component_type + "_component.html"
     list_of_ids_of_components_and_configurations = path_of_the_components.split(
-        delimiter
+        DELIMITER
     )
     list_of_breadcrumbs = create_list_of_breadcrumbs(
         list_of_ids_of_components_and_configurations
@@ -14738,7 +15038,7 @@ def component_add_new(request, path_of_the_components, component_type):
                     "component_view",
                     args=(
                         path_of_the_components
-                        + delimiter
+                        + DELIMITER
                         + str(new_specific_component.id),
                     ),
                 )
@@ -14959,7 +15259,7 @@ def component_reuse(request, path_of_the_components, component_id):
 
             redirect_url = reverse(
                 "component_view",
-                args=(path_of_the_components + delimiter + str(component_to_add.id),),
+                args=(path_of_the_components + DELIMITER + str(component_to_add.id),),
             )
 
             messages.success(request, _("Step included successfully."))

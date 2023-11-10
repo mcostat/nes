@@ -56,7 +56,7 @@ CSRF_TRUSTED_ORIGINS = ["https://localhost:80", "https://$NES_IP", "https://$NES
 		}
 		LIMESURVEY = {
 		    "URL_API": "http://$LIMESURVEY_HOST:$LIMESURVEY_PORT",
-		    "URL_WEB": "http://$LIMESURVEY_HOST:$LIMESURVEY_PORT",
+		    "URL_WEB": "http://$LIMESURVEY_URL_WEB:$LIMESURVEY_PORT",
 		    "USER": "$LIMESURVEY_ADMIN_USER",
 		    "PASSWORD": "$LIMESURVEY_ADMIN_PASSWORD"
 		}
@@ -106,13 +106,17 @@ except:
     echo "	INFO: import cid10"
     python3 -u manage.py import_icd_cid --file icd10cid10v2017.csv || true
     
-    mkdir static || true
+    mkdir -p static || true
     echo "	INFO: colectstatic"
     python3 -u manage.py collectstatic --no-input || true
 
     echo "	INFO: populate_history"
     python3 -u manage.py populate_history --auto || true
     
+
+    mkdir -p $NES_PROJECT_PATH/media/eeg_electrode_system_files/1/
+    mkdir -p $NES_PROJECT_PATH/media/eeg_electrode_system_files/2/
+    mkdir -p $NES_PROJECT_PATH/media/eeg_electrode_system_files/3/
 
     cp -r $NES_PROJECT_PATH/site_static/imgs/International_10-10_system_for_EEG.png $NES_PROJECT_PATH/media/eeg_electrode_system_files/2/International_10-10_system_for_EEG.png
     cp -r $NES_PROJECT_PATH/site_static/imgs/International_10-20_system_for_EEG.jpg $NES_PROJECT_PATH/media/eeg_electrode_system_files/3/International_10-20_system_for_EEG.jpg

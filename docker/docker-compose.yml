@@ -73,6 +73,7 @@ services:
       dockerfile: docker/Dockerfile
       args:
         DEBUG: 0
+        HTTPS_CERT_KEY: SMIJz45XdhGCDCUzVSOoVYMrb4X2kN6l
     command: sleep infinity
     restart: unless-stopped
     tty: true
@@ -100,6 +101,7 @@ services:
       LIMESURVEY_ADMIN_PASSWORD: ${LIMESURVEY_ADMIN_PASSWORD:-lime_admin_password}
       LIMESURVEY_HOST: limesurvey
       LIMESURVEY_PORT: 8080
+      LIMESURVEY_URL_WEB: lapisnes.local
     volumes:
       - nes_data:/usr/local/nes
     depends_on:

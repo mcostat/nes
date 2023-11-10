@@ -1,174 +1,154 @@
 {% extends "base/template.html" %}
-{% block activeAdvancedResearchProject %}class="active"{% endblock %}
+
+{% block activeAdvancedResearchProject %}
+    active
+{% endblock activeAdvancedResearchProject %}
 
 {% load i18n static %}
 
 {% block form %}
-    <div class="row">
     <form id="tms_setting_form" method="post" data-toggle="validator">
-    {% csrf_token %}
-{% endblock %}
+        {% csrf_token %}
+    {% endblock form %}
 
-{% block content %}
+    {% block content %}
 
-    {% comment %} {% if messages %}
-        {% for message in messages %}
+        {% if tms_device_setting_form.errors %}<script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">showErrorMessage(gettext('Please, correct fields highlighted.'))</script>{% endif %}
 
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
+        <div class="tab-pane fade show active" id="experimentBreadCrumb">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                    <li class="breadcrumb-item">
+                        <a href="{% url "home" %}">{% trans "Home" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/research_project/list">{% trans "Studies" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/research_project/{{ tms_setting.experiment.research_project.id }}">{{ tms_setting.experiment.research_project.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/{{ tms_setting.experiment.id }}">{{ tms_setting.experiment.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/tms_setting/{{ tms_setting.id }}">{{ tms_setting.name }}</a>
+                    </li>
 
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %} {% endcomment %}
-
-    {% if tms_device_setting_form.errors %}
-        <script type="text/javascript">
-            showErrorMessage(gettext('Please, correct fields highlighted.'))
-        </script>
-    {% endif %}
-
-
-    <div class="tab-pane fade in active" id="experimentBreadCrumb">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li><a href="/experiment/research_project/{{ tms_setting.experiment.research_project.id }}">{{ tms_setting.experiment.research_project.title }}</a></li>
-                <li><a href="/experiment/{{ tms_setting.experiment.id }}">{{ tms_setting.experiment.title }}</a></li>
-                <li><a href="/experiment/tms_setting/{{ tms_setting.id }}">{{ tms_setting.name }}</a></li>
-
-                {% if creating %}
-                    <li class="active">{% trans "Add TMS device setting" %} </li>
-                {% else %}
-                    {% if editing %}
-                        <li><a href="/experiment/tms_setting/{{ tms_setting.id }}/tms_device">{{ tms_setting.tms_device_setting.tms_device.identification }}</a></li>
-                        <li class="active">{% trans "Editing" %}</li>
+                    {% if creating %}
+                        <li class="breadcrumb-item active">{% trans "Add TMS device setting" %}</li>
                     {% else %}
-                        <li class="active"> {{ tms_setting.tms_device_setting.tms_device.identification }} </li>
+                        {% if editing %}
+                            <li class="breadcrumb-item">
+                                <a href="/experiment/tms_setting/{{ tms_setting.id }}/tms_device">{{ tms_setting.tms_device_setting.tms_device.identification }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">{% trans "Editing" %}</li>
+                        {% else %}
+                            <li class="breadcrumb-item active">{{ tms_setting.tms_device_setting.tms_device.identification }}</li>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            </ol>
+                </ol>
+            </nav>
         </div>
-    </div>
 
-    <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-12">
-            <div class="container-fluid well">
+        <div class="tab-pane fade show active" id="menuUserTab">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
 
                 <h4>{% trans "TMS device settings" %}</h4>
-
+                <hr>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Manufacturer" %} </label>
+                            <label class="form-label">{% trans "Manufacturer" %}</label>
                             <select class="form-control" name="manufacturer" id="id_manufacturer" {% if not editing and not creating %}disabled{% endif %}>
                                 <option value>-------</option>
                                 {% for manufacturer in manufacturer_list %}
-                                    <option {% if manufacturer.id == equipment_form.instance.manufacturer_id %}selected="selected"{% endif %} value="{{ manufacturer.id }}">{{ manufacturer.name }}</option>
+                                    <option {% if manufacturer.id == equipment_form.instance.manufacturer_id %}selected="selected"{% endif %}
+                                            value="{{ manufacturer.id }}">{{ manufacturer.name }}</option>
                                 {% endfor %}
                             </select>
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
 
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "TMS device" %} </label>
+                            <label class="form-label">{% trans "TMS device" %}</label>
                             {{ tms_device_setting_form.tms_device }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
 
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Description" %} </label>
+                            <label class="form-label">{% trans "Description" %}</label>
                             {{ equipment_form.description }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Coil Model" %}</label>
+                            <label class="form-label">{% trans "Coil Model" %}</label>
                             {{ tms_device_setting_form.coil_model }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Description" %} </label>
+                            <label class="form-label">{% trans "Description" %}</label>
                             {{ coil_model_form.description }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Pulse stimulus type" %}</label>
+                            <label class="form-label">{% trans "Pulse stimulus type" %}</label>
                             {{ tms_device_setting_form.pulse_stimulus_type }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 {% if not editing and not creating and can_change %}
-                    <div class="btn-group pull-left">
+                    <div class="btn-group">
                         <a href="/experiment/tms_setting/{{ tms_setting.id }}/tms_device/edit" class="btn btn-primary">{% trans "Edit" %}</a>
                     </div>
                 {% endif %}
-
             </div>
 
-            <div class="btn-toolbar">
-                {% if editing or creating%}
-                    <div class="btn-group pull-right">
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                {% if editing or creating %}
+                    <div class="btn-group float-end">
                         <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save setting" %}</button>
-                    </div>
-                    <div class="btn-group pull-right">
-                        <a href="/experiment/tms_setting/{{ tms_setting.id }}{% if editing %}/tms_device{% endif %}"
-                           class="btn" style="background-color: #f5f5f5">{% trans "Cancel" %}</a>
+                        <a href="/experiment/tms_setting/{{ tms_setting.id }}{% if editing %}/tms_device{% endif %}" class="btn btn-light">{% trans "Cancel" %}</a>
                     </div>
                 {% else %}
-                    <div class="btn-group pull-right">
-                        <a href="/experiment/tms_setting/{{ tms_setting.id }}" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+                    <div class="btn-group float-end">
+                        <a href="/experiment/tms_setting/{{ tms_setting.id }}" class="btn btn-light">{% trans "Back" %}</a>
                     </div>
                 {% endif %}
             </div>
         </div>
-    </div>
+    {% endblock content %}
 
-{% endblock %}
-
-{% block end_form %}
+    {% block end_form %}
     </form>
-</div>
-{% endblock %}
+{% endblock end_form %}
 
-{% block script %}
-    <script src="{% static 'site/js/add_description_to_tms_setting.js' %}"></script>
-{% endblock %}
+{% block extrascript %}
+    <script type="text/javascript" defer  src={% static "site/js/add_description_to_tms_setting.js" %}></script>
+{% endblock extrascript %}

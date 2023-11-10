@@ -3,51 +3,31 @@
 {% load i18n %}
 
 {% block form %}
-    <div class="row">
+    
     <form id="user_form" method="post" data-toggle="validator" enctype="multipart/form-data">
     {% csrf_token %}
 {% endblock %}
 
-{% block activeAdvancedResearchProject %}class="active"{% endblock %}
+{% block activeAdvancedResearchProject %} active{% endblock activeAdvancedResearchProject  %}
 
 {% block content %}
 
-    {% comment %} {% if messages %}
-        {% for message in messages %}
 
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
 
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %} {% endcomment %}
-
-    <div class="tab-pane fade in active">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li class="active">{% trans "Schedule of sending" %}</li>
+    <div class="tab-pane fade show active">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
+                <li class="breadcrumb-item active">{% trans "Schedule of sending" %}</li>
             </ol>
-        </div>
+        </nav>
     </div>
 
-    <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-12">
+    <div class="tab-pane fade show active" id="mainMenuUserTab">
+        <div class="container-fluid">
 
-            <div class="container-fluid well">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
                 <h4>{% trans "List of experiments to send to Portal" %}</h4>
                 <div class="form-group">
                     <table class="table table-striped">
@@ -74,7 +54,7 @@
                     </table>
                 </div>
 
-                <div class="btn-group pull-left">
+                <div class="btn-group">
                     <button type="submit" {% if not portal_status %}disabled="disabled"{% endif %} name="action" value="send-to-portal" class="btn btn-primary">{% trans "Send to Portal" %}</button>
                 </div>
             </div>
@@ -87,13 +67,5 @@
 
 {% block end_form %}
     </form>
-    </div>
 {% endblock %}
 
-{% block script %}
-    <script>
-        $(function(){
-            $("[data-toggle=tooltip]").tooltip();
-        });
-    </script>
-{% endblock %}

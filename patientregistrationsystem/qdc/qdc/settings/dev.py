@@ -12,7 +12,6 @@ IS_TESTING = True
 
 AXES_ENABLED = True
 
-
 SECURE_SSL_REDIRECT = False
 CSRF_USE_SESSIONS = False
 SESSION_COOKIE_SECURE = False
@@ -23,7 +22,7 @@ INSTALLED_APPS += [
     "debug_toolbar",
 ]
 
-MIDDLEWARE.insert(3, "debug_toolbar.middleware.DebugToolbarMiddleware")
+MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
@@ -39,8 +38,6 @@ if DEBUG:
         "127.0.0.1",
         "10.0.2.2",
     ]
-
-DJANGO_LOG_LEVEL = "Info"
 
 
 warnings.filterwarnings(

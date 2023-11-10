@@ -3,8 +3,9 @@
  */
 
 // function to select all collaborators
-$(document).ready(function(){
-    $("#select_all_collaborators").change(function(){
+"use strict";
+ready(function(){
+    $("#select_all_collaborators").on("change", function(){
       $(".checkbox_collaborators").prop('checked', $(this).prop("checked"));
     });
 

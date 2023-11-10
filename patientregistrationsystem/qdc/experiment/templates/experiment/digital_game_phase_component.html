@@ -1,11 +1,11 @@
 {% extends "experiment/component_template.html" %}
 
-{% load i18n static %}
+{% load i18n %}
 
 {% block breadcrumb %}
 
     {% if creating %}
-        <li class="active">{% trans "New goalkeeper game phase" %}</li>
+        <li class="breadcrumb-item active">{% trans "New goalkeeper game phase" %}</li>
     {% endif %}
 
 {% endblock %}
@@ -26,22 +26,22 @@
 
 {% block extra_fields %}
     <div class="row">
-        <div class="col-xs-6 col-sm-12">
+        <div class="col-6 col-sm-12">
             <div class="form-group">
-                <label class="control-label">{% trans "Software version" %} <b style="color: red;">*</b></label>
+                <label class="form-label">{% trans "Software version" %} <b class="text-danger">*</b></label>
                     {{ specific_form.software_version }}
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
             </div>
             <div class="form-group">
-                <label class="control-label">{% trans "Context tree" %} <b style="color: red;">*</b></label>
+                <label class="form-label">{% trans "Context tree" %} <b class="text-danger">*</b></label>
                     {{ specific_form.context_tree }}
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {# In case of inclusion of javascript, insert parent template scripts #}
-{#{% block script %}#}
+{#{% block extrascript %}#}
 {# Uncomment this block and insert parent template scripts #}
 {#{% endblock %}#}

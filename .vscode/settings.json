@@ -3,8 +3,6 @@
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true
     },
-
-    "[django-html]": {},
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
@@ -32,8 +30,8 @@
         "--disable=C0111",
         "--disable=reportGeneralTypeIssues",
         "--load-plugins",
-        // "pylint_django",
-        //"--django-settings-module=patientregistrationsystem.qdc.qdc.settings"
+        "pylint_django",
+        "--django-settings-module=qdc.settings.dev"
     ],
     "pylint.path": [],
     "python.analysis.include": [],
@@ -46,7 +44,6 @@
         "${localWorkspaceFolder}, /usr/local/bin/python"
     ],
     "python.defaultInterpreterPath": "/usr/local/bin/python",
-
     "python.analysis.extraPaths": [
         "${localWorkspaceFolder}",
         "patientregistrationsystem/qdc"
@@ -54,7 +51,8 @@
     "[dockerfile]": {
         "editor.defaultFormatter": "ms-azuretools.vscode-docker"
     },
-    "mypy-type-checker.reportingScope":"workspace",
+    "mypy-type-checker.reportingScope": "workspace",
+    "mypy-type-checker.preferDaemon": true,
     "python.testing.unittestArgs": [
         "-v",
         "-s",
@@ -64,4 +62,34 @@
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
+    "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
+    "djlint.enableLinting": false,
+    "djlint.maxLineLength": 180,
+    "djlint.useGitignore": true,
+    "djlint.lineBreakAfterMultilineTag": true,
+    "djlint.maxBlankLines": 1,
+    "djlint.formatAttributeTemplateTags": false,
+    "djlint.maxAttributeLength": 160,
+    "djlint.blankLineAfterTag": [
+        "endblock",
+        "include",
+        "extends",
+        "load",
+    ],
+    "djlint.blankLineBeforeTag": [
+        "block",
+        "include",
+        "load",
+    ],
+    "djlint.profile": "django",
+    "djlint.ignore": [
+        "D018",
+        "H031"
+    ],
+    "djlint.extendExclude": [".py"],
+    "[django-html]": {
+        "editor.defaultFormatter": "monosans.djlint"
+    },
 }

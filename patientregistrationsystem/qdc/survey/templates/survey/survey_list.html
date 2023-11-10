@@ -1,80 +1,94 @@
 {% extends "base/template.html" %}
 
-{% load i18n static %}
+{% load i18n %}
 
-{% block activeAdvancedSurvey %}class="active"{% endblock %}
+{% block activeAdvancedSurvey %}
+    active
+{% endblock activeAdvancedSurvey %}
 
 {% block content %}
-    <div class="tab-pane fade in active" id="surveyBreadCrumb">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li class="active" >{% trans "Questionnaires" %}</li>
+    <div class="tab-pane fade show active" id="surveyBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item">
+                    <a href="{% url "home" %}">{% trans "Home" %}</a>
+                </li>
+                <li class="breadcrumb-item active">{% trans "Questionnaires" %}</li>
             </ol>
-        </div>
+        </nav>
     </div>
 
-    <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-12">
-            <div class="container-fluid well">
-                <h4>{% trans "List of questionnaires" %}</h4>
-                <div class="form-group">
-                    <table class="table table-striped">
-                        <thead>
+    <div class="tab-pane fade show active" id="mainMenuUserTab">
+        <div class="my-3 p-3 bg-body rounded shadow-sm">
+            <h4>{% trans "List of questionnaires" %}</h4>
+            <hr>
+            <div class="form-group">
+                <table class="table table-striped">
+                    <thead>
                         <tr>
                             <th>{% trans "Questionnaire" %}</th>
-                            <th style="text-align: center">{% trans "Required fill" %}</th>
-                            <th style="text-align: center">{% trans "Is active?" %}</th>
+                            <th class="text-center">{% trans "Required fill" %}</th>
+                            <th class="text-center">{% trans "Is active?" %}</th>
                         </tr>
-                        </thead>
-                        <tbody>
+                    </thead>
+                    <tbody>
                         {% for questionnaire in questionnaires_list %}
                             <tr>
-                                <td><a data-toggle="tooltip" data-placement="left" href="/survey/{{ questionnaire.id }}" title="{% trans 'View' %}"> 
-                                    {{ questionnaire.lime_survey_id }} - {{ questionnaire.title }} </a></td>
-                                <td style="text-align: center">{% if questionnaire.is_initial_evaluation %}<span class="fa fa-check" style="color: royalblue"></span> {% endif %}</td>
-                                <td style="text-align: center">{% if questionnaire.is_active == True %}<span class="fa fa-check" style="color: royalblue"></span> {% else %}<span class="fa fa-remove" style="color: red"></span> {% endif %}</td>
+                                <td>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" href="/survey/{{ questionnaire.id }}" title={% trans "View" %}>
+                                    {{ questionnaire.lime_survey_id }} - {{ questionnaire.title }} </a>
+                                </td>
+                                <td class="text-center">
+                                    {% if questionnaire.is_initial_evaluation %}<span class="fa-fw fa fa-check text-info"></span>{% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if questionnaire.is_active == True %}
+                                        <span class="fa-fw fa fa-check text-info"></span>
+                                    {% else %}
+                                        <span class="fa-fw fa fa-remove text-danger"></span>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="form-group">
-                    <label class="control-label"><b style="color: red;"><big>!</big> {% trans "Obs.: NES doesn't retrieve 'file upload' questions from LimeSurvey." %}
-                        (<small>{% trans "See more details in" %} <a href="https://nes.readthedocs.io/en/latest/limesurvey/bestpractices.html#best-pratices-and-recommendations"><i>Best Practices and Recommendations</i></a></small>)</b></label>
-                </div>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label class="form-label my-2">
+                    <b class="text-danger"><big>!</big> {% trans "Obs.: NES doesn't retrieve 'file upload' questions from LimeSurvey." %}
+                    (<small>{% trans "See more details in" %} <a href="https://nes.readthedocs.io/en/latest/limesurvey/bestpractices.html#best-pratices-and-recommendations"><i>Best Practices and Recommendations</i></a></small>)</b>
+                </label>
+            </div>
+
+            <div class="btn-toolbar justify-content-between">
                 {% if perms.survey.add_survey %}
-                    <div class="btn-group pull-left">
-                        <a href="/survey/new/" class="btn btn-primary" {% if not limesurvey_available  %} disabled {% endif %}>{% trans "Insert new questionnaire" %}</a>
+
+                    <div class="btn-group">
+                        <a href="/survey/new/" class="btn btn-primary" {% if not limesurvey_available %}disabled{% endif %}>{% trans "Insert new questionnaire" %}</a>
                     </div>
                 {% endif %}
+
                 {% if perms.survey.change_survey %}
                     <form id="survey_form" method="post">
                         {% csrf_token %}
-                        <div class="btn-group pull-right">
-                            <button data-toggle="tooltip" title="{% trans "Click to update questionnaire title if not displaying the title in selected NES language" %}"
-                                    type="submit" class="btn
-                            btn-default"
-                                    name="action"
-                                    value="update"
-                                    {% if not limesurvey_available  %} disabled {% endif %} title={% trans "Update informations about the questionnaires" %}><i class="fa fa-refresh"></i> {% trans "Update" %}</button>
-                        </div>
+                        <button data-bs-toggle="tooltip"
+                                title="{% trans "Click to update questionnaire title if not displaying the title in selected NES language" %}"
+                                type="submit"
+                                class="btn btn-light float-end"
+                                name="action"
+                                value="update"
+                                {% if not limesurvey_available %}disabled{% endif %}
+                                title="{% trans "Update informations about the questionnaires" %}">
+                            <i class="fa-fw fa fa-refresh"></i> {% trans "Update" %}
+                        </button>
                     </form>
                 {% endif %}
             </div>
         </div>
+
     </div>
+{% endblock content %}
 
-{% endblock %}
-
-{% block script %}
-    <script>
-        {% if survey_form.errors %}
-            showErrorMessage(gettext('Please, correct the highlighted fields.'))
-        {% endif %}
-
-        $(function(){
-            $("[data-toggle=tooltip]").tooltip();
-        });
-    </script>
-{% endblock %}
+{% block extrascript %}
+    <script type="text/javascript" nonce="{{ request.csp_nonce }}">{% if survey_form.errors %}showErrorMessage(gettext('Please, correct the highlighted fields.')){% endif %}</script>
+{% endblock extrascript %}

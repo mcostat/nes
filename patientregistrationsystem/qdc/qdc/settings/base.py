@@ -52,6 +52,15 @@ CONN_MAX_AGE = 10 * 60
 CONN_HEALTH_CHECKS = True
 
 
+# Content Security Policy
+
+CSP_IMG_SRC = ["'self'", "data:"]
+CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
+CSP_SCRIPT_SRC = ["'self'"]
+CSP_BASE_URI = "'none'"
+CSP_INCLUDE_NONCE_IN = ["script-src"]
+
+
 # Application definition
 
 INSTALLED_APPS: list[str] = [
@@ -70,6 +79,7 @@ INSTALLED_APPS: list[str] = [
     "rosetta",
     "axes",
     "django_extensions",
+    "compressor",
 ]
 
 PROJECT_APPS: list[str] = [
@@ -86,6 +96,7 @@ PROJECT_APPS: list[str] = [
 INSTALLED_APPS += PROJECT_APPS
 
 MIDDLEWARE: list[str] = [
+    "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
     # "django.middleware.cache.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -157,9 +168,14 @@ CACHES: dict[str, Any] = {
     },
 }
 
+COMPRESS_CACHE_BACKEND = "redis"
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = False
+
 ROOT_URLCONF = "qdc.urls"
 
 WSGI_APPLICATION = "qdc.wsgi.application"
+
 
 # LimeSurvey configuration
 LIMESURVEY: dict[str, str] = {
@@ -250,9 +266,25 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
+
 STATICFILES_DIRS: list[str] = [
     os.path.join(BASE_DIR, "site_static"),
 ]
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    # other finders..
+    "compressor.finders.CompressorFinder",
+)
 
 STATIC_ROOT: str = os.path.join(BASE_DIR, "static")
 STATIC_URL = "static/"

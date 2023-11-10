@@ -1,16 +1,20 @@
-{% load i18n %}
+{% load i18n static %}
 
-<ul id="ul-location-list" style="list-style-type: none; padding: 0; margin: 0;">
+<ul id="ul-diagnosis-list" class="list-group list-group-flush">
     {% if location_list.count > 0 %}
         {% for location in location_list %}
-            <li><a href="#" onclick="add_location('{{ location.city }}'); return false;">{{ location.city }}</a></li>
+            <li class="list-group-item list-group-item-action">
+                <a href="#" onclick="add_location('{{ location.city }}'); return false;">{{ location.city }}</a>
+            </li>
         {% endfor %}
     {% else %}
         <li>{% trans "No locations found!" %}</li>
     {% endif %}
 </ul>
 
-{% block script %}
-    {% load static %}
-    <script src="{% static 'site/js/participant_selection.js' %}"></script>
-{% endblock %}
+{% block extrascript %}
+
+    
+
+    <script type="text/javascript" defer  src={% static "site/js/participant_selection.js" %}></script>
+{% endblock extrascript %}

@@ -175,8 +175,8 @@ class UserProfileForm(ModelForm):
         fields = ["institution", "login_enabled", "citation_name"]
 
         widgets = {
-            "institution": Select(attrs={"class": "form-control"}),
-            "login_enabled": RadioSelect(),
+            "institution": Select(attrs={"class": "form-select"}),
+            "login_enabled": RadioSelect(attrs={"class": "form-check-input"}),
             "citation_name": TextInput(
                 attrs={"class": "form-control", "placeholder": _("Type citation name")}
             ),
@@ -211,7 +211,7 @@ class ResearcherForm(ModelForm):
                     "placeholder": _("Type last name"),
                     "data-error": _("Only use letters and spaces"),
                     "oninput": "this.value = this.value.toUpperCase()",
-                    "data-maxlength": "1150",
+                    "data-maxlength": "150",
                 }
             ),
             "email": TextInput(
@@ -260,8 +260,8 @@ class InstitutionForm(ModelForm):
                     "maxlength": "30",
                 }
             ),
-            "country": Select(attrs={"class": "form-control"}),
-            "parent": Select(attrs={"class": "form-control"}),
+            "country": Select(attrs={"class": "form-select"}),
+            "parent": Select(attrs={"class": "form-select"}),
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

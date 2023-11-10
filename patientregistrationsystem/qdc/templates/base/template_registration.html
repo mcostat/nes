@@ -1,74 +1,67 @@
 <!DOCTYPE html>
 <html xml:lang="en" lang="en">
 
-<head>
-    {% load static %}
-    {% load i18n %}
-    {% load l10n %}
+  <head>
 
+    {% load static i18n l10n %}
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% trans "Neuroscience Experiments System - NES" %}</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'imgs/favicon.ico' %}">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="{% static "imgs/favicon.ico" %}">
     <meta name="description" content="Database system for storing data related to EEG and EMG">
-    <meta name="author" content="">
+    <meta name="author" content="Neuromat, PEB-Lapis">
 
-    <link rel="stylesheet" href="{% static 'site/jquery-ui-1.13.2/jquery-ui.min.css' %}">
-    <link rel="stylesheet" href="{% static 'site/bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'site/toastr/toastr.min.css' %}">
-    <link rel="stylesheet" href="{% static 'site/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    {% block extraheader %}
+    {% endblock extraheader %}
+
+    <link rel="preload" href="{% static "site/bootstrap-5.3.2-dist/css/bootstrap.min.css" %}" as="style" />
+
+    <link rel="stylesheet" href="{% static "site/bootstrap-5.3.2-dist/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "site/font-awesome-4.7.0/css/font-awesome.min.css" %}">
 
     <style>
         body {
+            height: 100%;
+          }
+          
+          body {
+            display: flex;
+            align-items: center;
             padding-top: 40px;
             padding-bottom: 40px;
-            background-color: #eee;
-        }
-        .form-signin {
+            background-color: #f5f5f5;
+          }
+          
+          .form-signin {
+            width: 100%;
             max-width: 330px;
             padding: 15px;
-            margin: 0 auto;
-        }
-        .form-signin .form-signin-heading,
-        .form-signin .checkbox {
-            margin-bottom: 10px;
-        }
-        .form-signin .checkbox {
+            margin: auto;
+          }
+          
+          .form-signin .checkbox {
             font-weight: 400;
-        }
-        .form-signin .form-control {
-            position: relative;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            height: auto;
-            padding: 10px;
-            font-size: 16px;
-        }
-        .form-signin .form-control:focus {
+          }
+          
+          .form-signin .form-floating:focus-within {
             z-index: 2;
-        }
-        .form-signin input[type="email"] {
+          }
+          
+          .form-signin input[id="id_username"] {
             margin-bottom: -1px;
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 0;
-        }
-        .form-signin input[type="text"] {
-            margin-bottom: -1px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        .form-signin input[id="id_password"] {
+          }
+          
+          .form-signin input[id="id_password"] {
             margin-bottom: 10px;
             border-top-left-radius: 0;
             border-top-right-radius: 0;
-        }
+          }
         .form-signin input[id="old_password"] {
-            margin-bottom: -1px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
+
         }
         .form-signin input[id="id_new_password1"] {
             margin-bottom: -1px;
@@ -79,35 +72,56 @@
             margin-bottom: 10px;
             border-top-left-radius: 0;
             border-top-right-radius: 0;
-        }
+        } 
     </style>
 
-</head>
+    {% block extrastyle %}
+    {% endblock extrastyle %}
 
-<body>
-    {% block content %} {% endblock %}
+  </head>
 
-    {% if messages %}
-        {% for message in messages %}
+  <body>
 
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
+    {% block content %}
+    {% endblock content %}
 
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
+    <script type="text/javascript" src="{% static "site/jquery/jquery-3.7.1.min.js" %}"></script>
 
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
+    <script type="text/javascript" src="{% static "site/jquery/jquery-migrate-3.4.0.js" %}" charset="utf-8"></script>
 
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
+    <script type="text/javascript" src="{% static "site/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "site/bootstrap-show-toast/bootstrap-show-toast.min.js" %}" charset="utf-8"></script>
+    {% comment %} <script type="text/javascript" async src="{% static "site/bootstrap-validator-0.11.9/validator.min.js" %}" charset="utf-8"></script> {% endcomment %}
+    {% comment %} <script type="text/javascript" src="{% static "site/js/validate.js" %}"></script> {% endcomment %}
+    <script type="text/javascript" src="{% static "site/js/nes_utils.js" %}"></script>
 
-        {% endfor %}
-    {% endif %}
-</body>
+    <script type="text/javascript" src="{% url "javascript-catalog" %}"></script>
 
+    {% for message in messages %}
+      {% if message.tags == "success" %}
+        <script type="text/javascript" nonce="{{ request.csp_nonce }}">showSuccessMessage('{{ message }}')</script>
+      {% endif %}
+
+      {% if message.tags == "warning" %}
+        <script type="text/javascript" nonce="{{ request.csp_nonce }}">showWarningMessage('{{ message }}')</script>
+      {% endif %}
+
+      {% if message.tags == "error" %}
+        <script type="text/javascript" nonce="{{ request.csp_nonce }}">showErrorMessage('{{ message }}')</script>
+      {% endif %}
+
+      {% if message.tags == "info" %}
+        <script type="text/javascript" nonce="{{ request.csp_nonce }}">showInfoMessage('{{ message }}')</script>
+      {% endif %}
+    {% endfor %}
+
+    <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+
+    {% block extrascript %}
+    {% endblock extrascript %}
+
+  </body>
 </html>

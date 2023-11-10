@@ -112,6 +112,8 @@ VOLUME $LIMESURVEY_DIR
 ARG NES_DIR=/nes
 ENV NES_DIR=$NES_DIR
 
+ARG HTTPS_CERT_KEY
+
 
 RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y install --no-install-recommends \
@@ -167,11 +169,7 @@ RUN sed -i -r 's@ErrorLog .*@Errorlog /dev/stderr@i' /etc/apache2/apache2.conf &
     echo "CustomLog /dev/stdout combined" >> /etc/apache2/apache2.conf && \
     sed -i -e 's/Listen 80/Listen 80\nServerName localhost/' /etc/apache2/ports.conf
 
-# Setup certbot for automatic SSL certificates
-# RUN service snap start && \
-#     snap install --classic certbot && \
-#     ln -s /snap/bin/certbot /usr/bin/certbot
-
+# Setup certbot for automatic SSL certificates (does not work on localhost)
 # RUN python3 -m venv /opt/certbot/ && \
 #     /opt/certbot/bin/pip install --upgrade pip && \
 #     /opt/certbot/bin/pip install certbot certbot-apache && \
@@ -181,6 +179,7 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
     chmod +x mkcert-v*-linux-amd64 && \
     cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert && \
     /usr/local/bin/mkcert -install
+
 
 WORKDIR $NES_DIR
 

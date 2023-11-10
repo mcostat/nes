@@ -1,10 +1,10 @@
 /**
  * Created by diogopedrosa on 3/10/15.
  */
+"use strict";
 
-$(function(){
-    $("[data-toggle=tooltip]").tooltip();
-    $( "form" ).submit(function( event ) {
+ready(function(){
+    $( "form" ).on("submit", function( event ) {
         if(checkPass())
             event.preventDefault();
         if(passwordForce() < 20 && $('#id_new_password1').val()){

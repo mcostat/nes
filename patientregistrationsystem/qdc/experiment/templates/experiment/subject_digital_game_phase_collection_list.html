@@ -1,58 +1,38 @@
 {% extends "base/template.html" %}
-{% block activeAdvancedResearchProject %}class="active"{% endblock %}
+{% block activeAdvancedResearchProject %} active{% endblock activeAdvancedResearchProject  %}
 
-{% load i18n static %}
+{% load i18n %}
 {% load subjects_tags %}
 
 {% block form %}
-    <div class="row">
+    
     <form id="subject_form" method="post">
     {% csrf_token %}
 {% endblock %}
 
 {% block content %}
 
-    <div class="tab-pane fade in active" id="subjectBreadCrumb">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
-                <li><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a></li>
-                <li class="active">{% get_name_or_code subject.patient.id %}</li>
-                <li class="active">{% trans "Goalkeeper game phase data files" %}</li>
+    <div class="tab-pane fade show active" id="subjectBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a></li>
+                <li class="breadcrumb-item active">{% get_name_or_code subject.patient.id %}</li>
+                <li class="breadcrumb-item active">{% trans "Goalkeeper game phase data files" %}</li>
             </ol>
-        </div>
+        </nav>
     </div>
 
-    {% comment %} {% if messages %}
-        {% for message in messages %}
 
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
 
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %} {% endcomment %}
-
-    <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-12">
+    <div class="tab-pane fade show active" id="menuUserTab">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-xs-12 col-sm-12">
+                <div class="col-12 col-sm-12">
                     <div class="form-group">
                         <table class="table table-striped">
                             <thead>
@@ -85,14 +65,14 @@
                                                 {% for digital_game_phase_data in digital_game_phase_collection.digital_game_phase_data_list %}
                                                     <tr>
                                                         <td>
-                                                            <a href="/experiment/digital_game_phase_data/{{ digital_game_phase_data.id }}" data-toggle="tooltip" data-placement="left" title="{% trans "See details" %}">
+                                                            <a href="/experiment/digital_game_phase_data/{{ digital_game_phase_data.id }}" data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "See details" %}">
                                                                 {{ digital_game_phase_data.date }} - {{ digital_game_phase_data.time }}
                                                             </a>
                                                         </td>
                                                         <td>{{ digital_game_phase_data.file_format.name }}</td>
                                                         <td>
                                                             {% for digital_game_phase_files in digital_game_phase_data.digital_game_phase_files.all %}
-                                                                <span><a href="{{ digital_game_phase_files.file.url }}"><span class="fa fa-download"></span></a></span>
+                                                                <span><a href="{{ digital_game_phase_files.file.url }}"><span class="fa-fw fa fa-download"></span></a></span>
                                                                 <span>{{ digital_game_phase_files.file.size|filesizeformat }}</span>
                                                                 <br>
                                                             {% endfor %}
@@ -102,7 +82,7 @@
                                                 <tr>
                                                     <td colspan="5">
                                                         <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/digital_game_phase/{% for item in digital_game_phase_collection.path %}{{ item.0 }}{% if not forloop.last %}-{% endif %}{% endfor %}/add_digital_game_phase_data">
-                                                        <span class="fa fa-plus"></span>
+                                                        <span class="fa-fw fa fa-plus"></span>
                                                             {% trans "New goalkeeper game phase data file" %}
                                                         </a>
                                                     </td>
@@ -117,9 +97,9 @@
                     </div>
                 </div>
             </div>
-            <div class="btn-toolbar">
-                <div class="btn-group pull-right">
-                    <a href="/experiment/group/{{ group.id }}/subjects" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                <div class="btn-group float-end">
+                    <a href="/experiment/group/{{ group.id }}/subjects" class="btn btn-light">{% trans "Back" %}</a>
                 </div>
             </div>
 
@@ -131,13 +111,5 @@
 
 {% block end_form %}
     </form>
-    </div>
 {% endblock %}
 
-{% block script %}
-    <script>
-        $(function(){
-            $("[data-toggle=tooltip]").tooltip();
-        });
-    </script>
-{% endblock %}

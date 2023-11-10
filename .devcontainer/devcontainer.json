@@ -63,7 +63,9 @@
 				"shakram02.bash-beautify",
 				"bibhasdn.django-html",
 				"matangover.mypy",
-				"VisualStudioExptTeam.vscodeintellicode-completions"
+				"VisualStudioExptTeam.vscodeintellicode-completions",
+				"monosans.djlint",
+				"github.vscode-github-actions"
 			]
 		}
 	}

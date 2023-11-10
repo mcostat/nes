@@ -5,65 +5,43 @@
 {#information from http://stackoverflow.com/questions/6451304/django-simple-custom-template-tag-example#}
 {% load subjects_tags %}
 
-{% block activeAdvancedResearchProject %}class="active"{% endblock %}
+{% block activeAdvancedResearchProject %} active{% endblock activeAdvancedResearchProject  %}
 
 {% block form %}
-    <div class="row">
+    
     <form id="subject_form" method="post">
     {% csrf_token %}
 {% endblock %}
 
 {% block content %}
 
-    <div class="tab-pane fade in active" id="subjectBreadCrumb">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
-                <li><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
-                <li class="active">{% trans "Add Participants" %}</li>
+    <div class="tab-pane fade show active" id="subjectBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3"> 
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Add Participants" %}</li>
             </ol>
-        </div>
+        </nav>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %}
-
-    <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-12">
+    <div class="tab-pane fade show active" id="mainMenuUserTab">
+        <div class="container-fluid">
             {% if perms.experiment.add_subject and can_change %}
-                <div class="container-fluid well">
+                <div class="my-3 p-3 bg-body rounded shadow-sm">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12">
+                        <div class="col-12 col-sm-12">
                             <div class="form-group">
                                 <input id="group_id" value="{{ group.id }}" style="display: none;">
                                 <label>{% trans "Add participant" %}</label>
 
                                 <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"> <span class="fa fa-search"></span></span>
+                                    <span class="input-group-text"> <span class="fa-fw fa fa-search"></span></span>
                                     <input class="form-control" {% if perms.patient.sensitive_data_patient %}
-                                    placeholder="{% trans 'Type participant name, CPF or code' %}" {% else %} placeholder="{% trans 'Type participant code' %}"
+                                    placeholder={% trans "Type participant name, CPF or code" %} {% else %} placeholder={% trans "Type participant code" %}
                                 {% endif %} id="subject_name" type="text" autofocus="true">
                                 </div>
                                 {% csrf_token %}
@@ -73,7 +51,7 @@
                         </div>
                     </div>
                     <div class="row" align="right">
-                        <div class="col-md-12">
+                        <div class="container-fluid">
                             <a href="/experiment/group/{{ group.id }}/search_subjects">
                                 {% trans "Advanced search" %}
                             </a>
@@ -83,7 +61,7 @@
             {% endif %}
 
             <div class="row">
-                <div class="col-xs-12 col-sm-12">
+                <div class="col-12 col-sm-12">
                     <div class="form-group">
                         <table class="table table-striped">
                             <thead>
@@ -122,10 +100,9 @@
 
 {% block end_form %}
     </form>
-    </div>
 {% endblock %}
 
-{% block script %}
-    <script src="{% static 'site/js/subjects.js' %}"></script>
-    <script src="{% static 'site/js/participant_selection.js' %}"></script>
+{% block extrascript %}
+    <script type="text/javascript" defer  src={% static "site/js/subjects.js" %}></script>
+    <script type="text/javascript" defer  src={% static "site/js/participant_selection.js" %}></script>
 {% endblock %}

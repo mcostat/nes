@@ -2,122 +2,99 @@
 
 {% load i18n static %}
 
-{% block activeSetup %}class="active"{% endblock %}
+{% block activeSetup %} active{% endblock activeSetup %}
 
 {% block form %}
-    <div class="row">
     <form id="user_form" method="post" data-toggle="validator">
     {% csrf_token %}
-{% endblock %}
+{% endblock form %}
 
 {% block content %}
-{% comment %} 
-    {% if messages %}
-        {% for message in messages %}
-
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %} {% endcomment %}
 
     {% if equipment_form.errors %}
-        <script type="text/javascript">
+        <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
             showErrorMessage(gettext('Please, correct fields highlighted.'))
         </script>
     {% endif %}
 
-
-    <div class="tab-pane fade in active" id="equipmentBreadCrumb">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/setup">{% trans "Set up" %}</a></li>
-                <li><a href="/experiment/eegelectrodenet/list">{% trans "EEG electrode net" %}</a></li>
+    <div class="tab-pane fade show active" id="equipmentBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/setup">{% trans "Set up" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/eegelectrodenet/list">{% trans "EEG electrode net" %}</a></li>
 
                 {% if creating %}
-                    <li class="active">{% trans "New" %}</li>
+                    <li class="breadcrumb-item active">{% trans "New" %}</li>
                 {% else %}
                     {% if editing %}
-                        <li><a href="/experiment/eegelectrodenet/{{ equipment.id }}">{{ equipment_form.identification.value }}</a></li>
-                        <li class="active">{% trans "Editing" %}</li>
+                    <li class="breadcrumb-item"><a href="/experiment/eegelectrodenet/{{ equipment.id }}">{{ equipment_form.identification.value }}</a></li>
+                        <li class="breadcrumb-item active">{% trans "Editing" %}</li>
                     {% else %}
-                        <li class="active"> {{ equipment_form.identification.value }} </li>
+                        <li class="breadcrumb-item active"> {{ equipment_form.identification.value }} </li>
                     {% endif %}
                 {% endif %}
             </ol>
-        </div>
+        </nav>
     </div>
 
-    <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-12">
-            <div class="container-fluid well">
+    <div class="tab-pane fade show active" id="menuUserTab">
+        <div class="container-fluid">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
                 <h4>{% trans "EEG electrode net" %}</h4>
+<hr>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Manufacturer" %} <b style="color: red;">*</b></label>
+                            <label class="form-label">{% trans "Manufacturer" %} <b class="text-danger">*</b></label>
                             {{ equipment_form.manufacturer }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Identification" %} <b style="color: red;">*</b></label>
+                            <label class="form-label">{% trans "Identification" %} <b class="text-danger">*</b></label>
                             {{ equipment_form.identification }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Description" %} </label>
+                            <label class="form-label">{% trans "Description" %} </label>
                             {{ equipment_form.description }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Serial number" %}</label>
+                            <label class="form-label">{% trans "Serial number" %}</label>
                             {{ equipment_form.serial_number }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Electrode model default" %} <b style="color: red;">*</b></label>
+                            <label class="form-label">{% trans "Electrode model default" %} <b class="text-danger">*</b></label>
                             {{ equipment_form.electrode_model_default }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Localization system" %}</label>
-                            <div class="container-fluid well">
+                            <label class="form-label">{% trans "Localization system" %}</label>
+                            <div class="my-3 p-3 bg-body rounded shadow-sm">
                                 <div class="form-group">
                                     <table class="table table-striped">
                                         <tbody>
@@ -147,12 +124,11 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <div class="container-fluid well">
-
+                            <div class="my-3 p-3 bg-body rounded shadow">
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-12">
+                                    <div class="col-12 col-sm-12">
                                         <div class="form-group">
                                             <input type="checkbox" id="cap_flag" name="cap_flag" {% if is_a_cap %}checked="checked"{% endif %} {% if not creating %}disabled{% endif %}> <b>{% trans "Is a cap" %}</b> </input>
                                         </div>
@@ -160,11 +136,11 @@
                                 </div>
 
                                 <div class="row" id="div_cap">
-                                    <div class="col-xs-12 col-sm-12">
+                                    <div class="col-12 col-sm-12">
                                         <div class="form-group">
-                                            <label class="control-label">{% trans "Material" %} <b style="color: red;">*</b></label>
+                                            <label class="form-label">{% trans "Material" %} <b class="text-danger">*</b></label>
                                             {{ cap_form.material}}
-                                            <div class="help-block with-errors"></div>
+                                            <div class="form-text with-errors text-danger"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -173,9 +149,9 @@
                                 {% if is_a_cap %}
 
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-12">
+                                        <div class="col-12 col-sm-12">
                                             <div class="form-group">
-                                                <div class="container-fluid well">
+                                                <div class="my-3 p-3 bg-body rounded shadow-sm">
 
                                                     <table class="table table-striped">
                                                         <thead>
@@ -188,7 +164,7 @@
                                                                 <td>
 {#                                                                    {{ cap_size.size }}#}
                                                                      {% if perms.experiment.view_equipment and can_change %}
-                                                                            <a data-toggle="tooltip" data-placement="left" title="{% trans "Visualize" %}"
+                                                                            <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Visualize" %}"
                                                                                href="/experiment/eeg_electrode_cap_size/{{ cap_size.id }}">
                                                                                 {{cap_size.size }}
                                                                             </a>
@@ -201,8 +177,8 @@
                                                                     {{ cap_size.electrode_adjacent_distance|default:"" }}
 {#                                                                    {% if can_change %}#}
 {#                                                        <a href="/experiment/eeg_electrode_cap_size/remove/{{ cap_size.id }}"#}
-{#                                                           class="btn fa fa-remove" data-toggle="tooltip"#}
-{#                                                           data-placement="right"#}
+{#                                                           class="btn fa-fw fa fa-remove" data-bs-toggle="tooltip"#}
+{#                                                           data-bs-placement="right"#}
 {#                                                           style="color: indianred; position: relative; float: right; padding: 0"#}
 {#                                                           title="{% trans "Delete cap size" %}"#}
 {#                                                           onclick="show_modal_remove_cap_size();">#}
@@ -216,51 +192,48 @@
                                                     </table>
                                                 {% if can_change %}
                                                     <div class="row" id="div_cap">
-                                                        <div class="col-xs-12 col-sm-12">
-                                                            <div class="form-group">
+                                                        <div class="col-12 col-sm-12">
+                                                            <br>
+                                                            <div class="btn-group">
                                                                 <a href="/experiment/eeg_electrode_cap_size/{{ equipment.id }}/add_size" class="btn btn-primary">{% trans "Add size" %}</a>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 {% endif %}
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                 {% endif %}
-
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {% if not editing and can_change %}
-                    <div class="btn-group pull-left">
+                    <br>
+                    <div class="btn-group">
                         <a href="/experiment/eegelectrodenet/edit/{{ equipment.id }}" class="btn btn-primary">{% trans "Edit" %}</a>
                     </div>
                 {% endif %}
 
             </div>
 
-            <div class="btn-toolbar">
-                <div class="btn-group pull-left">
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                <div class="btn-group">
                     {% if not editing and perms.experiment.register_equipment and can_change %}
                         <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
                     {% endif %}
                 </div>
                 {% if editing %}
-                    <div class="btn-group pull-right">
+                    <div class="btn-group float-end">
                         <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save" %}</button>
-                    </div>
-                    <div class="btn-group pull-right">
                         <a href="/experiment/eegelectrodenet/{% if creating %}list{% else %}{{ equipment.id }}{% endif %}"
-                           class="btn" style="background-color: #f5f5f5">{% trans "Cancel" %}</a>
+                           class="btn btn-light">{% trans "Cancel" %}</a>
                     </div>
                 {% else %}
-                    <div class="btn-group pull-right">
-                        <a href="/experiment/eegelectrodenet/list" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+                    <div class="btn-group float-end">
+                        <a href="/experiment/eegelectrodenet/list" class="btn btn-light">{% trans "Back" %}</a>
                     </div>
                 {% endif %}
             </div>
@@ -275,7 +248,7 @@
                     {% trans "Are you sure you want to delete EEG electrode net?" %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="disableRemoveButton()">{% trans "Cancel" %}</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="disableRemoveButton()">{% trans "Cancel" %}</button>
                     <button type="submit" class="btn btn-danger" id="remove_button" value="remove" disabled name="action">{% trans "Delete" %}</button>
                 </div>
             </div>
@@ -286,10 +259,9 @@
 
 {% block end_form %}
     </form>
-    </div>
 {% endblock %}
 
-{% block script %}
-    <script src="{% static 'site/js/equipment.js' %}"></script>
-    <script src="{% static 'site/js/eeg_electrode_net_register.js' %}"></script>
+{% block extrascript %}
+    <script type="text/javascript" defer  src={% static "site/js/equipment.js" %}></script>
+    <script type="text/javascript" defer  src={% static "site/js/eeg_electrode_net_register.js" %}></script>
 {% endblock %}
