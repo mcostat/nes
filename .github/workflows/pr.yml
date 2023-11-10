@@ -10,7 +10,6 @@ jobs:
     quality-assurance:
         name: Quality Assurance
         runs-on: ubuntu-latest
-        container: python:3.11-slim-bookworm
 
         services:
             nes_db:
