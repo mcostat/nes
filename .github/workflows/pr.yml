@@ -34,4 +34,4 @@ jobs:
           - run: pip install -r patientregistrationsystem/qdc/requirements.txt         
           - name: Run Tests
             run: |
-              python3 manage.py test
+              python3 patientregistrationsystem/qdc/manage.py test
