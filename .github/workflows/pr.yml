@@ -26,7 +26,7 @@ jobs:
         defaults:
           run:
             shell: bash
-            working-directory: ./patientregistrationsystem/qdc
+            working-directory: ./patientregistrationsystem/qdc/
         steps:
           - uses: actions/checkout@v4
           - uses: actions/setup-python@v4
