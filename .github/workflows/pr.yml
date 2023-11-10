@@ -26,7 +26,7 @@ jobs:
         defaults:
           run:
             shell: bash
-            working-directory: patientregistrationsystem/qdc
+            working-directory: ../patientregistrationsystem/qdc
         steps:
           - uses: actions/checkout@v4
           - uses: actions/setup-python@v4
@@ -35,8 +35,7 @@ jobs:
               cache: 'pip' # caching pip dependencies
           - name: Install requirements
             run: pip install -r requirements.txt  
-          - name: Run Entrypoint
-            working-directory: patientregistrationsystem/qdc
+          - name: Run NES setup
             run: prepare_server.sh
           - name: Run Tests
             run: |
