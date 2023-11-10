@@ -26,7 +26,7 @@ jobs:
         defaults:
           run:
             shell: bash
-            working-directory: ../patientregistrationsystem/qdc
+            working-directory: ./patientregistrationsystem/qdc
         steps:
           - uses: actions/checkout@v4
           - uses: actions/setup-python@v4
@@ -36,7 +36,10 @@ jobs:
           - name: Install requirements
             run: pip install -r requirements.txt  
           - name: Run NES setup
-            run: prepare_server.sh
+            run: |
+              mkdir -p static |
+              python3 -u manage.py collectstatic --no-input |
+              python3 -u manage.py compress --force
           - name: Run Tests
             run: |
-              python3 manage.py test
+              python3 -u manage.py test
