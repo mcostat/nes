@@ -35,15 +35,17 @@ jobs:
             with:
               python-version: '3.11'
               cache: 'pip'
+          - uses: psf/black@stable
+            with:
+              options: "--check --verbose"
+              src: "."
           - name: Install requirements
             run: |
-              pip install flake8 |
+              pip install black |
               pip install -r requirements.txt  
           - name: Run NES setup
             run: |
               sh prepare_server.sh
-          - name: Python Linter
-            run: flake8 .
           - name: Run Tests
             run: |
               python3 -u manage.py test
