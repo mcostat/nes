@@ -24,7 +24,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "")
+SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "_my_secret_key_")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

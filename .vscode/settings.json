@@ -28,7 +28,6 @@
     ],
     "pylint.args": [
         "--disable=C0111",
-        "--disable=reportGeneralTypeIssues",
         "--load-plugins",
         "pylint_django",
         "--django-settings-module=qdc.settings.dev"
