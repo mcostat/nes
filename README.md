@@ -1,6 +1,6 @@
 # Neuroscience Experiments System - NES
 
-[![GitHub Super-Linter](https://github.com/mcostat/nes/actions/workflows/super-linter.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
+|  |quality-status| |super-linter| |license|
 
 ## About NES
 
@@ -28,3 +28,15 @@ Mozilla Public License Version 2.0
 ## RIDC NeuroMat
 
 The Research, Innovation and Dissemination Center for Neuromathematics (RIDC NeuroMat, or simply NeuroMat) is a Brazilian research center established in 2013 at the University of São Paulo that is dedicated to integrating mathematical modeling and theoretical neuroscience. Among the core missions of NeuroMat is the creation of a new mathematical system to understanding neural data and the development of neuroscientific open-source computational tools, keeping an active role under the context of open knowledge, open science, and scientific dissemination. The research center is headed by Prof. Antonio Galves, from USP's Institute of Mathematics and Statistics, and is funded by the São Paulo Research Foundation (FAPESP). NeuroMat homepage: http://neuromat.numec.prp.usp.br
+
+
+
+.. |quality-status| image:: https://github.com/mcostat/nes/actions/workflows/quality.yml/badge.svg?branch=master&event=push
+    :target: https://github.com/mcostat/nes/actions/workflows/quality.yml
+    :alt: Quality check status
+.. |super-linter| image:: https://github.com/mcostat/nes/actions/workflows/super-linter.yml/badge.svg
+    :target: https://github.com/marketplace/actions/super-linter
+    :alt: GitHub Super-Linter
+.. |license| image:: https://img.shields.io/pypi/l/coverage.svg
+    :target: https://github.com/mcostat/nes
+    :alt: License
