@@ -20,11 +20,11 @@ name: "Microsoft Defender For Devops"
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
   schedule:
-    - cron: '23 12 * * 6'
+    - cron: "23 12 * * 6"
 
 jobs:
   MSDO:
@@ -35,16 +35,16 @@ jobs:
       security-events: write
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          5.0.x
-          6.0.x
-    - name: Run Microsoft Security DevOps
-      uses: microsoft/security-devops-action@v1.6.0
-      id: msdo
-    - name: Upload results to Security tab
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: ${{ steps.msdo.outputs.sarifFile }}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            5.0.x
+            6.0.x
+      - name: Run Microsoft Security DevOps
+        uses: microsoft/security-devops-action@v1.6.0
+        id: msdo
+      - name: Upload results to Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
