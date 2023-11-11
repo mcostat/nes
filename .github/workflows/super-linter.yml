@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0
 
       - name: Lint Code Base
-        uses: github/super-linter@v5
+        uses: github/super-linter/slim@v5
         env:
           VALIDATE_JAVASCRIPT_STANDARD: true
           VALIDATE_TYPESCRIPT_STANDARD: true
@@ -37,4 +37,5 @@ jobs:
           VALIDATE_GITLEAKS: true
           VALIDATE_BASH: true
           DEFAULT_BRANCH: "master"
+          FILTER_REGEX_EXCLUDE: .*test/.*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
