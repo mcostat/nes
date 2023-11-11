@@ -8,7 +8,6 @@ from django.test import TestCase
 from experiment.forms import *
 from experiment.forms import NumberOfUsesToInsertForm
 from experiment.models import *
-from survey.abc_search_engine import Questionnaires
 
 # from .models import Questionnaire, ABCSearchEngine, Survey, ABC
 

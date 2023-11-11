@@ -17,7 +17,6 @@ from typing import Any
 from uuid import uuid4
 
 import mne
-import numpy as np
 import pydot
 import pynwb as nwb
 from dateutil.relativedelta import relativedelta

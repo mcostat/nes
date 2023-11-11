@@ -4,7 +4,6 @@ import random
 import tempfile
 import zipfile
 from io import BufferedWriter
-from venv import create
 
 from django.apps import apps
 from django.contrib.auth.models import Group as UserGroup

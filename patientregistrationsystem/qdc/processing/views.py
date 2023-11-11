@@ -1,21 +1,16 @@
 import tempfile
 from typing import Any
 
-import mne
-from click import Group
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.core.files import File
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-import experiment
 from experiment.models import Experiment, Group, ResearchProject, SubjectOfGroup
 from patient.models import Patient
-
-from .forms import UploadFileForm
 
 
 def handle_uploaded_file(file: File) -> str:
@@ -103,7 +98,7 @@ def index(
 def select_files(
     request: HttpRequest, template_name: str = "processing/file_selection.html"
 ) -> HttpResponse:
-    return Object()
+    return None
 
 
 def get_avaliable_projects() -> list[Experiment]:

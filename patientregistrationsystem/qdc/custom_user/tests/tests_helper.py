@@ -1,6 +1,4 @@
-from typing import Any
-
-from django.contrib.auth.models import Group, GroupManager, User
+from django.contrib.auth.models import Group, User
 from faker import Factory, Generator
 
 

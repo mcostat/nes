@@ -4,7 +4,6 @@ from typing import Any, Iterable
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from django.db.models import Model
 from django.forms import (
     CharField,
     CheckboxSelectMultiple,
@@ -19,9 +18,6 @@ from django.utils.translation import gettext_lazy as _
 
 from custom_user.models import Institution, UserProfile
 from custom_user.regex_utils import (
-    EMAIL_REGEX,
-    FIRSTNAME_REGEX,
-    LASTNAME_REGEX,
     PASSWORD_REGEX,
     USERNAME_REGEX,
 )

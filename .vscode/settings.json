@@ -1,7 +1,7 @@
 {
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.functionReturnTypes": true,
@@ -88,8 +88,14 @@
         "D018",
         "H031"
     ],
-    "djlint.extendExclude": [".py"],
+    "djlint.extendExclude": [
+        ".py"
+    ],
     "[django-html]": {
         "editor.defaultFormatter": "monosans.djlint"
     },
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--enable=W0614"
+    ]
 }

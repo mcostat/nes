@@ -1,7 +1,5 @@
 # check if exist a NES new version
 
-import os
-
 from django.conf import settings
 from git.repo import Repo
 

@@ -26,7 +26,6 @@ from django.utils.translation import gettext as _
 from experiment.models import (
     EEG,
     EMG,
-    TIME_UNITS,
     TMS,
     ADConverter,
     AdditionalData,

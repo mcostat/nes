@@ -16,7 +16,6 @@ from django.contrib.auth.models import Permission, User
 from django.contrib.messages.api import MessageFailure
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.core.management.base import CommandError
