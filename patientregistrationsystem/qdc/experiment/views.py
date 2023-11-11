@@ -135,7 +135,6 @@ from .forms import (
     SoftwareVersionRegisterForm,
     SourceCodeForm,
     StandardizationSystemRegisterForm,
-    StimuliDataForm,
     StimuliEqRegisterForm,
     StimuliEqSettingForm,
     StimulusForm,

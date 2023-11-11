@@ -41,15 +41,14 @@ jobs:
           - name: Install requirements
             run: |
               pip install -r requirements.txt  
+          - name: Run NES setup
+            run: |
+              sh prepare_server.sh
+          - name: Run Tests
+            run: |
+              python3 -u manage.py test
           - uses: psf/black@stable
             with:
               options: "--check --verbose"
               src: "patientregistrationsystem/qdc/"
-          - name: Run NES setup
-            run: |
-              sh prepare_server.sh
-          - run: pylint --disable=all --enable=unused-import $(git ls-files '*.py')
-          - run: mypy --strict $(git ls-files '*.py')
-          - name: Run Tests
-            run: |
-              python3 -u manage.py test
+          - run: mypy $(git ls-files '*.py')

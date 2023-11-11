@@ -12,7 +12,6 @@ from django.forms import (
     ModelForm,
     MultipleChoiceField,
     NumberInput,
-    RadioSelect,
     Select,
     SelectMultiple,
     TextInput,
