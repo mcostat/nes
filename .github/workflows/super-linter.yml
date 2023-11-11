@@ -27,6 +27,7 @@ jobs:
 
       - name: Lint Code Base
         uses: github/super-linter/slim@v5
+        id: lint
         env:
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_TYPESCRIPT_ES: true
@@ -39,3 +40,7 @@ jobs:
           DEFAULT_BRANCH: "master"
           FILTER_REGEX_EXCLUDE: .*tests/.*|.*bootstrap-5.3.2-dist/.*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.lint.outputs.sarifFile }}
