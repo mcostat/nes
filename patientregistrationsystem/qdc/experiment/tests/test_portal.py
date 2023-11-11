@@ -24,7 +24,7 @@ class PortalAPITest(TestCase):
     @patch("experiment.portal.RestApiClient")
     def test_send_experiment_to_portal(self, mockRestApiClientClass):
         # create the groups of users and their permissions
-        eval(open("add_initial_data.py").read())
+        exec(open("add_initial_data.py").read())
 
         user, user_passwd = create_user(Group.objects.all())
 
@@ -63,7 +63,7 @@ class PortalAPITest(TestCase):
     @patch("experiment.portal.RestApiClient")
     def test_send_researcher_to_portal(self, mockRestApiClientClass):
         # create the groups of users and their permissions
-        eval(open("add_initial_data.py").read())
+        exec(open("add_initial_data.py").read())
 
         research_project = ObjectsFactory.create_research_project()
         experiment = ObjectsFactory.create_experiment(research_project)
@@ -85,7 +85,7 @@ class PortalAPITest(TestCase):
     @patch("experiment.portal.RestApiClient")
     def test_send_experiment_researcher_to_portal(self, mockRestApiClientClass):
         # create the groups of users and their permissions
-        eval(open("add_initial_data.py").read())
+        exec(open("add_initial_data.py").read())
 
         research_project = ObjectsFactory.create_research_project()
         experiment = ObjectsFactory.create_experiment(research_project)
@@ -118,7 +118,7 @@ class PortalAPITest(TestCase):
         self, mockServerClass, mockRestApiClientClass
     ):
         # Create the groups of users and their permissions
-        eval(open("add_initial_data.py").read())
+        exec(open("add_initial_data.py").read())
 
         # Create objects necessary to send questionnaire step to portal
         research_project = ObjectsFactory.create_research_project()
