@@ -28,8 +28,8 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter/slim@v5
         env:
-          VALIDATE_JAVASCRIPT_STANDARD: true
-          VALIDATE_TYPESCRIPT_STANDARD: true
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_TYPESCRIPT_ES: true
           VALIDATE_JSON: true
           VALIDATE_DOCKERFILE: true
           VALIDATE_ENV: true
