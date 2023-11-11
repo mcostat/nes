@@ -6,13 +6,14 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8
 
 
-RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get -y install --no-install-recommends \
+RUN apt-get -y update && apt-get -y install --no-install-recommends \
     python-is-python3 \
     python3-dev \
     libjpeg-dev \
@@ -32,14 +33,13 @@ RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninter
     apt-get clean -y && \
     # Remove imagemagick due to https://security-tracker.debian.org/tracker/CVE-2019-10131
     apt-get purge -y imagemagick imagemagick-6-common && \
-    rm -rf /var/lib/apt/lists* && \
+    rm -rf /var/lib/apt/lists/* && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 
 RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list && \
-    apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get -y install --no-install-recommends redis
+    apt-get update &&  && apt-get -y install --no-install-recommends redis
 
 
 COPY $NES_DIR/patientregistrationsystem/qdc/requirements.txt /tmp/pip-tmp/

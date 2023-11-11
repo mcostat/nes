@@ -2,6 +2,7 @@ FROM python:3.11-slim-bookworm as wheeler
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONOPTIMIZE 1
+ENV DEBIAN_FRONTEND=noninteractive
 
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
@@ -13,8 +14,7 @@ ARG NES_DIR=/usr/local/nes
 ENV NES_DIR=$NES_DIR
 
 
-RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get -y install --no-install-recommends \
+RUN apt-get -y update && apt-get -y install --no-install-recommends \
     python3-dev \
     libjpeg-dev \
     libpng-dev \
@@ -23,11 +23,10 @@ RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninter
     zlib1g-dev \
     g++ \
     make \
-    #freetype-dev \
     git && \
     apt-get autoremove -y && \
     apt-get clean -y && \
-    rm -rf /var/lib/apt/lists* && \
+    rm -rf /var/lib/apt/lists/* && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 
@@ -66,8 +65,7 @@ ENV NES_DIR=$NES_DIR
 ARG HTTPS_CERT_KEY
 
 
-RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get -y install --no-install-recommends \
+RUN apt-get -y update && apt-get -y install --no-install-recommends \
     curl \
     python3-pip \
     python3-psycopg \
@@ -90,7 +88,7 @@ RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninter
     apt-get purge -y imagemagick imagemagick-6-common && \
     apt-get autoremove -y && \
     apt-get clean -y && \
-    rm -rf /var/lib/apt/lists* && \
+    rm -rf /var/lib/apt/lists/* && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 
