@@ -1,8 +1,8 @@
 import subprocess
 
-from experiment import models
 from django.contrib.auth.models import User
 
+from experiment import models
 from patient.models import Patient
 
 # Collect and send User's (nep: Researcher's) -> ResearchProject's

@@ -24,7 +24,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY: str = ""
+SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "_my_secret_key_")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,11 +39,13 @@ IS_TESTING = True
 
 
 AXES_COOLOFF_MESSAGE = _(
-    "Your accouunt has been locked for 1 hour: too many login attempts."
+    "Your accouunt has been locked for 30 MINUTES: too many login attempts."
 )
 AXES_FAILURE_LIMIT = 5
 AXES_RESET_ON_SUCCESS = True
-AXES_COOLOFF_TIME = 1
+AXES_COOLOFF_TIME = 0.5
+AXES_CACHE = "axes"
+AXES_LOCKOUT_PARAMETERS = ["ip_address", ["username", "user_agent"]]
 
 ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "0.0.0.0"]
 
@@ -166,6 +168,10 @@ CACHES: dict[str, Any] = {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379",
     },
+    "axes": {
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": "127.0.0.1:11211",
+    },
 }
 
 COMPRESS_CACHE_BACKEND = "redis"
@@ -175,21 +181,6 @@ COMPRESS_OFFLINE = False
 ROOT_URLCONF = "qdc.urls"
 
 WSGI_APPLICATION = "qdc.wsgi.application"
-
-
-# LimeSurvey configuration
-LIMESURVEY: dict[str, str] = {
-    "URL_API": "",
-    "URL_WEB": "",
-    "USER": "",
-    "PASSWORD": "",
-}
-
-# Portal API configuration
-PORTAL_API: dict[str, str] = {"URL": "", "PORT": "", "USER": "", "PASSWORD": ""}
-
-# Show button to send experiments to Portal
-SHOW_SEND_TO_PORTAL_BUTTON = False
 
 # AUTH_USER_MODEL = 'quiz.UserProfile'
 # AUTH_PROFILE_MODULE = 'quiz.UserProfile'
@@ -294,9 +285,63 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
 MEDIA_ROOT: str = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "media/"
 
-try:
-    from .settings_local import *
-except ImportError:
-    pass
+
+# TODO: move some of those env variables to a secret file
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "0.0.0.0",
+    os.getenv("NES_IP", "127.0.0.1"),
+    os.getenv("NES_HOSTNAME", "localhost"),
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://localhost",
+    "https://" + os.getenv("NES_IP", "127.0.0.1"),
+    "https://" + os.getenv("NES_HOSTNAME", "localhost"),
+]
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("NES_DB", "nes_db"),
+        "USER": os.getenv("NES_DB_USER", "nes_user"),
+        "PASSWORD": os.getenv("NES_DB_PASSWORD", "nes_password"),
+        "HOST": os.getenv("NES_DB_HOST", "localhost"),
+        "PORT": os.getenv("NES_DB_PORT", "5432"),
+    }
+}
+
+# LimeSurvey configuration
+LIMESURVEY = {
+    "URL_API": "http://"
+    + os.getenv("LIMESURVEY_HOST", "localhost")
+    + ":"
+    + os.getenv("LIMESURVEY_PORT", "8080"),
+    "URL_WEB": "http://"
+    + os.getenv("LIMESURVEY_URL_WEB", "localhost")
+    + ":"
+    + os.getenv("LIMESURVEY_PORT", "8080"),
+    "USER": os.getenv("LIMESURVEY_ADMIN_USER", "lime_admin"),
+    "PASSWORD": os.getenv("LIMESURVEY_ADMIN_PASSWORD", "lime_admin_password"),
+}
+
+# Portal API configuration
+PORTAL_API: dict[str, str] = {"URL": "", "PORT": "", "USER": "", "PASSWORD": ""}
+
+# Show button to send experiments to Portal
+SHOW_SEND_TO_PORTAL_BUTTON = False
+
+# Settings to send emails
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "")
+SERVER_EMAIL = EMAIL_HOST_USER
+
+
+LOGO_INSTITUTION = os.getenv("NES_PROJECT_PATH", "") + "/logo-institution.png"
+
 
 VERSION = "2.0.0"

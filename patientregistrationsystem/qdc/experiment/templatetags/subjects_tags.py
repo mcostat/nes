@@ -1,6 +1,5 @@
 from django import template
-from django.forms import Field
-from django.template.defaultfilters import stringfilter
+
 from patient.models import Patient
 
 register = template.Library()

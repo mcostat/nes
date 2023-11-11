@@ -16,12 +16,9 @@ from os import path
 from typing import Any
 from uuid import uuid4
 
-
 import mne
-import numpy as np
-import pynwb as nwb
 import pydot
-from configuration.models import LocalInstitution
+import pynwb as nwb
 from dateutil.relativedelta import relativedelta
 from django.apps import apps
 from django.conf import settings
@@ -39,18 +36,19 @@ from django.db.models.deletion import ProtectedError
 from django.http import (
     HttpRequest,
     HttpResponse,
-    HttpResponseRedirect,
     HttpResponseNotAllowed,
+    HttpResponseRedirect,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext as _
+from mne.channels import DigMontage
+
+from configuration.models import LocalInstitution
 from experiment.import_export import ExportExperiment, ImportExperiment
 from export.directory_utils import create_directory
 from export.forms import AgeIntervalForm, ParticipantsSelectionForm
-from mne.channels import DigMontage
-
 from patient.models import ClassificationOfDiseases, Patient
 from patient.models import QuestionnaireResponse as PatientQuestionnaireResponse
 from patient.models import SocialDemographicData
@@ -137,7 +135,6 @@ from .forms import (
     SoftwareVersionRegisterForm,
     SourceCodeForm,
     StandardizationSystemRegisterForm,
-    StimuliDataForm,
     StimuliEqRegisterForm,
     StimuliEqSettingForm,
     StimulusForm,
@@ -277,7 +274,6 @@ from .portal import (
     send_tms_data_to_portal,
     send_tms_setting_to_portal,
 )
-
 
 # mypy: disable-error-code="misc"
 permission_required = partial(permission_required, raise_exception=True)

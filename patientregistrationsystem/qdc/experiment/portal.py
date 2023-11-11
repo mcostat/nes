@@ -5,11 +5,11 @@ from io import StringIO
 from os import path
 from typing import Any
 
-from django.contrib.auth.models import User
-
 import coreapi
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.utils import translation
+
 from survey.abc_search_engine import Questionnaires
 from survey.survey_utils import QuestionnaireUtils
 from survey.views import questionnaire_evaluation_fields_excluded

@@ -1,7 +1,8 @@
-from configuration.models import Contact, LocalInstitution, get_institution_logo_dir
-from custom_user.models import Institution
 from django.db.utils import IntegrityError
 from django.test import TestCase
+
+from configuration.models import Contact, LocalInstitution, get_institution_logo_dir
+from custom_user.models import Institution
 
 
 class LocalInstiutionTest(TestCase):
@@ -49,3 +50,9 @@ class ContactTest(TestCase):
         contact = Contact.objects.create(name="adm test", email="test@test.com")
 
         self.assertEqual(str(contact), "adm test")
+
+    def test_adding_multiple_Contact(self) -> None:
+        Contact.objects.create(name="adm test", email="test@test.com")
+
+        with self.assertRaises(IntegrityError):
+            Contact.objects.create(name="adm test", email="test@test.com")

@@ -1,11 +1,12 @@
-from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
-from patient.models import ClassificationOfDiseases
-from django.utils.translation.trans_real import activate, deactivate
-
 import csv
 import os
 import sys
+
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+from django.utils.translation.trans_real import activate, deactivate
+
+from patient.models import ClassificationOfDiseases
 
 
 class Command(BaseCommand):

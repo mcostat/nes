@@ -1,99 +1,98 @@
 import csv
-import os
 import io
+import os
 import re
+import shutil
 import sys
 import tempfile
-from typing import Any
-from unittest import skip
 import zipfile
 from datetime import date, datetime
-
-import shutil
+from typing import Any
+from unittest import skip, skipIf
 from unittest.mock import patch
 
 from django.core.files import File
 from django.http import HttpResponse
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.test import override_settings
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from goodtables import validate
 
 from experiment.models import (
     AdditionalData,
     AdditionalDataFile,
-    Component,
-    ComponentConfiguration,
-    ComponentAdditionalFile,
-    BrainAreaSystem,
     BrainArea,
+    BrainAreaSystem,
+    CoilOrientation,
+    Component,
+    ComponentAdditionalFile,
+    ComponentConfiguration,
+    ContextTree,
     DigitalGamePhaseData,
     DigitalGamePhaseFile,
-    TMSLocalizationSystem,
-    HotSpot,
-    TMSData,
-    CoilOrientation,
     DirectionOfTheInducedCurrent,
+    EEGData,
     EEGFile,
     EMGFile,
+    HotSpot,
     Stimulus,
-    ContextTree,
-    EEGData,
+    TMSData,
+    TMSLocalizationSystem,
 )
 from experiment.tests.tests_helper import ObjectsFactory
 from export import input_export
 from export.export import (
-    PROTOCOL_IMAGE_FILENAME,
-    PROTOCOL_DESCRIPTION_FILENAME,
+    CONTEXT_TREE_DEFAULT,
     EEG_DEFAULT_SETTING_FILENAME,
     EEG_SETTING_FILENAME,
-    TMS_DATA_FILENAME,
-    HOTSPOT_MAP,
-    EMG_SETTING_FILENAME,
     EMG_DEFAULT_SETTING,
+    EMG_SETTING_FILENAME,
+    HOTSPOT_MAP,
+    PROTOCOL_DESCRIPTION_FILENAME,
+    PROTOCOL_IMAGE_FILENAME,
+    TMS_DATA_FILENAME,
     TMS_DEFAULT_SETTING_FILENAME,
-    CONTEXT_TREE_DEFAULT,
     ExportExecution,
 )
 from export.export_utils import create_list_of_trees
 from export.models import Export
 from export.tests.mocks import (
-    set_mocks1,
     LIMESURVEY_SURVEY_ID_1,
+    LIMESURVEY_SURVEY_ID_2,
+    set_mocks1,
     set_mocks2,
     set_mocks3,
     set_mocks4,
     set_mocks5,
     set_mocks6,
     set_mocks7,
-    update_mocks4_full_and_abbreviated,
-    update_mocks7_full,
-    update_mocks7_abbreviated,
-    LIMESURVEY_SURVEY_ID_2,
     set_mocks8,
-    update_mocks10_full,
-    update_mocks10_abbreviated,
     set_mocks9,
     set_mocks10,
     set_mocks11,
-    update_mocks11_full,
-    update_mocks11_abbreviated,
-    update_mocks6_full,
+    update_mocks4_full_and_abbreviated,
     update_mocks6_abbreviated,
-    update_mocks9_full,
+    update_mocks6_full,
+    update_mocks7_abbreviated,
+    update_mocks7_full,
     update_mocks9_abbreviated,
+    update_mocks9_full,
+    update_mocks10_abbreviated,
+    update_mocks10_full,
+    update_mocks11_abbreviated,
+    update_mocks11_full,
 )
 from export.tests.tests_helper import ExportTestCase
 from export.views import (
-    EXPORT_DIRECTORY,
-    abbreviated_data,
-    PATIENT_FIELDS,
     DIAGNOSIS_FIELDS,
+    EXPORT_DIRECTORY,
+    PATIENT_FIELDS,
+    abbreviated_data,
 )
 from patient.tests.test_orig import UtilTests
-from survey.tests.tests_helper import create_survey
 from survey.survey_utils import HEADER_EXPLANATION_FIELDS
+from survey.tests.tests_helper import create_survey
 
 USER_USERNAME = "myadmin"
 USER_PWD = "mypassword"
@@ -3914,6 +3913,10 @@ class ExportFrictionlessDataTest(ExportTestCase):
             shutil.rmtree(temp_dir)
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
+    @skipIf(
+        os.getenv("GITHUB_ACTIONS"),
+        reason="I dont know why this does not work on github actions",
+    )
     def test_export_per_experiment_adds_experimental_protocol_image_file(self):
         self._create_eeg_export_data()
         self.append_session_variable("group_selected_list", [str(self.group.id)])

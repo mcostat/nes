@@ -1,7 +1,7 @@
 {
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.functionReturnTypes": true,
@@ -28,7 +28,6 @@
     ],
     "pylint.args": [
         "--disable=C0111",
-        "--disable=reportGeneralTypeIssues",
         "--load-plugins",
         "pylint_django",
         "--django-settings-module=qdc.settings.dev"
@@ -88,7 +87,9 @@
         "D018",
         "H031"
     ],
-    "djlint.extendExclude": [".py"],
+    "djlint.extendExclude": [
+        ".py"
+    ],
     "[django-html]": {
         "editor.defaultFormatter": "monosans.djlint"
     },

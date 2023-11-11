@@ -6,10 +6,7 @@ from json import load
 
 from django.contrib.sessions.backends.base import SessionBase
 
-from custom_user.tests.tests_helper import create_user
-from django.contrib.auth.models import Group
-from django.test import TestCase
-from experiment.tests.tests_helper import ExperimentTestCase, ObjectsFactory
+from experiment.tests.tests_helper import ExperimentTestCase
 
 
 class ExportTestCase(ExperimentTestCase):

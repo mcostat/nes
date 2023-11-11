@@ -2,53 +2,73 @@
 
 {% load i18n static %}
 
-{% block activeSetup %} active{% endblock activeSetup %}
+{% block activeSetup %}
+    active
+{% endblock activeSetup %}
 
 {% block form %}
     <form id="user_form" method="post" data-toggle="validator">
-    {% csrf_token %}
-{% endblock form %}
+        {% csrf_token %}
+    {% endblock form %}
 
-{% block content %}
+    {% block content %}
 
-    {% if equipment_form.errors %}
-        <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
-            showErrorMessage(gettext('Please, correct fields highlighted.'))
-        </script>
-    {% endif %}
+        {% if equipment_form.errors %}
+            <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
+                showErrorMessage(gettext('Please, correct fields highlighted.'))
+            </script>
+        {% endif %}
 
-    <div class="tab-pane fade show active" id="equipmentBreadCrumb">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
-                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
-                <li class="breadcrumb-item"><a href="/experiment/setup">{% trans "Set up" %}</a></li>
-                <li class="breadcrumb-item"><a href="/experiment/eegelectrodenet/list">{% trans "EEG electrode net" %}</a></li>
+        <div class="tab-pane fade show active" id="equipmentBreadCrumb">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                    <li class="breadcrumb-item">
+                        <a href="{% url "home" %}">{% trans "Home" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/setup">{% trans "Set up" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/eegelectrodenet/list">{% trans "EEG electrode net" %}</a>
+                    </li>
 
-                {% if creating %}
-                    <li class="breadcrumb-item active">{% trans "New" %}</li>
-                {% else %}
-                    {% if editing %}
-                    <li class="breadcrumb-item"><a href="/experiment/eegelectrodenet/{{ equipment.id }}">{{ equipment_form.identification.value }}</a></li>
-                        <li class="breadcrumb-item active">{% trans "Editing" %}</li>
+                    {% if creating %}
+                        <li class="breadcrumb-item active">
+                            {% trans "New" %}
+                        </li>
                     {% else %}
-                        <li class="breadcrumb-item active"> {{ equipment_form.identification.value }} </li>
+                        {% if editing %}
+                            <li class="breadcrumb-item">
+                                <a href="/experiment/eegelectrodenet/{{ equipment.id }}">{{ equipment_form.identification.value }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                {% trans "Editing" %}
+                            </li>
+                        {% else %}
+                            <li class="breadcrumb-item active">
+                                {{ equipment_form.identification.value }}
+                            </li>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            </ol>
-        </nav>
-    </div>
+                </ol>
+            </nav>
+        </div>
 
-    <div class="tab-pane fade show active" id="menuUserTab">
-        <div class="container-fluid">
+        <div class="tab-pane fade show active" id="menuUserTab">
             <div class="my-3 p-3 bg-body rounded shadow-sm">
-                <h4>{% trans "EEG electrode net" %}</h4>
-<hr>
+                <h4>
+                    {% trans "EEG electrode net" %}
+                </h4>
+                <hr>
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="form-label">{% trans "Manufacturer" %} <b class="text-danger">*</b></label>
+                            <label class="form-label">
+                                {% trans "Manufacturer" %} <b class="text-danger">*</b>
+                            </label>
                             {{ equipment_form.manufacturer }}
-                            <div class="form-text with-errors text-danger"></div>
+                            <div class="form-text with-errors text-danger">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -56,36 +76,48 @@
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="form-label">{% trans "Identification" %} <b class="text-danger">*</b></label>
+                            <label class="form-label">
+                                {% trans "Identification" %} <b class="text-danger">*</b>
+                            </label>
                             {{ equipment_form.identification }}
-                            <div class="form-text with-errors text-danger"></div>
+                            <div class="form-text with-errors text-danger">
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="form-label">{% trans "Description" %} </label>
+                            <label class="form-label">
+                                {% trans "Description" %}
+                            </label>
                             {{ equipment_form.description }}
-                            <div class="form-text with-errors text-danger"></div>
+                            <div class="form-text with-errors text-danger">
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="form-label">{% trans "Serial number" %}</label>
+                            <label class="form-label">
+                                {% trans "Serial number" %}
+                            </label>
                             {{ equipment_form.serial_number }}
-                            <div class="form-text with-errors text-danger"></div>
+                            <div class="form-text with-errors text-danger">
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="form-label">{% trans "Electrode model default" %} <b class="text-danger">*</b></label>
+                            <label class="form-label">
+                                {% trans "Electrode model default" %} <b class="text-danger">*</b>
+                            </label>
                             {{ equipment_form.electrode_model_default }}
-                            <div class="form-text with-errors text-danger"></div>
+                            <div class="form-text with-errors text-danger">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,175 +125,188 @@
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="form-label">{% trans "Localization system" %}</label>
+                            <label class="form-label">
+                                {% trans "Localization system" %}
+                            </label>
                             <div class="my-3 p-3 bg-body rounded shadow-sm">
                                 <div class="form-group">
                                     <table class="table table-striped">
                                         <tbody>
-                                        {% for localizationsystem in eegelectrodelocalizationsystem %}
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox"
-                                                           id="localization_system_{{ localizationsystem.id }}"
-                                                           name="localization_system_{{ localizationsystem.id }}"
-                                                           {% if localizationsystem.checked %}checked="checked"{% endif %}
-                                                           {% if localizationsystem.disabled %}disabled{% endif %}>
-                                                    {{ localizationsystem.name }}
+                                            {% for localizationsystem in eegelectrodelocalizationsystem %}
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox"
+                                                               id="localization_system_{{ localizationsystem.id }}"
+                                                               name="localization_system_{{ localizationsystem.id }}"
+                                                               {% if localizationsystem.checked %}checked="checked"{% endif %}
+                                                               {% if localizationsystem.disabled %}disabled{% endif %}>
+                                                        {{ localizationsystem.name }}
                                                     </input>
                                                 </td>
                                                 <td>
                                                     {% if localizationsystem.used %}
-                                                        {% trans "Used in EEG setting(s)" %}{% endif %}
+                                                        {% trans "Used in EEG setting(s)" %}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                         {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-12 col-sm-12">
-                        <div class="form-group">
-                            <div class="my-3 p-3 bg-body rounded shadow">
-                                <div class="row">
-                                    <div class="col-12 col-sm-12">
-                                        <div class="form-group">
-                                            <input type="checkbox" id="cap_flag" name="cap_flag" {% if is_a_cap %}checked="checked"{% endif %} {% if not creating %}disabled{% endif %}> <b>{% trans "Is a cap" %}</b> </input>
-                                        </div>
+            <div class="row">
+                <div class="col-12 col-sm-12">
+                    <div class="form-group">
+                        <div class="my-3 p-3 bg-body rounded shadow">
+                            <div class="row">
+                                <div class="col-12 col-sm-12">
+                                    <div class="form-group">
+                                        <input type="checkbox" id="cap_flag" name="cap_flag" {% if is_a_cap %}checked="checked"{% endif %} {% if not creating %}disabled{% endif %}>
+                                        <b>{% trans "Is a cap" %}</b>
+                                    </input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="div_cap">
+                            <div class="col-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        {% trans "Material" %} <b class="text-danger">*</b>
+                                    </label>
+                                    {{ cap_form.material }}
+                                    <div class="form-text with-errors text-danger">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <div class="row" id="div_cap">
-                                    <div class="col-12 col-sm-12">
-                                        <div class="form-group">
-                                            <label class="form-label">{% trans "Material" %} <b class="text-danger">*</b></label>
-                                            {{ cap_form.material}}
-                                            <div class="form-text with-errors text-danger"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                        {#                                {% if is_a_cap and not editing %}#}
+                        {% if is_a_cap %}
 
-{#                                {% if is_a_cap and not editing %}#}
-                                {% if is_a_cap %}
+                            <div class="row">
+                                <div class="col-12 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="my-3 p-3 bg-body rounded shadow-sm">
 
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12">
-                                            <div class="form-group">
-                                                <div class="my-3 p-3 bg-body rounded shadow-sm">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>
+                                                        {% trans "Size" %}
+                                                    </th>
+                                                    <th>
+                                                        {% trans "Electrode adjacent distance" %}
+                                                    </th>
+                                                </thead>
+                                                <tbody>
+                                                    {% for cap_size in cap_size_list %}
+                                                        <tr>
+                                                            <td>
+                                                                {#                                                                    {{ cap_size.size }}#}
+                                                                {% if perms.experiment.view_equipment and can_change %}
+                                                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Visualize" %}" href="/experiment/eeg_electrode_cap_size/{{ cap_size.id }}">
+                                                                        {{ cap_size.size }}
+                                                                    </a>
+                                                                {% else %}
+                                                                    {{ cap_size.size }}
+                                                                {% endif %}
 
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <th>{% trans "Size" %}</th>
-                                                            <th>{% trans "Electrode adjacent distance" %}</th>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for cap_size in cap_size_list %}
-                                                            <tr>
-                                                                <td>
-{#                                                                    {{ cap_size.size }}#}
-                                                                     {% if perms.experiment.view_equipment and can_change %}
-                                                                            <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Visualize" %}"
-                                                                               href="/experiment/eeg_electrode_cap_size/{{ cap_size.id }}">
-                                                                                {{cap_size.size }}
-                                                                            </a>
-                                                                        {% else %}
-                                                                            {{ cap_size.size }}
-                                                                        {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {{ cap_size.electrode_adjacent_distance|default:"" }}
+                                                                {#                                                                    {% if can_change %}#}
+                                                                {#                                                        <a href="/experiment/eeg_electrode_cap_size/remove/{{ cap_size.id }}"#}
+                                                                {#                                                           class="btn fa-fw fa fa-remove" data-bs-toggle="tooltip"#}
+                                                                {#                                                           data-bs-placement="right"#}
+                                                                {#                                                           style="color: indianred; position: relative; float: right; padding: 0"#}
+                                                                {#                                                           title="{% trans "Delete cap size" %}"#}
+                                                                {#                                                           onclick="show_modal_remove_cap_size();">#}
+                                                                {#                                                        </a>#}
+                                                                {#                                                                    {% endif %}#}
 
-                                                                </td>
-                                                                <td>
-                                                                    {{ cap_size.electrode_adjacent_distance|default:"" }}
-{#                                                                    {% if can_change %}#}
-{#                                                        <a href="/experiment/eeg_electrode_cap_size/remove/{{ cap_size.id }}"#}
-{#                                                           class="btn fa-fw fa fa-remove" data-bs-toggle="tooltip"#}
-{#                                                           data-bs-placement="right"#}
-{#                                                           style="color: indianred; position: relative; float: right; padding: 0"#}
-{#                                                           title="{% trans "Delete cap size" %}"#}
-{#                                                           onclick="show_modal_remove_cap_size();">#}
-{#                                                        </a>#}
-{#                                                                    {% endif %}#}
-
-                                                                </td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                {% if can_change %}
-                                                    <div class="row" id="div_cap">
-                                                        <div class="col-12 col-sm-12">
-                                                            <br>
-                                                            <div class="btn-group">
-                                                                <a href="/experiment/eeg_electrode_cap_size/{{ equipment.id }}/add_size" class="btn btn-primary">{% trans "Add size" %}</a>
-                                                            </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% if can_change %}
+                                                <div class="row" id="div_cap">
+                                                    <div class="col-12 col-sm-12">
+                                                        <br>
+                                                        <div class="btn-group">
+                                                            <a href="/experiment/eeg_electrode_cap_size/{{ equipment.id }}/add_size" class="btn btn-primary">{% trans "Add size" %}</a>
                                                         </div>
                                                     </div>
-                                                {% endif %}
                                                 </div>
-                                            </div>
+                                            {% endif %}
                                         </div>
                                     </div>
-                                {% endif %}
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
-
-                {% if not editing and can_change %}
-                    <br>
-                    <div class="btn-group">
-                        <a href="/experiment/eegelectrodenet/edit/{{ equipment.id }}" class="btn btn-primary">{% trans "Edit" %}</a>
-                    </div>
-                {% endif %}
-
-            </div>
-
-            <div class="btn-toolbar justify-content-between" role="toolbar">
-                <div class="btn-group">
-                    {% if not editing and perms.experiment.register_equipment and can_change %}
-                        <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
-                    {% endif %}
-                </div>
-                {% if editing %}
-                    <div class="btn-group float-end">
-                        <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save" %}</button>
-                        <a href="/experiment/eegelectrodenet/{% if creating %}list{% else %}{{ equipment.id }}{% endif %}"
-                           class="btn btn-light">{% trans "Cancel" %}</a>
-                    </div>
-                {% else %}
-                    <div class="btn-group float-end">
-                        <a href="/experiment/eegelectrodenet/list" class="btn btn-light">{% trans "Back" %}</a>
-                    </div>
-                {% endif %}
             </div>
         </div>
+
+        {% if not editing and can_change %}
+            <br>
+            <div class="btn-group">
+                <a href="/experiment/eegelectrodenet/edit/{{ equipment.id }}" class="btn btn-primary">{% trans "Edit" %}</a>
+            </div>
+        {% endif %}
     </div>
 
-    <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
+    <div class="btn-toolbar justify-content-between" role="toolbar">
+        <div class="btn-group">
+            {% if not editing and perms.experiment.register_equipment and can_change %}
+                <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">
+                    {% trans "Delete" %}
+                </button>
+            {% endif %}
+        </div>
+        {% if editing %}
+            <div class="btn-group float-end">
+                <button type="submit" name="action" value="save" class="btn btn-primary">
+                    {% trans "Save" %}
+                </button>
+                <a href="/experiment/eegelectrodenet/{% if creating %}list{% else %}{{ equipment.id }}{% endif %}" class="btn btn-light">{% trans "Cancel" %}</a>
+            </div>
+        {% else %}
+            <div class="btn-group float-end">
+                <a href="/experiment/eegelectrodenet/list" class="btn btn-light">{% trans "Back" %}</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
                     {% trans "Are you sure you want to delete EEG electrode net?" %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="disableRemoveButton()">{% trans "Cancel" %}</button>
-                    <button type="submit" class="btn btn-danger" id="remove_button" value="remove" disabled name="action">{% trans "Delete" %}</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="disableRemoveButton()">
+                        {% trans "Cancel" %}
+                    </button>
+                    <button type="submit" class="btn btn-danger" id="remove_button" value="remove" disabled name="action">
+                        {% trans "Delete" %}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
-{% endblock %}
+{% endblock content %}
 
 {% block end_form %}
-    </form>
-{% endblock %}
+</form>
+{% endblock end_form %}
 
 {% block extrascript %}
     <script type="text/javascript" defer  src={% static "site/js/equipment.js" %}></script>
     <script type="text/javascript" defer  src={% static "site/js/eeg_electrode_net_register.js" %}></script>
-{% endblock %}
+{% endblock extrascript %}

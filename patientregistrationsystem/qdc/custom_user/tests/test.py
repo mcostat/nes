@@ -1,22 +1,14 @@
 # -*- coding: UTF-8 -*-
-from http import HTTPStatus
 import re
+from http import HTTPStatus
 from typing import Any
 
-from custom_user.models import Institution, UserProfile
-from .tests_helper import create_user
-from custom_user.views import (
-    institution_create,
-    institution_update,
-    institution_view,
-    user_update,
-)
-from django.contrib.auth.models import Group
+from django.conf import settings
+from django.contrib.auth.models import Group, User
 from django.contrib.auth.tokens import (
     PasswordResetTokenGenerator,
     default_token_generator,
 )
-from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
@@ -27,8 +19,16 @@ from django.test.client import RequestFactory
 from django.urls import resolve, reverse
 from django.utils.http import int_to_base36
 from django.utils.translation import gettext as _
-from django.conf import settings
 
+from custom_user.models import Institution, UserProfile
+from custom_user.views import (
+    institution_create,
+    institution_update,
+    institution_view,
+    user_update,
+)
+
+from .tests_helper import create_user
 
 USER_USERNAME = "myadmin"
 USER_PWD = "mypassword"

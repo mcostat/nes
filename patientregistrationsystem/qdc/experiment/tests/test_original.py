@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
 from experiment.models import (
     EEG,
     EMG,

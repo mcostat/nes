@@ -1,23 +1,15 @@
 from base64 import b64decode
-from unittest import skip
 from unittest.mock import patch
 
-from custom_user.tests.tests_helper import create_user
 from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
 from django.urls import reverse
+
+from custom_user.tests.tests_helper import create_user
 from experiment.models import (
-    Block,
     Component,
-    ComponentConfiguration,
-    DataConfigurationTree,
-    Experiment,
-    Questionnaire,
     QuestionnaireResponse,
-    ResearchProject,
-    Subject,
-    SubjectOfGroup,
 )
 from experiment.tests.tests_helper import ObjectsFactory
 from patient.models import QuestionnaireResponse as PatientQuestionnaireResponse

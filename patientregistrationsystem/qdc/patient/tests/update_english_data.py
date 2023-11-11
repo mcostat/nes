@@ -3,7 +3,6 @@ import typing
 
 from django.apps import apps
 from django.conf import settings
-from django.core import management
 
 SUFFIX_EN = "_en"
 SUFFIX_pt_br = "_pt_br"

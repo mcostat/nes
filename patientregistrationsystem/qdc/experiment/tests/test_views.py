@@ -1,135 +1,137 @@
 import io
 import json
+import os
 import shutil
 import sys
 import tempfile
 import zipfile
-import os
 from datetime import datetime
 from unittest import skip
-from unittest.mock import patch, call
+from unittest.mock import call, patch
 
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.contrib.messages import get_messages
 from django.core.exceptions import PermissionDenied
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.urls import reverse
 from django.core.files import File
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
+from django.urls import reverse
 from django.utils.encoding import smart_str
 from django.utils.html import strip_tags
-from django.conf import settings
 from faker import Factory
 
 from custom_user.tests.tests_helper import create_user
 from experiment.import_export import ExportExperiment
 from experiment.models import (
-    Keyword,
-    Component,
-    FileFormat,
-    ExperimentResearcher,
-    Experiment,
-    ResearchProject,
+    EEG,
+    EMG,
     TMS,
-    ComponentConfiguration,
-    Questionnaire,
-    Subject,
-    SubjectOfGroup,
-    Manufacturer,
-    Material,
-    TMSDevice,
-    TMSDeviceSetting,
+    ADConverter,
+    AdditionalDataFile,
+    Amplifier,
+    AmplifierDetectionType,
     CoilModel,
     CoilShape,
-    TMSSetting,
-    EEGSetting,
-    EEGElectrodeLayoutSetting,
-    EEGElectrodeNetSystem,
-    EEGElectrodeNet,
-    ElectrodeModel,
-    ElectrodeConfiguration,
-    EEGElectrodeLocalizationSystem,
-    EEGElectrodePositionSetting,
-    EEGElectrodePosition,
-    EEGFilterSetting,
-    FilterType,
-    Amplifier,
+    Component,
+    ComponentAdditionalFile,
+    ComponentConfiguration,
+    ContextTree,
+    DataConfigurationTree,
+    DigitalGamePhaseFile,
     EEGAmplifierSetting,
-    EEGSolutionSetting,
+    EEGCapSize,
+    EEGData,
+    EEGElectrodeCap,
+    EEGElectrodeLayoutSetting,
+    EEGElectrodeLocalizationSystem,
+    EEGElectrodeNet,
+    EEGElectrodeNetSystem,
+    EEGElectrodePosition,
+    EEGElectrodePositionCollectionStatus,
+    EEGElectrodePositionSetting,
+    EEGFile,
+    EEGFilterSetting,
+    EEGSetting,
     EEGSolution,
-    EMGSetting,
-    EMGElectrodeSetting,
+    EEGSolutionSetting,
+    ElectrodeConfiguration,
+    ElectrodeModel,
     EMGADConverterSetting,
-    ADConverter,
+    EMGAmplifierSetting,
+    EMGAnalogFilterSetting,
+    EMGData,
     EMGDigitalFilterSetting,
-    SoftwareVersion,
-    Software,
-    AmplifierDetectionType,
-    TetheringSystem,
+    EMGElectrodePlacement,
+    EMGElectrodePlacementSetting,
+    EMGElectrodeSetting,
+    EMGFile,
+    EMGIntramuscularPlacement,
+    EMGNeedlePlacement,
+    EMGPreamplifierFilterSetting,
+    EMGPreamplifierSetting,
+    EMGSetting,
+    EMGSurfacePlacement,
+    Equipment,
+    Experiment,
+    ExperimentResearcher,
+    FileFormat,
+    FilterType,
+    GenericDataCollectionFile,
+)
+from experiment.models import Group as ExperimentGroup
+from experiment.models import (
+    HotSpot,
+    Instruction,
+    Keyword,
+    Manufacturer,
+    Material,
     Muscle,
     MuscleSide,
     MuscleSubdivision,
-    EMGElectrodePlacementSetting,
-    StandardizationSystem,
-    EMGIntramuscularPlacement,
-    EMGNeedlePlacement,
-    EMGSurfacePlacement,
-    EMGAnalogFilterSetting,
-    EMGAmplifierSetting,
-    EMGPreamplifierSetting,
-    EMGPreamplifierFilterSetting,
-    EEG,
-    EMG,
-    Instruction,
-    StimulusType,
-    ContextTree,
-    EMGElectrodePlacement,
-    Equipment,
-    DataConfigurationTree,
-    EEGData,
-    HotSpot,
-    ComponentAdditionalFile,
-    TMSLocalizationSystem,
-    EEGFile,
-    EEGCapSize,
-    EEGElectrodeCap,
-    EEGElectrodePositionCollectionStatus,
-    EMGFile,
-    DigitalGamePhaseFile,
-    GenericDataCollectionFile,
-    AdditionalDataFile,
-    Stimulus,
+    Questionnaire,
     QuestionnaireResponse,
-    EMGData,
+    ResearchProject,
+    Software,
+    SoftwareVersion,
+    StandardizationSystem,
+    Stimulus,
+    StimulusType,
+    Subject,
+    SubjectOfGroup,
+    TetheringSystem,
+    TMSDevice,
+    TMSDeviceSetting,
+    TMSLocalizationSystem,
+    TMSSetting,
 )
+from patient.models import (
+    AlcoholFrequency,
+    AlcoholPeriod,
+    AmountCigarettes,
+    ClassificationOfDiseases,
+    Diagnosis,
+    ExamFile,
+    FleshTone,
+    MedicalRecordData,
+    Patient,
+    Payment,
+    Religion,
+    Schooling,
+    SocialDemographicData,
+    SocialHistoryData,
+    Telephone,
+)
+from patient.tests.test_orig import UtilTests
+from survey.models import Survey
+from survey.tests.tests_helper import create_survey
+
+from .tests_helper import ExperimentTestCase, ObjectsFactory
 
 # TODO: Include these imports when the integration with the GoalKeeper Game is reimplemented
 # GoalkeeperGame, GoalkeeperPhase, GoalkeeperGameResults, GoalkeeperGameConfig, \
 
-from experiment.models import Group as ExperimentGroup
-from .tests_helper import ObjectsFactory, ExperimentTestCase
-from patient.models import (
-    Patient,
-    Telephone,
-    SocialDemographicData,
-    AmountCigarettes,
-    AlcoholFrequency,
-    AlcoholPeriod,
-    SocialHistoryData,
-    MedicalRecordData,
-    Diagnosis,
-    ClassificationOfDiseases,
-    FleshTone,
-    Payment,
-    Religion,
-    Schooling,
-    ExamFile,
-)
-
-from patient.tests.test_orig import UtilTests
-from survey.models import Survey
-from survey.tests.tests_helper import create_survey
 
 # TODO: Include these imports when the integration with the GoalKeeper Game is reimplemented
 # from configuration.models import LocalInstitution

@@ -1,4 +1,5 @@
 import mne
+
 from experiment.models import ComponentConfiguration
 from experiment.views import eeg_data_reading
 

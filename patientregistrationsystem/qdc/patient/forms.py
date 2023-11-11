@@ -3,9 +3,7 @@ from django import forms
 from django.core.validators import EMPTY_VALUES
 from django.forms import (
     CheckboxInput,
-    DateInput,
     ModelForm,
-    NullBooleanSelect,
     RadioSelect,
     Select,
     TextInput,
@@ -13,6 +11,7 @@ from django.forms import (
 )
 from django.forms.widgets import Textarea
 from django.utils.translation import gettext as _
+
 from patient.models import (
     ComplementaryExam,
     ExamFile,

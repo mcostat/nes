@@ -10,6 +10,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modeltranslation.manager import MultilingualManager
 from simple_history.models import HistoricalRecords
+
 from survey.models import Survey
 
 from .validation import CPF

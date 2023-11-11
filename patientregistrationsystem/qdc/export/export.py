@@ -13,17 +13,12 @@ from sys import modules
 from django.apps import apps
 from django.conf import settings
 from django.core.files import File
-from django.db.models import (
-    BooleanField,
-    CharField,
-    DateField,
-    FloatField,
-    TextField,
-)
+from django.db.models import BooleanField, CharField, DateField, FloatField, TextField
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext as _
+
 from experiment.models import (
     AdditionalData,
     ComponentAdditionalFile,
@@ -1946,7 +1941,11 @@ class ExportExecution:
             for language in language_list:
                 # Get data for datapackage resource questionnaire response table schema
                 rows_participant_data = self.get_input_data("participants")["data_list"]
-                answer_list: dict[str, list] = {"fields": [], "header": [], "header_questionnaire": []}
+                answer_list: dict[str, list] = {
+                    "fields": [],
+                    "header": [],
+                    "header_questionnaire": [],
+                }
                 for question in questionnaire["output_list"]:
                     answer_list["fields"].append(question["field"])
                     answer_list["header"].append(question["header"])
@@ -2200,7 +2199,7 @@ class ExportExecution:
                 for questionnaire_id in questionnaire_list:
                     # Create questionnaire_name_directory
                     questionnaires = questionnaire_list[questionnaire_id]
-                    dir_questionnaire_step = dict()
+                    dir_questionnaire_step = {}
                     dir_questionnaire_step[questionnaire_id] = set()
 
                     questionnaire_data = self.get_input_data(
@@ -2295,7 +2294,7 @@ class ExportExecution:
                         )
 
                         # Save file with data
-                        fields_description = []
+                        fields_description: list[list] = []
 
                         for language in language_list:
                             # Q123_<questionnaire_title>_<lang>.csv
@@ -2665,7 +2664,7 @@ class ExportExecution:
                             complete_filename, per_participant_rows, filesformat_type
                         )
 
-                        answer_list = {
+                        answer_list: dict[str, list] = {
                             "fields": [],
                             "header": [],
                             "header_questionnaire": [],
@@ -2851,7 +2850,7 @@ class ExportExecution:
                                     rows_participant_data = self.get_input_data(
                                         "participants"
                                     )["data_list"]
-                                    answer_list = {
+                                    answer_list: dict[str, list] = {
                                         "fields": [],
                                         "header": [],
                                         "header_questionnaire": [],
@@ -4673,7 +4672,7 @@ class ExportExecution:
             experiment_resume_directory, filename_experiment_resume
         )
 
-        experiment_description_fields = []
+        experiment_description_fields: list[list] = []
         experiment_description_fields.insert(0, experiment_summary_header)
         experiment_description_fields.insert(1, experiment_summary)
         save_to_csv(
@@ -5095,7 +5094,9 @@ class ExportExecution:
                                     settings.MEDIA_ROOT,
                                     stimulus_data["stimulus_file"].media_file.name,
                                 )
-                                stimulus_filename = path.basename(path_stimulus_filename)
+                                stimulus_filename = path.basename(
+                                    path_stimulus_filename
+                                )
                                 complete_stimulus_data_filename = path.join(
                                     path_stimulus_data, stimulus_filename
                                 )
@@ -5106,7 +5107,8 @@ class ExportExecution:
                                     "name": unique_name,
                                     "title": unique_name,
                                     "path": path.join(
-                                        export_directory_stimulus_data, stimulus_filename
+                                        export_directory_stimulus_data,
+                                        stimulus_filename,
                                     ),
                                     "description": "Stimulus type: %s"
                                     % stimulus_data["stimulus_file"].stimulus_type.name,

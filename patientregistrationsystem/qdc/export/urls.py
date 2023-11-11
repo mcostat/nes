@@ -8,8 +8,8 @@ from .views import (
     filter_participants,
     search_diagnosis,
     search_locations,
-    select_groups_by_experiment,
     select_experiments_by_study,
+    select_groups_by_experiment,
 )
 
 urlpatterns = [

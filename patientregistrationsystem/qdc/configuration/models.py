@@ -1,8 +1,10 @@
 from typing import Any
-from custom_user.models import Institution
+
 from django.db import models
 from django_stubs_ext.db.models import TypedModelMeta
 from solo.models import SingletonModel
+
+from custom_user.models import Institution
 
 
 def get_institution_logo_dir(instance: Any, filename: str) -> str:

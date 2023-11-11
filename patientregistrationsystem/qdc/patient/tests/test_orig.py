@@ -16,7 +16,6 @@ from django.contrib.auth.models import Permission, User
 from django.contrib.messages.api import MessageFailure
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.core.management.base import CommandError
@@ -26,6 +25,8 @@ from django.test import Client, TestCase, override_settings
 from django.test.client import RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from faker import Factory
+
 from experiment.models import (
     Block,
     ComponentConfiguration,
@@ -36,7 +37,6 @@ from experiment.models import (
 )
 from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
 from experiment.models import ResearchProject, Subject, SubjectOfGroup
-from faker import Factory
 from patient.management.commands.import_icd import import_classification_of_diseases
 from patient.models import (
     AlcoholFrequency,

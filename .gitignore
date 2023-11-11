@@ -1,12 +1,5 @@
 
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-*.cover
-
-*.rdb
-
+dump.rdb
 
 *.pyc
 patientregistrationsystem/qdc/.idea
@@ -76,7 +69,6 @@ cover/
 
 # Django stuff:
 *.log
-local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
