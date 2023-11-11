@@ -15,6 +15,32 @@ jobs:
         runs-on: ubuntu-latest
 
         services:
+            limesurvey_db:
+              image: postgres:11-bookworm
+              env:
+                POSTGRES_DB: limesurvey_db
+                POSTGRES_USER: limesurvey_user
+                POSTGRES_PASSWORD: lime_password
+          
+            limesurvey:
+              image: neuromat/nes-compose:limesurvey
+              ports:
+                - "8080:8080"
+              env:
+                LIMESURVEY_PORT: 8080
+                LIMESURVEY_DB_TYPE: pgsql
+                LIMESURVEY_DB_HOST: limesurvey_db
+                LIMESURVEY_DB_PORT: 5432
+                LIMESURVEY_DB_NAME: limesurvey_db
+                LIMESURVEY_DB_TABLE_PREFIX: lime_
+                LIMESURVEY_DB_USERNAME: limesurvey_user
+                LIMESURVEY_DB_PASSWORD: lime_password
+                LIMESURVEY_ADMIN_USER: lime_admin
+                LIMESURVEY_ADMIN_PASSWORD: lime_admin_password
+                LIMESURVEY_ADMIN_NAME: Lime Administrator
+                LIMESURVEY_ADMIN_EMAIL: limesurvey@limemail.fake
+                LIMESURVEY_URL_FORMAT: path
+
             nes_db:
                 image: postgres:16-bookworm
                 env:
