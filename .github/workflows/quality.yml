@@ -21,6 +21,7 @@ jobs:
           POSTGRES_DB: limesurvey_db
           POSTGRES_USER: limesurvey_user
           POSTGRES_PASSWORD: lime_password
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       limesurvey:
         image: neuromat/nes-compose:limesurvey
@@ -63,8 +64,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: "2"
 
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           cache: "pip"
@@ -83,13 +87,16 @@ jobs:
           python -u manage.py check --deploy
       - name: Run Tests
         run: |
-          python3 -u manage.py test
+          coverage run --omit=*/tests/*,*/migrations/* manage.py test
       - name: Check formating
         uses: psf/black@stable
         with:
           options: "--check --verbose"
           src: "patientregistrationsystem/qdc/"
-      # - name: Analysing the code with pylint
-      #   run: |
-      #     pylint $(git ls-files '*.py')
+      - name: Analysing the code with pylint
+        run: |
+          pylint $(git ls-files '*.py')
+        continue-on-error: true
       # - run: mypy $(git ls-files '*.py')
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v3
