@@ -121,7 +121,7 @@ else
 </IfModule>
 	EOF
 
-    mkcert -key-file /etc/apache2/ssl-certs/key.pem -cert-file /etc/apache2/ssl-certs/cert.pem $NES_HOSTNAME $NES_IP localhost 0.0.0.0
+    mkcert -key-file /etc/apache2/ssl-certs/key.pem -cert-file /etc/apache2/ssl-certs/cert.pem "$NES_HOSTNAME" "$NES_IP" localhost 0.0.0.0
 
     a2enmod ssl
     a2enmod http2
