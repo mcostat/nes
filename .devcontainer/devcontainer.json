@@ -3,10 +3,6 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "nes",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// This can be used to network with other containers or the host.
 	"forwardPorts": [
 		80,
 		5432,
@@ -33,12 +29,6 @@
 		"NES_DIR": "/workspaces/${localWorkspaceFolderBasename}",
 		"PGDATA": "/var/lib/postgresql/data"
 	},
-	// Use 'postCreateCommand' to run commands after the container is created.
-	//"postCreateCommand": "sudo /entrypoint.sh",
-	"mounts": [
-		//"source=${localWorkspaceFolder}/app-data,target=/data,type=bind,consistency=cached"
-	],
-	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -63,10 +53,9 @@
 				"matangover.mypy",
 				"VisualStudioExptTeam.vscodeintellicode-completions",
 				"monosans.djlint",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"esbenp.prettier-vscode"
 			]
 		}
 	}
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	//"remoteUser": "root"
 }

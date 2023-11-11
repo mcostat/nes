@@ -23,7 +23,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
             "args": [
-                "test",
+                "test"
             ],
             "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
             "django": true,
@@ -36,7 +36,6 @@
             "name": "Python: Coverage",
             "type": "python",
             "request": "launch",
-            //"program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
             "module": "coverage",
             "args": [
                 "run",

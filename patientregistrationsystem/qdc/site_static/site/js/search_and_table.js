@@ -9,58 +9,69 @@ let dataResults = [];
 let totalPages = 0;
 
 function pagination(data, page) {
-    let start = (page - 1) * RESULTS_PER_PAGE;
-    let end = start + RESULTS_PER_PAGE;
-    return data.slice(start, end);
+  let start = (page - 1) * RESULTS_PER_PAGE;
+  let end = start + RESULTS_PER_PAGE;
+  return data.slice(start, end);
 }
 
 function searchSuccessPatient(data, textStatus, jqXHR) {
-    dataResults = data.split(/<li>/).map(row => row = "" + row.replace("<a", '<a class="list-group-item list-group-item-action"').replace("</li>", ""));
-    dataResults.shift();
-    totalPages = Math.ceil(dataResults.length / RESULTS_PER_PAGE);
-    list.html(pagination(dataResults, 1));
+  dataResults = data
+    .split(/<li>/)
+    .map(
+      (row) =>
+        (row =
+          "" +
+          row
+            .replace("<a", '<a class="list-group-item list-group-item-action"')
+            .replace("</li>", ""))
+    );
+  dataResults.shift();
+  totalPages = Math.ceil(dataResults.length / RESULTS_PER_PAGE);
+  list.html(pagination(dataResults, 1));
 }
 
 async function searchRequest(url, query, ajaxExtras = null) {
-    let data = {
-        "search_text": query,
-        "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val(),
-    };
-    
-    for (let el in ajaxExtras) {
-        if (ajaxExtras.hasOwnProperty(el)) data[el] = ajaxExtras[el];
-    }
-    
-    fetch_post(url, data, searchSuccessPatient);
+  let data = {
+    search_text: query,
+    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+  };
 
-    // $.ajax({
-    //     type: "POST",
-    //     url: url,
-    //     data: data,
-    //     success: searchSuccessPatient,
-    //     dataType: 'html'
-    // });
+  for (let el in ajaxExtras) {
+    if (ajaxExtras.hasOwnProperty(el)) data[el] = ajaxExtras[el];
+  }
+
+  fetch_post(url, data, searchSuccessPatient);
+
+  // $.ajax({
+  //     type: "POST",
+  //     url: url,
+  //     data: data,
+  //     success: searchSuccessPatient,
+  //     dataType: 'html'
+  // });
 }
 
 function searchAndTable(url, ajaxExtras = null, canSeeNames = false) {
-    let page = 1;
+  let page = 1;
 
-    // Handle search requests
-    const defaultQuery = ' ';
+  // Handle search requests
+  const defaultQuery = " ";
 
-    //Search for patient in search mode
-    searchKey.on("keyup", function (e) {
-        e.target.value !== '' ? searchRequest(url, e.target.value, ajaxExtras) : searchRequest(url, defaultQuery, ajaxExtras);
-    });
+  //Search for patient in search mode
+  searchKey.on("keyup", function (e) {
+    e.target.value !== ""
+      ? searchRequest(url, e.target.value, ajaxExtras)
+      : searchRequest(url, defaultQuery, ajaxExtras);
+  });
 
-    // Handle pagination control
-    nextBtn.on("click", function () {
-        if (page !== totalPages) list.html(pagination(dataResults, ++page));
-    });
-    prevBtn.on("click", function () {
-        if (page !== 1) list.html(pagination(dataResults, --page));
-    });
+  // Handle pagination control
+  nextBtn.on("click", function () {
+    if (page !== totalPages) list.html(pagination(dataResults, ++page));
+  });
+  prevBtn.on("click", function () {
+    if (page !== 1) list.html(pagination(dataResults, --page));
+  });
 
-    // Initial query
-    searchRequest(url, defaultQuery, ajaxExtras);
+  // Initial query
+  searchRequest(url, defaultQuery, ajaxExtras);
 }

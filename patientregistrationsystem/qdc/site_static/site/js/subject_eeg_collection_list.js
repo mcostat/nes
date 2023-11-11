@@ -7,7 +7,7 @@
 var requisition_id = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
-    requisition_id = $("#process_requisition").val();
+  requisition_id = $("#process_requisition").val();
 });
 
 // function generate_requisition_id() {
@@ -20,32 +20,34 @@ document.addEventListener("DOMContentLoaded", () => {
 // }
 
 function handle_processing() {
-    $('#pleaseWaitDialog').modal('show');
-    check_requisition();
-    setTimeout(check_requisition, 1000);
+  $("#pleaseWaitDialog").modal("show");
+  check_requisition();
+  setTimeout(check_requisition, 1000);
 }
 
 async function check_requisition() {
-    const url = "/experiment/eeg_data/get_process_requisition_status/" + requisition_id;
+  const url =
+    "/experiment/eeg_data/get_process_requisition_status/" + requisition_id;
 
-    const response_fetch = await fetch(url);
-    const response = await response_fetch.json();
+  const response_fetch = await fetch(url);
+  const response = await response_fetch.json();
 
-    document.getElementById('label_process_requisition_status').innerHTML = response['message'];
-    if (response['status'] == "finished") {
-        $('#pleaseWaitDialog').modal('hide');
-        document.getElementById('label_process_requisition_status').innerHTML = "";
-    } else {
-        setTimeout(check_requisition, 1000);
-    }
+  document.getElementById("label_process_requisition_status").innerHTML =
+    response["message"];
+  if (response["status"] == "finished") {
+    $("#pleaseWaitDialog").modal("hide");
+    document.getElementById("label_process_requisition_status").innerHTML = "";
+  } else {
+    setTimeout(check_requisition, 1000);
+  }
 
-    // $.getJSON(url, function (response) {
-    //     document.getElementById('label_process_requisition_status').innerHTML = response['message'];
-    //     if(response['status'] == "finished"){
-    //         $('#pleaseWaitDialog').modal('hide');
-    //     document.getElementById('label_process_requisition_status').innerHTML = "";
-    //     } else {
-    //         setTimeout(check_requisition, 1000);
-    //     }
-    // });
+  // $.getJSON(url, function (response) {
+  //     document.getElementById('label_process_requisition_status').innerHTML = response['message'];
+  //     if(response['status'] == "finished"){
+  //         $('#pleaseWaitDialog').modal('hide');
+  //     document.getElementById('label_process_requisition_status').innerHTML = "";
+  //     } else {
+  //         setTimeout(check_requisition, 1000);
+  //     }
+  // });
 }

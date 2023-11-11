@@ -3,5 +3,5 @@
  */
 
 function showRemoveDialog() {
-    $('#modalRemove').modal('show');
+  $("#modalRemove").modal("show");
 }
