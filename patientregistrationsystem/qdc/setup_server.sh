@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "INFO: Setup NES"
+
 echo "	INFO: colectstatic"
 mkdir -p static || true
 python3 -u manage.py collectstatic --no-input || true

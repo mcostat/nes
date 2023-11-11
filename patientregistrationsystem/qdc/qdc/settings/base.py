@@ -44,7 +44,7 @@ AXES_COOLOFF_MESSAGE = _(
 AXES_FAILURE_LIMIT = 5
 AXES_RESET_ON_SUCCESS = True
 AXES_COOLOFF_TIME = 0.5
-AXES_CACHE = "axes"
+AXES_CACHE = "redis"
 AXES_LOCKOUT_PARAMETERS = ["ip_address", ["username", "user_agent"]]
 
 ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "0.0.0.0"]
@@ -167,10 +167,6 @@ CACHES: dict[str, Any] = {
     "redis": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379",
-    },
-    "axes": {
-        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
-        "LOCATION": "127.0.0.1:11211",
     },
 }
 
