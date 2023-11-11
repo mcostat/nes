@@ -237,7 +237,10 @@ def create_directory(basedir, path_to_create):
     if not path.exists(basedir.encode("utf-8")):
         return _("Base path does not exist"), ""
 
-    complete_path = path.join(basedir, path_to_create)
+    complete_path: str = path.normpath(path.join(basedir, path_to_create))
+    if not complete_path.startswith(basedir):
+        raise ValueError("Invalid path")
+
     if not path.exists(complete_path.encode("utf-8")):
         makedirs(complete_path.encode("utf-8"))
 

@@ -1,6 +1,20 @@
 # Neuroscience Experiments System - NES
 
 [![GitHub Super-Linter](https://github.com/mcostat/nes/actions/workflows/super-linter.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![Quality check status](https://github.com/mcostat/nes/actions/workflows/quality.yml/badge.svg)](https://github.com/mcostat/nes/actions/workflows/quality.yml)
+[![MSDO](https://github.com/mcostat/nes/actions/workflows/defender-for-devops.yml/badge.svg)](https://github.com/mcostat/nes/actions/workflows/defender-for-devops.yml)
+
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![Latest release](https://badgen.net/github/release/mcostat/nes)](https://github.com/mcostat/nes/releases)
+[![GitHub version](https://badge.fury.io/gh/mcostat%2Fnes.js.svg)](https://github.com/mcostat/nes)
+[![GitHub latest commit](https://badgen.net/github/last-commit/mcostat/nes)](https://github.com/mcostat/nes/commit/)
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+
+[![GitHub watchers](https://img.shields.io/github/watchers/mcostat/nes.svg?style=social&label=Watch&maxAge=2592000)](https://github.com/mcostat/nes/watchers/)
+[![GitHub followers](https://img.shields.io/github/followers/mcostat.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/mcostat?tab=followers)
+
+
 
 ## About NES
 

@@ -138,7 +138,7 @@ class DirectoryTest(TestCase):
         """Test directory creation when it already exists"""
 
         # in this case, nothing will change
-        path_to_create = "opt/"
+        path_to_create = "opt"
 
         mkdir(path.join(self.basedir, path_to_create))
 
