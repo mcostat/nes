@@ -37,5 +37,5 @@ jobs:
           VALIDATE_GITLEAKS: true
           VALIDATE_BASH: true
           DEFAULT_BRANCH: "master"
-          FILTER_REGEX_EXCLUDE: .*test/.*
+          FILTER_REGEX_EXCLUDE: .*tests/.*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
