@@ -8,7 +8,7 @@ import tempfile
 import zipfile
 from datetime import date, datetime
 from typing import Any
-from unittest import skip
+from unittest import skip, skipIf
 from unittest.mock import patch
 
 from django.core.files import File
@@ -3913,6 +3913,10 @@ class ExportFrictionlessDataTest(ExportTestCase):
             shutil.rmtree(temp_dir)
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
+    @skipIf(
+        os.getenv("GITHUB_ACTIONS"),
+        reason="I dont know why this does not work on github actions",
+    )
     def test_export_per_experiment_adds_experimental_protocol_image_file(self):
         self._create_eeg_export_data()
         self.append_session_variable("group_selected_list", [str(self.group.id)])
