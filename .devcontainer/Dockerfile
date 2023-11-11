@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/devcontainers/python:3.11-bookworm
 
 # Keeps Python from generating .pyc files in the container
-#ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
@@ -23,8 +23,6 @@ RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninter
     git \
     #openblas-dev \
     #hdf5-dev && \
-    apache2 \
-    libapache2-mod-wsgi-py3 \
     netcat-traditional \
     lsb-release \
     curl \
@@ -48,9 +46,6 @@ COPY $NES_DIR/patientregistrationsystem/qdc/requirements.txt /tmp/pip-tmp/
 RUN pip3 --disable-pip-version-check install -r /tmp/pip-tmp/requirements.txt \
     && rm -rf /tmp/pip-tmp
 
-# COPY $NES_DIR/patientregistrationsystem/qdc/src/nwb/dist/nwb-1.0.0-py3-none-any.whl .
-# RUN pip3 --disable-pip-version-check install nwb-1.0.0-py3-none-any.whl \
-#     && rm nwb-1.0.0-py3-none-any.whl
 
 ENV DEBIAN_FRONTEND=dialog
 
