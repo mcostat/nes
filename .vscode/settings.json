@@ -93,8 +93,4 @@
     "[django-html]": {
         "editor.defaultFormatter": "monosans.djlint"
     },
-    "python.linting.pylintEnabled": true,
-    "python.linting.pylintArgs": [
-        "--enable=W0614"
-    ]
 }
