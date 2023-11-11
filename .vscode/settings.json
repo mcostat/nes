@@ -1,7 +1,7 @@
 {
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true,
+        "editor.formatOnSave": true
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.functionReturnTypes": true,
@@ -18,19 +18,18 @@
         {
             "name": "django",
             "depth": 10,
-            "includeAllSymbols": true,
+            "includeAllSymbols": true
         },
         {
             "name": "custom_user",
             "depth": 10,
-            "includeAllSymbols": true,
+            "includeAllSymbols": true
         }
     ],
     "pylint.args": [
         "--disable=C0111",
         "--load-plugins",
-        "pylint_django",
-        "--django-settings-module=qdc.settings.dev"
+        "pylint_django"
     ],
     "pylint.path": [],
     "python.analysis.include": [],
@@ -75,12 +74,12 @@
         "endblock",
         "include",
         "extends",
-        "load",
+        "load"
     ],
     "djlint.blankLineBeforeTag": [
         "block",
         "include",
-        "load",
+        "load"
     ],
     "djlint.profile": "django",
     "djlint.ignore": [
@@ -93,4 +92,15 @@
     "[django-html]": {
         "editor.defaultFormatter": "monosans.djlint"
     },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    }
 }

@@ -4,13 +4,12 @@
 
 // function to select all collaborators
 "use strict";
-ready(function(){
-    $("#select_all_collaborators").on("change", function(){
-      $(".checkbox_collaborators").prop('checked', $(this).prop("checked"));
-    });
+ready(function () {
+  $("#select_all_collaborators").on("change", function () {
+    $(".checkbox_collaborators").prop("checked", $(this).prop("checked"));
+  });
 
-    if ($('.no_researcher').length ) {
-        $('#add_researcher').attr('disabled', 'disabled');
-    }
+  if ($(".no_researcher").length) {
+    $("#add_researcher").attr("disabled", "disabled");
+  }
 });
-

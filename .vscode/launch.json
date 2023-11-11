@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -26,7 +23,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
             "args": [
-                "test",
+                "test"
             ],
             "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
             "django": true,
@@ -39,7 +36,6 @@
             "name": "Python: Coverage",
             "type": "python",
             "request": "launch",
-            //"program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
             "module": "coverage",
             "args": [
                 "run",

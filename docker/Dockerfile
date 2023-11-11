@@ -12,23 +12,33 @@ ARG NES_BRANCH=dev
 ARG NES_DIR=/usr/local/nes
 ENV NES_DIR=$NES_DIR
 
-RUN mkdir -p "$NES_DIR"  && \
-		if [ "$NES_TAG" != "unset" ]; then \
-			echo Cloning tag "$NES_TAG" ;\
-			wget https://github.com/neuromat/nes/archive/TAG-"${NES_TAG}".tar.gz -qO - | \
-				tar xzv --strip-components=1 -C "$NES_DIR" ;\
-			sed -i 's/\(psycopg2==\)[0-9.]\+/\12.7.5/' /nes/patientregistrationsystem/qdc/requirements.txt ;\
-			sed -i '1isetuptools>=40.6.3' /nes/patientregistrationsystem/qdc/requirements.txt ;\
-			sed -i '1ipip>=18.1' /nes/patientregistrationsystem/qdc/requirements.txt ;\
-			echo 'mne>=0.17.0' >> /nes/patientregistrationsystem/qdc/requirements.txt ;\
-			echo '-e "git+https://github.com/AllenInstitute/nwb-api.git#egg=nwb&subdirectory=ainwb"' >> /nes/patientregistrationsystem/qdc/requirements.txt ;\
-		elif [ "$NES_BRANCH" != "unset" ]; then \
-			echo Cloning "$NES_BRANCH" branch ;\
-			git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/neuromat/nes.git "$NES_DIR" ;\
-		else \
-			echo Cloning master branch ;\
-			git clone -j $(nproc) https://github.com/neuromat/nes.git "$NES_DIR" ;\
-		fi
+
+RUN apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
+    apt-get -y install --no-install-recommends \
+    python3-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libpq-dev \
+    libfreetype6-dev \
+    zlib1g-dev \
+    g++ \
+    make \
+    #freetype-dev \
+    git && \
+    apt-get autoremove -y && \
+    apt-get clean -y && \
+    rm -rf /var/lib/apt/lists* && \
+    ln -s /usr/include/locale.h /usr/include/xlocale.h
+
+
+RUN mkdir -p $NES_DIR  && \
+    if [ $NES_BRANCH != "unset" ]; then \
+        echo Cloning $NES_BRANCH branch ;\
+        git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/mcostat/nes.git $NES_DIR ;\
+    else \
+        echo Cloning master branch ;\
+        git clone -j $(nproc) https://github.com/mcostat/nes.git $NES_DIR ;\
+    fi
 
 
 RUN mkdir -p /wheels/requirement && \
@@ -40,76 +50,17 @@ RUN pip3 install -U pip setuptools wheel && \
     pip3 install -r requirement/requirements.txt && \
     pip3 wheel -r requirement/requirements.txt
 
-FROM alpine:3.12
 
-SHELL ["/bin/sh","-exc"]
+FROM python:3.11-slim-bookworm
 
-RUN apk update && \
-	apk add --no-cache \
-		# Postgresql 9, due to LS incompatbilities \\
-		postgresql-bdr \
-		postgresql-bdr-client \
-		# limesurvey - apache2  \\
-		apache2 \
-		# limesurvey - php  \\
-		php7 \
-		php7-apache2 \
-		php7-ctype \
-		php7-gd \
-		php7-imap \
-		php7-json \
-		php7-ldap \
-		php7-mbstring \
-		php7-pdo_pgsql \
-		php7-session \
-		php7-simplexml \
-		php7-xml \
-		php7-zip \
-		# git to clone and update nes  \\
-		git \
-		# python to run django \\
-		python3 \
-		py3-pip \
-		# supervisord  \\
-		supervisor \
-		# nes dependencies \\
-		graphviz \
-		openblas-dev \
-		hdf5-dev && \
-	rm -rf /var/cache/apk/*
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONOPTIMIZE 1
 
-# SETUP POSTGRESQL ##################################################
-ARG PGDATA=/var/lib/postgresql/data
-ENV PGDATA=$PGDATA
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8  
 
-RUN	mkdir -p /var/run/postgresql  && \
-		chown -R postgres:postgres /var/run/postgresql  && \
-		chmod 2777 /var/run/postgresql  && \
-		mkdir -p "$PGDATA"  && \
-		chown -R postgres:postgres "$PGDATA"  && \
-		chmod 700 "$PGDATA"
-
-VOLUME $PGDATA
-
-# LIMESURVEY INSTALLATION ####################################################
-ARG LIMESURVEY_URL_DOWNLOAD=https://github.com/LimeSurvey/LimeSurvey/archive/2.73.1+171220.tar.gz
-ARG LIMESURVEY_DIR=/var/www/limesurvey
-ENV LIMESURVEY_DIR=$LIMESURVEY_DIR
-
-RUN mkdir -p "$LIMESURVEY_DIR" && \
-		wget "$LIMESURVEY_URL_DOWNLOAD" -qO - | \
-			tar xz --strip-components=1 -C "$LIMESURVEY_DIR" && \
-		chown -R apache:apache "$LIMESURVEY_DIR" && \
-		chmod -R o-rwx "$LIMESURVEY_DIR" && \
-		chmod -R 770 "${LIMESURVEY_DIR}"/application/config/ && \
-		chmod -R 770 "${LIMESURVEY_DIR}"/upload/ && \
-		chmod -R 770 "${LIMESURVEY_DIR}"/tmp/ && \
-		mkdir -p /run/apache2
-
-VOLUME $LIMESURVEY_DIR
-
-# NES INSTALLATION ###########################################################
-ARG NES_DIR=/nes
+ARG NES_DIR=/usr/local/nes
 ENV NES_DIR=$NES_DIR
 
 ARG HTTPS_CERT_KEY

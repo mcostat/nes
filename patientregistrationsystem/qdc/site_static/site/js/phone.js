@@ -13,25 +13,53 @@
 
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
-    $('.telephone_number').on("focus", function () {
-        $(this).val($(this).val().replace(/\D/g,''));
-    });
+  $(".telephone_number").on("focus", function () {
+    $(this).val($(this).val().replace(/\D/g, ""));
+  });
 
-    $('.telephone_number').on("blur", function () {
-        number = $(this).val().replace(/\D/g,'');
+  $(".telephone_number").on("blur", function () {
+    number = $(this).val().replace(/\D/g, "");
 
-        // 011 98888 8888
-        if (number.length == 12 && number.substring(0,1) == '0')
-            $(this).val('(' + number.substring(1,3) + ') ' + number.substring(3,8) + '-' + number.substring(8,12));
-        else if (number.length == 11)
-            // 011 8888 8888
-            if (number.substring(0,1) == '0')
-                $(this).val('(' + number.substring(1,3) + ') ' + number.substring(3,7) + '-' + number.substring(7,11));
-            // 11 98888 8888
-            else
-                $(this).val('(' + number.substring(0,2) + ') ' + number.substring(2,7) + '-' + number.substring(7,11));
-        // 11 8888 8888
-        else if (number.length == 10)
-            $(this).val('(' + number.substring(0,2) + ') ' + number.substring(2,6) + '-' + number.substring(6,10));
-    });
+    // 011 98888 8888
+    if (number.length == 12 && number.substring(0, 1) == "0")
+      $(this).val(
+        "(" +
+          number.substring(1, 3) +
+          ") " +
+          number.substring(3, 8) +
+          "-" +
+          number.substring(8, 12)
+      );
+    else if (number.length == 11)
+      if (number.substring(0, 1) == "0")
+        // 011 8888 8888
+        $(this).val(
+          "(" +
+            number.substring(1, 3) +
+            ") " +
+            number.substring(3, 7) +
+            "-" +
+            number.substring(7, 11)
+        );
+      // 11 98888 8888
+      else
+        $(this).val(
+          "(" +
+            number.substring(0, 2) +
+            ") " +
+            number.substring(2, 7) +
+            "-" +
+            number.substring(7, 11)
+        );
+    // 11 8888 8888
+    else if (number.length == 10)
+      $(this).val(
+        "(" +
+          number.substring(0, 2) +
+          ") " +
+          number.substring(2, 6) +
+          "-" +
+          number.substring(6, 10)
+      );
+  });
 });

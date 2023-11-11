@@ -24,7 +24,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "_my_secret_key_")
+SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "django-insecure")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -44,7 +44,7 @@ AXES_COOLOFF_MESSAGE = _(
 AXES_FAILURE_LIMIT = 5
 AXES_RESET_ON_SUCCESS = True
 AXES_COOLOFF_TIME = 0.5
-AXES_CACHE = "axes"
+AXES_CACHE = "redis"
 AXES_LOCKOUT_PARAMETERS = ["ip_address", ["username", "user_agent"]]
 
 ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "0.0.0.0"]
@@ -61,6 +61,29 @@ CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_SCRIPT_SRC = ["'self'"]
 CSP_BASE_URI = "'none'"
 CSP_INCLUDE_NONCE_IN = ["script-src"]
+
+# CORS
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "https://localhost",
+    "http://127.0.0.1",
+    "https://127.0.0.1",
+    "http://localhost:8080",
+    "https://localhost:8080",
+    "http://127.0.0.1:8080",
+    "https://127.0.0.1:8080",
+    "https://" + os.getenv("NES_IP", "127.0.0.1"),
+    "https://" + os.getenv("NES_HOSTNAME", "localhost"),
+    "https://"
+    + os.getenv("LIMESURVEY_HOST", "localhost")
+    + ":"
+    + os.getenv("LIMESURVEY_PORT", "8080"),
+    "http://"
+    + os.getenv("LIMESURVEY_URL_WEB", "localhost")
+    + ":"
+    + os.getenv("LIMESURVEY_PORT", "8080"),
+]
 
 
 # Application definition
@@ -82,6 +105,7 @@ INSTALLED_APPS: list[str] = [
     "axes",
     "django_extensions",
     "compressor",
+    "corsheaders",
 ]
 
 PROJECT_APPS: list[str] = [
@@ -104,6 +128,7 @@ MIDDLEWARE: list[str] = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -167,10 +192,6 @@ CACHES: dict[str, Any] = {
     "redis": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379",
-    },
-    "axes": {
-        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
-        "LOCATION": "127.0.0.1:11211",
     },
 }
 

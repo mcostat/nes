@@ -35,15 +35,21 @@
                         <a href="/patient/find/">{% trans "Search Participants" %}</a>
                     </li>
                     {% if creating %}
-                        <li class="breadcrumb-item active">{% trans "New" %}</li>
+                        <li class="breadcrumb-item active">
+                            {% trans "New" %}
+                        </li>
                     {% else %}
                         {% if editing %}
                             <li class="breadcrumb-item">
                                 <a href="/patient/{{ patient_id }}">{% trans "Participant" %}</a>
                             </li>
-                            <li class="breadcrumb-item active">{% trans "Editing" %}</li>
+                            <li class="breadcrumb-item active">
+                                {% trans "Editing" %}
+                            </li>
                         {% else %}
-                            <li class="breadcrumb-item active">{% trans "Participant" %}</li>
+                            <li class="breadcrumb-item active">
+                                {% trans "Participant" %}
+                            </li>
                         {% endif %}
                     {% endif %}
                 </ol>
@@ -57,33 +63,28 @@
                     <li role="presentation" class="nav-item">
                         <a href="/patient/{% if editing %}edit/{% endif %}{{ patient_id }}/?currentTab=0"
                            {% if editing %}id="linkToTab0"{% endif %}
-                           class="nav-link
-                                  {% if currentTab == "0" %}active{% endif %}">{% trans "Personal data" %}</a>
+                           class="nav-link {% if currentTab == "0" %}active{% endif %}">{% trans "Personal data" %}</a>
                     </li>
                     <li role="presentation" class="nav-item">
                         <a href="/patient/{% if editing %}edit/{% endif %}{{ patient_id }}/?currentTab=1"
                            {% if editing %}id="linkToTab1"{% endif %}
-                           class="nav-link
-                                  {% if currentTab == "1" %}active{% endif %}">{% trans "Social demographic data" %}</a>
+                           class="nav-link {% if currentTab == "1" %}active{% endif %}">{% trans "Social demographic data" %}</a>
                     </li>
                     <li role="presentation" class="nav-item">
                         <a href="/patient/{% if editing %}edit/{% endif %}{{ patient_id }}/?currentTab=2"
                            {% if editing %}id="linkToTab2"{% endif %}
-                           class="nav-link
-                                  {% if currentTab == "2" %}active{% endif %}">{% trans "Social history" %}</a>
+                           class="nav-link {% if currentTab == "2" %}active{% endif %}">{% trans "Social history" %}</a>
                     </li>
                     <li role="presentation" class="nav-item">
                         <a href="/patient/{% if editing %}edit/{% endif %}{{ patient_id }}/?currentTab=3"
                            {% if editing %}id="linkToTab3"{% endif %}
-                           class="nav-link
-                                  {% if currentTab == "3" %}active{% endif %}">{% trans "Medical evaluation" %}</a>
+                           class="nav-link {% if currentTab == "3" %}active{% endif %}">{% trans "Medical evaluation" %}</a>
                     </li>
                     {% if perms.survey.view_survey %}
                         <li role="presentation" class="nav-item">
                             <a href="/patient/{% if editing %}edit/{% endif %}{{ patient_id }}/?currentTab=4"
                                {% if editing %}id="linkToTab4"{% endif %}
-                               class="nav-link
-                                      {% if currentTab == "4" %}active{% endif %}">{% trans "Questionnaires" %}</a>
+                               class="nav-link {% if currentTab == "4" %}active{% endif %}">{% trans "Questionnaires" %}</a>
                         </li>
                     {% endif %}
                 {% else %}
@@ -113,6 +114,7 @@
             <input class="visually-hidden" type="text" id="nextTabURL" name="nextTabURL">
 
             <div class="tab-content">
+
                 {% block sub_content %}
                 {% endblock sub_content %}
 
@@ -120,43 +122,50 @@
                     <div class="btn-group">
                         {% if not editing %}
                             {% if perms.patient.delete_patient %}
-                                <button type="button" class="btn btn-danger" onclick="$('#modalRemove').modal('show')">{% trans "Delete participant" %}</button>
+                                <button type="button" class="btn btn-danger" onclick="$('#modalRemove').modal('show')">
+                                    {% trans "Delete participant" %}
+                                </button>
                             {% endif %}
                         {% endif %}
                     </div>
                     <div class="btn-group float-end">
+                        {% if editing %}
+                            {% if currentTab == "0" %}
+                                <button type="button" class="btn btn-primary" id="savetab">
+                                    {% trans "Save" %}
+                                </button>
+                            {% else %}
+                                <button type="submit" name="action" value="save" class="btn btn-primary" id="save_submit_button">
+                                    {% trans "Save" %}
+                                </button>
+                            {% endif %}
+                            <button type="button" class="btn btn-secondary {% if currentTab == "0" %}disabled{% endif %}" id="prevtab">
+                                {% trans "Save and show before" %}
+                            </button>
+                            <button type="button"
+                                    class="btn btn-secondary {% if currentTab == "4" %} disabled {% elif currentTab == '3' and not perms.survey.view_survey %} disabled {% endif %}"
+                                    id="nexttab">
+                                {% trans "Save and show next" %}
+                            </button>
+                        {% else %}
+                            {% if perms.patient.change_patient %}
+                                <button type="button" class="btn btn-primary" id="editPatient">
+                                    {% trans "Edit" %}
+                                </button>
+                            {% endif %}
+                            <button type="button" class="btn btn-secondary" {% if currentTab == "0" %}disabled{% endif %} id="prevtab">
+                                {% trans "Show before" %}
+                            </button>
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    {% if currentTab == "4" %} disabled {% elif currentTab == '3' and not perms.survey.view_survey %} disabled {% endif %}
+                                    id="nexttab">
+                                {% trans "Show next" %}
+                            </button>
+                        {% endif %}
                         <div class="btn-group">
                             <a href="/patient/find/" class="btn btn-light">{% trans "Back" %}</a>
                         </div>
-                        {% if editing %}
-                            <button type="button" class="btn btn-secondary {% if currentTab == "0" %}disabled{% endif %}" id="prevtab">{% trans "Save and show before" %}</button>
-                            <button type="button"
-                                    class="btn btn-secondary
-                                           {% if currentTab == "4" %}
-                                               disabled
-                                           {% elif currentTab == '3' and not perms.survey.view_survey %}
-                                               disabled
-                                           {% endif %}"
-                                    id="nexttab">{% trans "Save and show next" %}</button>
-                            {% if currentTab == "0" %}
-                                <button type="button" class="btn btn-primary" id="savetab">{% trans "Save" %}</button>
-                            {% else %}
-                                <button type="submit" name="action" value="save" class="btn btn-primary" id="save_submit_button">{% trans "Save" %}</button>
-                            {% endif %}
-                        {% else %}
-                            <button type="button" class="btn btn-secondary" {% if currentTab == "0" %}disabled{% endif %} id="prevtab">{% trans "Show before" %}</button>
-                            <button type="button"
-                                    class="btn btn-secondary"
-                                    {% if currentTab == "4" %}
-                                        disabled
-                                    {% elif currentTab == '3' and not perms.survey.view_survey %}
-                                        disabled
-                                    {% endif %}
-                                    id="nexttab">{% trans "Show next" %}</button>
-                            {% if perms.patient.change_patient %}
-                                <button type="button" class="btn btn-primary" id="editPatient">{% trans "Edit" %}</button>
-                            {% endif %}
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -167,14 +176,25 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{% trans "Save?" %}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title">
+                            {% trans "Save?" %}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
-                    <div class="modal-body">{% trans "Would you like to save?" %}</div>
+                    <div class="modal-body">
+                        {% trans "Would you like to save?" %}
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
-                        <button type="button" class="btn btn-secondary" id="savetab_modal_dont_save">{% trans "Do not save" %}</button>
-                        <button type="button" class="btn btn-primary" id="savetab_modal_save">{% trans "Save" %}</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            {% trans "Cancel" %}
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="savetab_modal_dont_save">
+                            {% trans "Do not save" %}
+                        </button>
+                        <button type="button" class="btn btn-primary" id="savetab_modal_save">
+                            {% trans "Save" %}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -185,12 +205,19 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{% trans "Missing Info" %}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title">
+                            {% trans "Missing Info" %}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
-                    <div class="modal-body">{% trans "It is necessary to save personnal data before you can access other tabs." %}</div>
+                    <div class="modal-body">
+                        {% trans "It is necessary to save personnal data before you can access other tabs." %}
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{% trans "OK" %}</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                            {% trans "OK" %}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -200,13 +227,22 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{% trans "Delete?" %}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title">
+                            {% trans "Delete?" %}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
-                    <div class="modal-body">{% trans "Are you sure you want to delete participant?" %}</div>
+                    <div class="modal-body">
+                        {% trans "Are you sure you want to delete participant?" %}
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
-                        <button type="button" class="btn btn-danger" id="removePatient">{% trans "Delete" %}</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            {% trans "Cancel" %}
+                        </button>
+                        <button type="button" class="btn btn-danger" id="removePatient">
+                            {% trans "Delete" %}
+                        </button>
                     </div>
                 </div>
             </div>
