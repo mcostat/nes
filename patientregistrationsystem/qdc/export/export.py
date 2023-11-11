@@ -2199,7 +2199,7 @@ class ExportExecution:
                 for questionnaire_id in questionnaire_list:
                     # Create questionnaire_name_directory
                     questionnaires = questionnaire_list[questionnaire_id]
-                    dir_questionnaire_step = dict()
+                    dir_questionnaire_step = {}
                     dir_questionnaire_step[questionnaire_id] = set()
 
                     questionnaire_data = self.get_input_data(
@@ -2294,7 +2294,7 @@ class ExportExecution:
                         )
 
                         # Save file with data
-                        fields_description = []
+                        fields_description: list[list] = []
 
                         for language in language_list:
                             # Q123_<questionnaire_title>_<lang>.csv
@@ -2664,7 +2664,7 @@ class ExportExecution:
                             complete_filename, per_participant_rows, filesformat_type
                         )
 
-                        answer_list = {
+                        answer_list: dict[str, list] = {
                             "fields": [],
                             "header": [],
                             "header_questionnaire": [],
@@ -2850,7 +2850,7 @@ class ExportExecution:
                                     rows_participant_data = self.get_input_data(
                                         "participants"
                                     )["data_list"]
-                                    answer_list = {
+                                    answer_list: dict[str, list] = {
                                         "fields": [],
                                         "header": [],
                                         "header_questionnaire": [],
@@ -4672,7 +4672,7 @@ class ExportExecution:
             experiment_resume_directory, filename_experiment_resume
         )
 
-        experiment_description_fields = []
+        experiment_description_fields: list[list] = []
         experiment_description_fields.insert(0, experiment_summary_header)
         experiment_description_fields.insert(1, experiment_summary)
         save_to_csv(
