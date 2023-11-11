@@ -1,84 +1,84 @@
 name: Quality Assurance
 
-on:   
+on:
   push:
-    branches: [ "master", "dev" ]
+    branches: ["master", "dev"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 env:
   DJANGO_SETTINGS_MODULE: qdc.settings.test
 
 jobs:
-    quality-assurance:
-        name: Quality Assurance
-        runs-on: ubuntu-latest
+  quality-assurance:
+    name: Quality Assurance
+    runs-on: ubuntu-latest
 
-        services:
-            limesurvey_db:
-              image: postgres:11-bookworm
-              env:
-                POSTGRES_DB: limesurvey_db
-                POSTGRES_USER: limesurvey_user
-                POSTGRES_PASSWORD: lime_password
-          
-            limesurvey:
-              image: neuromat/nes-compose:limesurvey
-              ports:
-                - "8080:8080"
-              env:
-                LIMESURVEY_PORT: 8080
-                LIMESURVEY_DB_TYPE: pgsql
-                LIMESURVEY_DB_HOST: limesurvey_db
-                LIMESURVEY_DB_PORT: 5432
-                LIMESURVEY_DB_NAME: limesurvey_db
-                LIMESURVEY_DB_TABLE_PREFIX: lime_
-                LIMESURVEY_DB_USERNAME: limesurvey_user
-                LIMESURVEY_DB_PASSWORD: lime_password
-                LIMESURVEY_ADMIN_USER: lime_admin
-                LIMESURVEY_ADMIN_PASSWORD: lime_admin_password
-                LIMESURVEY_ADMIN_NAME: Lime Administrator
-                LIMESURVEY_ADMIN_EMAIL: limesurvey@limemail.fake
-                LIMESURVEY_URL_FORMAT: path
+    services:
+      limesurvey_db:
+        image: postgres:11-bookworm
+        env:
+          POSTGRES_DB: limesurvey_db
+          POSTGRES_USER: limesurvey_user
+          POSTGRES_PASSWORD: lime_password
 
-            nes_db:
-                image: postgres:16-bookworm
-                env:
-                    POSTGRES_DB: nes_db
-                    POSTGRES_USER: nes_user
-                    POSTGRES_PASSWORD: nes_password
-                    PGDATA: /var/lib/postgresql/data
-                    PGCLIENTENCODING: UTF8
-                    POSTGRES_HOST_AUTH_METHOD: md5
-                    POSTGRES_INITDB_ARGS: --auth-host=md5
-                ports:
-                  - 5432:5432
-                options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        defaults:
-          run:
-            shell: bash
-            working-directory: ./patientregistrationsystem/qdc
-        steps:
-          - uses: actions/checkout@v4
-          - uses: actions/setup-python@v4
-            with:
-              python-version: '3.11'
-              cache: 'pip'
-          - name: Install requirements
-            run: |
-              python -m pip install --upgrade pip
-              pip install -r requirements.txt  
-          - name: Run NES setup
-            run: |
-              sh prepare_server.sh
-          - name: Run Tests
-            run: |
-              python3 -u manage.py test
-          - uses: psf/black@stable
-            with:
-              options: "--check --verbose"
-              src: "patientregistrationsystem/qdc/"
-          # - name: Analysing the code with pylint
-          #   run: |
-          #     pylint $(git ls-files '*.py')
-          # - run: mypy $(git ls-files '*.py')
+      limesurvey:
+        image: neuromat/nes-compose:limesurvey
+        ports:
+          - "8080:8080"
+        env:
+          LIMESURVEY_PORT: 8080
+          LIMESURVEY_DB_TYPE: pgsql
+          LIMESURVEY_DB_HOST: limesurvey_db
+          LIMESURVEY_DB_PORT: 5432
+          LIMESURVEY_DB_NAME: limesurvey_db
+          LIMESURVEY_DB_TABLE_PREFIX: lime_
+          LIMESURVEY_DB_USERNAME: limesurvey_user
+          LIMESURVEY_DB_PASSWORD: lime_password
+          LIMESURVEY_ADMIN_USER: lime_admin
+          LIMESURVEY_ADMIN_PASSWORD: lime_admin_password
+          LIMESURVEY_ADMIN_NAME: Lime Administrator
+          LIMESURVEY_ADMIN_EMAIL: limesurvey@limemail.fake
+          LIMESURVEY_URL_FORMAT: path
+
+      nes_db:
+        image: postgres:16-bookworm
+        env:
+          POSTGRES_DB: nes_db
+          POSTGRES_USER: nes_user
+          POSTGRES_PASSWORD: nes_password
+          PGDATA: /var/lib/postgresql/data
+          PGCLIENTENCODING: UTF8
+          POSTGRES_HOST_AUTH_METHOD: md5
+          POSTGRES_INITDB_ARGS: --auth-host=md5
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./patientregistrationsystem/qdc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run NES setup
+        run: |
+          sh setup_server.sh
+      - name: Run Tests
+        run: |
+          python3 -u manage.py test
+      - uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          src: "patientregistrationsystem/qdc/"
+      # - name: Analysing the code with pylint
+      #   run: |
+      #     pylint $(git ls-files '*.py')
+      # - run: mypy $(git ls-files '*.py')
