@@ -77,4 +77,5 @@ jobs:
             with:
               options: "--check --verbose"
               src: "patientregistrationsystem/qdc/"
+          # - run: Lint
           # - run: mypy $(git ls-files '*.py')
