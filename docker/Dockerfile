@@ -46,8 +46,8 @@ RUN mkdir -p /wheels/requirement && \
 
 WORKDIR /wheels
 
-RUN pip3 install -U pip setuptools wheel && \
-    pip3 install -r requirement/requirements.txt && \
+RUN pip3 --no-cache-dir --disable-pip-version-check install -U pip setuptools wheel && \
+    pip3 --no-cache-dir --disable-pip-version-check install -r requirement/requirements.txt && \
     pip3 wheel -r requirement/requirements.txt
 
 
@@ -106,8 +106,8 @@ COPY --from=wheeler $NES_DIR $NES_DIR
 
 COPY --from=wheeler /wheels /wheels
 
-RUN pip3 install -U pip setuptools wheel && \
-	pip3 install -r /wheels/requirement/requirements.txt -f /wheels && \
+RUN pip3 --no-cache-dir --disable-pip-version-check install -U pip setuptools wheel && \
+	pip3 --no-cache-dir --disable-pip-version-check install -r /wheels/requirement/requirements.txt -f /wheels && \
 		rm -rf /wheels && \
 		rm -rf /root/.cache/pip*
 

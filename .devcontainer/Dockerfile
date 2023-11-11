@@ -43,7 +43,7 @@ RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyri
 
 
 COPY $NES_DIR/patientregistrationsystem/qdc/requirements.txt /tmp/pip-tmp/
-RUN pip3 --disable-pip-version-check install -r /tmp/pip-tmp/requirements.txt \
+RUN pip3 --no-cache-dir --disable-pip-version-check install -r /tmp/pip-tmp/requirements.txt \
     && rm -rf /tmp/pip-tmp
 
 
