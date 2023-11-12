@@ -17,28 +17,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: site_static/site/js/block_component.js:53
+#: static_data/site/js/block_component.js:53
 msgid "Collapse"
 msgstr "Recolher"
 
-#: site_static/site/js/block_component.js:67
+#: static_data/site/js/block_component.js:67
 msgid "Expand"
 msgstr "Expandir"
 
-#: site_static/site/js/block_component.js:90
+#: static_data/site/js/block_component.js:90
 msgid "Are you sure you want to delete this use of step from list?"
 msgstr "Tem certeza que deseja excluir este uso de passo da lista?"
 
-#: site_static/site/js/block_component.js:99
+#: static_data/site/js/block_component.js:99
 msgid "Are you sure you want to delete these "
 msgstr "Tem certeza que deseja excluir estes "
 
-#: site_static/site/js/block_component.js:99
+#: static_data/site/js/block_component.js:99
 msgid "  uses of step from list?"
 msgstr " usos de passo da lista?"
 
-#: site_static/site/js/custom_user_validation.js:11
-#: site_static/site/js/password_ext.js:11
+#: static_data/site/js/custom_user_validation.js:11
+#: static_data/site/js/password_ext.js:11
 msgid ""
 "Password must contain at least 8 characters, including at least one "
 "uppercase letter, digit or special character."
@@ -46,34 +46,34 @@ msgstr ""
 "Senha deve conter pelo menos 8 caracteres, incluindo ao menos uma letra "
 "maiúscula, dígito ou caractere especial."
 
-#: site_static/site/js/custom_user_validation.js:19
+#: static_data/site/js/custom_user_validation.js:19
 msgid "You have to choose at least one user profile!"
 msgstr "Você precisa escolher ao menos um perfil de usuário!"
 
-#: site_static/site/js/custom_user_validation.js:48
+#: static_data/site/js/custom_user_validation.js:48
 msgid "E-mail have to be filled!"
 msgstr "E-mail precisa ser preenchido!"
 
-#: site_static/site/js/data_collection_manage.js:45
+#: static_data/site/js/data_collection_manage.js:45
 msgid "No data collection selected."
 msgstr "Nenhuma coleta de dados selecionada."
 
-#: site_static/site/js/data_collection_manage.js:60
+#: static_data/site/js/data_collection_manage.js:60
 msgid "No target step selected."
 msgstr "Nenhum passo alvo selecionado."
 
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:77
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:218
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:77
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:218
 msgid "delete"
 msgstr "remover"
 
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:122
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:122
 msgid "Please click on a new position on the image to update this point"
 msgstr ""
 "Por favor, clique em uma nova posição sobre a imagem para atualizar este "
 "ponto"
 
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:283
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:283
 msgid ""
 "This coodinates can't be modified because is being used by some EEG layout "
 "setting! "
@@ -81,80 +81,80 @@ msgstr ""
 "Esta coordenada não pode ser modificada porque está sendo usada por alguma "
 "configuração de EEG!"
 
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:291
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:332
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:291
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:332
 msgid "Updating point "
 msgstr "Atualizando ponto "
 
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:292
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:334
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:355
-#: site_static/site/js/tms_position_setting.js:137
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:292
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:334
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:355
+#: static_data/site/js/tms_position_setting.js:137
 msgid "Confirms the coordinates? x - y: "
 msgstr "Confirma as coordenadas? x - y: "
 
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:293
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:335
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:293
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:335
 msgid "Please enter the name of the point"
 msgstr "Por favor insira o nome do ponto"
 
-#: site_static/site/js/eeg_electrode_cap_coordinates.js:357
+#: static_data/site/js/eeg_electrode_cap_coordinates.js:357
 msgid "Please enter the name this point"
 msgstr "Por favor insira o nome do ponto"
 
-#: site_static/site/js/password.js:19
+#: static_data/site/js/password.js:19
 msgid "Passwords don't match"
 msgstr "Senhas não combinam"
 
-#: site_static/site/js/password.js:54
+#: static_data/site/js/password.js:54
 msgid "Weak"
 msgstr "Fraco"
 
-#: site_static/site/js/password.js:60
+#: static_data/site/js/password.js:60
 msgid "Fair"
 msgstr "Justa"
 
-#: site_static/site/js/password.js:66
+#: static_data/site/js/password.js:66
 msgid "Strong"
 msgstr "Forte"
 
-#: site_static/site/js/password.js:72
+#: static_data/site/js/password.js:72
 msgid "Excellent"
 msgstr "Excelente"
 
-#: site_static/site/js/patient_personal_data.js:186
-#: site_static/site/js/patient_personal_data.js:191
-#: site_static/site/js/register.js:77
+#: static_data/site/js/patient_personal_data.js:186
+#: static_data/site/js/patient_personal_data.js:191
+#: static_data/site/js/register.js:77
 msgid "Obligatory fields must be filled."
 msgstr "Campos obrigatórios devem ser preenchidos."
 
-#: site_static/site/js/patient_personal_data.js:200
+#: static_data/site/js/patient_personal_data.js:200
 msgid "Please fill the fields correctly. E-mail is invalid"
 msgstr "Preencha os campos corretamente. Campo de e-mail inválido"
 
-#: site_static/site/js/questionnaire_export.js:95
+#: static_data/site/js/questionnaire_export.js:95
 msgid "Either one or both Per participant/Per questionnaire must be set."
 msgstr "Opção 'Por participante' e/ou 'Por questionário' deve ser preenchida."
 
-#: site_static/site/js/questionnaire_export.js:99
+#: static_data/site/js/questionnaire_export.js:99
 #| msgid "At least one questionnaire field have to be set."
 msgid "At least one questionnaire field have to be set"
 msgstr "Pelo menos um campo de questionário deve ser escolhido."
 
-#: site_static/site/js/questionnaire_export.js:103
+#: static_data/site/js/questionnaire_export.js:103
 #| msgid "At least one field from participant have to be set."
 msgid "At least one field from participant have to be set"
 msgstr "Pelo menos um campo de participante deve ser escolhido."
 
-#: site_static/site/js/questionnaire_export.js:130
+#: static_data/site/js/questionnaire_export.js:130
 msgid "At least one field from participant/questionnaire have to be set."
 msgstr "Pelo menos um campo de participante/questionário deve ser escolhido."
 
-#: site_static/site/js/questionnaire_export.js:135
+#: static_data/site/js/questionnaire_export.js:135
 msgid "At least one field from participant have to be set."
 msgstr "Pelo menos um campo de participante deve ser escolhido."
 
-#: site_static/site/js/tms_position_setting.js:138
+#: static_data/site/js/tms_position_setting.js:138
 msgid "Please enter the name of the position"
 msgstr "Por favor insira o nome da posição"
 

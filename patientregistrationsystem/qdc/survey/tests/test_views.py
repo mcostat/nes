@@ -1,10 +1,13 @@
 from base64 import b64decode
 from unittest.mock import patch
+from xmlrpc.client import Error
 
+from django.conf import settings
 from django.contrib.auth.models import Group
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, tag
 from django.test.client import RequestFactory
 from django.urls import reverse
+from jsonrpclib import Server
 
 from custom_user.tests.tests_helper import create_user
 from experiment.models import (
@@ -26,182 +29,233 @@ LIME_SURVEY_ID = 828636
 LIME_SURVEY_TOKEN_ID_1 = 1
 
 
-# TODO (NES-981): This class run integration tests. Separate in a file/dir for integraion tests.
 #  Integration tests are to run separated from unit tests and to less often
-# class ABCSearchEngineTest(TestCase):
-#     session_key = None
-#     server = None
-#
-#     def setUp(self):
-#
-#         self.server = Server(settings.LIMESURVEY['URL_API'] + '/index.php/admin/remotecontrol')
-#
-#         try:
-#             self.session_key = self.server.get_session_key(settings.LIMESURVEY['USER'], settings.LIMESURVEY['PASSWORD'])
-#             self.session_key = None if isinstance(self.session_key, dict) else self.session_key
-#         except TransportError:
-#             self.session_key = None
-#
-#     def test_complete_survey(self):
-#         lime_survey = Questionnaires()
-#         sid = None
-#
-#         try:
-#             # Cria uma nova survey no lime survey
-#             title_survey = 'Questionario de teste'
-#             sid = lime_survey.add_survey(9999, title_survey, 'en', 'G')
-#
-#             # Obtenho o titulo da survey
-#             survey_title = lime_survey.get_survey_title(sid)
-#             self.assertEqual(survey_title, title_survey)
-#
-#             # Verifica se esta ativa
-#             survey_active = lime_survey.get_survey_properties(sid, 'active')
-#             self.assertEqual(survey_active, 'N')
-#
-#             # Obtem uma propriedade - Administrador da Survey
-#             survey_admin = lime_survey.get_survey_properties(sid, 'admin')
-#             self.assertEqual(survey_admin, None)
-#
-#             # Importar grupo de questoes
-#             handle_file_import = \
-#                 open('data/static/quiz/tests/limesurvey_groups.lsg', 'r')
-#             questions_data = handle_file_import.read()
-#             questions_id = \
-#                 lime_survey.insert_questions(sid, questions_data, 'lsg')
-#             self.assertGreaterEqual(questions_id, 1)
-#
-#             # Inicia tabela de tokens
-#             self.assertEqual(lime_survey.activate_tokens(sid), 'OK')
-#
-#             # Ativar survey
-#             self.assertEqual(lime_survey.activate_survey(sid), 'OK')
-#
-#             # Verifica se esta ativa
-#             survey_active = lime_survey.get_survey_properties(sid, 'active')
-#             self.assertEqual(survey_active, 'Y')
-#
-#             # Adiciona participante e obtem o token
-#             result_token = lime_survey.add_participant(sid)
-#
-#             # Verifica se o token está presente na tabela de participantes
-#             token = lime_survey.get_participant_properties(sid, result_token, "token")
-#             self.assertEqual(token, result_token['token'])
-#         finally:
-#             # Deleta a survey gerada no Lime Survey
-#             self.assertEqual(lime_survey.delete_survey(sid), 'OK')
-#
-#     def test_find_all_questionnaires_method_returns_correct_result(self):
-#         questionnaires = Questionnaires()
-#         list_survey = self.server.list_surveys(self.session_key, None)
-#         self.server.release_session_key(self.session_key)
-#         self.assertEqual(questionnaires.find_all_questionnaires(), list_survey)
-#         questionnaires.release_session_key()
-#
-#     def test_find_questionnaire_by_id_method_found_survey(self):
-#         questionnaires = Questionnaires()
-#         list_survey = self.server.list_surveys(self.session_key, None)
-#         self.server.release_session_key(self.session_key)
-#         self.assertEqual(questionnaires.find_questionnaire_by_id(list_survey[3]['sid']), list_survey[3])
-#         questionnaires.release_session_key()
-#
-#     def test_find_questionnaire_by_id_method_not_found_survey_by_string(self):
-#         questionnaires = Questionnaires()
-#         self.assertEqual(None, questionnaires.find_questionnaire_by_id('three'))
-#         questionnaires.release_session_key()
-#
-#     def test_find_questionnaire_by_id_method_not_found_survey_by_out_of_range(self):
-#         questionnaires = Questionnaires()
-#         self.assertEqual(None, questionnaires.find_questionnaire_by_id(10000000))
-#         questionnaires.release_session_key()
-#
-#     def test_list_active_questionnaires(self):
-#         questionnaires = Questionnaires()
-#         list_survey = self.server.list_surveys(self.session_key, None)
-#         self.server.release_session_key(self.session_key)
-#         list_active_survey = []
-#         for survey in list_survey:
-#             survey_has_token = questionnaires.survey_has_token_table(survey['sid'])
-#             if survey['active'] == "Y" and survey_has_token is True:
-#                 list_active_survey.append(survey)
-#         self.assertEqual(questionnaires.find_all_active_questionnaires(), list_active_survey)
-#         questionnaires.release_session_key()
-#
-#     def test_add_participant_to_a_survey(self):
-#         """testa a insercao de participante em um questionario """
-#
-#         surveys = Questionnaires()
-#         list_active_surveys = surveys.find_all_active_questionnaires()
-#
-#         self.assertNotEqual(list_active_surveys, None)
-#
-#         survey = list_active_surveys[0]
-#         sid = int(survey['sid'])
-#
-#         participant_data_result = surveys.add_participant(sid)
-#
-#         # verificar se info retornada eh a mesma
-#         # self.assertEqual(participant_data_result[0]['email'], participant_data['email'])
-#         # self.assertEqual(participant_data_result[0]['lastname'], participant_data['lastname'])
-#         # self.assertEqual(participant_data_result[0]['firsStname'], participant_data['firstname'])
-#
-#         self.assertNotEqual(participant_data_result, None)
-#
-#         token_id = participant_data_result['tid']
-#
-#         # remover participante do questionario
-#         result = self.server.delete_participants(self.session_key, sid, [token_id])
-#
-#         self.assertEqual(result[str(token_id)], 'Deleted')
-#
-#         surveys.release_session_key()
-#
-#     def test_add_and_delete_survey(self):
-#         """TDD - Criar uma survey de teste e apos devera ser excluida
-#         """
-#         survey_id_generated = self.server.add_survey(self.session_key, 9999, 'Questionario de Teste', 'en', 'G')
-#         self.assertGreaterEqual(survey_id_generated, 0)
-#
-#         status = self.server.delete_survey(self.session_key, survey_id_generated)
-#         self.assertEqual(status['status'], 'OK')
-#         self.server.release_session_key(self.session_key)
-#
-#     def test_add_and_delete_survey_methods(self):
-#         questionnaires = Questionnaires()
-#         sid = questionnaires.add_survey('9999', 'Questionario de Teste', 'en', 'G')
-#         self.assertGreaterEqual(sid, 0)
-#
-#         status = questionnaires.delete_survey(sid)
-#         self.assertEqual(status, 'OK')
-#
-#     def test_delete_survey_participant(self):
-#         """Remove survey participant test"""
-#
-#         surveys = Questionnaires()
-#         list_active_surveys = surveys.find_all_active_questionnaires()
-#
-#         self.assertNotEqual(list_active_surveys, None)
-#
-#         survey = list_active_surveys[0]
-#         sid = int(survey['sid'])
-#
-#         participant_data_result = surveys.add_participant(sid)
-#
-#         # verificar se info retornada eh a mesma
-#         # self.assertEqual(participant_data_result[0]['email'], participant_data['email'])
-#         # self.assertEqual(participant_data_result[0]['lastname'], participant_data['lastname'])
-#         # self.assertEqual(participant_data_result[0]['firstname'], participant_data['firstname'])
-#
-#         self.assertNotEqual(participant_data_result, None)
-#
-#         token_id = participant_data_result['tid']
-#
-#         # remover participante do questionario
-#         result = surveys.delete_participants(sid, [token_id])
-#
-#         self.assertEqual(result[str(token_id)], 'Deleted')
-#
-#         surveys.release_session_key()
+@tag("slow", "integration")
+class ABCSearchEngineTest(TestCase):
+    session_key = None
+    server = None
+    test_sid = None
+
+    def setUp(self):
+        self.server = Server(
+            settings.LIMESURVEY["URL_API"] + "/index.php/admin/remotecontrol"
+        )
+
+        try:
+            self.session_key = self.server.get_session_key(
+                settings.LIMESURVEY["USER"], settings.LIMESURVEY["PASSWORD"]
+            )
+            self.session_key = (
+                None if isinstance(self.session_key, dict) else self.session_key
+            )
+
+            lime_survey = Questionnaires()
+
+            title_survey = "Questionario de teste"
+            self.test_sid = lime_survey.add_survey(9999, title_survey, "en", "G")
+
+            # Importar grupo de questoes
+            with open(
+                "static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8"
+            ) as handle_file_import:
+                questions_data = handle_file_import.read()
+
+            questions_id = lime_survey.insert_questions(
+                self.test_sid, questions_data, "lsg"
+            )
+
+            lime_survey.activate_tokens(self.test_sid)
+            lime_survey.activate_survey(self.test_sid)
+
+            # Adiciona participante e obtem o token
+            result_token = lime_survey.add_participant(self.test_sid)
+
+            # Verifica se o token está presente na tabela de participantes
+            token = lime_survey.get_participant_properties(
+                self.test_sid, result_token, "token"
+            )
+
+        # except TRANSPORT_ERROR:
+        except Error as e:
+            print("ERROR", e)
+            self.session_key = None
+
+    def tearDown(self) -> None:
+        super().tearDown()
+        Questionnaires().delete_survey(self.test_sid)
+
+    def test_complete_survey(self):
+        lime_survey = Questionnaires()
+        sid = None
+
+        try:
+            # Cria uma nova survey no lime survey
+            title_survey = "Questionario de teste"
+            sid = lime_survey.add_survey(9999, title_survey, "en", "G")
+
+            # Obtenho o titulo da survey
+            survey_title = lime_survey.get_survey_title(sid)
+            self.assertEqual(survey_title, title_survey)
+
+            # Verifica se esta ativa
+            survey_active = lime_survey.get_survey_properties(sid, "active")
+            self.assertEqual(survey_active, "N")
+
+            # Obtem uma propriedade - Administrador da Survey
+            survey_admin = lime_survey.get_survey_properties(sid, "admin")
+            self.assertEqual(survey_admin, None)
+
+            # Importar grupo de questoes
+            with open(
+                "static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8"
+            ) as handle_file_import:
+                questions_data = handle_file_import.read()
+
+            questions_id = lime_survey.insert_questions(sid, questions_data, "lsg")
+            self.assertGreaterEqual(questions_id, 1)
+
+            # Inicia tabela de tokens
+            self.assertEqual(lime_survey.activate_tokens(sid), "OK")
+
+            # Ativar survey
+            self.assertEqual(lime_survey.activate_survey(sid), "OK")
+
+            # Verifica se esta ativa
+            survey_active = lime_survey.get_survey_properties(sid, "active")
+            self.assertEqual(survey_active, "Y")
+
+            # Adiciona participante e obtem o token
+            result_token = lime_survey.add_participant(sid)
+
+            # Verifica se o token está presente na tabela de participantes
+            token = lime_survey.get_participant_properties(sid, result_token, "token")
+            self.assertEqual(token, result_token["token"])
+        finally:
+            # Deleta a survey gerada no Lime Survey
+            self.assertEqual(lime_survey.delete_survey(sid), "OK")
+
+    def test_find_all_questionnaires_method_returns_correct_result(self):
+        questionnaires = Questionnaires()
+        list_survey = self.server.list_surveys(self.session_key, None)
+        self.server.release_session_key(self.session_key)
+        self.assertEqual(questionnaires.find_all_questionnaires(), list_survey)
+        questionnaires.release_session_key()
+
+    def test_find_questionnaire_by_id_method_found_survey(self):
+        questionnaires = Questionnaires()
+        list_survey = self.server.list_surveys(self.session_key, None)
+        self.server.release_session_key(self.session_key)
+        self.assertEqual(
+            questionnaires.find_questionnaire_by_id(list_survey[3]["sid"]),
+            list_survey[3],
+        )
+        questionnaires.release_session_key()
+
+    def test_find_questionnaire_by_id_method_not_found_survey_by_string(self):
+        questionnaires = Questionnaires()
+        self.assertEqual(None, questionnaires.find_questionnaire_by_id("three"))
+        questionnaires.release_session_key()
+
+    def test_find_questionnaire_by_id_method_not_found_survey_by_out_of_range(self):
+        questionnaires = Questionnaires()
+        self.assertEqual(None, questionnaires.find_questionnaire_by_id(10000000))
+        questionnaires.release_session_key()
+
+    def test_list_active_questionnaires(self):
+        questionnaires = Questionnaires()
+
+        list_survey = self.server.list_surveys(self.session_key, None)
+
+        self.server.release_session_key(self.session_key)
+
+        list_active_survey = []
+        for survey in list_survey:
+            survey_has_token = questionnaires.survey_has_token_table(survey["sid"])
+            if survey["active"] == "Y" and survey_has_token is True:
+                list_active_survey.append(survey)
+
+        self.assertEqual(
+            questionnaires.find_all_active_questionnaires(), list_active_survey
+        )
+
+        questionnaires.release_session_key()
+
+    def test_add_participant_to_a_survey(self):
+        """testa a insercao de participante em um questionario"""
+
+        surveys = Questionnaires()
+        list_active_surveys = surveys.find_all_active_questionnaires()
+
+        self.assertNotEqual(list_active_surveys, None)
+
+        survey = list_active_surveys[0]
+        sid = int(survey["sid"])
+
+        participant_data_result = surveys.add_participant(sid)
+
+        # verificar se info retornada eh a mesma
+        # self.assertEqual(participant_data_result[0]['email'], participant_data['email'])
+        # self.assertEqual(participant_data_result[0]['lastname'], participant_data['lastname'])
+        # self.assertEqual(participant_data_result[0]['firsStname'], participant_data['firstname'])
+
+        self.assertNotEqual(participant_data_result, None)
+
+        token_id = participant_data_result["tid"]
+
+        # remover participante do questionario
+        result = self.server.delete_participants(self.session_key, sid, [token_id])
+
+        self.assertEqual(result[str(token_id)], "Deleted")
+
+        surveys.release_session_key()
+
+    def test_add_and_delete_survey(self):
+        """TDD - Criar uma survey de teste e apos devera ser excluida"""
+        survey_id_generated = self.server.add_survey(
+            self.session_key, 9999, "Questionario de Teste", "en", "G"
+        )
+        self.assertGreaterEqual(survey_id_generated, 0)
+
+        status = self.server.delete_survey(self.session_key, survey_id_generated)
+        self.assertEqual(status["status"], "OK")
+        self.server.release_session_key(self.session_key)
+
+    def test_add_and_delete_survey_methods(self):
+        questionnaires = Questionnaires()
+        sid = questionnaires.add_survey("9999", "Questionario de Teste", "en", "G")
+        self.assertGreaterEqual(sid, 0)
+
+        status = questionnaires.delete_survey(sid)
+        self.assertEqual(status, "OK")
+
+    def test_delete_survey_participant(self):
+        """Remove survey participant test"""
+
+        surveys = Questionnaires()
+        list_active_surveys = surveys.find_all_active_questionnaires()
+
+        self.assertNotEqual(list_active_surveys, None)
+
+        survey = list_active_surveys[0]
+        sid = int(survey["sid"])
+
+        participant_data_result = surveys.add_participant(sid)
+
+        # verificar se info retornada eh a mesma
+        # self.assertEqual(participant_data_result[0]['email'], participant_data['email'])
+        # self.assertEqual(participant_data_result[0]['lastname'], participant_data['lastname'])
+        # self.assertEqual(participant_data_result[0]['firstname'], participant_data['firstname'])
+
+        self.assertNotEqual(participant_data_result, None)
+
+        token_id = participant_data_result["tid"]
+
+        # remover participante do questionario
+        result = surveys.delete_participants(sid, [token_id])
+
+        self.assertEqual(result[str(token_id)], "Deleted")
+
+        surveys.release_session_key()
 
 
 class SurveyTest(TestCase):

@@ -231,7 +231,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, "export/locale"),
     os.path.join(BASE_DIR, "processing/locale"),
     os.path.join(BASE_DIR, "qdc/locale"),
-    os.path.join(BASE_DIR, "site_static/locale"),
+    os.path.join(BASE_DIR, "static_data/locale"),
 )
 
 USE_TZ = True
@@ -288,7 +288,7 @@ STORAGES = {
 }
 
 STATICFILES_DIRS: list[str] = [
-    os.path.join(BASE_DIR, "site_static"),
+    os.path.join(BASE_DIR, "static_data"),
 ]
 
 STATICFILES_FINDERS = (

@@ -23,7 +23,7 @@ added CSP (Content Security Policy)
 
 removed quiz folder
 
-added site_static folder for all the site's .html, .css, .js and images
+added static_data folder for all the site's .html, .css, .js and images
 
 moved quiz/templates to /templates
 

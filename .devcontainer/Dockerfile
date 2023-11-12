@@ -13,17 +13,15 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 
-RUN apt-get -y update && apt-get -y install --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python-is-python3 \
     python3-dev \
     libjpeg-dev \
     libpng-dev \
     libpq-dev \
     libfreetype6-dev \
-    #build-base \
+    redis-server \
     git \
-    #openblas-dev \
-    #hdf5-dev && \
     netcat-traditional \
     lsb-release \
     curl \
@@ -37,9 +35,12 @@ RUN apt-get -y update && apt-get -y install --no-install-recommends \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 
-RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list && \
-    apt-get update &&  && apt-get -y install --no-install-recommends redis
+# RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
+#     echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list && \
+#     apt-get update && apt-get install -y --no-install-recommends redis && \
+#     apt-get autoremove -y && \
+#     apt-get clean -y && \
+#     rm -rf /var/lib/apt/lists/*
 
 
 COPY $NES_DIR/patientregistrationsystem/qdc/requirements.txt /tmp/pip-tmp/

@@ -19,6 +19,7 @@ from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from django.forms import ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.test import Client, TestCase, override_settings
@@ -127,7 +128,7 @@ class UtilTests:
                     email="lenin@example.com",
                     marital_status=MaritalStatus.objects.create(name=fake.word()),
                 )
-            except:  # TODO: exception derived from non-unique cpf
+            except ValidationError:  # TODO: exception derived from non-unique cpf
                 pass
 
     @staticmethod

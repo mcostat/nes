@@ -23,7 +23,8 @@
             "request": "launch",
             "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
             "args": [
-                "test"
+                "test",
+                "--tag=integration"
             ],
             "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
             "django": true,

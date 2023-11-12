@@ -1,7 +1,7 @@
 FROM python:3.11-slim-bookworm as wheeler
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONOPTIMIZE 1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV LANG en_US.UTF-8  
@@ -14,7 +14,7 @@ ARG NES_DIR=/usr/local/nes
 ENV NES_DIR=$NES_DIR
 
 
-RUN apt-get -y update && apt-get -y install --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     libjpeg-dev \
     libpng-dev \
@@ -32,11 +32,11 @@ RUN apt-get -y update && apt-get -y install --no-install-recommends \
 
 RUN mkdir -p $NES_DIR  && \
     if [ $NES_BRANCH != "unset" ]; then \
-        echo Cloning $NES_BRANCH branch ;\
-        git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/mcostat/nes.git $NES_DIR ;\
+    echo Cloning $NES_BRANCH branch ;\
+    git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/mcostat/nes.git $NES_DIR ;\
     else \
-        echo Cloning master branch ;\
-        git clone -j $(nproc) https://github.com/mcostat/nes.git $NES_DIR ;\
+    echo Cloning master branch ;\
+    git clone -j $(nproc) https://github.com/mcostat/nes.git $NES_DIR ;\
     fi
 
 
@@ -52,8 +52,8 @@ RUN pip3 --no-cache-dir --disable-pip-version-check install -U pip setuptools wh
 
 FROM python:3.11-slim-bookworm
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONOPTIMIZE 1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONOPTIMIZE=1
 
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
@@ -65,7 +65,7 @@ ENV NES_DIR=$NES_DIR
 ARG HTTPS_CERT_KEY
 
 
-RUN apt-get -y update && apt-get -y install --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     python3-pip \
     python3-psycopg \
@@ -105,9 +105,9 @@ COPY --from=wheeler $NES_DIR $NES_DIR
 COPY --from=wheeler /wheels /wheels
 
 RUN pip3 --no-cache-dir --disable-pip-version-check install -U pip setuptools wheel && \
-	pip3 --no-cache-dir --disable-pip-version-check install -r /wheels/requirement/requirements.txt -f /wheels && \
-		rm -rf /wheels && \
-		rm -rf /root/.cache/pip*
+    pip3 --no-cache-dir --disable-pip-version-check install -r /wheels/requirement/requirements.txt -f /wheels && \
+    rm -rf /wheels && \
+    rm -rf /root/.cache/pip*
 
 
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
@@ -132,9 +132,9 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
 
 WORKDIR $NES_DIR
 
-RUN cp docker/entrypoint.sh / && \
-    chmod +x /entrypoint.sh 
-    
+COPY docker/entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+
 
 ENTRYPOINT ["/entrypoint.sh"]
 

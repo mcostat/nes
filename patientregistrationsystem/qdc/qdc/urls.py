@@ -95,7 +95,7 @@ js_info_dict = {
         "custom_user",
         "export",
         "plugin",
-        "site_static",
+        "static_data",
     ),
 }
 
