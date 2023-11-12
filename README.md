@@ -15,8 +15,6 @@
 [![GitHub watchers](https://img.shields.io/github/watchers/mcostat/nes.svg?style=social&label=Watch&maxAge=2592000)](https://github.com/mcostat/nes/watchers/)
 [![GitHub followers](https://img.shields.io/github/followers/mcostat.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/mcostat?tab=followers)
 
-
-
 ## About NES
 
 NES is an open-source tool that aims to assist neuroscience research laboratories in routine procedures for data collection. NES supports the reproducibility of experiments, enables comparison of data across studies, and keeps data provenance. In addition, it promotes standardized formats for experiments and analyses reporting.
@@ -30,7 +28,7 @@ NES is an open-source tool that aims to assist neuroscience research laboratorie
 
 ### Documentation
 
-Available at https://nes.readthedocs.io/en/latest/
+Available at <https://nes.readthedocs.io/en/latest/>
 
 ### Contributing
 
@@ -42,4 +40,6 @@ Mozilla Public License Version 2.0
 
 ## RIDC NeuroMat
 
-The Research, Innovation and Dissemination Center for Neuromathematics (RIDC NeuroMat, or simply NeuroMat) is a Brazilian research center established in 2013 at the University of São Paulo that is dedicated to integrating mathematical modeling and theoretical neuroscience. Among the core missions of NeuroMat is the creation of a new mathematical system to understanding neural data and the development of neuroscientific open-source computational tools, keeping an active role under the context of open knowledge, open science, and scientific dissemination. The research center is headed by Prof. Antonio Galves, from USP's Institute of Mathematics and Statistics, and is funded by the São Paulo Research Foundation (FAPESP). NeuroMat homepage: http://neuromat.numec.prp.usp.br
+The Research, Innovation and Dissemination Center for Neuromathematics (RIDC NeuroMat, or simply NeuroMat) is a Brazilian research center established in 2013 at the University of São Paulo that is dedicated to integrating mathematical modeling and theoretical neuroscience.
+Among the core missions of NeuroMat is the creation of a new mathematical system to understanding neural data and the development of neuroscientific open-source computational tools, keeping an active role under the context of open knowledge, open science, and scientific dissemination.
+The research center is headed by Prof. Antonio Galves, from USP's Institute of Mathematics and Statistics, and is funded by the São Paulo Research Foundation (FAPESP). NeuroMat homepage: <http://neuromat.numec.prp.usp.br>
