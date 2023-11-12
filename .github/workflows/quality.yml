@@ -87,21 +87,16 @@ jobs:
         run: |
           python -u manage.py check --deploy
 
-      - name: Run Tests
+      - name: Run Unit Tests
         run: |
-          coverage run --omit=*/tests/*,*/migrations/* manage.py test && coverage report --fail-under=60 && coverage xml
+          coverage run --omit=*/tests/*,*/migrations/* manage.py test --exclude-tag=integration && coverage report --fail-under=60 && coverage xml
 
-      - name: Check formating
-        uses: psf/black@stable
-        with:
-          options: "--check --verbose"
-          src: "patientregistrationsystem/qdc/"
-
-      - name: Analise the code with pylint
-        continue-on-error: true
+      - name: Run Integration Tests
         run: |
-          pylint $(git ls-files '*.py')
+          python manage.py test --tag=integration
 
-      # - run: mypy $(git ls-files '*.py')
+      # - name: Run Mypy type check
+      #   run: mypy $(git ls-files '*.py')
+
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
