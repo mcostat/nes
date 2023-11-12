@@ -2,7 +2,7 @@ name: Quality Assurance
 
 on:
   push:
-    branches: ["master", "dev"]
+    branches: ["master"]
   pull_request:
     branches: ["master"]
 
@@ -87,7 +87,7 @@ jobs:
           python -u manage.py check --deploy
       - name: Run Tests
         run: |
-          coverage run --omit=*/tests/*,*/migrations/* manage.py test
+          coverage run --omit=*/tests/*,*/migrations/* manage.py test && coverage report --fail-under=60 && coverage xml
       - name: Check formating
         uses: psf/black@stable
         with:
@@ -100,3 +100,5 @@ jobs:
       # - run: mypy $(git ls-files '*.py')
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
