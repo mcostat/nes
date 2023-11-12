@@ -16,7 +16,7 @@ function init() {
   var canvas = document.getElementById("electrodeMapCanvas");
   var ctx = canvas.getContext("2d");
   var eeg_positions = document.getElementById("eeg_electrode_position");
-  positions = eval(eeg_positions.value);
+  positions = Function(eeg_positions.value);
   used_positions_counter = positions.length;
   var localization_system = document.getElementById("localization_system_id");
   localization_system_id = localization_system.value;

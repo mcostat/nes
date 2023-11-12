@@ -11,7 +11,7 @@ function init() {
   if (canvas) var ctx = canvas.getContext("2d");
 
   var eeg_positions = document.getElementById("eeg_electrode_position");
-  if (eeg_positions) positions = eval(eeg_positions.value);
+  if (eeg_positions) positions = Function(eeg_positions.value);
 
   var imageObj = new Image();
 
