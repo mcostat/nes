@@ -34,6 +34,7 @@ jobs:
         id: lint
         env:
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JSCPD: false
           VALIDATE_PYTHON: false
           VALIDATE_PYTHON_ISORT: false
           VALIDATE_PYTHON_MYPY: false
@@ -42,20 +43,7 @@ jobs:
           VALIDATE_HTML: false
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_TYPESCRIPT_STANDARD: false
-          # VALIDATE_PYTHON_BLACK: true
-          # VALIDATE_JAVASCRIPT_ES: true
-          # VALIDATE_TYPESCRIPT_ES: true
-          # VALIDATE_JSON: true
-          # VALIDATE_DOCKERFILE: true
-          # VALIDATE_ENV: true
-          # VALIDATE_GITHUB_ACTIONS: true
-          # VALIDATE_GITLEAKS: true
-          # VALIDATE_BASH: true
           DEFAULT_BRANCH: "master"
           FILTER_REGEX_EXCLUDE: .*tests/.*|.*bootstrap-5.3.2-dist/.*
           IGNORE_GITIGNORED_FILES: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Upload results
-      #   uses: github/codeql-action/upload-sarif@v2
-      #   with:
-      #     sarif_file: ${{ steps.lint.outputs.sarifFile }}

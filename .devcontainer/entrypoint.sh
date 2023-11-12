@@ -21,7 +21,7 @@ while ! nc -z "$LIMESURVEY_HOST" "$LIMESURVEY_PORT"; do
 done
 echo "INFO: Limesurvey OK"
 
-sh "$NES_PROJECT_PATH/setup_nes.sh" vscode
+sh "$NES_DIR/scripts/setup_nes.sh" vscode
 
 echo "INFO: Done initializing data"
 
