@@ -17,7 +17,6 @@ from django.forms import (
     TextInput,
 )
 from django.utils.translation import gettext_lazy as _
-
 from patient.models import Diagnosis, Patient
 
 HEADINGS_CHOICES = (
@@ -145,7 +144,7 @@ class ParticipantsSelectionForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs) -> None:
-        super(ParticipantsSelectionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["gender"].empty_label = None
         self.fields["marital_status"].empty_label = None
         self.fields["country"].empty_label = None
@@ -199,7 +198,7 @@ class AgeIntervalForm(Form):
     )
 
     def clean(self) -> dict[str, Any]:
-        cleaned_data: dict[str, Any] = super(AgeIntervalForm, self).clean()
+        cleaned_data: dict[str, Any] = super().clean()
         min_age = cleaned_data.get("min_age")
         max_age = cleaned_data.get("max_age")
 

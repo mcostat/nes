@@ -5,13 +5,12 @@ from datetime import date, datetime, timedelta
 from json import load
 
 from django.contrib.sessions.backends.base import SessionBase
-
 from experiment.tests.tests_helper import ExperimentTestCase
 
 
 class ExportTestCase(ExperimentTestCase):
     def setUp(self) -> None:
-        super(ExportTestCase, self).setUp()
+        super().setUp()
 
         self.client.login(username=self.user.username, password=self.user_passwd)
 

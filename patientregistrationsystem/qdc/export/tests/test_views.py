@@ -17,8 +17,6 @@ from django.template.defaultfilters import slugify
 from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from goodtables import validate
-
 from experiment.models import (
     AdditionalData,
     AdditionalDataFile,
@@ -90,6 +88,7 @@ from export.views import (
     PATIENT_FIELDS,
     abbreviated_data,
 )
+from goodtables import validate
 from patient.tests.test_orig import UtilTests
 from survey.survey_utils import HEADER_EXPLANATION_FIELDS
 from survey.tests.tests_helper import create_survey
@@ -101,7 +100,7 @@ TEMP_MEDIA_ROOT = tempfile.mkdtemp()
 
 class ExportQuestionnaireTest(ExportTestCase):
     def setUp(self):
-        super(ExportQuestionnaireTest, self).setUp()
+        super().setUp()
 
         # Create questionnaire data collection in NES
         # TODO: use method already existent in patient.tests. See other places
@@ -1582,7 +1581,7 @@ class ExportQuestionnaireTest(ExportTestCase):
 
 class ExportDataCollectionTest(ExportTestCase):
     def setUp(self):
-        super(ExportDataCollectionTest, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         self.client.logout()
@@ -2491,7 +2490,7 @@ class ExportDataCollectionTest(ExportTestCase):
 
 class ExportParticipantsTest(ExportTestCase):
     def setUp(self):
-        super(ExportParticipantsTest, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         self.client.logout()
@@ -2614,7 +2613,7 @@ class ExportParticipantsTest(ExportTestCase):
 
 class ExportSelectionTest(ExportTestCase):
     def setUp(self):
-        super(ExportSelectionTest, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         self.client.logout()
@@ -2708,7 +2707,7 @@ class ExportSelectionTest(ExportTestCase):
 
 class ExportFrictionlessDataTest(ExportTestCase):
     def setUp(self):
-        super(ExportFrictionlessDataTest, self).setUp()
+        super().setUp()
 
         # Redirect sys.stdout to avoid messages during test.
         self.stdout_bk, sys.stdout = sys.stdout, open("/dev/null", "w+")

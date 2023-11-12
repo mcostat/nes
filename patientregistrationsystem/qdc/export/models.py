@@ -22,4 +22,4 @@ class Export(models.Model):
 
     def delete(self, *args, **kwargs):
         # self.content.delete() #FIXME
-        super(Export, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)

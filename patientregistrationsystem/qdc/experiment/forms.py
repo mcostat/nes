@@ -22,7 +22,6 @@ from django.forms import (
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext as _
-
 from experiment.models import (
     EEG,
     EMG,
@@ -370,7 +369,7 @@ class EEGForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EEGForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
             self.fields["eeg_setting"].queryset = EEGSetting.objects.filter(
@@ -396,7 +395,7 @@ class EMGForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EMGForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
             self.fields["emg_setting"].queryset = EMGSetting.objects.filter(
@@ -422,7 +421,7 @@ class TMSForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(TMSForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
             self.fields["tms_setting"].queryset = TMSSetting.objects.filter(
@@ -455,7 +454,7 @@ class DigitalGamePhaseForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(DigitalGamePhaseForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
             self.fields["context_tree"].queryset = ContextTree.objects.filter(
@@ -598,7 +597,7 @@ class ResearchProjectForm(ModelForm):
         }
 
     def clean(self) -> Any:
-        cleaned_data: Any = super(ResearchProjectForm, self).clean()
+        cleaned_data: Any = super().clean()
         start_date = cleaned_data.get("start_date")
         end_date = cleaned_data.get("end_date")
 
@@ -763,7 +762,7 @@ class EEGDataForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EEGDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["file_format"].queryset = FileFormat.objects.filter(
             tags__name="EEG"
@@ -854,7 +853,7 @@ class StimuliDataForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs) -> None:
-        super(StimuliDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["file_format"].queryset = FileFormat.objects.filter(
             tags__name="EEG"
@@ -1391,7 +1390,7 @@ class EEGElectrodeNETRegisterForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EEGElectrodeNETRegisterForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["electrode_model_default"].queryset = ElectrodeModel.objects.filter(
             tags__name="EEG"
@@ -1755,7 +1754,7 @@ class EMGDataForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EMGDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # emg_setting has no blank option
         self.fields["emg_setting"].empty_label = None
@@ -1979,7 +1978,7 @@ class EMGElectrodeSettingForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EMGElectrodeSettingForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["electrode"].queryset = ElectrodeModel.objects.filter(
             tags__name="EMG"
@@ -2031,7 +2030,7 @@ class EMGPreamplifierSettingForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EMGPreamplifierSettingForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["amplifier"].queryset = Amplifier.objects.filter(tags__name="EMG")
 
@@ -2090,7 +2089,7 @@ class EMGAmplifierSettingForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(EMGAmplifierSettingForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["amplifier"].queryset = Amplifier.objects.filter(tags__name="EMG")
 
@@ -2298,7 +2297,7 @@ class TMSDataForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(TMSDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         initial = kwargs.get("initial")
         if initial and "experiment" in initial:
@@ -2548,7 +2547,7 @@ class DigitalGamePhaseDataForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(DigitalGamePhaseDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class GenericDataCollectionDataForm(ModelForm):
@@ -2616,7 +2615,7 @@ class GenericDataCollectionDataForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(GenericDataCollectionDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["file_format"].queryset = FileFormat.objects.filter(
             tags__name="generic"
@@ -2672,7 +2671,7 @@ class MediaCollectionDataForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(MediaCollectionDataForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["file_format"].queryset = FileFormat.objects.filter(
             tags__name="media"

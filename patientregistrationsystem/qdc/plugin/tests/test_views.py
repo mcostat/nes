@@ -12,7 +12,6 @@ from django.contrib.messages import get_messages
 from django.test import override_settings
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
-
 from export import input_export
 from export.models import Export
 from export.tests.tests_helper import ExportTestCase
@@ -32,7 +31,7 @@ TEMP_MEDIA_ROOT = tempfile.mkdtemp()
 
 class PluginTest(ExportTestCase):
     def setUp(self):
-        super(PluginTest, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         self.client.logout()

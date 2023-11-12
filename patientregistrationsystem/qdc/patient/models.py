@@ -10,7 +10,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modeltranslation.manager import MultilingualManager
 from simple_history.models import HistoricalRecords
-
 from survey.models import Survey
 
 from .validation import CPF
@@ -414,7 +413,7 @@ class Patient(models.Model):
     def save(self, *args, **kwargs) -> None:
         if not self.pk:
             self.code = self.create_random_patient_code()
-        super(Patient, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     @staticmethod
     def create_random_patient_code() -> str:
@@ -704,7 +703,7 @@ class ExamFile(models.Model):
 
     def delete(self, *args, **kwargs):
         self.content.delete()
-        super(ExamFile, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
 
 class QuestionnaireResponse(models.Model):

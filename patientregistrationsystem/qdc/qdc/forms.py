@@ -11,7 +11,7 @@ class PasswordChangeFormCustomized(PasswordChangeForm):
     )
 
     def __init__(self, *args, **kwargs) -> None:
-        super.__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["old_password"].widget = PasswordInput(
             attrs={

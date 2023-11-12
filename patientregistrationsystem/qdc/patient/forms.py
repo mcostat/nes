@@ -11,7 +11,6 @@ from django.forms import (
 )
 from django.forms.widgets import Textarea
 from django.utils.translation import gettext as _
-
 from patient.models import (
     ComplementaryExam,
     ExamFile,
@@ -27,7 +26,7 @@ NULLBOOLEAN_CHOICE = ((True, _("Yes")), (False, _("No")), (None, _("Unknown")))
 
 class PatientForm(ModelForm):
     def __init__(self, data=None, *args, **kwargs):
-        super(PatientForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
         self.fields["zipcode"].widget.attrs["onBlur"] = "pesquisacep(this.value);"
         self.fields["country"].initial = "BR"
 

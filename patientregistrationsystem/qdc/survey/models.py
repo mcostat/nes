@@ -28,7 +28,7 @@ class Survey(models.Model):  # type: ignore [django-manager-missing]
     def save(self, *args, **kwargs) -> None:
         if not self.pk:
             self.code = self.create_random_survey_code()
-        super(Survey, self).save(*args, **kwargs)
+        super()).save(*args, **kwargs)
 
     @staticmethod
     def create_random_survey_code() -> str:

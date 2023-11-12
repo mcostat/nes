@@ -9,6 +9,7 @@ from datetime import datetime
 from unittest import skip
 from unittest.mock import call, patch
 
+from custom_user.tests.tests_helper import create_user
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import Group, User
@@ -20,9 +21,6 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.encoding import smart_str
 from django.utils.html import strip_tags
-from faker import Factory
-
-from custom_user.tests.tests_helper import create_user
 from experiment.import_export import ExportExperiment
 from experiment.models import (
     EEG,
@@ -106,6 +104,7 @@ from experiment.models import (
     TMSLocalizationSystem,
     TMSSetting,
 )
+from faker import Factory
 from patient.models import (
     AlcoholFrequency,
     AlcoholPeriod,
@@ -6864,7 +6863,7 @@ class ImportExperimentTest(TestCase):
 
 class ExperimentQuestionnaireTest(ExperimentTestCase):
     def setUp(self):
-        super(ExperimentQuestionnaireTest, self).setUp()
+        super().setUp()
 
         # Create questionnaire data collection in NES
         # TODO: use method already existent in patient.tests. See other places

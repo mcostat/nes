@@ -5,15 +5,13 @@ import tempfile
 import zipfile
 from io import BufferedWriter
 
+from custom_user.tests.tests_helper import create_user
 from django.apps import apps
 from django.contrib.auth.models import Group as UserGroup
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.db import IntegrityError
 from django.test import RequestFactory, TestCase
-from faker import Factory
-
-from custom_user.tests.tests_helper import create_user
 from experiment.models import (
     EEG,
     EMG,
@@ -89,6 +87,7 @@ from experiment.models import (
     TMSLocalizationSystem,
     TMSSetting,
 )
+from faker import Factory
 from patient.models import (
     ClassificationOfDiseases,
     ComplementaryExam,
@@ -103,7 +102,7 @@ from survey.tests.tests_helper import create_survey
 
 class ExperimentTestCase(TestCase):
     def setUp(self):
-        super(ExperimentTestCase, self).setUp()
+        super().setUp()
         # create the groups of users and their permissions
         exec(open(os.getcwd() + "/add_initial_data.py").read())
 

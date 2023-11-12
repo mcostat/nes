@@ -1,6 +1,8 @@
 # coding=utf-8
 from typing import Any, Iterable
 
+from custom_user.models import Institution, UserProfile
+from custom_user.regex_utils import PASSWORD_REGEX, USERNAME_REGEX
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
@@ -15,9 +17,6 @@ from django.forms import (
     ValidationError,
 )
 from django.utils.translation import gettext_lazy as _
-
-from custom_user.models import Institution, UserProfile
-from custom_user.regex_utils import PASSWORD_REGEX, USERNAME_REGEX
 
 
 class UserForm(ModelForm):
@@ -145,7 +144,7 @@ class UserFormUpdate(UserForm):
 
 class CustomPasswordResetForm(PasswordResetForm):
     def is_valid(self) -> bool:
-        if not super(CustomPasswordResetForm, self).is_valid():
+        if not super().is_valid():
             return False
 
         # get_users returns a generator object
@@ -257,7 +256,7 @@ class InstitutionForm(ModelForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super(InstitutionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["country"].initial = "BR"
         instance = kwargs.get("instance") or self.instance
 
