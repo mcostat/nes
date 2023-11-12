@@ -1,6 +1,8 @@
 import os
 import sys
 
+from django.core.asgi import get_asgi_application
+
 paths = [
     os.getenv("NES_DIR", "/usr/local/nes"),
     "/usr/local",
@@ -13,7 +15,5 @@ for path in paths:
         sys.path.append(path)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "qdc.settings.prod")
-
-from django.core.asgi import get_asgi_application
 
 application = get_asgi_application()
