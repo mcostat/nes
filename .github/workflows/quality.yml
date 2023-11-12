@@ -8,6 +8,7 @@ on:
 
 env:
   DJANGO_SETTINGS_MODULE: qdc.settings.test
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   quality-assurance:
@@ -100,5 +101,4 @@ jobs:
       # - run: mypy $(git ls-files '*.py')
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
