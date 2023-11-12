@@ -11,7 +11,9 @@ USER_PWD = "mypassword"
 
 class ParticipantsSelectionFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.gender = Gender.objects.create(name="Masculino")
@@ -57,7 +59,9 @@ class ParticipantsSelectionFormValidation(TestCase):
 
 class AgeIntervalFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
 
@@ -92,7 +96,9 @@ class AgeIntervalFormValidation(TestCase):
 
 class DiagnosisSelectionFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
 

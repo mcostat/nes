@@ -84,7 +84,12 @@ from export.tests.mocks import (
     update_mocks11_full,
 )
 from export.tests.tests_helper import ExportTestCase
-from export.views import DIAGNOSIS_FIELDS, EXPORT_DIRECTORY, PATIENT_FIELDS, abbreviated_data
+from export.views import (
+    DIAGNOSIS_FIELDS,
+    EXPORT_DIRECTORY,
+    PATIENT_FIELDS,
+    abbreviated_data,
+)
 from patient.tests.test_orig import UtilTests
 from survey.survey_utils import HEADER_EXPLANATION_FIELDS
 from survey.tests.tests_helper import create_survey
@@ -101,7 +106,9 @@ class ExportQuestionnaireTest(ExportTestCase):
         # Create questionnaire data collection in NES
         # TODO: use method already existent in patient.tests. See other places
         self.survey = create_survey(LIMESURVEY_SURVEY_ID_1)
-        self.data_configuration_tree = self._create_nes_questionnaire(self.root_component)
+        self.data_configuration_tree = self._create_nes_questionnaire(
+            self.root_component
+        )
 
         # Add response's participant to limesurvey survey and the references
         # in our db
@@ -125,7 +132,9 @@ class ExportQuestionnaireTest(ExportTestCase):
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": self.survey}
         )
         # Include questionnaire in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(root_component, self.questionnaire)
+        component_config = ObjectsFactory.create_component_configuration(
+            root_component, self.questionnaire
+        )
 
         return ObjectsFactory.create_data_configuration_tree(component_config)
 
@@ -137,7 +146,9 @@ class ExportQuestionnaireTest(ExportTestCase):
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": self.survey}
         )
         # Include questionnaire in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, self.questionnaire)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, self.questionnaire
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # Add response's participant to limesurvey survey and the references
@@ -296,7 +307,9 @@ class ExportQuestionnaireTest(ExportTestCase):
                 {
                     "code": "arrayzahlen[SQ001_SQ001]",
                     "full": _("Array (Zahlen) [Unterfrage eins][Unterfrage eins]"),
-                    "abbreviated": _("Array (Zahlen) [Unterfrage eins][Unterfrage eins]"),
+                    "abbreviated": _(
+                        "Array (Zahlen) [Unterfrage eins][Unterfrage eins]"
+                    ),
                 },
                 ":",
                 "string",
@@ -306,7 +319,9 @@ class ExportQuestionnaireTest(ExportTestCase):
                 {
                     "code": "arrayzahlen[SQ002_SQ001]",
                     "full": _("Array (Zahlen) [Unterfrage zwei][Unterfrage eins]"),
-                    "abbreviated": _("Array (Zahlen) [Unterfrage zwei][Unterfrage eins]"),
+                    "abbreviated": _(
+                        "Array (Zahlen) [Unterfrage zwei][Unterfrage eins]"
+                    ),
                 },
                 ":",
                 "string",
@@ -316,7 +331,9 @@ class ExportQuestionnaireTest(ExportTestCase):
                 {
                     "code": "arraytexte[SQ001_SQ001]",
                     "full": _("Array (Texte) [Unterfrage eins][Unterfrage eins]"),
-                    "abbreviated": _("Array (Texte) [Unterfrage eins][Unterfrage eins]"),
+                    "abbreviated": _(
+                        "Array (Texte) [Unterfrage eins][Unterfrage eins]"
+                    ),
                 },
                 ";",
                 "string",
@@ -326,7 +343,9 @@ class ExportQuestionnaireTest(ExportTestCase):
                 {
                     "code": "arraytexte[SQ001_SQ002]",
                     "full": _("Array (Texte) [Unterfrage eins][Unterfrage zwei]"),
-                    "abbreviated": _("Array (Texte) [Unterfrage eins][Unterfrage zwei]"),
+                    "abbreviated": _(
+                        "Array (Texte) [Unterfrage eins][Unterfrage zwei]"
+                    ),
                 },
                 ";",
                 "string",
@@ -654,7 +673,8 @@ class ExportQuestionnaireTest(ExportTestCase):
         # Assertions for first group
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group1.title), "Experimental_protocol") in element
+                os.path.join("Group_" + slugify(group1.title), "Experimental_protocol")
+                in element
                 for element in zipped_file.namelist()
             ),
             os.path.join("Group_" + slugify(group1.title), "Experimental_Protocol")
@@ -663,14 +683,18 @@ class ExportQuestionnaireTest(ExportTestCase):
         )
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group1.title), "Per_participant") in element
+                os.path.join("Group_" + slugify(group1.title), "Per_participant")
+                in element
                 for element in zipped_file.namelist()
             ),
-            os.path.join("Group_" + slugify(group1.title), "Per_participant") + "not in:" + str(zipped_file.namelist()),
+            os.path.join("Group_" + slugify(group1.title), "Per_participant")
+            + "not in:"
+            + str(zipped_file.namelist()),
         )
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group1.title), "Per_questionnaire") in element
+                os.path.join("Group_" + slugify(group1.title), "Per_questionnaire")
+                in element
                 for element in zipped_file.namelist()
             ),
             os.path.join("Group_" + slugify(group1.title), "Per_questionnaire")
@@ -679,7 +703,8 @@ class ExportQuestionnaireTest(ExportTestCase):
         )
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group1.title), "Questionnaire_metadata") in element
+                os.path.join("Group_" + slugify(group1.title), "Questionnaire_metadata")
+                in element
                 for element in zipped_file.namelist()
             ),
             os.path.join("Group_" + slugify(group1.title), "Questionnaire_metadata")
@@ -690,7 +715,8 @@ class ExportQuestionnaireTest(ExportTestCase):
         # Assertions for second group
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group2.title), "Experimental_protocol") in element
+                os.path.join("Group_" + slugify(group2.title), "Experimental_protocol")
+                in element
                 for element in zipped_file.namelist()
             ),
             os.path.join("Group_" + slugify(group2.title), "Experimental_Protocol")
@@ -699,14 +725,18 @@ class ExportQuestionnaireTest(ExportTestCase):
         )
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group2.title), "Per_participant") in element
+                os.path.join("Group_" + slugify(group2.title), "Per_participant")
+                in element
                 for element in zipped_file.namelist()
             ),
-            os.path.join("Group_" + slugify(group2.title), "Per_participant") + "not in:" + str(zipped_file.namelist()),
+            os.path.join("Group_" + slugify(group2.title), "Per_participant")
+            + "not in:"
+            + str(zipped_file.namelist()),
         )
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group2.title), "Per_questionnaire") in element
+                os.path.join("Group_" + slugify(group2.title), "Per_questionnaire")
+                in element
                 for element in zipped_file.namelist()
             ),
             os.path.join("Group_" + slugify(group2.title), "Per_questionnaire")
@@ -715,7 +745,8 @@ class ExportQuestionnaireTest(ExportTestCase):
         )
         self.assertTrue(
             any(
-                os.path.join("Group_" + slugify(group2.title), "Questionnaire_metadata") in element
+                os.path.join("Group_" + slugify(group2.title), "Questionnaire_metadata")
+                in element
                 for element in zipped_file.namelist()
             ),
             os.path.join("Group_" + slugify(group2.title), "Questionnaire_metadata")
@@ -725,7 +756,9 @@ class ExportQuestionnaireTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_same_questionnaire_used_in_different_steps_return_correct_responses_content(self, mockServer):
+    def test_same_questionnaire_used_in_different_steps_return_correct_responses_content(
+        self, mockServer
+    ):
         """Without reuse"""
 
         set_mocks1(mockServer)
@@ -827,7 +860,9 @@ class ExportQuestionnaireTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_same_questionnaire_used_in_different_steps_return_correct_zipfile_content(self, mockServer):
+    def test_same_questionnaire_used_in_different_steps_return_correct_zipfile_content(
+        self, mockServer
+    ):
         set_mocks2(mockServer)
 
         # Create other component (step) QUESTIONNAIRE in same experimental
@@ -933,7 +968,9 @@ class ExportQuestionnaireTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_two_groups_with_questionnaire_step_in_both_returns_correct_directory_structure(self, mockServer):
+    def test_two_groups_with_questionnaire_step_in_both_returns_correct_directory_structure(
+        self, mockServer
+    ):
         set_mocks3(mockServer)
 
         # Create other group/experimental protocol
@@ -955,7 +992,9 @@ class ExportQuestionnaireTest(ExportTestCase):
             subject_of_group=subject_of_group2,
         )
 
-        self.append_session_variable("group_selected_list", [str(self.group.id), str(group2.id)])
+        self.append_session_variable(
+            "group_selected_list", [str(self.group.id), str(group2.id)]
+        )
         self.append_session_variable("license", "0")
 
         # Post data to view: data style that is posted to export_view in
@@ -998,7 +1037,11 @@ class ExportQuestionnaireTest(ExportTestCase):
                 + "*"
                 + str(LIMESURVEY_SURVEY_ID_1)
                 + "*Test questionnaire*secondQuestion*secondQuestion",
-                "1*" + str(group2.id) + "*" + str(LIMESURVEY_SURVEY_ID_1) + "*Test questionnaire*fileUpload*fileUpload",
+                "1*"
+                + str(group2.id)
+                + "*"
+                + str(LIMESURVEY_SURVEY_ID_1)
+                + "*Test questionnaire*fileUpload*fileUpload",
             ],
             "patient_selected": ["age*age"],
             "responses": ["short"],
@@ -1013,7 +1056,9 @@ class ExportQuestionnaireTest(ExportTestCase):
     @override_settings(LANGUAGE_CODE="en-US", LANGUAGES=(("en", "English"),))
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_has_correct_header_fields_in_questionnaire_responses_file(self, mockServer):
+    def test_export_has_correct_header_fields_in_questionnaire_responses_file(
+        self, mockServer
+    ):
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
 
@@ -1113,7 +1158,9 @@ class ExportQuestionnaireTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_reusing_experimental_protocol_in_two_groups_returns_correct_directory_structure(self, mockServer):
+    def test_reusing_experimental_protocol_in_two_groups_returns_correct_directory_structure(
+        self, mockServer
+    ):
         set_mocks3(mockServer)
 
         # Create other group and associate the same experimental protocol
@@ -1131,7 +1178,9 @@ class ExportQuestionnaireTest(ExportTestCase):
             subject_of_group=subject_of_group2,
         )
 
-        self.append_session_variable("group_selected_list", [str(self.group.id), str(group2.id)])
+        self.append_session_variable(
+            "group_selected_list", [str(self.group.id), str(group2.id)]
+        )
         self.append_session_variable("license", "0")
 
         # Post data to view: data style that is posted to export_view in
@@ -1177,7 +1226,11 @@ class ExportQuestionnaireTest(ExportTestCase):
                 + "*"
                 + str(LIMESURVEY_SURVEY_ID_1)
                 + "*Test questionnaire*secondQuestion*secondQuestion",
-                "1*" + str(group2.id) + "*" + str(LIMESURVEY_SURVEY_ID_1) + "*Test questionnaire*fileUpload*fileUpload",
+                "1*"
+                + str(group2.id)
+                + "*"
+                + str(LIMESURVEY_SURVEY_ID_1)
+                + "*Test questionnaire*fileUpload*fileUpload",
             ],
             "patient_selected": ["age*age"],
             "responses": ["short"],
@@ -1226,7 +1279,9 @@ class ExportQuestionnaireTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_participant_age_in_responses_is_age_when_questionnaire_was_filled_1(self, mockServer):
+    def test_participant_age_in_responses_is_age_when_questionnaire_was_filled_1(
+        self, mockServer
+    ):
         """Test over experiment questionnaire response"""
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -1305,14 +1360,18 @@ class ExportQuestionnaireTest(ExportTestCase):
                     rows.append(row)
                 self.assertEqual(
                     rows[1][1],
-                    ExportParticipantsTest.subject_age(self.patient.date_birth, self.questionnaire_response),
+                    ExportParticipantsTest.subject_age(
+                        self.patient.date_birth, self.questionnaire_response
+                    ),
                 )
 
             shutil.rmtree(temp_dir)
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_participant_age_in_responses_is_age_when_questionnaire_was_filled_2(self, mockServer):
+    def test_participant_age_in_responses_is_age_when_questionnaire_was_filled_2(
+        self, mockServer
+    ):
         """Test over participant questionnaire responses"""
 
         set_mocks5(mockServer)
@@ -1334,10 +1393,18 @@ class ExportQuestionnaireTest(ExportTestCase):
             "action": ["run"],
             "headings": ["code"],
             "to[]": [
-                "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*Test questionnaire*acquisitiondate*acquisitiondate",
-                "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*Test questionnaire*firstQuestion*firstQuestion",
-                "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*Test questionnaire*secondQuestion*secondQuestion",
-                "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*Test questionnaire*fileUpload*fileUpload",
+                "0*"
+                + str(LIMESURVEY_SURVEY_ID_1)
+                + "*Test questionnaire*acquisitiondate*acquisitiondate",
+                "0*"
+                + str(LIMESURVEY_SURVEY_ID_1)
+                + "*Test questionnaire*firstQuestion*firstQuestion",
+                "0*"
+                + str(LIMESURVEY_SURVEY_ID_1)
+                + "*Test questionnaire*secondQuestion*secondQuestion",
+                "0*"
+                + str(LIMESURVEY_SURVEY_ID_1)
+                + "*Test questionnaire*fileUpload*fileUpload",
             ],
             "patient_selected": ["age*age"],
             "responses": ["short"],
@@ -1347,9 +1414,13 @@ class ExportQuestionnaireTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         zipped_file = self.get_zipped_file(response)
-        zipped_file.extract(os.path.join(input_export.BASE_DIRECTORY, "Participants.csv"), temp_dir)
+        zipped_file.extract(
+            os.path.join(input_export.BASE_DIRECTORY, "Participants.csv"), temp_dir
+        )
 
-        with open(os.path.join(temp_dir, input_export.BASE_DIRECTORY, "Participants.csv")) as file:
+        with open(
+            os.path.join(temp_dir, input_export.BASE_DIRECTORY, "Participants.csv")
+        ) as file:
             csvreader = csv.reader(file)
             rows = []
             for row in csvreader:
@@ -1520,18 +1591,26 @@ class ExportDataCollectionTest(ExportTestCase):
     def test_export_experiment_with_generic_data_colletion(self):
         # Create generic data collection (gdc) component
         it = ObjectsFactory.create_information_type()
-        gdc = ObjectsFactory.create_component(self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it})
+        gdc = ObjectsFactory.create_component(
+            self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it}
+        )
 
         # Include gdc component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, gdc)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, gdc
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' generic data collection file
-        gdc_data = ObjectsFactory.create_generic_data_collection_data(dct, self.subject_of_group)
+        gdc_data = ObjectsFactory.create_generic_data_collection_data(
+            dct, self.subject_of_group
+        )
         gdcf = ObjectsFactory.create_generic_data_collection_file(gdc_data)
 
         # Create additional data to this step
-        additional_data = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
 
         adf = ObjectsFactory.create_additional_data_file(additional_data)
 
@@ -1556,9 +1635,13 @@ class ExportDataCollectionTest(ExportTestCase):
 
         # We have only the generic_data_collection step, so we get the first
         # element: [0]
-        path = create_list_of_trees(self.group.experimental_protocol, "generic_data_collection")[0]
+        path = create_list_of_trees(
+            self.group.experimental_protocol, "generic_data_collection"
+        )[0]
 
-        generic_component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
+        generic_component_configuration = ComponentConfiguration.objects.get(
+            pk=path[-1][0]
+        )
         component_step = generic_component_configuration.component
         step_number = path[-1][4]
 
@@ -1592,17 +1675,23 @@ class ExportDataCollectionTest(ExportTestCase):
         )
 
         # Include dgp component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, dgp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, dgp
+        )
 
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' digital game data file
-        dgp_data = ObjectsFactory.create_digital_game_phase_data(dct, self.subject_of_group)
+        dgp_data = ObjectsFactory.create_digital_game_phase_data(
+            dct, self.subject_of_group
+        )
 
         dgpf = ObjectsFactory.create_digital_game_phase_file(dgp_data)
 
         # Create additional data to this step
-        additional_data = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
 
         adf = ObjectsFactory.create_additional_data_file(additional_data)
 
@@ -1627,9 +1716,13 @@ class ExportDataCollectionTest(ExportTestCase):
 
         # We have only the digital_game_phase step, so we get the first
         # element: [0]
-        path = create_list_of_trees(self.group.experimental_protocol, "digital_game_phase")[0]
+        path = create_list_of_trees(
+            self.group.experimental_protocol, "digital_game_phase"
+        )[0]
 
-        digital_game_phase_component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
+        digital_game_phase_component_configuration = ComponentConfiguration.objects.get(
+            pk=path[-1][0]
+        )
         component_step = digital_game_phase_component_configuration.component
         step_number = path[-1][4]
 
@@ -1652,10 +1745,14 @@ class ExportDataCollectionTest(ExportTestCase):
     def test_export_experiment_with_eeg(self):
         # Create eeg component
         eeg_set = ObjectsFactory.create_eeg_setting(self.experiment)
-        eeg_comp = ObjectsFactory.create_component(self.experiment, Component.EEG, kwargs={"eeg_set": eeg_set})
+        eeg_comp = ObjectsFactory.create_component(
+            self.experiment, Component.EEG, kwargs={"eeg_set": eeg_set}
+        )
 
         # Include eeg component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, eeg_comp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, eeg_comp
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' eeg file
@@ -1663,7 +1760,9 @@ class ExportDataCollectionTest(ExportTestCase):
         eegf = ObjectsFactory.create_eeg_file(eegdata)
 
         # Create additional data to this step
-        additional_data = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
         adf = ObjectsFactory.create_additional_data_file(additional_data)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -1714,19 +1813,29 @@ class ExportDataCollectionTest(ExportTestCase):
         self.software = ObjectsFactory.create_software(self.manufacturer)
         self.software_version = ObjectsFactory.create_software_version(self.software)
         self.tag_emg = ObjectsFactory.create_tag("EMG")
-        emg_set = ObjectsFactory.create_emg_setting(self.experiment, self.software_version)
-        emg_comp = ObjectsFactory.create_component(self.experiment, Component.EMG, kwargs={"emg_set": emg_set})
+        emg_set = ObjectsFactory.create_emg_setting(
+            self.experiment, self.software_version
+        )
+        emg_comp = ObjectsFactory.create_component(
+            self.experiment, Component.EMG, kwargs={"emg_set": emg_set}
+        )
 
         # Include emg component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, emg_comp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, emg_comp
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' emg file
-        emgdata = ObjectsFactory.create_emg_data_collection_data(dct, self.subject_of_group, emg_set)
+        emgdata = ObjectsFactory.create_emg_data_collection_data(
+            dct, self.subject_of_group, emg_set
+        )
         emgf = ObjectsFactory.create_emg_data_collection_file(emgdata)
 
         # Create additional data to this step
-        additional_data = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
 
         adf = ObjectsFactory.create_additional_data_file(additional_data)
 
@@ -1776,13 +1885,19 @@ class ExportDataCollectionTest(ExportTestCase):
     def test_export_experiment_with_tms(self):
         # Create tms component
         tms_set = ObjectsFactory.create_tms_setting(self.experiment)
-        tms_comp = ObjectsFactory.create_component(self.experiment, Component.TMS, kwargs={"tms_set": tms_set})
+        tms_comp = ObjectsFactory.create_component(
+            self.experiment, Component.TMS, kwargs={"tms_set": tms_set}
+        )
 
         # Include tms component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, tms_comp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, tms_comp
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
-        doic = DirectionOfTheInducedCurrent.objects.create(name="Direction of Induced Current")
+        doic = DirectionOfTheInducedCurrent.objects.create(
+            name="Direction of Induced Current"
+        )
         coilor = CoilOrientation.objects.create(name="Coil Orientation")
 
         tmsdataaux = TMSData.objects.create(
@@ -1796,7 +1911,9 @@ class ExportDataCollectionTest(ExportTestCase):
 
         brainareasystem = BrainAreaSystem.objects.create(name="Lobo frontal")
 
-        brainarea = BrainArea.objects.create(name="Lobo frontal", brain_area_system=brainareasystem)
+        brainarea = BrainArea.objects.create(
+            name="Lobo frontal", brain_area_system=brainareasystem
+        )
 
         temp_dir = tempfile.mkdtemp()
         with open(os.path.join(temp_dir, "image.bin"), "wb") as f:
@@ -1818,7 +1935,9 @@ class ExportDataCollectionTest(ExportTestCase):
         ObjectsFactory.create_hotspot_data_collection_file(hotspot)
 
         # Create additional data to this step
-        additional_data = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
 
         adf = ObjectsFactory.create_additional_data_file(additional_data)
 
@@ -1871,28 +1990,42 @@ class ExportDataCollectionTest(ExportTestCase):
 
         # Create generic data collection (gdc) component
         it = ObjectsFactory.create_information_type()
-        gdc = ObjectsFactory.create_component(self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it})
+        gdc = ObjectsFactory.create_component(
+            self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it}
+        )
 
         # Include gdc component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, gdc)
-        component_config1 = ObjectsFactory.create_component_configuration(root_component1, gdc)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, gdc
+        )
+        component_config1 = ObjectsFactory.create_component_configuration(
+            root_component1, gdc
+        )
 
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
         dct1 = ObjectsFactory.create_data_configuration_tree(component_config1)
 
         # 'upload' generic data collection file
-        gdc_data = ObjectsFactory.create_generic_data_collection_data(dct, self.subject_of_group)
-        gdc_data1 = ObjectsFactory.create_generic_data_collection_data(dct1, subject_of_group1)
+        gdc_data = ObjectsFactory.create_generic_data_collection_data(
+            dct, self.subject_of_group
+        )
+        gdc_data1 = ObjectsFactory.create_generic_data_collection_data(
+            dct1, subject_of_group1
+        )
 
         gdc = ObjectsFactory.create_generic_data_collection_file(gdc_data)
         gdc1 = ObjectsFactory.create_generic_data_collection_file(gdc_data1)
 
         # Create additional data to this step
-        additional_data = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
 
         adf = ObjectsFactory.create_additional_data_file(additional_data)
 
-        self.append_session_variable("group_selected_list", [str(self.group.id), str(group1.id)])
+        self.append_session_variable(
+            "group_selected_list", [str(self.group.id), str(group1.id)]
+        )
         self.append_session_variable("license", "0")
 
         # Post data to view: data style that is posted to export_view in
@@ -1911,8 +2044,12 @@ class ExportDataCollectionTest(ExportTestCase):
         response = self.client.post(reverse("export_view"), data)
         zipped_file = self.get_zipped_file(response)
 
-        for path in create_list_of_trees(self.group.experimental_protocol, "generic_data_collection"):
-            generic_component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
+        for path in create_list_of_trees(
+            self.group.experimental_protocol, "generic_data_collection"
+        ):
+            generic_component_configuration = ComponentConfiguration.objects.get(
+                pk=path[-1][0]
+            )
             component_step = generic_component_configuration.component
             step_number = path[-1][4]
 
@@ -1981,28 +2118,44 @@ class ExportDataCollectionTest(ExportTestCase):
         )
 
         # Include dgp component in experimental protocol
-        component_config: ComponentConfiguration = ObjectsFactory.create_component_configuration(
-            self.root_component, dgp
+        component_config: ComponentConfiguration = (
+            ObjectsFactory.create_component_configuration(self.root_component, dgp)
         )
-        component_config1: ComponentConfiguration = ObjectsFactory.create_component_configuration(root_component1, dgp)
+        component_config1: ComponentConfiguration = (
+            ObjectsFactory.create_component_configuration(root_component1, dgp)
+        )
 
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
         dct1 = ObjectsFactory.create_data_configuration_tree(component_config1)
 
         # 'upload' data game phase collection file
-        dgp_data: DigitalGamePhaseData = ObjectsFactory.create_digital_game_phase_data(dct, self.subject_of_group)
+        dgp_data: DigitalGamePhaseData = ObjectsFactory.create_digital_game_phase_data(
+            dct, self.subject_of_group
+        )
 
-        dgp_data1: DigitalGamePhaseData = ObjectsFactory.create_digital_game_phase_data(dct1, subject_of_group1)
+        dgp_data1: DigitalGamePhaseData = ObjectsFactory.create_digital_game_phase_data(
+            dct1, subject_of_group1
+        )
 
-        dgp: DigitalGamePhaseFile = ObjectsFactory.create_digital_game_phase_file(dgp_data)
-        dgp1: DigitalGamePhaseFile = ObjectsFactory.create_digital_game_phase_file(dgp_data1)
+        dgp: DigitalGamePhaseFile = ObjectsFactory.create_digital_game_phase_file(
+            dgp_data
+        )
+        dgp1: DigitalGamePhaseFile = ObjectsFactory.create_digital_game_phase_file(
+            dgp_data1
+        )
 
         # Create additional data to this step
-        additional_data: AdditionalData = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data: AdditionalData = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
 
-        adf: AdditionalDataFile = ObjectsFactory.create_additional_data_file(additional_data)
+        adf: AdditionalDataFile = ObjectsFactory.create_additional_data_file(
+            additional_data
+        )
 
-        self.append_session_variable("group_selected_list", [str(self.group.id), str(group1.id)])
+        self.append_session_variable(
+            "group_selected_list", [str(self.group.id), str(group1.id)]
+        )
         self.append_session_variable("license", "0")
 
         # Post data to view: data style that is posted to export_view in
@@ -2021,8 +2174,12 @@ class ExportDataCollectionTest(ExportTestCase):
         response: HttpResponse = self.client.post(reverse("export_view"), data)
         zipped_file: zipfile.ZipFile = self.get_zipped_file(response)
 
-        for path in create_list_of_trees(self.group.experimental_protocol, "generic_data_collection"):
-            generic_component_configuration: ComponentConfiguration = ComponentConfiguration.objects.get(pk=path[-1][0])
+        for path in create_list_of_trees(
+            self.group.experimental_protocol, "generic_data_collection"
+        ):
+            generic_component_configuration: ComponentConfiguration = (
+                ComponentConfiguration.objects.get(pk=path[-1][0])
+            )
             component_step: Component = generic_component_configuration.component
             step_number = path[-1][4]
 
@@ -2042,8 +2199,12 @@ class ExportDataCollectionTest(ExportTestCase):
                 zipped_file,
             )
 
-        for path in create_list_of_trees(group1.experimental_protocol, "generic_data_collection"):
-            generic_component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
+        for path in create_list_of_trees(
+            group1.experimental_protocol, "generic_data_collection"
+        ):
+            generic_component_configuration = ComponentConfiguration.objects.get(
+                pk=path[-1][0]
+            )
             component_step = generic_component_configuration.component
             step_number = path[-1][4]
 
@@ -2067,7 +2228,9 @@ class ExportDataCollectionTest(ExportTestCase):
     def test_step_additional_data(self):
         # Create generic data collection (gdc) component, it could been any data collection
         it = ObjectsFactory.create_information_type()
-        gdc = ObjectsFactory.create_component(self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it})
+        gdc = ObjectsFactory.create_component(
+            self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it}
+        )
 
         # Create a file and add it as an additional file of the step
         with tempfile.TemporaryDirectory() as tmpdirname:
@@ -2077,15 +2240,21 @@ class ExportDataCollectionTest(ExportTestCase):
                     ComponentAdditionalFile.objects.create(component=gdc, file=file)
 
         # Include gdc component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, gdc)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, gdc
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' generic data collection file
-        gdc_data = ObjectsFactory.create_generic_data_collection_data(dct, self.subject_of_group)
+        gdc_data = ObjectsFactory.create_generic_data_collection_data(
+            dct, self.subject_of_group
+        )
         ObjectsFactory.create_generic_data_collection_file(gdc_data)
 
         # Create additional data to this subject of group
-        additional_data = ObjectsFactory.create_additional_data_data(dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            dct, self.subject_of_group
+        )
 
         ObjectsFactory.create_additional_data_file(additional_data)
 
@@ -2114,8 +2283,12 @@ class ExportDataCollectionTest(ExportTestCase):
 
         # we have only the generic_data_collection step, so we get the first
         # element: [0]
-        path = create_list_of_trees(self.group.experimental_protocol, "generic_data_collection")[0]
-        generic_component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
+        path = create_list_of_trees(
+            self.group.experimental_protocol, "generic_data_collection"
+        )[0]
+        generic_component_configuration = ComponentConfiguration.objects.get(
+            pk=path[-1][0]
+        )
         component_step = generic_component_configuration.component
         step_number = path[-1][4]
 
@@ -2143,7 +2316,9 @@ class ExportDataCollectionTest(ExportTestCase):
                 )
 
         # Include gdc component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, stimulus)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, stimulus
+        )
         ObjectsFactory.create_data_configuration_tree(component_config)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -2173,11 +2348,15 @@ class ExportDataCollectionTest(ExportTestCase):
         # We have only the generic_data_collection step, so we get the first
         # element: [0]
         path = create_list_of_trees(self.group.experimental_protocol, "stimulus")[0]
-        stimulus_component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
+        stimulus_component_configuration = ComponentConfiguration.objects.get(
+            pk=path[-1][0]
+        )
         component_step = stimulus_component_configuration.component
         step_number = path[-1][4]
 
-        self.assert_step_data_files_exists(step_number, component_step, "", os.path.basename(f.name), zipped_file)
+        self.assert_step_data_files_exists(
+            step_number, component_step, "", os.path.basename(f.name), zipped_file
+        )
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     def test_export_participants_age_is_age_at_first_data_collection(self):
@@ -2186,10 +2365,16 @@ class ExportDataCollectionTest(ExportTestCase):
         """
         # Generic data collection (gdc) stuff
         it = ObjectsFactory.create_information_type()
-        gdc = ObjectsFactory.create_component(self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it})
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, gdc)
+        gdc = ObjectsFactory.create_component(
+            self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it}
+        )
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, gdc
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
-        gdc_data = ObjectsFactory.create_generic_data_collection_data(dct, self.subject_of_group)
+        gdc_data = ObjectsFactory.create_generic_data_collection_data(
+            dct, self.subject_of_group
+        )
         # change generic data collection date for testing
         gdc_data.date = date(2018, 7, 7)
         gdc_data.save()
@@ -2197,8 +2382,12 @@ class ExportDataCollectionTest(ExportTestCase):
 
         # eeg data collection stuff
         eeg_set = ObjectsFactory.create_eeg_setting(self.experiment)
-        eeg_comp = ObjectsFactory.create_component(self.experiment, Component.EEG, kwargs={"eeg_set": eeg_set})
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, eeg_comp)
+        eeg_comp = ObjectsFactory.create_component(
+            self.experiment, Component.EEG, kwargs={"eeg_set": eeg_set}
+        )
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, eeg_comp
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
         eeg_data = ObjectsFactory.create_eeg_data(dct, self.subject_of_group, eeg_set)
         # change eeg data collection date for testing
@@ -2225,7 +2414,9 @@ class ExportDataCollectionTest(ExportTestCase):
         temp_dir = tempfile.mkdtemp()
         zipped_file = self.get_zipped_file(response)
         zipped_file.extract(
-            os.path.join(input_export.BASE_DIRECTORY, "Participant_data", "Participants.csv"),
+            os.path.join(
+                input_export.BASE_DIRECTORY, "Participant_data", "Participants.csv"
+            ),
             temp_dir,
         )
 
@@ -2241,7 +2432,9 @@ class ExportDataCollectionTest(ExportTestCase):
             rows = []
             for row in csvreader:
                 rows.append(row)
-            self.assertEqual(rows[1][1], self.subject_age(self.patient.date_birth, eeg_data))
+            self.assertEqual(
+                rows[1][1], self.subject_age(self.patient.date_birth, eeg_data)
+            )
 
         shutil.rmtree(temp_dir)
 
@@ -2249,7 +2442,9 @@ class ExportDataCollectionTest(ExportTestCase):
     def test_export_participants_age_is_age_today_if_no_data_collection(self):
         # Create eeg step
         eeg_set = ObjectsFactory.create_eeg_setting(self.experiment)
-        eeg_comp = ObjectsFactory.create_component(self.experiment, Component.EEG, kwargs={"eeg_set": eeg_set})
+        eeg_comp = ObjectsFactory.create_component(
+            self.experiment, Component.EEG, kwargs={"eeg_set": eeg_set}
+        )
         ObjectsFactory.create_component_configuration(self.root_component, eeg_comp)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -2271,7 +2466,9 @@ class ExportDataCollectionTest(ExportTestCase):
         temp_dir = tempfile.mkdtemp()
         zipped_file = self.get_zipped_file(response)
         zipped_file.extract(
-            os.path.join(input_export.BASE_DIRECTORY, "Participant_data", "Participants.csv"),
+            os.path.join(
+                input_export.BASE_DIRECTORY, "Participant_data", "Participants.csv"
+            ),
             temp_dir,
         )
 
@@ -2312,7 +2509,9 @@ class ExportParticipantsTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("export.export.ExportExecution.get_directory_base")
-    def test_create_directory_fails_returns_error_message(self, get_directory_base_mock):
+    def test_create_directory_fails_returns_error_message(
+        self, get_directory_base_mock
+    ):
         get_directory_base_mock.return_value = "/non/existent/path"
         data = {"patient_selected": ["age*age"], "action": ["run"]}
         response = self.client.post(reverse("export_view"), data, follow=True)
@@ -2329,12 +2528,18 @@ class ExportParticipantsTest(ExportTestCase):
 
         export = Export.objects.first()
         self.assertFalse(
-            os.path.exists(os.path.join(TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id)))
+            os.path.exists(
+                os.path.join(
+                    TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id)
+                )
+            )
         )
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("export.export.ExportExecution.is_input_data_consistent")
-    def test_input_data_is_inconsistent_returns_error_message(self, is_input_data_consistent_mock):
+    def test_input_data_is_inconsistent_returns_error_message(
+        self, is_input_data_consistent_mock
+    ):
         is_input_data_consistent_mock.return_value = False
         data = {"patient_selected": ["age*age"], "action": ["run"]}
         response = self.client.post(reverse("export_view"), data, follow=True)
@@ -2344,19 +2549,27 @@ class ExportParticipantsTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("export.export.ExportExecution.is_input_data_consistent")
-    def test_input_data_is_inconsistent_removes_export_dir(self, is_input_data_consistent_mock):
+    def test_input_data_is_inconsistent_removes_export_dir(
+        self, is_input_data_consistent_mock
+    ):
         is_input_data_consistent_mock.return_value = False
         data = {"patient_selected": ["age*age"], "action": ["run"]}
         self.client.post(reverse("export_view"), data, follow=True)
 
         export = Export.objects.first()
         self.assertFalse(
-            os.path.exists(os.path.join(TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id)))
+            os.path.exists(
+                os.path.join(
+                    TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id)
+                )
+            )
         )
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("export.export.ExportExecution.create_export_directory")
-    def test_create_export_directory_fails_return_error_message(self, create_export_directory_mock):
+    def test_create_export_directory_fails_return_error_message(
+        self, create_export_directory_mock
+    ):
         pass  # TODO: continue here when come back to NES-983
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -2368,9 +2581,13 @@ class ExportParticipantsTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         zipped_file = self.get_zipped_file(response)
-        zipped_file.extract(os.path.join(input_export.BASE_DIRECTORY, "Participants.csv"), temp_dir)
+        zipped_file.extract(
+            os.path.join(input_export.BASE_DIRECTORY, "Participants.csv"), temp_dir
+        )
 
-        with open(os.path.join(temp_dir, input_export.BASE_DIRECTORY, "Participants.csv")) as file:
+        with open(
+            os.path.join(temp_dir, input_export.BASE_DIRECTORY, "Participants.csv")
+        ) as file:
             csvreader = csv.reader(file)
             rows = []
             for row in csvreader:
@@ -2382,7 +2599,9 @@ class ExportParticipantsTest(ExportTestCase):
     def test_export_participants_does_not_select_any_attribute_returns_redirect_and_display_warning_message(
         self,
     ):
-        response = self.client.post(reverse("export_view"), {"action": ["run"]}, follow=True)
+        response = self.client.post(
+            reverse("export_view"), {"action": ["run"]}, follow=True
+        )
         # After POSTing without 'patient_selected' as key for data nargs, the
         # system first redirects to export/view, then to export/, so take
         # the first redirection url and status code.
@@ -2408,13 +2627,17 @@ class ExportSelectionTest(ExportTestCase):
             "action": "next-step-participants",
         }
 
-        self.append_session_variable("id_research_projects", [str(self.experiment.research_project.id)])
+        self.append_session_variable(
+            "id_research_projects", [str(self.experiment.research_project.id)]
+        )
         self.append_session_variable("id_experiments", [str(self.experiment.id)])
         self.append_session_variable("group_selected", [str(self.group.id)])
 
         response = self.client.post(reverse("experiment_selection"), data)
 
-        self.assertRedirects(response, "/export/view/", status_code=302, target_status_code=200)
+        self.assertRedirects(
+            response, "/export/view/", status_code=302, target_status_code=200
+        )
 
     def test_experiment_selection_without_select_group(self):
         data = {
@@ -2423,7 +2646,9 @@ class ExportSelectionTest(ExportTestCase):
             "action": "next-step-participants",
         }
 
-        self.append_session_variable("id_research_projects", [str(self.experiment.research_project.id)])
+        self.append_session_variable(
+            "id_research_projects", [str(self.experiment.research_project.id)]
+        )
         self.append_session_variable("id_experiments", [str(self.experiment.id)])
         response = self.client.post(reverse("experiment_selection"), data)
         self.assertEqual(response.status_code, 200)
@@ -2452,11 +2677,15 @@ class ExportSelectionTest(ExportTestCase):
         }
         response = self.client.post(reverse("export_view"), data)
 
-        response2 = self.client.post(response.url, {"username": self.user.username, "password": self.user_passwd})
+        response2 = self.client.post(
+            response.url, {"username": self.user.username, "password": self.user_passwd}
+        )
 
         # when session expires the request is made with get
         response3 = self.client.get(response2.url)
-        self.assertRedirects(response3, reverse("export_menu"), status_code=302, target_status_code=200)
+        self.assertRedirects(
+            response3, reverse("export_menu"), status_code=302, target_status_code=200
+        )
 
     def test_experiment_selection_appends_license_to_request_session_and_redirects_to_export_view(
         self,
@@ -2470,7 +2699,9 @@ class ExportSelectionTest(ExportTestCase):
         }
         response = self.client.post(reverse("experiment_selection"), data)
 
-        self.assertRedirects(response, "/export/view/", status_code=302, target_status_code=200)
+        self.assertRedirects(
+            response, "/export/view/", status_code=302, target_status_code=200
+        )
         self.assertIn("license", self.client.session)
         self.assertEqual(self.client.session["license"], "0")
 
@@ -2497,26 +2728,38 @@ class ExportFrictionlessDataTest(ExportTestCase):
     def _create_eeg_export_data(self):
         # Create eeg component (could be other component type or more than one component)
         self.eeg_set = ObjectsFactory.create_eeg_setting(self.experiment)
-        eeg_comp = ObjectsFactory.create_component(self.experiment, Component.EEG, kwargs={"eeg_set": self.eeg_set})
+        eeg_comp = ObjectsFactory.create_component(
+            self.experiment, Component.EEG, kwargs={"eeg_set": self.eeg_set}
+        )
 
         # Include eeg component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, eeg_comp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, eeg_comp
+        )
         # self.dct to be used in other test
         self.dct_eeg = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' eeg file
-        eegdata = ObjectsFactory.create_eeg_data(self.dct_eeg, self.subject_of_group, self.eeg_set)
+        eegdata = ObjectsFactory.create_eeg_data(
+            self.dct_eeg, self.subject_of_group, self.eeg_set
+        )
         ObjectsFactory.create_eeg_file(eegdata)
 
     def _create_tms_export_data(self, temp_dir):
         tms_set = ObjectsFactory.create_tms_setting(self.experiment)
-        tms_comp = ObjectsFactory.create_component(self.experiment, Component.TMS, kwargs={"tms_set": tms_set})
+        tms_comp = ObjectsFactory.create_component(
+            self.experiment, Component.TMS, kwargs={"tms_set": tms_set}
+        )
 
         # Include tms component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, tms_comp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, tms_comp
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
-        doic = DirectionOfTheInducedCurrent.objects.create(name="Direction of Induced Current")
+        doic = DirectionOfTheInducedCurrent.objects.create(
+            name="Direction of Induced Current"
+        )
         coilor = CoilOrientation.objects.create(name="Coil Orientation")
 
         tmsdata = TMSData.objects.create(
@@ -2529,7 +2772,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         )
 
         brainareasystem = BrainAreaSystem.objects.create(name="Lobo frontal")
-        brainarea = BrainArea.objects.create(name="Lobo frontal", brain_area_system=brainareasystem)
+        brainarea = BrainArea.objects.create(
+            name="Lobo frontal", brain_area_system=brainareasystem
+        )
 
         with open(os.path.join(temp_dir, "image.bin"), "wb") as f:
             f.write(b"carambola")
@@ -2551,15 +2796,23 @@ class ExportFrictionlessDataTest(ExportTestCase):
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         software_version = ObjectsFactory.create_software_version(software)
-        self.emg_set = ObjectsFactory.create_emg_setting(self.experiment, software_version)
-        emg_comp = ObjectsFactory.create_component(self.experiment, Component.EMG, kwargs={"emg_set": self.emg_set})
+        self.emg_set = ObjectsFactory.create_emg_setting(
+            self.experiment, software_version
+        )
+        emg_comp = ObjectsFactory.create_component(
+            self.experiment, Component.EMG, kwargs={"emg_set": self.emg_set}
+        )
 
         # Include emg component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, emg_comp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, emg_comp
+        )
         self.dct_emg = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' emg file
-        self.emgdata = ObjectsFactory.create_emg_data_collection_data(self.dct_emg, self.subject_of_group, self.emg_set)
+        self.emgdata = ObjectsFactory.create_emg_data_collection_data(
+            self.dct_emg, self.subject_of_group, self.emg_set
+        )
         ObjectsFactory.create_emg_data_collection_file(self.emgdata)
 
     def _create_goalkeeper_game_export_data(self):
@@ -2572,10 +2825,16 @@ class ExportFrictionlessDataTest(ExportTestCase):
             Component.DIGITAL_GAME_PHASE,
             kwargs={"software_version": software_version, "context_tree": context_tree},
         )
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, dgp)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, dgp
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
-        dgp_data = ObjectsFactory.create_digital_game_phase_data(dct, self.subject_of_group)
-        dgp_file = ObjectsFactory.create_digital_game_phase_file(dgp_data, "file_dgp.bin")
+        dgp_data = ObjectsFactory.create_digital_game_phase_data(
+            dct, self.subject_of_group
+        )
+        dgp_file = ObjectsFactory.create_digital_game_phase_file(
+            dgp_data, "file_dgp.bin"
+        )
 
         return dgp_file
 
@@ -2587,7 +2846,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": self.survey}
         )
         # Include questionnaire in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, self.questionnaire)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, self.questionnaire
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # Add response's participant to limesurvey survey and the references
@@ -2601,13 +2862,17 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     def _assert_basic_per_experiment_data(self, json_data):
         for item in ["title", "name", "description", "created", "homepage"]:
-            self.assertIn(item, json_data, "'" + item + "'" + " not in " + str(json_data))
+            self.assertIn(
+                item, json_data, "'" + item + "'" + " not in " + str(json_data)
+            )
 
         name = slugify(self.experiment.title)
         self.assertEqual(self.experiment.title, json_data["title"])
         self.assertEqual(name, json_data["name"])
         self.assertEqual(self.experiment.description, json_data["description"])
-        day = json_data["created"].split(" ")[0]  # Get only the day to avoid test not passing
+        day = json_data["created"].split(" ")[
+            0
+        ]  # Get only the day to avoid test not passing
         self.assertEqual(datetime.now().strftime("%Y-%m-%d"), day)
         # TODO (NES-987): see how to get testserver from TestCase class or other place,
         #  and https/http url part
@@ -2615,7 +2880,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     def _assert_basic_per_participant_data(self, json_data):
         for item in ["title", "name", "description", "created"]:
-            self.assertIn(item, json_data, "'" + item + "'" + " not in " + str(json_data))
+            self.assertIn(
+                item, json_data, "'" + item + "'" + " not in " + str(json_data)
+            )
 
         title = "Questionnaires Answered by Participants Outside Experiment Scope"
         name = slugify(title)
@@ -2624,7 +2891,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             "questionnaires filled outside any experiment in the system. They can be entrance "
             "questionnaires."
         )
-        day = json_data["created"].split(" ")[0]  # Get only the day to avoid test not passing
+        day = json_data["created"].split(" ")[
+            0
+        ]  # Get only the day to avoid test not passing
         self.assertEqual(title, json_data["title"])
         self.assertEqual(name, json_data["name"])
         self.assertEqual(description, json_data["description"])
@@ -2717,13 +2986,17 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         return title
 
-    def _assert_participants_related_fields_table_schema(self, resource_schema, heading_type, fields):
+    def _assert_participants_related_fields_table_schema(
+        self, resource_schema, heading_type, fields
+    ):
         titles = []
         types = []
         # First append for testing later: when heading_type == 'abbreviated' it's
         # necessary to update duplicates below
         for field in fields:
-            dict_item = next(item for item in fields if item["header"] == field["header"])
+            dict_item = next(
+                item for item in fields if item["header"] == field["header"]
+            )
             titles.append(self._get_name_title(heading_type, dict_item))
             types.append(field["json_data_type"])
 
@@ -2901,7 +3174,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 {
                     "code": "arrayzahlen[SQ001_SQ001]",
                     "full": _("Array (Zahlen) [Unterfrage eins][Unterfrage eins]"),
-                    "abbreviated": _("Array (Zahlen) [Unterfrage eins][Unterfrage eins]"),
+                    "abbreviated": _(
+                        "Array (Zahlen) [Unterfrage eins][Unterfrage eins]"
+                    ),
                 },
                 ":",
                 "string",
@@ -2911,7 +3186,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 {
                     "code": "arrayzahlen[SQ002_SQ001]",
                     "full": _("Array (Zahlen) [Unterfrage zwei][Unterfrage eins]"),
-                    "abbreviated": _("Array (Zahlen) [Unterfrage zwei][Unterfrage eins]"),
+                    "abbreviated": _(
+                        "Array (Zahlen) [Unterfrage zwei][Unterfrage eins]"
+                    ),
                 },
                 ":",
                 "string",
@@ -2921,7 +3198,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 {
                     "code": "arraytexte[SQ001_SQ001]",
                     "full": _("Array (Texte) [Unterfrage eins][Unterfrage eins]"),
-                    "abbreviated": _("Array (Texte) [Unterfrage eins][Unterfrage eins]"),
+                    "abbreviated": _(
+                        "Array (Texte) [Unterfrage eins][Unterfrage eins]"
+                    ),
                 },
                 ";",
                 "string",
@@ -2931,7 +3210,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 {
                     "code": "arraytexte[SQ001_SQ002]",
                     "full": _("Array (Texte) [Unterfrage eins][Unterfrage zwei]"),
-                    "abbreviated": _("Array (Texte) [Unterfrage eins][Unterfrage zwei]"),
+                    "abbreviated": _(
+                        "Array (Texte) [Unterfrage eins][Unterfrage zwei]"
+                    ),
                 },
                 ";",
                 "string",
@@ -3307,7 +3588,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     ):
         self._create_eeg_export_data()
         contributor1 = self.research_project.owner
-        contributor2 = ObjectsFactory.create_experiment_researcher(self.experiment).researcher
+        contributor2 = ObjectsFactory.create_experiment_researcher(
+            self.experiment
+        ).researcher
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
 
@@ -3414,7 +3697,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         json_data = self.get_datapackage_json_data(temp_dir, response)
-        experiment_resource = next(item for item in json_data["resources"] if item["name"] == "Experiment")
+        experiment_resource = next(
+            item for item in json_data["resources"] if item["name"] == "Experiment"
+        )
 
         # Remove schema field if it exists. The test was written before the
         # test that drives adding schema field to datapackage.json
@@ -3450,7 +3735,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         json_data = self.get_datapackage_json_data(temp_dir, response)
-        experiment_resource = next(item for item in json_data["resources"] if item["name"] == "Experiment")
+        experiment_resource = next(
+            item for item in json_data["resources"] if item["name"] == "Experiment"
+        )
 
         self.assertIn("schema", experiment_resource)
         self.assertIn("fields", experiment_resource["schema"])
@@ -3474,7 +3761,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         json_data = self.get_datapackage_json_data(temp_dir, response)
-        participants_resource = next(item for item in json_data["resources"] if item["name"] == "participants")
+        participants_resource = next(
+            item for item in json_data["resources"] if item["name"] == "participants"
+        )
         # Remove schema field if it exists. The test was written before the
         # test that drives adding schema field to datapackage.json
         if "schema" in participants_resource:
@@ -3510,7 +3799,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         age_field = next(item for item in patient_fields if item["field"] == "age")
         del patient_fields[patient_fields.index(age_field)]
         # participant_code field is not posted in request
-        participant_code_field = next(item for item in patient_fields if item["field"] == "code")
+        participant_code_field = next(
+            item for item in patient_fields if item["field"] == "code"
+        )
         del patient_fields[patient_fields.index(participant_code_field)]
 
         # Append all possible patient attributes in POST data
@@ -3525,7 +3816,11 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
             temp_dir = tempfile.mkdtemp()
             json_data = self.get_datapackage_json_data(temp_dir, response)
-            participants_resource = next(item for item in json_data["resources"] if item["name"] == "participants")
+            participants_resource = next(
+                item
+                for item in json_data["resources"]
+                if item["name"] == "participants"
+            )
 
             self.assertIn("schema", participants_resource)
             self.assertIn("fields", participants_resource["schema"])
@@ -3556,7 +3851,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         json_data = self.get_datapackage_json_data(temp_dir, response)
-        diagnosis_resource = next(item for item in json_data["resources"] if item["name"] == "diagnosis")
+        diagnosis_resource = next(
+            item for item in json_data["resources"] if item["name"] == "diagnosis"
+        )
         # Remove schema field if it exists. The test was written before the
         # test that drives adding schema field to datapackage.json
         if "schema" in diagnosis_resource:
@@ -3601,7 +3898,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
             temp_dir = tempfile.mkdtemp()
             json_data = self.get_datapackage_json_data(temp_dir, response)
-            diagnosis_resource = next(item for item in json_data["resources"] if item["name"] == "diagnosis")
+            diagnosis_resource = next(
+                item for item in json_data["resources"] if item["name"] == "diagnosis"
+            )
             self.assertIn("schema", diagnosis_resource)
             self.assertIn("fields", diagnosis_resource["schema"])
             self._assert_participants_related_fields_table_schema(
@@ -3744,7 +4043,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     def test_export_per_experiment_adds_eeg_data_collection_files(self):
         self._create_eeg_export_data()
         # Adds one more eeg data collection
-        eegdata = ObjectsFactory.create_eeg_data(self.dct_eeg, self.subject_of_group, self.eeg_set)
+        eegdata = ObjectsFactory.create_eeg_data(
+            self.dct_eeg, self.subject_of_group, self.eeg_set
+        )
         ObjectsFactory.create_eeg_file(eegdata)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -3900,7 +4201,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     def test_export_per_experiment_adds_tms_default_setting_file(self):
         temp_dir = tempfile.mkdtemp()
-        self._create_tms_export_data(temp_dir)  # pass temp_dir for hotspot file creation
+        self._create_tms_export_data(
+            temp_dir
+        )  # pass temp_dir for hotspot file creation
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
 
@@ -3932,7 +4235,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         self,
     ):
         temp_dir = tempfile.mkdtemp()
-        self._create_tms_export_data(temp_dir)  # pass temp_dir for hotspot file creation
+        self._create_tms_export_data(
+            temp_dir
+        )  # pass temp_dir for hotspot file creation
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
 
@@ -4049,7 +4354,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     def test_export_per_experiment_adds_emg_data_collection_files(self):
         self._create_emg_export_data()
         # Adds one more emg data collection
-        emgdata = ObjectsFactory.create_emg_data_collection_data(self.dct_emg, self.subject_of_group, self.emg_set)
+        emgdata = ObjectsFactory.create_emg_data_collection_data(
+            self.dct_emg, self.subject_of_group, self.emg_set
+        )
         ObjectsFactory.create_emg_data_collection_file(emgdata)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -4134,7 +4441,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     kwargs={"stimulus_type": stimulus_type, "media_file": file},
                 )
         # Include gdc component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, stimulus)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, stimulus
+        )
         ObjectsFactory.create_data_configuration_tree(component_config)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -4172,14 +4481,20 @@ class ExportFrictionlessDataTest(ExportTestCase):
     def test_export_per_experiment_adds_generic_data_collection_file(self):
         # Create generic data collection (gdc) component
         it = ObjectsFactory.create_information_type()
-        gdc = ObjectsFactory.create_component(self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it})
+        gdc = ObjectsFactory.create_component(
+            self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it}
+        )
 
         # Include gdc component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, gdc)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, gdc
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # 'upload' generic data collection file
-        gdc_data = ObjectsFactory.create_generic_data_collection_data(dct, self.subject_of_group)
+        gdc_data = ObjectsFactory.create_generic_data_collection_data(
+            dct, self.subject_of_group
+        )
         gdcf = ObjectsFactory.create_generic_data_collection_file(gdc_data)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -4232,7 +4547,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         filename = os.path.basename(digital_game_phase_file.file.name)
         filename_goalkeeper_game_data_dir = filename.split("_")[0]
-        unique_name_filename_goalkeeper_game_data_dir = slugify(filename_goalkeeper_game_data_dir)
+        unique_name_filename_goalkeeper_game_data_dir = slugify(
+            filename_goalkeeper_game_data_dir
+        )
 
         digital_game_phase_resource1 = {
             "name": unique_name_filename_goalkeeper_game_data_dir,
@@ -4247,7 +4564,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             "encoding": "UTF-8",
         }
 
-        file_format_nes_code = digital_game_phase_file.digital_game_phase_data.file_format.nes_code
+        file_format_nes_code = (
+            digital_game_phase_file.digital_game_phase_data.file_format.nes_code
+        )
         unique_name = slugify(filename)
         digital_game_phase_resource2 = {
             "name": unique_name,
@@ -4336,17 +4655,23 @@ class ExportFrictionlessDataTest(ExportTestCase):
     def test_export_per_experiment_adds_step_additional_file(self):
         # Create generic data collection (gdc) component, it could been any data collection
         it = ObjectsFactory.create_information_type()
-        gdc = ObjectsFactory.create_component(self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it})
+        gdc = ObjectsFactory.create_component(
+            self.experiment, Component.GENERIC_DATA_COLLECTION, kwargs={"it": it}
+        )
 
         # Create a file and add it as an additional file of the step
         with tempfile.TemporaryDirectory() as tmpdirname:
             with open(os.path.join(tmpdirname, "stepadditionaldata.bin"), "wb") as f:
                 f.write(b"carambola")
                 with File(open(f.name, "rb")) as file:
-                    additional_file = ComponentAdditionalFile.objects.create(component=gdc, file=file)
+                    additional_file = ComponentAdditionalFile.objects.create(
+                        component=gdc, file=file
+                    )
 
         # Include gdc component in experimental protocol
-        component_config = ObjectsFactory.create_component_configuration(self.root_component, gdc)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.root_component, gdc
+        )
         ObjectsFactory.create_data_configuration_tree(component_config)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -4385,7 +4710,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         self,
     ):
         self._create_eeg_export_data()
-        additional_data = ObjectsFactory.create_additional_data_data(self.dct_eeg, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            self.dct_eeg, self.subject_of_group
+        )
         additional_file = ObjectsFactory.create_additional_data_file(additional_data)
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -4413,7 +4740,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 "AdditionalData_1",
                 filename,
             ),
-            "description": "Data Collection (additional file, format: %s)" % file_format_nes_code,
+            "description": "Data Collection (additional file, format: %s)"
+            % file_format_nes_code,
         }
 
         self.assertIn(additional_data_resource, json_data["resources"])
@@ -4422,7 +4750,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_experiment_adds_questionnaire_metadata_file_to_datapackage_json_file(self, mockServer):
+    def test_export_per_experiment_adds_questionnaire_metadata_file_to_datapackage_json_file(
+        self, mockServer
+    ):
         self._create_questionnaire_export_data()
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
@@ -4558,7 +4888,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_experiment_adds_questionnaire_responses_file_to_datapackage_json_file1(self, mockServer):
+    def test_export_per_experiment_adds_questionnaire_responses_file_to_datapackage_json_file1(
+        self, mockServer
+    ):
         """In Per_questionnaire subdir"""
         self._create_questionnaire_export_data()
 
@@ -4603,7 +4935,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             filename = self.survey.code + "_" + slugify(self.survey.en_title) + "_en"
             extension = ".csv"
 
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             # Remove schema field if it exists. The test was written before the
             # test that drives adding schema field to datapackage.json
             if "schema" in questionnaire_response_resource:
@@ -4640,7 +4974,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_experiment_adds_questionnaire_responses_file_to_datapackage_json_file2(self, mockServer):
+    def test_export_per_experiment_adds_questionnaire_responses_file_to_datapackage_json_file2(
+        self, mockServer
+    ):
         """In Per_participant subdir"""
 
         self._create_questionnaire_export_data()
@@ -4772,7 +5108,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             json_data = self.get_datapackage_json_data(temp_dir, response)
 
             filename = self.survey.code + "_" + slugify(self.survey.en_title) + "_en"
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             for item in questions:
                 self.assertIn(
                     {
@@ -4785,7 +5123,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     "Failed for heading type " + "'" + heading_type + "'",
                 )
 
-            report = self._set_validation_for_goodtables(os.path.join(temp_dir, "datapackage.json"), heading_type)
+            report = self._set_validation_for_goodtables(
+                os.path.join(temp_dir, "datapackage.json"), heading_type
+            )
             self._assert_goodtables(report)
 
             shutil.rmtree(temp_dir)
@@ -4856,16 +5196,22 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     questionnaire_response_resource["schema"]["fields"],
                 )
 
-            report = self._set_validation_for_goodtables(os.path.join(temp_dir, "datapackage.json"), heading_type)
+            report = self._set_validation_for_goodtables(
+                os.path.join(temp_dir, "datapackage.json"), heading_type
+            )
             self._assert_goodtables(report)
 
             shutil.rmtree(temp_dir)
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_experiment_adds_entrance_questionnaire_metadata_file_to_datapackage_json_file(self, mockServer):
+    def test_export_per_experiment_adds_entrance_questionnaire_metadata_file_to_datapackage_json_file(
+        self, mockServer
+    ):
         self._create_questionnaire_export_data()
-        UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
+        UtilTests.create_response_survey(
+            self.user, self.patient, self.survey, token_id=1
+        )
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
@@ -4903,7 +5249,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         filename = "Fields_" + str(self.survey.lime_survey_id) + "_en"
         extension = ".csv"
 
-        questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+        questionnaire_response_resource = next(
+            item for item in json_data["resources"] if item["title"] == filename
+        )
         # Remove schema field if it exists. The test was written before the
         # test that drives adding schema field to datapackage.json
         if "schema" in questionnaire_response_resource:
@@ -4937,7 +5285,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         self, mockServer
     ):
         self._create_questionnaire_export_data()
-        UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
+        UtilTests.create_response_survey(
+            self.user, self.patient, self.survey, token_id=1
+        )
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
@@ -4973,7 +5323,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         json_data = self.get_datapackage_json_data(temp_dir, response)
 
         filename = "Fields_" + str(self.survey.lime_survey_id) + "_en"
-        questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+        questionnaire_response_resource = next(
+            item for item in json_data["resources"] if item["title"] == filename
+        )
         for item in HEADER_EXPLANATION_FIELDS:
             self.assertIn(
                 {
@@ -4985,7 +5337,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 questionnaire_response_resource["schema"]["fields"],
             )
 
-        report = validate(os.path.join(temp_dir, "datapackage.json"), skip_checks=["duplicate-row"])
+        report = validate(
+            os.path.join(temp_dir, "datapackage.json"), skip_checks=["duplicate-row"]
+        )
         self._assert_goodtables(report)
 
         shutil.rmtree(temp_dir)
@@ -4997,7 +5351,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     ):
         """In Per_questionnaire subdir"""
         self._create_questionnaire_export_data()
-        UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
+        UtilTests.create_response_survey(
+            self.user, self.patient, self.survey, token_id=1
+        )
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
@@ -5040,7 +5396,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             filename = "Responses_" + str(self.survey.lime_survey_id) + "_en"
             extension = ".csv"
 
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             # Remove schema field if it exists. The test was written before the
             # test that drives adding schema field to datapackage.json
             if "schema" in questionnaire_response_resource:
@@ -5052,7 +5410,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     "data",
                     "Participant_data",
                     "Per_questionnaire",
-                    str(self.survey.lime_survey_id) + "_" + slugify(self.survey.en_title),
+                    str(self.survey.lime_survey_id)
+                    + "_"
+                    + slugify(self.survey.en_title),
                     filename + extension,
                 ),
                 "format": "csv",
@@ -5082,7 +5442,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         """In Per_participant subdir"""
 
         self._create_questionnaire_export_data()
-        UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
+        UtilTests.create_response_survey(
+            self.user, self.patient, self.survey, token_id=1
+        )
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
@@ -5125,7 +5487,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             filename = "Responses_" + str(self.survey.code) + "_en"
             extension = ".csv"
 
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             # Remove schema field if it exists. The test was written before the
             # test that drives adding schema field to datapackage.json
             if "schema" in questionnaire_response_resource:
@@ -5168,7 +5532,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     ):
         """In Per_questionnaire subdir"""
         self._create_questionnaire_export_data()
-        UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
+        UtilTests.create_response_survey(
+            self.user, self.patient, self.survey, token_id=1
+        )
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
@@ -5209,7 +5575,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             json_data = self.get_datapackage_json_data(temp_dir, response)
 
             filename = "Responses_" + str(self.survey.lime_survey_id) + "_en"
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             for item in questions:
                 self.assertIn(
                     {
@@ -5221,7 +5589,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     questionnaire_response_resource["schema"]["fields"],
                 )
 
-            report = self._set_validation_for_goodtables(os.path.join(temp_dir, "datapackage.json"), heading_type)
+            report = self._set_validation_for_goodtables(
+                os.path.join(temp_dir, "datapackage.json"), heading_type
+            )
             self._assert_goodtables(report)
 
             shutil.rmtree(temp_dir)
@@ -5235,7 +5605,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         """In Per_participant subdir"""
 
         self._create_questionnaire_export_data()
-        UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
+        UtilTests.create_response_survey(
+            self.user, self.patient, self.survey, token_id=1
+        )
 
         self.append_session_variable("group_selected_list", [str(self.group.id)])
         self.append_session_variable("license", "0")
@@ -5276,7 +5648,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             json_data = self.get_datapackage_json_data(temp_dir, response)
 
             filename = "Responses_" + str(self.survey.code) + "_en"
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             for item in questions:
                 self.assertIn(
                     {
@@ -5288,7 +5662,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     questionnaire_response_resource["schema"]["fields"],
                 )
 
-            report = self._set_validation_for_goodtables(os.path.join(temp_dir, "datapackage.json"), heading_type)
+            report = self._set_validation_for_goodtables(
+                os.path.join(temp_dir, "datapackage.json"), heading_type
+            )
             self._assert_goodtables(report)
 
             shutil.rmtree(temp_dir)
@@ -5335,7 +5711,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_basic_content_to_datapackage_json_file(self, mockServer):
+    def test_export_per_participant_adds_basic_content_to_datapackage_json_file(
+        self, mockServer
+    ):
         survey = create_survey(LIMESURVEY_SURVEY_ID_1)
         UtilTests.create_response_survey(self.user, self.patient, survey, token_id=1)
         set_mocks10(mockServer)
@@ -5375,7 +5753,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_questionnaires_contributors_to_datapackage_json_file(self, mockServer):
+    def test_export_per_participant_adds_questionnaires_contributors_to_datapackage_json_file(
+        self, mockServer
+    ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
         survey1 = create_survey(LIMESURVEY_SURVEY_ID_1)
@@ -5389,10 +5769,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5438,7 +5834,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_displays_license_options_in_form_with_default_to_creative_commons(self, mockServer):
+    def test_export_per_participant_displays_license_options_in_form_with_default_to_creative_commons(
+        self, mockServer
+    ):
         survey = create_survey(LIMESURVEY_SURVEY_ID_1)
         UtilTests.create_response_survey(self.user, self.patient, survey, token_id=1)
         set_mocks8(mockServer)
@@ -5455,7 +5853,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_default_license_to_datapackage_json_file(self, mockServer):
+    def test_export_per_participant_adds_default_license_to_datapackage_json_file(
+        self, mockServer
+    ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
         survey1 = create_survey(LIMESURVEY_SURVEY_ID_1)
@@ -5469,10 +5869,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5504,7 +5920,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_creative_commons_license_to_datapackage_json_file(self, mockServer):
+    def test_export_per_participant_adds_creative_commons_license_to_datapackage_json_file(
+        self, mockServer
+    ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
         survey1 = create_survey(LIMESURVEY_SURVEY_ID_1)
@@ -5518,10 +5936,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5569,10 +6003,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5589,7 +6039,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         json_data = self.get_datapackage_json_data(temp_dir, response)
-        participants_resource = next(item for item in json_data["resources"] if item["name"] == "participants")
+        participants_resource = next(
+            item for item in json_data["resources"] if item["name"] == "participants"
+        )
         # Remove schema field if it exists. The test was written before the
         # test that drives adding schema field to datapackage.json
         if "schema" in participants_resource:
@@ -5629,10 +6081,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         UtilTests.create_response_survey(self.user, self.patient, survey2, token_id=1)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "per_participant": ["on"],
@@ -5645,7 +6113,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         }
         patient_fields = PATIENT_FIELDS.copy()
         # participant_code field is included besides PATIENT_FIELDS
-        participant_code = next(item for item in patient_fields if item["field"] == "code")
+        participant_code = next(
+            item for item in patient_fields if item["field"] == "code"
+        )
         del patient_fields[patient_fields.index(participant_code)]
         # Append all possible patient attributes in POST data
         data["patient_selected"] = []
@@ -5665,7 +6135,11 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
             temp_dir = tempfile.mkdtemp()
             json_data = self.get_datapackage_json_data(temp_dir, response)
-            participants_resource = next(item for item in json_data["resources"] if item["name"] == "participants")
+            participants_resource = next(
+                item
+                for item in json_data["resources"]
+                if item["name"] == "participants"
+            )
 
             self.assertIn("schema", participants_resource)
             self.assertIn("fields", participants_resource["schema"])
@@ -5696,10 +6170,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5721,7 +6211,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         temp_dir = tempfile.mkdtemp()
         json_data = self.get_datapackage_json_data(temp_dir, response)
-        diagnosis_resource = next(item for item in json_data["resources"] if item["name"] == "diagnosis")
+        diagnosis_resource = next(
+            item for item in json_data["resources"] if item["name"] == "diagnosis"
+        )
         # Remove schema field if it exists. The test was written before the
         # test that drives adding schema field to datapackage.json
         if "schema" in diagnosis_resource:
@@ -5762,10 +6254,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "per_participant": ["on"],
@@ -5793,7 +6301,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
             temp_dir = tempfile.mkdtemp()
             json_data = self.get_datapackage_json_data(temp_dir, response)
-            diagnosis_resource = next(item for item in json_data["resources"] if item["name"] == "diagnosis")
+            diagnosis_resource = next(
+                item for item in json_data["resources"] if item["name"] == "diagnosis"
+            )
             self.assertIn("schema", diagnosis_resource)
             self.assertIn("fields", diagnosis_resource["schema"])
             self._assert_participants_related_fields_table_schema(
@@ -5807,7 +6317,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_questionnaire_metadata_file_to_datapackage_json_file(self, mockServer):
+    def test_export_per_participant_adds_questionnaire_metadata_file_to_datapackage_json_file(
+        self, mockServer
+    ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
         survey1 = create_survey(LIMESURVEY_SURVEY_ID_1)
@@ -5821,10 +6333,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5847,7 +6375,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             unique_name = slugify("Fields_" + str(survey.lime_survey_id) + "_" + "en")
             title = "Fields_" + str(survey.lime_survey_id) + "_" + "en"
 
-            questionnaire_metadata_resource = next(item for item in json_data["resources"] if item["title"] == title)
+            questionnaire_metadata_resource = next(
+                item for item in json_data["resources"] if item["title"] == title
+            )
             # Remove schema field if it exists. The test was written before the
             # test that drives adding schema field to datapackage.json
             if "schema" in questionnaire_metadata_resource:
@@ -5892,10 +6422,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5915,7 +6461,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
         for survey in [survey1, survey2]:
             title = "Fields_" + str(survey.lime_survey_id) + "_" + "en"
-            questionnaire_metadata_resource = next(item for item in json_data["resources"] if item["title"] == title)
+            questionnaire_metadata_resource = next(
+                item for item in json_data["resources"] if item["title"] == title
+            )
 
             for item in HEADER_EXPLANATION_FIELDS:
                 self.assertIn(
@@ -5935,7 +6483,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_questionnaire_response_file_to_datapackage_json_file1(self, mockServer):
+    def test_export_per_participant_adds_questionnaire_response_file_to_datapackage_json_file1(
+        self, mockServer
+    ):
         """In Per_questionnaire subdir"""
 
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
@@ -5951,10 +6501,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -5976,7 +6542,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             filename = "Responses_" + slugify(survey.lime_survey_id) + "_en"
             extension = ".csv"
 
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             # Remove schema field if it exists. The test was written before the
             # test that drives adding schema field to datapackage.json
             if "schema" in questionnaire_response_resource:
@@ -6006,7 +6574,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(LANGUAGE_CODE="en-US", LANGUAGES=(("en", "English"),))
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_questionnaire_responses_table_schema_info_to_datapackage1(self, mockServer):
+    def test_export_per_participant_adds_questionnaire_responses_table_schema_info_to_datapackage1(
+        self, mockServer
+    ):
         """In Per_questionnaire subdir"""
 
         survey = create_survey(LIMESURVEY_SURVEY_ID_1)
@@ -6053,7 +6623,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             json_data = self.get_datapackage_json_data(temp_dir, response)
 
             filename = "Responses_" + slugify(survey.lime_survey_id) + "_en"
-            questionnaire_response_resource = next(item for item in json_data["resources"] if item["title"] == filename)
+            questionnaire_response_resource = next(
+                item for item in json_data["resources"] if item["title"] == filename
+            )
             for item in questions:
                 self.assertIn(
                     {
@@ -6066,7 +6638,11 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 )
             for patient_field_selected in patient_selected:
                 patient_field_selected = patient_field_selected.split("*")[0]
-                patient_field = next(item for item in PATIENT_FIELDS if item["field"] == patient_field_selected)
+                patient_field = next(
+                    item
+                    for item in PATIENT_FIELDS
+                    if item["field"] == patient_field_selected
+                )
                 title = ""
                 if heading_type == "code":
                     title = patient_field["header"]
@@ -6084,14 +6660,18 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     questionnaire_response_resource["schema"]["fields"],
                 )
 
-            report = self._set_validation_for_goodtables(os.path.join(temp_dir, "datapackage.json"), heading_type)
+            report = self._set_validation_for_goodtables(
+                os.path.join(temp_dir, "datapackage.json"), heading_type
+            )
             self._assert_goodtables(report)
 
             shutil.rmtree(temp_dir)
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_questionnaire_response_file_to_datapackage_json_file2(self, mockServer):
+    def test_export_per_participant_adds_questionnaire_response_file_to_datapackage_json_file2(
+        self, mockServer
+    ):
         """In Per_participant subdir"""
 
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
@@ -6107,10 +6687,26 @@ class ExportFrictionlessDataTest(ExportTestCase):
         set_mocks9(mockServer)
 
         to = [
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*acquisitiondate*acquisitiondate",
-            "0*" + str(LIMESURVEY_SURVEY_ID_1) + "*" + survey1.en_title + "*textfrageeins*textfrageeins",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*acquisitiondate*acquisitiondate",
-            "1*" + str(LIMESURVEY_SURVEY_ID_2) + "*" + survey2.en_title + "*textfragezwei*textfragezwei",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "0*"
+            + str(LIMESURVEY_SURVEY_ID_1)
+            + "*"
+            + survey1.en_title
+            + "*textfrageeins*textfrageeins",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*acquisitiondate*acquisitiondate",
+            "1*"
+            + str(LIMESURVEY_SURVEY_ID_2)
+            + "*"
+            + survey2.en_title
+            + "*textfragezwei*textfragezwei",
         ]
         data = {
             "headings": ["code"],
@@ -6172,7 +6768,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(LANGUAGE_CODE="en-US", LANGUAGES=(("en", "English"),))
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_export_per_participant_adds_questionnaire_responses_table_schema_info_to_datapackage2(self, mockServer):
+    def test_export_per_participant_adds_questionnaire_responses_table_schema_info_to_datapackage2(
+        self, mockServer
+    ):
         """In Per_participant subdir"""
 
         survey = create_survey(LIMESURVEY_SURVEY_ID_1)
@@ -6244,7 +6842,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             for patient_field_selected in patient_selected:
                 patient_field_selected: str = patient_field_selected.split("*")[0]
                 patient_field: dict[str, str] = next(
-                    item for item in PATIENT_FIELDS if item["field"] == patient_field_selected
+                    item
+                    for item in PATIENT_FIELDS
+                    if item["field"] == patient_field_selected
                 )
                 title: str = ""
                 if heading_type == "code":
@@ -6263,7 +6863,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     questionnaire_response_resource["schema"]["fields"],
                 )
 
-            report = self._set_validation_for_goodtables(os.path.join(temp_dir, "datapackage.json"), heading_type)
+            report = self._set_validation_for_goodtables(
+                os.path.join(temp_dir, "datapackage.json"), heading_type
+            )
             self._assert_goodtables(report)
 
             shutil.rmtree(temp_dir)
@@ -6283,7 +6885,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         json_data = self.get_datapackage_json_data(temp_dir, response)
 
         eeg_emg_resources = [
-            resource for resource in json_data["resources"] if "file" in os.path.basename(resource["path"])
+            resource
+            for resource in json_data["resources"]
+            if "file" in os.path.basename(resource["path"])
         ]
 
         self.assertNotEqual(eeg_emg_resources[0]["name"], eeg_emg_resources[1]["name"])

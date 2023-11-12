@@ -1,5 +1,7 @@
 def set_limesurvey_api_mocks(mock_server):
-    mock_server.return_value.get_session_key.return_value = "idk208ghdkdg8bu"  # whatever string
+    mock_server.return_value.get_session_key.return_value = (
+        "idk208ghdkdg8bu"  # whatever string
+    )
     mock_server.return_value.get_survey_properties.return_value = {
         "language": "en",
         "additional_languages": "",

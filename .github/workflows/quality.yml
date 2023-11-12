@@ -81,7 +81,7 @@ jobs:
 
       - name: Run NES setup
         run: |
-          sh setup_nes_test.sh
+          sh ../../scripts/setup_nes_test.sh
 
       - name: Check Djando deploy
         run: |
@@ -97,10 +97,11 @@ jobs:
           options: "--check --verbose"
           src: "patientregistrationsystem/qdc/"
 
-      - name: Analysing the code with pylint
+      - name: Analise the code with pylint
+        continue-on-error: true
         run: |
           pylint $(git ls-files '*.py')
-        continue-on-error: true
+
       # - run: mypy $(git ls-files '*.py')
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3

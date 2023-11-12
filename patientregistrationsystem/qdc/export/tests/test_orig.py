@@ -42,7 +42,9 @@ class UtilTests:
         """Cria um participante para ser utilizado durante os testes"""
 
         gender = self.create_gender_mock(gender_name)
-        return Patient.objects.create(name=name, date_birth=date_birth, gender=gender, changed_by=user)
+        return Patient.objects.create(
+            name=name, date_birth=date_birth, gender=gender, changed_by=user
+        )
 
     @staticmethod
     def create_marital_status_mock(marital_status_name="Single") -> MaritalStatus:
@@ -64,7 +66,9 @@ class UtilTests:
 
     @staticmethod
     def create_survey_mock(survey_id, is_initial_evaluation) -> Survey:
-        survey = Survey(lime_survey_id=survey_id, is_initial_evaluation=is_initial_evaluation)
+        survey = Survey(
+            lime_survey_id=survey_id, is_initial_evaluation=is_initial_evaluation
+        )
         survey.save()
 
         return survey
@@ -77,7 +81,9 @@ class UtilTests:
 
         return result["tid"]
 
-    def create_response_survey_mock(self, user, patient, survey, token_id=None) -> QuestionnaireResponse:
+    def create_response_survey_mock(
+        self, user, patient, survey, token_id=None
+    ) -> QuestionnaireResponse:
         if not token_id:
             # TODO (NES-981): maybe this is not necessary. We want just the token id.
             #  It's not necessary to really create participant in LimeSurvey
@@ -100,7 +106,9 @@ class DirectoryTest(TestCase):
 
     def setUp(self):
         """Cria um participante para ser utilizado durante os testes"""
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -109,7 +117,9 @@ class DirectoryTest(TestCase):
 
         self.client.login(username=USER_USERNAME, password=USER_PWD)
 
-        self.basedir = path.join(path.dirname(path.realpath("__file__")), "test_directory")
+        self.basedir = path.join(
+            path.dirname(path.realpath("__file__")), "test_directory"
+        )
 
         mkdir(self.basedir)
 
@@ -160,7 +170,9 @@ class PatientActiveTest(TestCase):
     util = UtilTests()
 
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -234,7 +246,9 @@ class PatientActiveTest(TestCase):
         patient_mock.save()
 
         survey_mock = self.util.create_survey_mock(QUESTIONNAIRE_ID, True)
-        self.util.create_response_survey_mock(self.user, patient_mock, survey_mock, token_id=1)
+        self.util.create_response_survey_mock(
+            self.user, patient_mock, survey_mock, token_id=1
+        )
 
         subject_id = str(float(patient_mock.pk))
         response = is_patient_active(subject_id)
@@ -248,7 +262,9 @@ class JsonTest(TestCase):
     data: dict[str, Any] = {}
 
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -272,7 +288,9 @@ class InputExportTest(TestCase):
     util = UtilTests()
 
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -303,7 +321,9 @@ class InputExportTest(TestCase):
 
         self.assertNotIn("participants", input_data.data)
 
-        input_data.build_diagnosis_participant("participants", "Participants", participant_field_header_list)
+        input_data.build_diagnosis_participant(
+            "participants", "Participants", participant_field_header_list
+        )
 
         self.assertIn("participants", input_data.data)
 
@@ -313,7 +333,9 @@ class InputExportTest(TestCase):
 
         self.assertNotIn("questionnaires", input_data.data)
 
-        input_data.build_questionnaire(questionnaire_list, "pt-BR", entrance_questionnaire=True)
+        input_data.build_questionnaire(
+            questionnaire_list, "pt-BR", entrance_questionnaire=True
+        )
 
         self.assertIn("questionnaires", input_data.data)
 
@@ -390,7 +412,9 @@ class AdvancedSearchTest(TestCase):
     util = UtilTests()
 
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -427,13 +451,17 @@ class AdvancedSearchTest(TestCase):
         for index in range(6):
             patient = Patient.objects.get(name=self._testMethodName + str(index))
             marital_status_id = int(index / 2.5)
-            marital_status = MaritalStatus.objects.get(name=marital_status_list[marital_status_id])
+            marital_status = MaritalStatus.objects.get(
+                name=marital_status_list[marital_status_id]
+            )
             patient.marital_status = marital_status
             patient.save()
 
     def test_filter_all_participants(self):
         for index in range(3):
-            self.util.create_patient_mock(name=self._testMethodName + str(index), user=self.user)
+            self.util.create_patient_mock(
+                name=self._testMethodName + str(index), user=self.user
+            )
 
         response = self.client.get(reverse("filter_participants"))
         self.assertEqual(response.status_code, 200)
@@ -494,7 +522,9 @@ class AdvancedSearchTest(TestCase):
             birthday_max.day,
         )
 
-        self.assertEqual(len(response.wsgi_request.session["filtered_participant_data"]), 3)
+        self.assertEqual(
+            len(response.wsgi_request.session["filtered_participant_data"]), 3
+        )
 
     def test_filter_marital_status_participants(self):
         self.create_initial_patients_data()

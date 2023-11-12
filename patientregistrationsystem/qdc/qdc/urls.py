@@ -102,7 +102,9 @@ js_info_dict = {
 urlpatterns += [
     re_path(
         r"^jsi18n/$",
-        cache_page(86400, cache="redis", key_prefix="jsi18n-%s" % get_version())(JavaScriptCatalog.as_view()),
+        cache_page(86400, cache="redis", key_prefix="jsi18n-%s" % get_version())(
+            JavaScriptCatalog.as_view()
+        ),
         name="javascript-catalog",
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

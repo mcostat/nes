@@ -114,7 +114,9 @@ class PortalAPITest(TestCase):
 
     @patch("experiment.portal.RestApiClient")
     @patch("survey.abc_search_engine.Server")
-    def test_send_questionnaire_to_portal_has_correct_metadata_columns(self, mockServerClass, mockRestApiClientClass):
+    def test_send_questionnaire_to_portal_has_correct_metadata_columns(
+        self, mockServerClass, mockRestApiClientClass
+    ):
         # Create the groups of users and their permissions
         exec(open("add_initial_data.py").read())
 
@@ -127,19 +129,25 @@ class PortalAPITest(TestCase):
         questionnaire_step = ObjectsFactory.create_component(
             experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
         )
-        ObjectsFactory.create_component_configuration(experimental_protocol, questionnaire_step)
+        ObjectsFactory.create_component_configuration(
+            experimental_protocol, questionnaire_step
+        )
         tree = get_block_tree(group.experimental_protocol, "en")
 
         # Mock methods used in test calling methods
         survey_languages = {"language": "en", "additional_languages": None}
-        mockServerClass.return_value.get_survey_properties.return_value = survey_languages
+        mockServerClass.return_value.get_survey_properties.return_value = (
+            survey_languages
+        )
         mockServerClass.return_value.export_responses.return_value = (
             b"ImlkIiwic3VibWl0ZGF0ZSIsImxhc3RwYWdlIiwic3RhcnRsYW5ndWFn"
             b"ZSIsInRva2VuIiwicmVzcG9uc2libGVpZCIsImZha2VRdWVzdGlvbiIKI"
             b"jgiLCIxOTgwLTAxLTAxIDAwOjAwOjAwIiwiMiIsImVuIiwieDQ0cmRxeT"
             b"RhMGxoYjRMIiwiMiIsNSIsInRleHRvIGxvbmdvIgoK"
         )
-        mockServerClass.return_value.get_language_properties.return_value = {"surveyls_title": "Ein wunderbar Titel"}
+        mockServerClass.return_value.get_language_properties.return_value = {
+            "surveyls_title": "Ein wunderbar Titel"
+        }
         mockServerClass.return_value.list_questions.return_value = [{"id": {"qid": 1}}]
         # Mock get_question_properties LimeSurvey API method using
         # ABCSearchEngine.QUESTION_PROPERTIES constant list with fake values
@@ -162,7 +170,9 @@ class PortalAPITest(TestCase):
                 ],
             )
         )
-        mockServerClass.return_value.get_question_properties.return_value = question_properties
+        mockServerClass.return_value.get_question_properties.return_value = (
+            question_properties
+        )
         # mock list_groups LimeSurvey API method (fake values)
         language = "en"
         mockServerClass.return_value.list_groups.return_value = [

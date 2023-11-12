@@ -168,7 +168,9 @@ class ScheduleOfSendingListViewTest(TestCase):
 class PermissionsresearchprojectupdateViewtest(TestCase):
     def setUp(self):
         exec(open("add_initial_data.py").read())
-        self.user = User.objects.create_user(username="jose", email="jose@test.com", password="passwd")
+        self.user = User.objects.create_user(
+            username="jose", email="jose@test.com", password="passwd"
+        )
         user_profile = self.user.user_profile
         user_profile.login_enabled = True
 
@@ -200,7 +202,9 @@ class PermissionsresearchprojectupdateViewtest(TestCase):
 class ResearchProjectViewTest(TestCase):
     def setUp(self):
         exec(open("add_initial_data.py").read())
-        self.user = User.objects.create_user(username="jose", email="jose@test.com", password="passwd")
+        self.user = User.objects.create_user(
+            username="jose", email="jose@test.com", password="passwd"
+        )
         user_profile = self.user.user_profile
         user_profile.login_enabled = True
         user_profile.force_password_change = False
@@ -222,7 +226,9 @@ class ResearchProjectViewTest(TestCase):
         self.assertEqual(Keyword.objects.all().count(), 0)
         self.assertEqual(self.research_project.keywords.count(), 0)
         response = self.client.get(
-            reverse("keyword_new", args=(self.research_project.pk, "first_test_keyword")),
+            reverse(
+                "keyword_new", args=(self.research_project.pk, "first_test_keyword")
+            ),
             follow=True,
         )
         # self.assertEqual(response.status_code, 403)
@@ -402,7 +408,9 @@ class ResearchProjectViewTest(TestCase):
 class CollaboratorTest(TestCase):
     def setUp(self):
         exec(open("add_initial_data.py").read())
-        self.user = User.objects.create_user(username="jose", email="jose@test.com", password="passwd")
+        self.user = User.objects.create_user(
+            username="jose", email="jose@test.com", password="passwd"
+        )
         user_profile = self.user.user_profile
         user_profile.login_enabled = True
         user_profile.force_password_change = False
@@ -417,25 +425,35 @@ class CollaboratorTest(TestCase):
         self.researcher = ObjectsFactory.create_experiment_researcher(self.experiment)
 
         # create experiment/experimental protocol/group
-        self.experiment = ObjectsFactory.create_experiment(ObjectsFactory.create_research_project(self.user))
+        self.experiment = ObjectsFactory.create_experiment(
+            ObjectsFactory.create_research_project(self.user)
+        )
         self.root_component = ObjectsFactory.create_block(self.experiment)
         self.group = ObjectsFactory.create_group(self.experiment, self.root_component)
 
         # create patient/subject/subject_of_group
         self.patient = UtilTests().create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(self.patient)
-        self.subject_of_group = ObjectsFactory.create_subject_of_group(self.group, subject)
+        self.subject_of_group = ObjectsFactory.create_subject_of_group(
+            self.group, subject
+        )
 
     def tearDown(self):
         self.client.logout()
 
     def test_collaborator_create(self):
         # Insert collaborator
-        response = self.client.get(reverse("collaborator_new", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("collaborator_new", kwargs={"experiment_id": self.experiment.id})
+        )
         self.assertEqual(response.status_code, 200)
 
-        collaborators_added = ExperimentResearcher.objects.filter(experiment_id=self.experiment.id)
-        collaborators_added_ids = collaborators_added.values_list("researcher_id", flat=True)
+        collaborators_added = ExperimentResearcher.objects.filter(
+            experiment_id=self.experiment.id
+        )
+        collaborators_added_ids = collaborators_added.values_list(
+            "researcher_id", flat=True
+        )
 
         collaborators = (
             User.objects.filter(is_active=True)
@@ -446,7 +464,9 @@ class CollaboratorTest(TestCase):
         if collaborators:
             collaborators_selected = collaborators.first()
             response = self.client.post(
-                reverse("collaborator_new", kwargs={"experiment_id": self.experiment.id}),
+                reverse(
+                    "collaborator_new", kwargs={"experiment_id": self.experiment.id}
+                ),
                 data={"collaborators": collaborators_selected.id, "action": "save"},
             )
             self.assertEqual(response.status_code, 302)
@@ -653,7 +673,9 @@ class ExportExperimentTest(TestCase):
             mockServer.return_value.export_survey.return_value = first_survey
 
     def test_GET_experiment_export_returns_zip_file(self):
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.get("Content-Disposition"),
@@ -665,7 +687,9 @@ class ExportExperimentTest(TestCase):
         self.assertIsNone(zipped_file.testzip())
 
     def test_GET_experiment_export_returns_json_inside_zip_file(self):
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         zipped_file = zipfile.ZipFile(io.BytesIO(response.content), "r")
         json_file = zipped_file.namelist()[0]  # There's only one file archived
         self.assertEqual("experiment.json", json_file)
@@ -673,12 +697,16 @@ class ExportExperimentTest(TestCase):
     # TODO: NES-946: see if it's deprecated or have to check for all user objects, not only one
     def test_GET_experiment_export_returns_json_file_without_user_object(self):
         temp_dir = tempfile.mkdtemp()
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         zipped_file = zipfile.ZipFile(io.BytesIO(response.content), "r")
         zipped_file.extractall(temp_dir)
         with open(os.path.join(temp_dir, ExportExperiment.FILE_NAME_JSON)) as file:
             data = json.loads(file.read().replace("\n", ""))
-            self.assertIsNone(next((item for item in data if item["model"] == "auth.user"), None))
+            self.assertIsNone(
+                next((item for item in data if item["model"] == "auth.user"), None)
+            )
 
         shutil.rmtree(temp_dir)
 
@@ -710,7 +738,11 @@ class ExportExperimentTest(TestCase):
         deserialized = json.loads(data)
         self.assertIsNone(
             next(
-                (index for (index, dict_) in enumerate(deserialized) if dict_["model"] == "auth.user"),
+                (
+                    index
+                    for (index, dict_) in enumerate(deserialized)
+                    if dict_["model"] == "auth.user"
+                ),
                 None,
             )
         )
@@ -740,14 +772,22 @@ class ExportExperimentTest(TestCase):
         deserialized = json.loads(data)
         self.assertIsNone(
             next(
-                (index for (index, dict_) in enumerate(deserialized) if dict_["model"] == "auth.user"),
+                (
+                    index
+                    for (index, dict_) in enumerate(deserialized)
+                    if dict_["model"] == "auth.user"
+                ),
                 None,
             )
         )
 
         deserialized = json.loads(data)
         index = next(
-            (index for (index, dict_) in enumerate(deserialized) if dict_["model"] == "patient.diagnosis"),
+            (
+                index
+                for (index, dict_) in enumerate(deserialized)
+                if dict_["model"] == "patient.diagnosis"
+            ),
             None,
         )
         code = deserialized[index]["fields"]["classification_of_diseases"][0]
@@ -759,10 +799,14 @@ class ExportExperimentTest(TestCase):
     def test_experiment_has_file_creates_corresponding_dir_file_in_experiment_zip_file(
         self,
     ):
-        self.experiment.ethics_committee_project_file = SimpleUploadedFile("file.bin", b"binnary content")
+        self.experiment.ethics_committee_project_file = SimpleUploadedFile(
+            "file.bin", b"binnary content"
+        )
         self.experiment.save()
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         zipped_file = zipfile.ZipFile(io.BytesIO(response.content), "r")
         file_path = self.experiment.ethics_committee_project_file.name
         self.assertTrue(
@@ -775,11 +819,15 @@ class ExportExperimentTest(TestCase):
     def test_experiment_has_not_file_does_not_creates_corresponding_dir_file_in_experiment_zip_file(
         self,
     ):
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertTrue(
-                ExportExperiment.FILE_NAME_JSON in [file for file in zipped_file.namelist()],
-                "%s not in %s" % (ExportExperiment.FILE_NAME_JSON, zipped_file.namelist()),
+                ExportExperiment.FILE_NAME_JSON
+                in [file for file in zipped_file.namelist()],
+                "%s not in %s"
+                % (ExportExperiment.FILE_NAME_JSON, zipped_file.namelist()),
             )
             self.assertEqual(1, len(zipped_file.namelist()))
 
@@ -787,33 +835,50 @@ class ExportExperimentTest(TestCase):
     def test_eeg_has_data_collection_files_creates_corresponding_file_paths_in_zip_file(
         self,
     ):
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         patient = UtilTests.create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(patient)
         subject_of_group = ObjectsFactory.create_subject_of_group(self.group, subject)
         eeg_set = ObjectsFactory.create_eeg_setting(self.experiment)
-        component = ObjectsFactory.create_component(self.experiment, "eeg", kwargs={"eeg_set": eeg_set})
-        component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, component)
+        component = ObjectsFactory.create_component(
+            self.experiment, "eeg", kwargs={"eeg_set": eeg_set}
+        )
+        component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, component
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_configuration)
         eeg_data = ObjectsFactory.create_eeg_data(dct, subject_of_group, eeg_set)
         eeg_file = ObjectsFactory.create_eeg_file(eeg_data)
         eeg_els = ObjectsFactory.create_eeg_electrode_localization_system()
         manufacturer = ObjectsFactory.create_manufacturer()
         eeg_electrode_model = ObjectsFactory.create_electrode_model()
-        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(manufacturer, eeg_electrode_model)
-        eeg_electrode_net_system = ObjectsFactory.create_eeg_electrode_net_system(eeg_electrode_cap, eeg_els)
-        eeg_electrode_localization_system = ObjectsFactory.create_eeg_electrode_localization_system()
+        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(
+            manufacturer, eeg_electrode_model
+        )
+        eeg_electrode_net_system = ObjectsFactory.create_eeg_electrode_net_system(
+            eeg_electrode_cap, eeg_els
+        )
+        eeg_electrode_localization_system = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
         ObjectsFactory.create_eeg_electrode_position(eeg_electrode_localization_system)
-        ObjectsFactory.create_eeg_electrode_layout_setting(eeg_set, eeg_electrode_net_system)
+        ObjectsFactory.create_eeg_electrode_layout_setting(
+            eeg_set, eeg_electrode_net_system
+        )
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertTrue(
                 eeg_file.file.name in [subdir for subdir in zipped_file.namelist()],
                 "%s not in %s" % (eeg_file.file.name, zipped_file.namelist()),
             )
             self.assertTrue(
-                eeg_els.map_image_file.name in [subdir for subdir in zipped_file.namelist()],
+                eeg_els.map_image_file.name
+                in [subdir for subdir in zipped_file.namelist()],
                 "%s not in %s" % (eeg_els.map_image_file.name, zipped_file.namelist()),
             )
 
@@ -822,13 +887,19 @@ class ExportExperimentTest(TestCase):
     def test_eeg_has_not_data_collection_files_does_not_create_corresponding_file_paths_in_zip_file(
         self,
     ):
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         patient = UtilTests.create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(patient)
         subject_of_group = ObjectsFactory.create_subject_of_group(self.group, subject)
         eeg_set = ObjectsFactory.create_eeg_setting(self.experiment)
-        component = ObjectsFactory.create_component(self.experiment, "eeg", kwargs={"eeg_set": eeg_set})
-        component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, component)
+        component = ObjectsFactory.create_component(
+            self.experiment, "eeg", kwargs={"eeg_set": eeg_set}
+        )
+        component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, component
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_configuration)
         eeg_data = ObjectsFactory.create_eeg_data(dct, subject_of_group, eeg_set)
         eeg_file = ObjectsFactory.create_eeg_file(eeg_data)
@@ -839,13 +910,23 @@ class ExportExperimentTest(TestCase):
         eeg_els.save()
         manufacturer = ObjectsFactory.create_manufacturer()
         eeg_electrode_model = ObjectsFactory.create_electrode_model()
-        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(manufacturer, eeg_electrode_model)
-        eeg_electrode_net_system = ObjectsFactory.create_eeg_electrode_net_system(eeg_electrode_cap, eeg_els)
-        eeg_electrode_localization_system = ObjectsFactory.create_eeg_electrode_localization_system()
+        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(
+            manufacturer, eeg_electrode_model
+        )
+        eeg_electrode_net_system = ObjectsFactory.create_eeg_electrode_net_system(
+            eeg_electrode_cap, eeg_els
+        )
+        eeg_electrode_localization_system = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
         ObjectsFactory.create_eeg_electrode_position(eeg_electrode_localization_system)
-        ObjectsFactory.create_eeg_electrode_layout_setting(eeg_set, eeg_electrode_net_system)
+        ObjectsFactory.create_eeg_electrode_layout_setting(
+            eeg_set, eeg_electrode_net_system
+        )
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertEqual(1, len(zipped_file.namelist()))
 
@@ -855,26 +936,44 @@ class ExportExperimentTest(TestCase):
     ):
         patient = UtilTests.create_patient(changed_by=self.user)
         self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         subject_of_group = SubjectOfGroup.objects.last()
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         software_version = ObjectsFactory.create_software_version(software)
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, software_version)
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, software_version
+        )
         standardization_system = ObjectsFactory.create_standardization_system()
         muscle = ObjectsFactory.create_muscle()
         muscle_subdivision = ObjectsFactory.create_muscle_subdivision(muscle)
         electrode_model = ObjectsFactory.create_electrode_model()
-        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(emg_setting, electrode_model)
-        emg_ep = ObjectsFactory.create_emg_electrode_placement(standardization_system, muscle_subdivision)
-        ObjectsFactory.create_emg_electrode_placement_setting(emg_electrode_setting, emg_ep)
-        emg_step = ObjectsFactory.create_component(self.experiment, "emg", kwargs={"emg_set": emg_setting})
-        component_config = ObjectsFactory.create_component_configuration(rootcomponent, emg_step)
+        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(
+            emg_setting, electrode_model
+        )
+        emg_ep = ObjectsFactory.create_emg_electrode_placement(
+            standardization_system, muscle_subdivision
+        )
+        ObjectsFactory.create_emg_electrode_placement_setting(
+            emg_electrode_setting, emg_ep
+        )
+        emg_step = ObjectsFactory.create_component(
+            self.experiment, "emg", kwargs={"emg_set": emg_setting}
+        )
+        component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, emg_step
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
-        emg_data = ObjectsFactory.create_emg_data_collection_data(dct, subject_of_group, emg_setting)
+        emg_data = ObjectsFactory.create_emg_data_collection_data(
+            dct, subject_of_group, emg_setting
+        )
         emg_file = ObjectsFactory.create_emg_data_collection_file(emg_data)
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertTrue(
                 emg_file.file.name in [subdir for subdir in zipped_file.namelist()],
@@ -893,29 +992,47 @@ class ExportExperimentTest(TestCase):
     ):
         patient = UtilTests.create_patient(changed_by=self.user)
         subject_of_group = self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         software_version = ObjectsFactory.create_software_version(software)
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, software_version)
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, software_version
+        )
         standardization_system = ObjectsFactory.create_standardization_system()
         muscle = ObjectsFactory.create_muscle()
         muscle_subdivision = ObjectsFactory.create_muscle_subdivision(muscle)
         electrode_model = ObjectsFactory.create_electrode_model()
-        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(emg_setting, electrode_model)
-        emg_ep = ObjectsFactory.create_emg_electrode_placement(standardization_system, muscle_subdivision)
+        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(
+            emg_setting, electrode_model
+        )
+        emg_ep = ObjectsFactory.create_emg_electrode_placement(
+            standardization_system, muscle_subdivision
+        )
         emg_ep.photo = ""
         emg_ep.save()
-        ObjectsFactory.create_emg_electrode_placement_setting(emg_electrode_setting, emg_ep)
-        emg_step = ObjectsFactory.create_component(self.experiment, "emg", kwargs={"emg_set": emg_setting})
-        component_config = ObjectsFactory.create_component_configuration(rootcomponent, emg_step)
+        ObjectsFactory.create_emg_electrode_placement_setting(
+            emg_electrode_setting, emg_ep
+        )
+        emg_step = ObjectsFactory.create_component(
+            self.experiment, "emg", kwargs={"emg_set": emg_setting}
+        )
+        component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, emg_step
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
-        emg_data = ObjectsFactory.create_emg_data_collection_data(dct, subject_of_group, emg_setting)
+        emg_data = ObjectsFactory.create_emg_data_collection_data(
+            dct, subject_of_group, emg_setting
+        )
         emg_file = ObjectsFactory.create_emg_data_collection_file(emg_data)
         emg_file.file = ""
         emg_file.save()
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertEqual(1, len(zipped_file.namelist()))
 
@@ -928,20 +1045,26 @@ class ExportExperimentTest(TestCase):
         # TODO (NES-966): solve temp dir created misteriously
         patient = UtilTests.create_patient(changed_by=self.user)
         self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
 
         # First survey
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
         )
-        ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step1)
+        ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire_step1
+        )
         # Second survey
         survey2 = create_survey(505050)
         questionnaire_step2 = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey2}
         )
-        ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step2)
+        ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire_step2
+        )
 
         self.set_export_survey_mock_value(mockServer, True)
 
@@ -957,27 +1080,37 @@ class ExportExperimentTest(TestCase):
         self.assertIn("%s.lsa" % survey2.lime_survey_id, os.listdir(export.temp_dir))
 
     @patch("survey.abc_search_engine.Server")
-    def test_experiment_has_questionnaire_step_add_survey_archive_in_experiment_zip_file(self, mockServer):
+    def test_experiment_has_questionnaire_step_add_survey_archive_in_experiment_zip_file(
+        self, mockServer
+    ):
         patient = UtilTests.create_patient(changed_by=self.user)
         self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
 
         # First survey
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
         )
-        ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step1)
+        ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire_step1
+        )
         # Second survey
         survey2 = create_survey(505050)
         questionnaire_step2 = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey2}
         )
-        ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step2)
+        ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire_step2
+        )
 
         self.set_export_survey_mock_value(mockServer, True)
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
 
         self.assertTrue(mockServer.return_value.export_survey.called)
         self.assertTrue(
@@ -993,7 +1126,9 @@ class ExportExperimentTest(TestCase):
     def test_call_export_survey_rpc_method_uses_correct_url(self, mockServer):
         patient = UtilTests.create_patient(changed_by=self.user)
         self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
@@ -1002,7 +1137,9 @@ class ExportExperimentTest(TestCase):
 
         self.set_export_survey_mock_value(mockServer)
 
-        self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
 
         def check_right_url():
             self.assertEqual(
@@ -1019,17 +1156,25 @@ class ExportExperimentTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_export_all_generates_partial_fixture_with_questionnaire_response_data(self, mockServer):
+    def test_export_all_generates_partial_fixture_with_questionnaire_response_data(
+        self, mockServer
+    ):
         patient = UtilTests.create_patient(self.user)
         subject_of_group = self._create_minimum_objects_to_test_patient(patient)
         survey = create_survey()
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         questionnaire = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
         )
-        component_config = ObjectsFactory.create_component_configuration(rootcomponent, questionnaire)
+        component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
-        ObjectsFactory.create_questionnaire_response(dct, self.user, token_id=212121, subject_of_group=subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            dct, self.user, token_id=212121, subject_of_group=subject_of_group
+        )
 
         self.set_export_survey_mock_value(mockServer)
 
@@ -1039,19 +1184,27 @@ class ExportExperimentTest(TestCase):
         self.assertIn("questionnaireresponse.json", os.listdir(export.temp_dir))
 
     @patch("survey.abc_search_engine.Server")
-    def test_export_survey_stablish_limesurvey_connection_fails_display_warning_message(self, mockServer):
+    def test_export_survey_stablish_limesurvey_connection_fails_display_warning_message(
+        self, mockServer
+    ):
         patient = UtilTests.create_patient(changed_by=self.user)
         self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
 
-        mockServer.return_value.get_session_key.return_value = {"status": "Invalid user name or password"}
+        mockServer.return_value.get_session_key.return_value = {
+            "status": "Invalid user name or password"
+        }
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
             message,
@@ -1061,10 +1214,14 @@ class ExportExperimentTest(TestCase):
 
     # CONTINUE: keep with tests for errors in consuming LimeSurvey API
     @patch("survey.abc_search_engine.Server")
-    def test_export_survey_returns_error_from_api_display_warning_message(self, mockServer):
+    def test_export_survey_returns_error_from_api_display_warning_message(
+        self, mockServer
+    ):
         patient = UtilTests.create_patient(changed_by=self.user)
         self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
@@ -1077,7 +1234,9 @@ class ExportExperimentTest(TestCase):
         # give a generic pair: {'status': 'Error'}
         mockServer.return_value.export_survey.return_value = {"status": "Error"}
 
-        response = self.client.get(reverse("experiment_export", kwargs={"experiment_id": self.experiment.id}))
+        response = self.client.get(
+            reverse("experiment_export", kwargs={"experiment_id": self.experiment.id})
+        )
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
             message,
@@ -1105,9 +1264,13 @@ class ImportExperimentTest(TestCase):
         sys.stdout = self.stdout_bk
 
     def _assert_new_objects(self, old_objects_count):
-        self.assertEqual(ResearchProject.objects.count(), old_objects_count["research_project"] + 1)
+        self.assertEqual(
+            ResearchProject.objects.count(), old_objects_count["research_project"] + 1
+        )
 
-        self.assertEqual(Experiment.objects.count(), old_objects_count["experiment"] + 1)
+        self.assertEqual(
+            Experiment.objects.count(), old_objects_count["experiment"] + 1
+        )
         self.assertEqual(
             Experiment.objects.last().research_project.id,
             ResearchProject.objects.last().id,
@@ -1115,29 +1278,42 @@ class ImportExperimentTest(TestCase):
 
         self.assertEqual(
             ExperimentGroup.objects.count(),
-            old_objects_count["group"]["count"] + len(old_objects_count["group"]["objs"]),
+            old_objects_count["group"]["count"]
+            + len(old_objects_count["group"]["objs"]),
         )
         for group in old_objects_count["group"]["objs"]:
             self.assertEqual(Experiment.objects.last().id, group.experiment.id)
 
     def _assert_steps_imported(self, response):
-        self.assertContains(response, "2 passos de <em>Conjunto de passos</em> importados")
+        self.assertContains(
+            response, "2 passos de <em>Conjunto de passos</em> importados"
+        )
         self.assertContains(response, "1 passo de <em>Instrução</em> importado")
         self.assertContains(response, "1 passo de <em>Pausa</em> importado")
         self.assertContains(response, "1 passo de <em>Questionário</em> importado")
         self.assertContains(response, "1 passo de <em>Estímulo</em> importado")
-        self.assertContains(response, "1 passo de <em>Tarefa para o participante</em> importado")
-        self.assertContains(response, "2 passos de <em>Tarefa para o experimentador</em> importados")
+        self.assertContains(
+            response, "1 passo de <em>Tarefa para o participante</em> importado"
+        )
+        self.assertContains(
+            response, "2 passos de <em>Tarefa para o experimentador</em> importados"
+        )
         self.assertContains(response, "1 passo de <em>EEG</em> importado")
         self.assertContains(response, "1 passo de <em>EMG</em> importado")
         self.assertContains(response, "1 passo de <em>TMS</em> importado")
-        self.assertContains(response, "1 passo de <em>Fase de jogo do goleiro</em> importado")
-        self.assertContains(response, "1 passo de <em>Coleta genérica de dados</em> importado")
+        self.assertContains(
+            response, "1 passo de <em>Fase de jogo do goleiro</em> importado"
+        )
+        self.assertContains(
+            response, "1 passo de <em>Coleta genérica de dados</em> importado"
+        )
 
     def _create_minimum_objects_to_test_components(self):
         self.research_project = ObjectsFactory.create_research_project(owner=self.user)
         self.experiment = ObjectsFactory.create_experiment(self.research_project)
-        self.rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
+        self.rootcomponent = ObjectsFactory.create_component(
+            self.experiment, "block", "root component"
+        )
 
     def _create_experiment_with_digital_game_phase(self):
         self._create_minimum_objects_to_test_components()
@@ -1145,8 +1321,12 @@ class ImportExperimentTest(TestCase):
         context_tree = ObjectsFactory.create_context_tree(self.experiment)
 
         manufacturer = Manufacturer.objects.create(name="TEST_MANUFACTURER")
-        software = Software.objects.create(name="TEST_SOFTWARE", manufacturer=manufacturer)
-        software_version = SoftwareVersion.objects.create(name="TEST_SOFTWARE_VERSION", software=software)
+        software = Software.objects.create(
+            name="TEST_SOFTWARE", manufacturer=manufacturer
+        )
+        software_version = SoftwareVersion.objects.create(
+            name="TEST_SOFTWARE_VERSION", software=software
+        )
 
         digital_game_phase = ObjectsFactory.create_component(
             self.experiment,
@@ -1154,7 +1334,9 @@ class ImportExperimentTest(TestCase):
             kwargs={"context_tree": context_tree, "software_version": software_version},
         )
 
-        ObjectsFactory.create_component_configuration(self.rootcomponent, digital_game_phase)
+        ObjectsFactory.create_component_configuration(
+            self.rootcomponent, digital_game_phase
+        )
 
         return self.experiment
 
@@ -1167,12 +1349,20 @@ class ImportExperimentTest(TestCase):
             description="TMS-Setting description",
         )
         manufacturer = Manufacturer.objects.create(name="TEST_MANUFACTURER")
-        tms_device = TMSDevice.objects.create(identification="TEST_DEVICE_IDENTIFICATION", manufacturer=manufacturer)
-        material = Material.objects.create(name="TEST_MATERIAL", description="TEST_DESCRIPTION_MATERIAL")
+        tms_device = TMSDevice.objects.create(
+            identification="TEST_DEVICE_IDENTIFICATION", manufacturer=manufacturer
+        )
+        material = Material.objects.create(
+            name="TEST_MATERIAL", description="TEST_DESCRIPTION_MATERIAL"
+        )
         coil_shape = CoilShape.objects.create(name="TEST_COIL_SHAPE")
-        coil_model = CoilModel.objects.create(name="TEST_COIL_MODEL", coil_shape=coil_shape, material=material)
+        coil_model = CoilModel.objects.create(
+            name="TEST_COIL_MODEL", coil_shape=coil_shape, material=material
+        )
 
-        TMSDeviceSetting.objects.create(tms_setting=tms_setting, tms_device=tms_device, coil_model=coil_model)
+        TMSDeviceSetting.objects.create(
+            tms_setting=tms_setting, tms_device=tms_device, coil_model=coil_model
+        )
 
         return experiment
 
@@ -1185,9 +1375,15 @@ class ImportExperimentTest(TestCase):
             description="EEG-Setting description",
         )
         manufacturer = Manufacturer.objects.create(name="TEST_MANUFACTURER")
-        material = Material.objects.create(name="TEST_MATERIAL", description="TEST_DESCRIPTION_MATERIAL")
-        electrode_config = ElectrodeConfiguration.objects.create(name="Electrode config name")
-        electrode_loc_sys = EEGElectrodeLocalizationSystem.objects.create(name="TEST_EEGELocS")
+        material = Material.objects.create(
+            name="TEST_MATERIAL", description="TEST_DESCRIPTION_MATERIAL"
+        )
+        electrode_config = ElectrodeConfiguration.objects.create(
+            name="Electrode config name"
+        )
+        electrode_loc_sys = EEGElectrodeLocalizationSystem.objects.create(
+            name="TEST_EEGELocS"
+        )
 
         electrode_model = ElectrodeModel.objects.create(
             name="TEST_ELECTRODE_MODEL",
@@ -1220,9 +1416,15 @@ class ImportExperimentTest(TestCase):
         )
 
         filter_type = FilterType.objects.create(name="TEST_FILTER_TYPE")
-        EEGFilterSetting.objects.create(eeg_setting=eeg_setting, eeg_filter_type=filter_type)
-        amplifier_detection_type = AmplifierDetectionType.objects.create(name="TEST_AMPLIFIER_DETECTION_TYPE")
-        tethering_system = TetheringSystem.objects.create(name="TEST_AMPLIFIER_DETECTION_TYPE")
+        EEGFilterSetting.objects.create(
+            eeg_setting=eeg_setting, eeg_filter_type=filter_type
+        )
+        amplifier_detection_type = AmplifierDetectionType.objects.create(
+            name="TEST_AMPLIFIER_DETECTION_TYPE"
+        )
+        tethering_system = TetheringSystem.objects.create(
+            name="TEST_AMPLIFIER_DETECTION_TYPE"
+        )
         amplifier = Amplifier.objects.create(
             identification="AMPLIFIER",
             amplifier_detection_type=amplifier_detection_type,
@@ -1230,10 +1432,16 @@ class ImportExperimentTest(TestCase):
             manufacturer=manufacturer,
             equipment_type="amplifier",
         )
-        EEGAmplifierSetting.objects.create(eeg_amplifier=amplifier, eeg_setting=eeg_setting)
+        EEGAmplifierSetting.objects.create(
+            eeg_amplifier=amplifier, eeg_setting=eeg_setting
+        )
 
-        eeg_solution = EEGSolution.objects.create(name="TEST_EEG_SOLUTION", manufacturer=manufacturer)
-        EEGSolutionSetting.objects.create(eeg_setting=eeg_setting, eeg_solution=eeg_solution)
+        eeg_solution = EEGSolution.objects.create(
+            name="TEST_EEG_SOLUTION", manufacturer=manufacturer
+        )
+        EEGSolutionSetting.objects.create(
+            eeg_setting=eeg_setting, eeg_solution=eeg_solution
+        )
 
         return experiment
 
@@ -1242,8 +1450,12 @@ class ImportExperimentTest(TestCase):
         experiment = ObjectsFactory.create_experiment(research_project)
         # EMG Setting
         manufacturer = Manufacturer.objects.create(name="TEST_MANUFACTURER")
-        software = Software.objects.create(name="TEST_SOFTWARE", manufacturer=manufacturer)
-        software_version = SoftwareVersion.objects.create(name="TEST_SOFTWARE_VERSION", software=software)
+        software = Software.objects.create(
+            name="TEST_SOFTWARE", manufacturer=manufacturer
+        )
+        software_version = SoftwareVersion.objects.create(
+            name="TEST_SOFTWARE_VERSION", software=software
+        )
         emg_setting = EMGSetting.objects.create(
             experiment=experiment,
             name="EMG-Setting name",
@@ -1257,15 +1469,23 @@ class ImportExperimentTest(TestCase):
             manufacturer=manufacturer,
             equipment_type="ad_converter",
         )
-        EMGADConverterSetting.objects.create(ad_converter=ad_converter, emg_setting=emg_setting)
+        EMGADConverterSetting.objects.create(
+            ad_converter=ad_converter, emg_setting=emg_setting
+        )
 
         # Filter type
         filter_type = FilterType.objects.create(name="TEST_FILTER_TYPE")
-        EMGDigitalFilterSetting.objects.create(emg_setting=emg_setting, filter_type=filter_type)
+        EMGDigitalFilterSetting.objects.create(
+            emg_setting=emg_setting, filter_type=filter_type
+        )
 
         # Electrodes
-        material = Material.objects.create(name="TEST_MATERIAL", description="TEST_DESCRIPTION_MATERIAL")
-        electrode_config = ElectrodeConfiguration.objects.create(name="Electrode config name")
+        material = Material.objects.create(
+            name="TEST_MATERIAL", description="TEST_DESCRIPTION_MATERIAL"
+        )
+        electrode_config = ElectrodeConfiguration.objects.create(
+            name="Electrode config name"
+        )
         electrode_model = ElectrodeModel.objects.create(
             name="TEST_ELECTRODE_MODEL",
             electrode_configuration=electrode_config,
@@ -1285,8 +1505,12 @@ class ImportExperimentTest(TestCase):
         # Muscle
         muscle = ObjectsFactory.create_muscle()
         muscle_side = MuscleSide.objects.create(name="TEST_MUSCLE_SIDE", muscle=muscle)
-        muscle_subdivision = MuscleSubdivision.objects.create(name="TEST_MUSCLE_SUBDIVISION", muscle=muscle)
-        standardization_system = StandardizationSystem.objects.create(name="TEST_STANDARDIZATION_SYSTEM")
+        muscle_subdivision = MuscleSubdivision.objects.create(
+            name="TEST_MUSCLE_SUBDIVISION", muscle=muscle
+        )
+        standardization_system = StandardizationSystem.objects.create(
+            name="TEST_STANDARDIZATION_SYSTEM"
+        )
 
         emg_intramuscular_placement = EMGIntramuscularPlacement.objects.create(
             standardization_system=standardization_system,
@@ -1321,7 +1545,9 @@ class ImportExperimentTest(TestCase):
         )
 
         # Amplifier
-        amplifier_detection_type = AmplifierDetectionType.objects.create(name="TEST_AMPLIFIER_DETECTION_TYPE")
+        amplifier_detection_type = AmplifierDetectionType.objects.create(
+            name="TEST_AMPLIFIER_DETECTION_TYPE"
+        )
         tethering_system = TetheringSystem.objects.create(name="TEST_THETHERING_SYSTEM")
         amplifier = Amplifier.objects.create(
             identification="TEST_AMPLIFIER",
@@ -1342,9 +1568,15 @@ class ImportExperimentTest(TestCase):
             emg_electrode_setting=emg_electrode_setting_needle, amplifier=amplifier
         )
 
-        EMGAnalogFilterSetting.objects.create(emg_electrode_setting=emg_amplifier_setting_surface)
-        EMGAnalogFilterSetting.objects.create(emg_electrode_setting=emg_amplifier_setting_intramuscular)
-        EMGAnalogFilterSetting.objects.create(emg_electrode_setting=emg_amplifier_setting_needle)
+        EMGAnalogFilterSetting.objects.create(
+            emg_electrode_setting=emg_amplifier_setting_surface
+        )
+        EMGAnalogFilterSetting.objects.create(
+            emg_electrode_setting=emg_amplifier_setting_intramuscular
+        )
+        EMGAnalogFilterSetting.objects.create(
+            emg_electrode_setting=emg_amplifier_setting_needle
+        )
 
         emg_pre_amplifier_setting_surface = EMGPreamplifierSetting.objects.create(
             emg_electrode_setting=emg_electrode_setting_surface, amplifier=amplifier
@@ -1357,11 +1589,15 @@ class ImportExperimentTest(TestCase):
             emg_electrode_setting=emg_electrode_setting_needle, amplifier=amplifier
         )
 
-        EMGPreamplifierFilterSetting.objects.create(emg_preamplifier_filter_setting=emg_pre_amplifier_setting_surface)
+        EMGPreamplifierFilterSetting.objects.create(
+            emg_preamplifier_filter_setting=emg_pre_amplifier_setting_surface
+        )
         EMGPreamplifierFilterSetting.objects.create(
             emg_preamplifier_filter_setting=emg_pre_amplifier_setting_intramuscular
         )
-        EMGPreamplifierFilterSetting.objects.create(emg_preamplifier_filter_setting=emg_pre_amplifier_setting_needle)
+        EMGPreamplifierFilterSetting.objects.create(
+            emg_preamplifier_filter_setting=emg_pre_amplifier_setting_needle
+        )
 
         return experiment
 
@@ -1415,7 +1651,9 @@ class ImportExperimentTest(TestCase):
 
         file_path = export.get_file_path()
 
-        old_model_1_objects_ids = list(model_1.objects.filter(**filter_model_1).values_list("pk", flat=True))
+        old_model_1_objects_ids = list(
+            model_1.objects.filter(**filter_model_1).values_list("pk", flat=True)
+        )
         old_model_2_objects_ids = list(model_2.objects.values_list("pk", flat=True))
 
         with open(file_path, "rb") as file:
@@ -1425,10 +1663,14 @@ class ImportExperimentTest(TestCase):
                 session["patients_conflicts_resolved"] = True
                 session["file_name"] = file.name
                 session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
-        new_model_1_objects = model_1.objects.filter(**filter_model_1).exclude(pk__in=old_model_1_objects_ids)
+        new_model_1_objects = model_1.objects.filter(**filter_model_1).exclude(
+            pk__in=old_model_1_objects_ids
+        )
         new_model_2_objects = model_2.objects.exclude(pk__in=old_model_2_objects_ids)
         if to_create1:  # TODO: refactor to not use to_create1
             self.assertNotEqual(0, new_model_1_objects.count())
@@ -1457,7 +1699,9 @@ class ImportExperimentTest(TestCase):
             for item in new_model_2_objects:
                 self.assertTrue(getattr(item, linking_field).id in new_model_1_ids)
 
-    def _test_creation_of_objects_that_should_not_be_duplicated(self, experiment, model_name):
+    def _test_creation_of_objects_that_should_not_be_duplicated(
+        self, experiment, model_name
+    ):
         model = apps.get_model(model_name)
 
         export = ExportExperiment(experiment)
@@ -1469,7 +1713,9 @@ class ImportExperimentTest(TestCase):
         old_model_ids = list(model.objects.values_list("pk", flat=True))
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_objects = model.objects.exclude(pk__in=old_model_ids)
@@ -1485,14 +1731,20 @@ class ImportExperimentTest(TestCase):
         patient = UtilTests.create_patient(changed_by=self.user)
         experiment = self._create_minimum_objects_to_test_patient(patient)
         subject_of_group = SubjectOfGroup.objects.last()
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
             experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
         )
-        component_config = ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
+        component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire_step
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
-        ObjectsFactory.create_questionnaire_response(dct, self.user, self.TOKEN_ID_KEEPED, subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            dct, self.user, self.TOKEN_ID_KEEPED, subject_of_group
+        )
 
         ExportExperimentTest.set_export_survey_mock_value(mockServer)
 
@@ -1507,7 +1759,9 @@ class ImportExperimentTest(TestCase):
     def test_POST_experiment_import_file_has_not_file_redirects_with_warning_message(
         self,
     ):
-        response = self.client.post(reverse("experiment_import"), {"file": ""}, follow=True)
+        response = self.client.post(
+            reverse("experiment_import"), {"file": ""}, follow=True
+        )
         self.assertRedirects(response, reverse("experiment_import"))
         message = str(list(response.context["messages"])[0])
         self.assertEqual(message, "Por favor, selecione um arquivo .zip")
@@ -1522,10 +1776,14 @@ class ImportExperimentTest(TestCase):
         with zipfile.ZipFile(os.path.join(temp_dir, zip_filename), "w") as zip_file:
             zip_file.write(dummy_json_file.name, json_filename)
         with open(os.path.join(temp_dir, zip_filename), "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("experiment_import"))
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Arquivo json danificado. Abortando importação do experimento.")
+        self.assertEqual(
+            message, "Arquivo json danificado. Abortando importação do experimento."
+        )
 
         shutil.rmtree(temp_dir)
 
@@ -1551,10 +1809,16 @@ class ImportExperimentTest(TestCase):
             "experiment": Experiment.objects.count(),
         }
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
-        self.assertEqual(ResearchProject.objects.count(), old_objects_count["research_project"] + 1)
-        self.assertEqual(Experiment.objects.count(), old_objects_count["experiment"] + 1)
+        self.assertEqual(
+            ResearchProject.objects.count(), old_objects_count["research_project"] + 1
+        )
+        self.assertEqual(
+            Experiment.objects.count(), old_objects_count["experiment"] + 1
+        )
         self.assertEqual(
             Experiment.objects.last().research_project.id,
             ResearchProject.objects.last().id,
@@ -1566,7 +1830,9 @@ class ImportExperimentTest(TestCase):
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        experiment.ethics_committee_project_file = SimpleUploadedFile("file.bin", b"binnary content")
+        experiment.ethics_committee_project_file = SimpleUploadedFile(
+            "file.bin", b"binnary content"
+        )
         experiment.save()
 
         export = ExportExperiment(experiment)
@@ -1578,10 +1844,16 @@ class ImportExperimentTest(TestCase):
 
         # Remove experiment exported file, so we guarantee
         # that the experiment imported has correct file uploaded
-        os.remove(os.path.join(self.TEMP_MEDIA_ROOT, experiment.ethics_committee_project_file.name))
+        os.remove(
+            os.path.join(
+                self.TEMP_MEDIA_ROOT, experiment.ethics_committee_project_file.name
+            )
+        )
 
         experiment_imported = Experiment.objects.last()
-        filepath = os.path.join(self.TEMP_MEDIA_ROOT, experiment_imported.ethics_committee_project_file.name)
+        filepath = os.path.join(
+            self.TEMP_MEDIA_ROOT, experiment_imported.ethics_committee_project_file.name
+        )
         self.assertTrue(os.path.exists(filepath))
 
         shutil.rmtree(self.TEMP_MEDIA_ROOT)
@@ -1602,14 +1874,20 @@ class ImportExperimentTest(TestCase):
         old_groups_count = ExperimentGroup.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
         new_groups = ExperimentGroup.objects.exclude(id__in=[group1.id, group2.id])
-        self.assertEqual(ExperimentGroup.objects.count(), old_groups_count + new_groups.count())
+        self.assertEqual(
+            ExperimentGroup.objects.count(), old_groups_count + new_groups.count()
+        )
         for group in new_groups:
             self.assertEqual(Experiment.objects.last().id, group.experiment.id)
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_new_components_and_returns_successful_message(
         self,
@@ -1628,14 +1906,22 @@ class ImportExperimentTest(TestCase):
 
         old_components_count = Component.objects.count()
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
-        new_components = Component.objects.exclude(id__in=[component1.id, component2.id])
-        self.assertEqual(Component.objects.count(), old_components_count + new_components.count())
+        new_components = Component.objects.exclude(
+            id__in=[component1.id, component2.id]
+        )
+        self.assertEqual(
+            Component.objects.count(), old_components_count + new_components.count()
+        )
         for component in new_components:
             self.assertEqual(Experiment.objects.last().id, component.experiment.id)
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_group_has_experimental_protocol_returns_successful_message(
         self,
@@ -1653,12 +1939,18 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
         new_block_components = Component.objects.exclude(id__in=[ep1.id, ep2.id])
         self.assertEqual(2, new_block_components.count())
-        new_groups = ExperimentGroup.objects.exclude(id__in=[group1.id, group2.id, group3.id])
-        new_groups_with_exp_prot = [group for group in new_groups if group.experimental_protocol is not None]
+        new_groups = ExperimentGroup.objects.exclude(
+            id__in=[group1.id, group2.id, group3.id]
+        )
+        new_groups_with_exp_prot = [
+            group for group in new_groups if group.experimental_protocol is not None
+        ]
         for group in new_groups_with_exp_prot:
             self.assertIn(group.experimental_protocol, new_block_components)
         self.assertNotEqual(
@@ -1673,8 +1965,12 @@ class ImportExperimentTest(TestCase):
         # Create another component, 'instruction', for this test, but every
         # type, apart from specific parameters, all depend on Component,
         # and only this relation needs to be updated
-        instruction_component = ObjectsFactory.create_component(self.experiment, "instruction")
-        ObjectsFactory.create_component_configuration(self.rootcomponent, instruction_component)
+        instruction_component = ObjectsFactory.create_component(
+            self.experiment, "instruction"
+        )
+        ObjectsFactory.create_component_configuration(
+            self.rootcomponent, instruction_component
+        )
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -1684,10 +1980,16 @@ class ImportExperimentTest(TestCase):
         components_before_count = Component.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
-        new_components = Component.objects.exclude(id__in=[self.rootcomponent.id, instruction_component.id])
-        self.assertEqual(Component.objects.count(), components_before_count + len(new_components))
+        new_components = Component.objects.exclude(
+            id__in=[self.rootcomponent.id, instruction_component.id]
+        )
+        self.assertEqual(
+            Component.objects.count(), components_before_count + len(new_components)
+        )
         for item in new_components:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
         new_rootcomponent = new_components.get(component_type="block")
@@ -1699,14 +2001,18 @@ class ImportExperimentTest(TestCase):
         self.assertEqual(new_instruction.experiment.id, Experiment.objects.last().id)
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_root_component_plus_tms_and_returns_successful_message(
         self,
     ):
         self._create_minimum_objects_to_test_components()
         tms_setting = ObjectsFactory.create_tms_setting(self.experiment)
-        tms_component = ObjectsFactory.create_component(self.experiment, "tms", kwargs={"tms_set": tms_setting})
+        tms_component = ObjectsFactory.create_component(
+            self.experiment, "tms", kwargs={"tms_set": tms_setting}
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, tms_component)
 
         export = ExportExperiment(self.experiment)
@@ -1717,11 +2023,17 @@ class ImportExperimentTest(TestCase):
         components_before_count = Component.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
-        new_components = Component.objects.exclude(id__in=[self.rootcomponent.id, tms_component.id])
-        self.assertEqual(Component.objects.count(), components_before_count + len(new_components))
+        new_components = Component.objects.exclude(
+            id__in=[self.rootcomponent.id, tms_component.id]
+        )
+        self.assertEqual(
+            Component.objects.count(), components_before_count + len(new_components)
+        )
         for item in new_components:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
         new_rootcomponent = new_components.get(component_type="block")
@@ -1739,14 +2051,18 @@ class ImportExperimentTest(TestCase):
         self.assertEqual(tms_setting.experiment.id, new_experiment.id)
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_root_component_plus_eeg_and_returns_successful_message(
         self,
     ):
         self._create_minimum_objects_to_test_components()
         eeg_setting = ObjectsFactory.create_eeg_setting(self.experiment)
-        eeg_component = ObjectsFactory.create_component(self.experiment, "eeg", kwargs={"eeg_set": eeg_setting})
+        eeg_component = ObjectsFactory.create_component(
+            self.experiment, "eeg", kwargs={"eeg_set": eeg_setting}
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, eeg_component)
 
         export = ExportExperiment(self.experiment)
@@ -1757,11 +2073,17 @@ class ImportExperimentTest(TestCase):
         components_before_count = Component.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
-        new_components = Component.objects.exclude(id__in=[self.rootcomponent.id, eeg_component.id])
-        self.assertEqual(Component.objects.count(), components_before_count + len(new_components))
+        new_components = Component.objects.exclude(
+            id__in=[self.rootcomponent.id, eeg_component.id]
+        )
+        self.assertEqual(
+            Component.objects.count(), components_before_count + len(new_components)
+        )
         for item in new_components:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
         new_rootcomponent = new_components.get(component_type="block")
@@ -1779,7 +2101,9 @@ class ImportExperimentTest(TestCase):
         self.assertEqual(eeg_setting.experiment.id, new_experiment.id)
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_root_component_plus_emg_and_returns_successful_message1(
         self,
@@ -1789,8 +2113,12 @@ class ImportExperimentTest(TestCase):
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         software_version = ObjectsFactory.create_software_version(software)
-        new_emg_setting = ObjectsFactory.create_emg_setting(self.experiment, software_version)
-        emg_component = ObjectsFactory.create_component(self.experiment, "emg", kwargs={"emg_set": new_emg_setting})
+        new_emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, software_version
+        )
+        emg_component = ObjectsFactory.create_component(
+            self.experiment, "emg", kwargs={"emg_set": new_emg_setting}
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, emg_component)
 
         export = ExportExperiment(self.experiment)
@@ -1801,11 +2129,17 @@ class ImportExperimentTest(TestCase):
         components_before_count = Component.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
-        new_components = Component.objects.exclude(id__in=[self.rootcomponent.id, emg_component.id])
-        self.assertEqual(Component.objects.count(), components_before_count + len(new_components))
+        new_components = Component.objects.exclude(
+            id__in=[self.rootcomponent.id, emg_component.id]
+        )
+        self.assertEqual(
+            Component.objects.count(), components_before_count + len(new_components)
+        )
         for item in new_components:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
         new_rootcomponent = new_components.get(component_type="block")
@@ -1823,7 +2157,9 @@ class ImportExperimentTest(TestCase):
         self.assertEqual(new_emg_setting.experiment.id, new_experiment.id)
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_root_component_plus_emg_and_returns_successful_message2(
         self,
@@ -1834,8 +2170,12 @@ class ImportExperimentTest(TestCase):
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         software_version = ObjectsFactory.create_software_version(software)
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, software_version)
-        emg_component = ObjectsFactory.create_component(self.experiment, "emg", kwargs={"emg_set": emg_setting})
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, software_version
+        )
+        emg_component = ObjectsFactory.create_component(
+            self.experiment, "emg", kwargs={"emg_set": emg_setting}
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, emg_component)
 
         export = ExportExperiment(self.experiment)
@@ -1843,7 +2183,9 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         self.assertEqual(2, SoftwareVersion.objects.count())
@@ -1855,20 +2197,28 @@ class ImportExperimentTest(TestCase):
         self.assertEqual(1, Manufacturer.objects.count())
         new_manufacturer = Manufacturer.objects.last()
         new_emg_setting = EMGSetting.objects.last()
-        self.assertEqual(new_software_version.id, new_emg_setting.acquisition_software_version.id)
+        self.assertEqual(
+            new_software_version.id, new_emg_setting.acquisition_software_version.id
+        )
         self.assertEqual(new_software.id, new_software_version.software.id)
         self.assertEqual(new_manufacturer.id, new_software.manufacturer.id)
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_experimental_protocols_and_groups_and_returns_successful_message(
         self,
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component1")
-        rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component2")
+        rootcomponent1 = ObjectsFactory.create_component(
+            experiment, "block", "root component1"
+        )
+        rootcomponent2 = ObjectsFactory.create_component(
+            experiment, "block", "root component2"
+        )
         # Create another component ('instruction', for example)
         component1 = ObjectsFactory.create_component(experiment, "instruction")
         ObjectsFactory.create_component_configuration(rootcomponent1, component1)
@@ -1890,30 +2240,44 @@ class ImportExperimentTest(TestCase):
         groups_before_count = ExperimentGroup.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
         new_components = Component.objects.exclude(
             id__in=[rootcomponent1.id, rootcomponent2.id, component1.id, component2.id]
         )
         new_groups = ExperimentGroup.objects.exclude(id__in=[group1.id, group2.id])
-        self.assertEqual(Component.objects.count(), components_before_count + len(new_components))
-        self.assertEqual(ExperimentGroup.objects.count(), groups_before_count + len(new_groups))
+        self.assertEqual(
+            Component.objects.count(), components_before_count + len(new_components)
+        )
+        self.assertEqual(
+            ExperimentGroup.objects.count(), groups_before_count + len(new_groups)
+        )
 
         for item in new_components:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
         for item in new_groups:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
-            self.assertFalse(new_components.filter(id=item.experimental_protocol_id).exists())
+            self.assertFalse(
+                new_components.filter(id=item.experimental_protocol_id).exists()
+            )
 
         # TODO (NES-908): get by exclude not this way
         new_instructions = Instruction.objects.all().order_by("-id")[:2]
         self.assertEqual(2, new_instructions.count())
-        new_instruction_components = Component.objects.filter(component_type="instruction").order_by("-id")[:2]
+        new_instruction_components = Component.objects.filter(
+            component_type="instruction"
+        ).order_by("-id")[:2]
         for instruction in new_instructions:
-            self.assertIn(instruction.id, new_instruction_components.values_list("id", flat=True))
+            self.assertIn(
+                instruction.id, new_instruction_components.values_list("id", flat=True)
+            )
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_experiment_in_existing_study_and_returns_successful_message(
         self,
@@ -1922,12 +2286,18 @@ class ImportExperimentTest(TestCase):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
         # Create root component (which is a 'block' type and it is the head of the experimental protocol)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         # Create another component ('instruction', for example)
         component = ObjectsFactory.create_component(experiment, "instruction")
         ObjectsFactory.create_component_configuration(rootcomponent, component)
-        group1 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent)
-        group2 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent)
+        group1 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent
+        )
+        group2 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent
+        )
 
         export = ExportExperiment(experiment)
         export.export_all()
@@ -1945,18 +2315,28 @@ class ImportExperimentTest(TestCase):
                 follow=True,
             )
         self.assertRedirects(response, reverse("import_log"))
-        new_components = Component.objects.exclude(id__in=[rootcomponent.id, component.id])
+        new_components = Component.objects.exclude(
+            id__in=[rootcomponent.id, component.id]
+        )
         new_groups = ExperimentGroup.objects.exclude(id__in=[group1.id, group2.id])
-        self.assertEqual(Component.objects.count(), old_objects_count + len(new_components))
-        self.assertEqual(ExperimentGroup.objects.count(), old_groups_count + len(new_groups))
+        self.assertEqual(
+            Component.objects.count(), old_objects_count + len(new_components)
+        )
+        self.assertEqual(
+            ExperimentGroup.objects.count(), old_groups_count + len(new_groups)
+        )
 
         for item in new_components:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
         for item in new_groups:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
-            self.assertTrue(new_components.filter(id=item.experimental_protocol_id).exists())
+            self.assertTrue(
+                new_components.filter(id=item.experimental_protocol_id).exists()
+            )
 
-        self.assertEqual(research_project.id, Experiment.objects.last().research_project.id)
+        self.assertEqual(
+            research_project.id, Experiment.objects.last().research_project.id
+        )
 
         message = str(list(response.context["messages"])[0])
         self.assertEqual(message, "Experimento importado com sucesso.")
@@ -1966,28 +2346,44 @@ class ImportExperimentTest(TestCase):
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component1")
-        rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component2")
-        group1 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent1)
-        group2 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent2)
+        rootcomponent1 = ObjectsFactory.create_component(
+            experiment, "block", "root component1"
+        )
+        rootcomponent2 = ObjectsFactory.create_component(
+            experiment, "block", "root component2"
+        )
+        group1 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent1
+        )
+        group2 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent2
+        )
 
         export = ExportExperiment(experiment)
         export.export_all()
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
-        new_components = Component.objects.exclude(id__in=[rootcomponent1.id, rootcomponent2.id])
+        new_components = Component.objects.exclude(
+            id__in=[rootcomponent1.id, rootcomponent2.id]
+        )
         new_groups = ExperimentGroup.objects.exclude(id__in=[group1.id, group2.id])
         self.assertEqual(2, len(new_components))
 
         for group in new_groups:
             self.assertEqual(Experiment.objects.last().id, group.experiment.id)
-            self.assertTrue(new_components.filter(id=group.experimental_protocol_id).exists())
+            self.assertTrue(
+                new_components.filter(id=group.experimental_protocol_id).exists()
+            )
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     # Fim dos testes a serem revisados
 
@@ -2002,7 +2398,9 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
     def test_POST_experiment_import_file_redirects_to_importing_log_page_2(self):
@@ -2032,7 +2430,9 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertTemplateUsed(response, "experiment/import_log.html")
 
     def test_POST_experiment_import_file_redirects_to_correct_template_2(self):
@@ -2064,7 +2464,9 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertIn(
             "1 Estudo importado: " + ResearchProject.objects.last().title,
             strip_tags(response.content.decode("utf-8")),
@@ -2110,7 +2512,9 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertContains(
             response,
             reverse(
@@ -2169,16 +2573,24 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertContains(response, "2 Grupos importados")
 
     @patch("survey.abc_search_engine.Server")
-    def test_POST_experiment_import_file_returns_log_with_steps_types_and_number_of_each_step(self, mockServer):
+    def test_POST_experiment_import_file_returns_log_with_steps_types_and_number_of_each_step(
+        self, mockServer
+    ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
         ObjectsFactory.create_research_project(owner=self.user)
-        rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component group 1")
-        rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component group 2")
+        rootcomponent1 = ObjectsFactory.create_component(
+            experiment, "block", "root component group 1"
+        )
+        rootcomponent2 = ObjectsFactory.create_component(
+            experiment, "block", "root component group 2"
+        )
         ObjectsFactory.create_group(experiment, rootcomponent1)
         ObjectsFactory.create_group(experiment, rootcomponent2)
 
@@ -2186,17 +2598,23 @@ class ImportExperimentTest(TestCase):
         ObjectsFactory.create_complete_set_of_components(experiment, rootcomponent1)
 
         # Create one more component to test pluralization
-        component = ObjectsFactory.create_component(experiment, Component.TASK_EXPERIMENT)
+        component = ObjectsFactory.create_component(
+            experiment, Component.TASK_EXPERIMENT
+        )
         ObjectsFactory.create_component_configuration(rootcomponent2, component)
 
-        mockServer.return_value.export_survey.return_value = {"status": "Error: Invalid survey ID"}
+        mockServer.return_value.export_survey.return_value = {
+            "status": "Error: Invalid survey ID"
+        }
 
         export = ExportExperiment(experiment)
         export.export_all()
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self._assert_steps_imported(response)  # related to objects created above
 
     def test_POST_experiment_import_file_import_all_when_there_is_not_previous_objects(
@@ -2204,10 +2622,14 @@ class ImportExperimentTest(TestCase):
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component group 1")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component group 1"
+        )
         group = ObjectsFactory.create_group(experiment, rootcomponent)
         component = ObjectsFactory.create_component(experiment, "instruction")
-        component_config = ObjectsFactory.create_component_configuration(rootcomponent, component)
+        component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, component
+        )
 
         export = ExportExperiment(experiment)
         export.export_all()
@@ -2276,11 +2698,15 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_experiment_and_group(self):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
@@ -2313,13 +2739,17 @@ class ImportExperimentTest(TestCase):
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         # Create another component ('instruction', for example)
         component1 = ObjectsFactory.create_component(experiment, "instruction")
         cc1 = ObjectsFactory.create_component_configuration(rootcomponent, component1)
         # And finally the last one Component ('tms', for example)
         component2_tms_setting = ObjectsFactory.create_tms_setting(experiment)
-        component2 = ObjectsFactory.create_component(experiment, "tms", kwargs={"tms_set": component2_tms_setting})
+        component2 = ObjectsFactory.create_component(
+            experiment, "tms", kwargs={"tms_set": component2_tms_setting}
+        )
         cc2 = ObjectsFactory.create_component_configuration(rootcomponent, component2)
         # Create a reuse of the step 1
         cc3 = ObjectsFactory.create_component_configuration(rootcomponent, component1)
@@ -2329,41 +2759,67 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
-        old_component_configurations = ComponentConfiguration.objects.filter(id__in=[cc1.id, cc2.id, cc3.id])
+        old_component_configurations = ComponentConfiguration.objects.filter(
+            id__in=[cc1.id, cc2.id, cc3.id]
+        )
 
-        new_instruction_component = Component.objects.filter(component_type="instruction").last()
+        new_instruction_component = Component.objects.filter(
+            component_type="instruction"
+        ).last()
         self.assertEqual(2, new_instruction_component.configuration.count())
         for component_configuration in new_instruction_component.configuration.all():
             self.assertNotIn(component_configuration, old_component_configurations)
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_groups_with_reuses_of_their_experimental_protocol_and_returns_successful_message(
         self,
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component1")
-        rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component2")
+        rootcomponent1 = ObjectsFactory.create_component(
+            experiment, "block", "root component1"
+        )
+        rootcomponent2 = ObjectsFactory.create_component(
+            experiment, "block", "root component2"
+        )
         # Create another component ('instruction', for example)
         component1 = ObjectsFactory.create_component(experiment, "instruction")
-        component1_config = ObjectsFactory.create_component_configuration(rootcomponent1, component1)
+        component1_config = ObjectsFactory.create_component_configuration(
+            rootcomponent1, component1
+        )
         # And finally the last one component ('tms', for example)
         component2_tms_setting = ObjectsFactory.create_tms_setting(experiment)
-        component2 = ObjectsFactory.create_component(experiment, "tms", kwargs={"tms_set": component2_tms_setting})
-        component2_config = ObjectsFactory.create_component_configuration(rootcomponent1, component2)
+        component2 = ObjectsFactory.create_component(
+            experiment, "tms", kwargs={"tms_set": component2_tms_setting}
+        )
+        component2_config = ObjectsFactory.create_component_configuration(
+            rootcomponent1, component2
+        )
         # Create a reuse of the step 1 on the same protocol
-        component3_config = ObjectsFactory.create_component_configuration(rootcomponent1, component1)
+        component3_config = ObjectsFactory.create_component_configuration(
+            rootcomponent1, component1
+        )
         # Create a reuse of the step 1 of experimental protocol 1 in group 2
-        component4_config = ObjectsFactory.create_component_configuration(rootcomponent2, component1)
+        component4_config = ObjectsFactory.create_component_configuration(
+            rootcomponent2, component1
+        )
 
         # Create groups
-        group1 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent1)
-        group2 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent2)
+        group1 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent1
+        )
+        group2 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent2
+        )
 
         export = ExportExperiment(experiment)
         export.export_all()
@@ -2377,7 +2833,9 @@ class ImportExperimentTest(TestCase):
         old_groups_count = ExperimentGroup.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_components = Component.objects.exclude(
@@ -2392,8 +2850,12 @@ class ImportExperimentTest(TestCase):
                 component4_config.id,
             ]
         )
-        self.assertEqual(Component.objects.count(), old_objects_count + len(new_components))
-        self.assertEqual(ExperimentGroup.objects.count(), old_groups_count + len(new_groups))
+        self.assertEqual(
+            Component.objects.count(), old_objects_count + len(new_components)
+        )
+        self.assertEqual(
+            ExperimentGroup.objects.count(), old_groups_count + len(new_groups)
+        )
         self.assertEqual(
             ComponentConfiguration.objects.count(),
             old_components_configs_count + len(new_components_configurations),
@@ -2403,13 +2865,21 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
         for item in new_groups:
             self.assertEqual(Experiment.objects.last().id, item.experiment.id)
-            self.assertTrue(new_components.filter(id=item.experimental_protocol_id).exists())
+            self.assertTrue(
+                new_components.filter(id=item.experimental_protocol_id).exists()
+            )
         for item in new_components_configurations:
             self.assertTrue(Component.objects.filter(id=item.component_id).exists())
-            self.assertTrue(ExperimentGroup.objects.filter(experimental_protocol_id=item.parent_id).exists())
+            self.assertTrue(
+                ExperimentGroup.objects.filter(
+                    experimental_protocol_id=item.parent_id
+                ).exists()
+            )
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_reuse_keywords_already_in_database_and_returns_successful_message(
         self,
@@ -2432,15 +2902,21 @@ class ImportExperimentTest(TestCase):
         old_keywords_count = Keyword.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_keywords = Keyword.objects.exclude(id__in=[keyword1.id, keyword2.id])
-        self.assertEqual(Keyword.objects.count(), old_keywords_count + len(new_keywords))
+        self.assertEqual(
+            Keyword.objects.count(), old_keywords_count + len(new_keywords)
+        )
         for item in new_keywords:
             self.assertIn(item, ResearchProject.objects.last().keywords.all())
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_keywords_and_returns_successful_message(
         self,
@@ -2465,23 +2941,33 @@ class ImportExperimentTest(TestCase):
         old_keywords_count = Keyword.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_keywords = Keyword.objects.exclude(id__in=[keyword1.id, keyword2.id])
-        self.assertEqual(Keyword.objects.count(), old_keywords_count + len(new_keywords))
+        self.assertEqual(
+            Keyword.objects.count(), old_keywords_count + len(new_keywords)
+        )
         for item in new_keywords:
             self.assertIn(item, ResearchProject.objects.last().keywords.all())
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     # Questionnaire tests
     @patch("survey.abc_search_engine.Server")
-    def test_POST_experiment_import_file_creates_questionnaire_component_returns_successful_message(self, mockServer):
+    def test_POST_experiment_import_file_creates_questionnaire_component_returns_successful_message(
+        self, mockServer
+    ):
         self._create_minimum_objects_to_test_components()
         self._create_minimum_objects_to_test_questionnaire()
 
-        mockServer.return_value.export_survey.return_value = {"status": "Error: Invalid survey ID"}
+        mockServer.return_value.export_survey.return_value = {
+            "status": "Error: Invalid survey ID"
+        }
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -2491,20 +2977,30 @@ class ImportExperimentTest(TestCase):
         questionnaire_before_count = Questionnaire.objects.count()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
         self.assertEqual(Survey.objects.count(), survey_before_count + 1)
         self.assertEqual(Questionnaire.objects.count(), questionnaire_before_count + 1)
-        self.assertEqual(Questionnaire.objects.last().survey.id, Survey.objects.last().id)
+        self.assertEqual(
+            Questionnaire.objects.last().survey.id, Survey.objects.last().id
+        )
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_POST_experiment_import_file_creates_random_code_in_surveys(self, mockServer):
+    def test_POST_experiment_import_file_creates_random_code_in_surveys(
+        self, mockServer
+    ):
         self._create_minimum_objects_to_test_components()
         self._create_minimum_objects_to_test_questionnaire()
 
-        mockServer.return_value.export_survey.return_value = {"status": "Error: Invalid survey ID"}
+        mockServer.return_value.export_survey.return_value = {
+            "status": "Error: Invalid survey ID"
+        }
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -2517,12 +3013,16 @@ class ImportExperimentTest(TestCase):
         self.assertTrue(1 <= int(new_survey.code.split("Q")[1]) <= 100000)
 
     @patch("survey.abc_search_engine.Server")
-    def test_POST_experiment_import_file_creates_dummy_reference_to_limesurvey_questionnaire(self, mockServer):
+    def test_POST_experiment_import_file_creates_dummy_reference_to_limesurvey_questionnaire(
+        self, mockServer
+    ):
         self._create_minimum_objects_to_test_components()
         self._create_minimum_objects_to_test_questionnaire()
         self._create_minimum_objects_to_test_questionnaire(survey_id=121212)
 
-        mockServer.return_value.export_survey.return_value = {"status": "Error: Invalid survey ID"}
+        mockServer.return_value.export_survey.return_value = {
+            "status": "Error: Invalid survey ID"
+        }
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -2539,7 +3039,9 @@ class ImportExperimentTest(TestCase):
     @staticmethod
     def _get_relations_questionnaire_response():
         return {
-            ComponentConfiguration: [(DataConfigurationTree, "component_configuration")],
+            ComponentConfiguration: [
+                (DataConfigurationTree, "component_configuration")
+            ],
             DataConfigurationTree: [(QuestionnaireResponse, "data_configuration_tree")],
             SubjectOfGroup: [(QuestionnaireResponse, "subject_of_group")],
         }
@@ -2555,14 +3057,20 @@ class ImportExperimentTest(TestCase):
         questionnaire = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
         )
-        component_config = ObjectsFactory.create_component_configuration(self.rootcomponent, questionnaire)
+        component_config = ObjectsFactory.create_component_configuration(
+            self.rootcomponent, questionnaire
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
-        ObjectsFactory.create_questionnaire_response(dct, self.user, 212121, subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            dct, self.user, 212121, subject_of_group
+        )
 
         relations = self._get_relations_questionnaire_response()
 
         # Return error for it's not necessary survey mock
-        mockServer.return_value.export_survey.return_value = {"status": "Error: Invalid survey ID"}
+        mockServer.return_value.export_survey.return_value = {
+            "status": "Error: Invalid survey ID"
+        }
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -2581,7 +3089,9 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(2, model.objects.count(), model)
             model_instance = model.objects.last()
             for dependent_model in relations[model]:
-                self.assertEqual(2, dependent_model[0].objects.count(), (model, dependent_model))
+                self.assertEqual(
+                    2, dependent_model[0].objects.count(), (model, dependent_model)
+                )
                 dependent_model_instance = dependent_model[0].objects.last()
                 reference = getattr(dependent_model_instance, dependent_model[1])
                 self.assertEqual(
@@ -2669,7 +3179,9 @@ class ImportExperimentTest(TestCase):
             new_component = ObjectsFactory.create_component(
                 self.experiment, "stimulus", kwargs={"stimulus_type": stimulus_type}
             )
-            ObjectsFactory.create_component_configuration(self.rootcomponent, new_component)
+            ObjectsFactory.create_component_configuration(
+                self.rootcomponent, new_component
+            )
 
             self._test_creation_and_linking_between_two_models(
                 "experiment.component",
@@ -2682,7 +3194,9 @@ class ImportExperimentTest(TestCase):
 
     def test_component_and_task_experiment(self):
         self._create_minimum_objects_to_test_components()
-        new_component = ObjectsFactory.create_component(self.experiment, "task_experiment")
+        new_component = ObjectsFactory.create_component(
+            self.experiment, "task_experiment"
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, new_component)
 
         self._test_creation_and_linking_between_two_models(
@@ -2695,9 +3209,13 @@ class ImportExperimentTest(TestCase):
 
     def test_component_and_eeg(self):
         self._create_minimum_objects_to_test_components()
-        eeg_setting = EEGSetting.objects.create(name="TESTE_EEG_SETTING", experiment=self.experiment)
+        eeg_setting = EEGSetting.objects.create(
+            name="TESTE_EEG_SETTING", experiment=self.experiment
+        )
 
-        new_component = ObjectsFactory.create_component(self.experiment, "eeg", kwargs={"eeg_set": eeg_setting})
+        new_component = ObjectsFactory.create_component(
+            self.experiment, "eeg", kwargs={"eeg_set": eeg_setting}
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, new_component)
 
         self._test_creation_and_linking_between_two_models(
@@ -2711,15 +3229,21 @@ class ImportExperimentTest(TestCase):
     def test_component_and_emg(self):
         self._create_minimum_objects_to_test_components()
         manufacturer = Manufacturer.objects.create(name="TEST_MANUFACTURER")
-        software = Software.objects.create(name="TEST_SOFTWARE", manufacturer=manufacturer)
-        software_version = SoftwareVersion.objects.create(name="TEST_SOFTWARE_VERSION", software=software)
+        software = Software.objects.create(
+            name="TEST_SOFTWARE", manufacturer=manufacturer
+        )
+        software_version = SoftwareVersion.objects.create(
+            name="TEST_SOFTWARE_VERSION", software=software
+        )
         emg_setting = EMGSetting.objects.create(
             name="TESTE_EEG_SETTING",
             experiment=self.experiment,
             acquisition_software_version=software_version,
         )
 
-        new_component = ObjectsFactory.create_component(self.experiment, "emg", kwargs={"emg_set": emg_setting})
+        new_component = ObjectsFactory.create_component(
+            self.experiment, "emg", kwargs={"emg_set": emg_setting}
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, new_component)
 
         self._test_creation_and_linking_between_two_models(
@@ -2732,9 +3256,13 @@ class ImportExperimentTest(TestCase):
 
     def test_component_and_tms(self):
         self._create_minimum_objects_to_test_components()
-        tms_setting = TMSSetting.objects.create(name="TESTE_TMS_SETTING", experiment=self.experiment)
+        tms_setting = TMSSetting.objects.create(
+            name="TESTE_TMS_SETTING", experiment=self.experiment
+        )
 
-        new_component = ObjectsFactory.create_component(self.experiment, "tms", kwargs={"tms_set": tms_setting})
+        new_component = ObjectsFactory.create_component(
+            self.experiment, "tms", kwargs={"tms_set": tms_setting}
+        )
         ObjectsFactory.create_component_configuration(self.rootcomponent, new_component)
 
         self._test_creation_and_linking_between_two_models(
@@ -2748,8 +3276,12 @@ class ImportExperimentTest(TestCase):
     def test_component_and_digital_game_phase(self):
         self._create_minimum_objects_to_test_components()
         manufacturer = Manufacturer.objects.create(name="TEST_MANUFACTURER")
-        software = Software.objects.create(name="TEST_SOFTWARE", manufacturer=manufacturer)
-        software_version = SoftwareVersion.objects.create(name="TEST_SOFTWARE_VERSION", software=software)
+        software = Software.objects.create(
+            name="TEST_SOFTWARE", manufacturer=manufacturer
+        )
+        software_version = SoftwareVersion.objects.create(
+            name="TEST_SOFTWARE_VERSION", software=software
+        )
         context_tree = ContextTree.objects.create(
             name="TEST_CONTEXT_TREE",
             description="DESCRIPTION_CONTEXT_TREE",
@@ -2776,7 +3308,9 @@ class ImportExperimentTest(TestCase):
         self._create_minimum_objects_to_test_components()
         self._create_minimum_objects_to_test_questionnaire()
 
-        mockServer.return_value.export_survey.return_value = {"status": "Error: Invalid survey ID"}
+        mockServer.return_value.export_survey.return_value = {
+            "status": "Error: Invalid survey ID"
+        }
 
         self._test_creation_and_linking_between_two_models(
             "experiment.component",
@@ -2792,14 +3326,22 @@ class ImportExperimentTest(TestCase):
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component1")
-        rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component2")
+        rootcomponent1 = ObjectsFactory.create_component(
+            experiment, "block", "root component1"
+        )
+        rootcomponent2 = ObjectsFactory.create_component(
+            experiment, "block", "root component2"
+        )
         component = ObjectsFactory.create_component(experiment, "instruction")
         ObjectsFactory.create_component_configuration(rootcomponent1, component)
 
         # Create groups
-        group1 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent1)
-        group2 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent2)
+        group1 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent1
+        )
+        group2 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent2
+        )
 
         # Create participants
         util = UtilTests()
@@ -2838,12 +3380,18 @@ class ImportExperimentTest(TestCase):
             session["file_name"] = file.name
             session.save()
 
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         self.assertRedirects(response, reverse("import_log"))
 
-        new_patients = Patient.objects.exclude(id__in=[patient1_mock.id, patient2_mock.id])
-        new_subjects = Subject.objects.exclude(id__in=[subject_mock1.id, subject_mock2.id])
+        new_patients = Patient.objects.exclude(
+            id__in=[patient1_mock.id, patient2_mock.id]
+        )
+        new_subjects = Subject.objects.exclude(
+            id__in=[subject_mock1.id, subject_mock2.id]
+        )
         new_subjectsofgroups = SubjectOfGroup.objects.exclude(
             id__in=[subject_group1.id, subject_group2.id, subject_group3.id]
         )
@@ -2854,7 +3402,9 @@ class ImportExperimentTest(TestCase):
         for item in new_subjectsofgroups:
             self.assertTrue(SubjectOfGroup.objects.filter(id=item.id).exists())
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_patient_with_new_code_and_cpf_cleared(
         self,
@@ -2878,7 +3428,9 @@ class ImportExperimentTest(TestCase):
             session["patients_conflicts_resolved"] = True
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_patients = Patient.objects.exclude(id=patient.id)
@@ -2918,15 +3470,23 @@ class ImportExperimentTest(TestCase):
     ):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component1")
-        rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component2")
+        rootcomponent1 = ObjectsFactory.create_component(
+            experiment, "block", "root component1"
+        )
+        rootcomponent2 = ObjectsFactory.create_component(
+            experiment, "block", "root component2"
+        )
         # Create another component ('instruction', for example)
         component = ObjectsFactory.create_component(experiment, "instruction")
         ObjectsFactory.create_component_configuration(rootcomponent1, component)
 
         # Create groups
-        group1 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent1)
-        group2 = ObjectsFactory.create_group(experiment=experiment, experimental_protocol=rootcomponent2)
+        group1 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent1
+        )
+        group2 = ObjectsFactory.create_group(
+            experiment=experiment, experimental_protocol=rootcomponent2
+        )
 
         util = UtilTests()
         patient1 = util.create_patient(changed_by=self.user)
@@ -2934,8 +3494,12 @@ class ImportExperimentTest(TestCase):
 
         # Create participants data
         # Telephone
-        telephone1 = Telephone.objects.create(patient=patient1, number="987654321", changed_by=self.user)
-        telephone2 = Telephone.objects.create(patient=patient2, number="987654321", changed_by=self.user)
+        telephone1 = Telephone.objects.create(
+            patient=patient1, number="987654321", changed_by=self.user
+        )
+        telephone2 = Telephone.objects.create(
+            patient=patient2, number="987654321", changed_by=self.user
+        )
 
         # Social demograph
         flesh_tone = FleshTone.objects.create(name="Yellow")
@@ -3001,7 +3565,9 @@ class ImportExperimentTest(TestCase):
             medical_record_data=medicalevaluation1, classification_of_diseases=cid10_1
         )
 
-        medicalevaluation2 = MedicalRecordData.objects.create(patient=patient2, record_responsible=self.user)
+        medicalevaluation2 = MedicalRecordData.objects.create(
+            patient=patient2, record_responsible=self.user
+        )
         diagnosis2 = Diagnosis.objects.create(
             medical_record_data=medicalevaluation2, classification_of_diseases=cid10_2
         )
@@ -3039,15 +3605,25 @@ class ImportExperimentTest(TestCase):
             session["file_name"] = file.name
             session.save()
 
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_patients = Patient.objects.exclude(id__in=[patient1.id, patient2.id])
-        new_telephones = Telephone.objects.exclude(id__in=[telephone1.id, telephone2.id])
-        new_socialdemographic = SocialDemographicData.objects.exclude(id__in=[sociodemograph1.id, sociodemograph2.id])
-        new_socialhistory = SocialHistoryData.objects.exclude(id__in=[socialhistory1.id, socialhistory2.id])
+        new_telephones = Telephone.objects.exclude(
+            id__in=[telephone1.id, telephone2.id]
+        )
+        new_socialdemographic = SocialDemographicData.objects.exclude(
+            id__in=[sociodemograph1.id, sociodemograph2.id]
+        )
+        new_socialhistory = SocialHistoryData.objects.exclude(
+            id__in=[socialhistory1.id, socialhistory2.id]
+        )
         new_diagnosis = Diagnosis.objects.exclude(id__in=[diagnosis1.id, diagnosis2.id])
-        new_medical_records = MedicalRecordData.objects.exclude(id__in=[medicalevaluation1.id, medicalevaluation2.id])
+        new_medical_records = MedicalRecordData.objects.exclude(
+            id__in=[medicalevaluation1.id, medicalevaluation2.id]
+        )
 
         self.assertEqual(2, new_patients.count())
         self.assertEqual(2, new_telephones.count())
@@ -3058,10 +3634,20 @@ class ImportExperimentTest(TestCase):
 
         for patient in new_patients:
             self.assertTrue(Telephone.objects.filter(patient_id=patient.id).exists())
-            self.assertTrue(SocialDemographicData.objects.filter(patient_id=patient.id).exists())
-            self.assertTrue(SocialHistoryData.objects.filter(patient_id=patient.id).exists())
-            self.assertTrue(Diagnosis.objects.filter(medical_record_data__patient_id=patient.id).exists())
-            self.assertTrue(MedicalRecordData.objects.filter(patient_id=patient.id).exists())
+            self.assertTrue(
+                SocialDemographicData.objects.filter(patient_id=patient.id).exists()
+            )
+            self.assertTrue(
+                SocialHistoryData.objects.filter(patient_id=patient.id).exists()
+            )
+            self.assertTrue(
+                Diagnosis.objects.filter(
+                    medical_record_data__patient_id=patient.id
+                ).exists()
+            )
+            self.assertTrue(
+                MedicalRecordData.objects.filter(patient_id=patient.id).exists()
+            )
 
         self.assertNotEqual(new_patients[0].id, new_patients[1].id)
         self.assertNotEqual(new_telephones[0].id, new_telephones[1].id)
@@ -3071,7 +3657,9 @@ class ImportExperimentTest(TestCase):
         self.assertNotEqual(new_diagnosis[0].id, new_diagnosis[1].id)
 
         message = str(list(response.context["messages"])[0])
-        self.assertEqual(message, "Experimento importado com sucesso. Novo estudo criado.")
+        self.assertEqual(
+            message, "Experimento importado com sucesso. Novo estudo criado."
+        )
 
     def test_POST_experiment_import_file_creates_telephone_with_logged_user(self):
         research_project = ObjectsFactory.create_research_project(owner=self.user)
@@ -3093,7 +3681,9 @@ class ImportExperimentTest(TestCase):
             session["patients_conflicts_resolved"] = True
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_telephone = Telephone.objects.exclude(id=telephone.id)
@@ -3141,7 +3731,9 @@ class ImportExperimentTest(TestCase):
         file_path = export.get_file_path()
 
         with open(file_path, "rb") as file:
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         existing_patients = response.context["patients"]
         self.assertEqual(patient2.id, existing_patients[0]["id_db"])
 
@@ -3185,7 +3777,9 @@ class ImportExperimentTest(TestCase):
             session["patients_conflicts_resolved"] = True
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file, "from[]": []}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file, "from[]": []}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         new_participant = Patient.objects.exclude(id=patient.id)
@@ -3766,15 +4360,23 @@ class ImportExperimentTest(TestCase):
                 (MuscleSubdivision, "muscle", 1),
             ],
             (MuscleSide, "name", 1): [(EMGElectrodePlacementSetting, "muscle_side", 3)],
-            (MuscleSubdivision, "anatomy_origin", 1): [(EMGElectrodePlacement, "muscle_subdivision", 3)],
-            (EMGSurfacePlacement, "location", 1): [(EMGElectrodePlacementSetting, "emg_electrode_placement", 1)],
-            (FilterType, "description", 1): [(EMGDigitalFilterSetting, "filter_type", 1)],
+            (MuscleSubdivision, "anatomy_origin", 1): [
+                (EMGElectrodePlacement, "muscle_subdivision", 3)
+            ],
+            (EMGSurfacePlacement, "location", 1): [
+                (EMGElectrodePlacementSetting, "emg_electrode_placement", 1)
+            ],
+            (FilterType, "description", 1): [
+                (EMGDigitalFilterSetting, "filter_type", 1)
+            ],
             (ElectrodeModel, "description", 1): [(EMGElectrodeSetting, "electrode", 3)],
             (Amplifier, "input_impedance_unit", 1): [
                 (EMGAmplifierSetting, "amplifier", 3),
                 (EMGPreamplifierSetting, "amplifier", 3),
             ],
-            (StandardizationSystem, "description", 1): [(EMGElectrodePlacement, "standardization_system", 3)],
+            (StandardizationSystem, "description", 1): [
+                (EMGElectrodePlacement, "standardization_system", 3)
+            ],
         }
 
     @staticmethod
@@ -3783,8 +4385,12 @@ class ImportExperimentTest(TestCase):
         # because they are not tested against creating new models.
         return {
             (TetheringSystem, "", 1): [(Amplifier, "tethering_system", 1)],
-            (AmplifierDetectionType, "", 1): [(Amplifier, "amplifier_detection_type", 1)],
-            (ElectrodeConfiguration, "", 1): [(ElectrodeModel, "electrode_configuration", 1)],
+            (AmplifierDetectionType, "", 1): [
+                (Amplifier, "amplifier_detection_type", 1)
+            ],
+            (ElectrodeConfiguration, "", 1): [
+                (ElectrodeModel, "electrode_configuration", 1)
+            ],
         }
 
     def test_preloaded_object_is_equal_to_the_one_imported_keeps_object_and_references_emg(
@@ -3810,7 +4416,9 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(model[2], model[0].objects.count(), model[0])
             model_instance = model[0].objects.last()
             for dependent_model in pre_loaded_models[model]:
-                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[: dependent_model[2]]
+                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[
+                    : dependent_model[2]
+                ]
                 for dependent_model_instance in dependent_model_instances:
                     reference = getattr(dependent_model_instance, dependent_model[1])
                     # for EMGElectrodePlacement we need to take the EMGSurfacePlacement inherited
@@ -3848,7 +4456,9 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(2, model[0].objects.count(), model[0])
             model_instance = model[0].objects.last()
             for dependent_model in pre_loaded_models[model]:
-                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[: dependent_model[2]]
+                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[
+                    : dependent_model[2]
+                ]
                 for dependent_model_instance in dependent_model_instances:
                     reference = getattr(dependent_model_instance, dependent_model[1])
                     # for EMGElectrodePlacement we need to take the EMGSurfacePlacement inherited
@@ -3880,9 +4490,15 @@ class ImportExperimentTest(TestCase):
                 (EEGElectrodeNetSystem, "eeg_electrode_localization_system", 1),
                 (EEGElectrodePosition, "eeg_electrode_localization_system", 1),
             ],
-            (EEGElectrodePosition, "name", 1): [(EEGElectrodePositionSetting, "eeg_electrode_position", 1)],
-            (Amplifier, "input_impedance_unit", 1): [(EEGAmplifierSetting, "eeg_amplifier", 1)],
-            (EEGElectrodeNet, "identification", 1): [(EEGElectrodeNetSystem, "eeg_electrode_net", 1)],
+            (EEGElectrodePosition, "name", 1): [
+                (EEGElectrodePositionSetting, "eeg_electrode_position", 1)
+            ],
+            (Amplifier, "input_impedance_unit", 1): [
+                (EEGAmplifierSetting, "eeg_amplifier", 1)
+            ],
+            (EEGElectrodeNet, "identification", 1): [
+                (EEGElectrodeNetSystem, "eeg_electrode_net", 1)
+            ],
         }
 
     @staticmethod
@@ -3890,10 +4506,16 @@ class ImportExperimentTest(TestCase):
         # Not editable models does not need the second element of the tupple, as in editable ones
         # because they are not tested against creating new models.
         return {
-            (EEGElectrodeNetSystem, "", 1): [(EEGElectrodeLayoutSetting, "eeg_electrode_net_system", 1)],
+            (EEGElectrodeNetSystem, "", 1): [
+                (EEGElectrodeLayoutSetting, "eeg_electrode_net_system", 1)
+            ],
             (TetheringSystem, "", 1): [(Amplifier, "tethering_system", 1)],
-            (AmplifierDetectionType, "", 1): [(Amplifier, "amplifier_detection_type", 1)],
-            (ElectrodeConfiguration, "", 1): [(ElectrodeModel, "electrode_configuration", 1)],
+            (AmplifierDetectionType, "", 1): [
+                (Amplifier, "amplifier_detection_type", 1)
+            ],
+            (ElectrodeConfiguration, "", 1): [
+                (ElectrodeModel, "electrode_configuration", 1)
+            ],
             (EEGElectrodeCap, "", 1): [(EEGCapSize, "eeg_electrode_cap", 1)],
         }
 
@@ -3920,7 +4542,9 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(model[2], model[0].objects.count(), model[0])
             model_instance = model[0].objects.last()
             for dependent_model in pre_loaded_models[model]:
-                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[: dependent_model[2]]
+                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[
+                    : dependent_model[2]
+                ]
                 for dependent_model_instance in dependent_model_instances:
                     reference = getattr(dependent_model_instance, dependent_model[1])
                     self.assertEqual(
@@ -3954,7 +4578,9 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(2, model[0].objects.count(), model[0])
             model_instance = model[0].objects.last()
             for dependent_model in pre_loaded_models[model]:
-                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[: dependent_model[2]]
+                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[
+                    : dependent_model[2]
+                ]
                 for dependent_model_instance in dependent_model_instances:
                     reference = getattr(dependent_model_instance, dependent_model[1])
                     self.assertEqual(
@@ -3986,7 +4612,9 @@ class ImportExperimentTest(TestCase):
         assert isinstance(electrode_loc_sys, EEGElectrodeLocalizationSystem)
         new_electrode_pos = EEGElectrodePosition.objects.last()
         assert isinstance(new_electrode_pos, EEGElectrodePosition)
-        self.assertEqual(new_electrode_pos.eeg_electrode_localization_system, new_electrode_loc_sys)
+        self.assertEqual(
+            new_electrode_pos.eeg_electrode_localization_system, new_electrode_loc_sys
+        )
         new_eegelectrodenetsystem = EEGElectrodeNetSystem.objects.last()
         assert isinstance(new_eegelectrodenetsystem, EEGElectrodeNetSystem)
         self.assertEqual(
@@ -4031,7 +4659,9 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(model[2], model[0].objects.count(), model[0])
             model_instance = model[0].objects.last()
             for dependent_model in pre_loaded_models[model]:
-                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[: dependent_model[2]]
+                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[
+                    : dependent_model[2]
+                ]
                 for dependent_model_instance in dependent_model_instances:
                     reference = getattr(dependent_model_instance, dependent_model[1])
                     self.assertEqual(
@@ -4065,7 +4695,9 @@ class ImportExperimentTest(TestCase):
             self.assertEqual(2, model[0].objects.count(), model[0])
             model_instance = model[0].objects.last()
             for dependent_model in pre_loaded_models[model]:
-                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[: dependent_model[2]]
+                dependent_model_instances = dependent_model[0].objects.order_by("-pk")[
+                    : dependent_model[2]
+                ]
                 for dependent_model_instance in dependent_model_instances:
                     reference = getattr(dependent_model_instance, dependent_model[1])
                     self.assertEqual(
@@ -4138,7 +4770,9 @@ class ImportExperimentTest(TestCase):
 
         self.assertEqual(Patient.objects.last().changed_by, self.user_importer)
         self.assertEqual(Telephone.objects.last().changed_by, self.user_importer)
-        self.assertEqual(MedicalRecordData.objects.last().record_responsible, self.user_importer)
+        self.assertEqual(
+            MedicalRecordData.objects.last().record_responsible, self.user_importer
+        )
 
     def test_diagnosis_classification_of_diseases_references_points_to_code_already_existent_imports_successfully(
         self,
@@ -4162,7 +4796,9 @@ class ImportExperimentTest(TestCase):
             session["patients_conflicts_resolved"] = True
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         self.assertEqual(ClassificationOfDiseases.objects.count(), cid10_count)
@@ -4191,7 +4827,9 @@ class ImportExperimentTest(TestCase):
             session["patients_conflicts_resolved"] = True
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
         self.assertRedirects(response, reverse("import_log"))
 
         self.assertEqual(2, ClassificationOfDiseases.objects.count())
@@ -4199,7 +4837,9 @@ class ImportExperimentTest(TestCase):
         assert isinstance(new_cid10, ClassificationOfDiseases)
         self.assertEqual(new_cid10.code, "A01")
         self.assertEqual(new_cid10.description, "(imported, not recognized)")
-        self.assertEqual(new_cid10.abbreviated_description, "(imported, not recognized)")
+        self.assertEqual(
+            new_cid10.abbreviated_description, "(imported, not recognized)"
+        )
 
     def test_error_loading_fixture_display_error_message(self):
         # TODO: implement it!
@@ -4210,18 +4850,28 @@ class ImportExperimentTest(TestCase):
         # Create base objects for an experiment with one step of tms
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         tms_setting = ObjectsFactory.create_tms_setting(experiment)
-        tms_step = ObjectsFactory.create_component(experiment, "tms", kwargs={"tms_set": tms_setting})
-        component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, tms_step)
-        self.dct = ObjectsFactory.create_data_configuration_tree(component_configuration)
+        tms_step = ObjectsFactory.create_component(
+            experiment, "tms", kwargs={"tms_set": tms_setting}
+        )
+        component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, tms_step
+        )
+        self.dct = ObjectsFactory.create_data_configuration_tree(
+            component_configuration
+        )
 
         # Create objects for the tms data
         group = ObjectsFactory.create_group(experiment)
         patient = UtilTests.create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(patient)
         self.subject_of_group = ObjectsFactory.create_subject_of_group(group, subject)
-        tms_data = ObjectsFactory.create_tms_data_collection_data(self.dct, self.subject_of_group, tms_setting)
+        tms_data = ObjectsFactory.create_tms_data_collection_data(
+            self.dct, self.subject_of_group, tms_setting
+        )
 
         # Create objects for the hotspot (optional, but desired step of the tms data)
         tms_local_sys = ObjectsFactory.create_tms_localization_system_file()
@@ -4239,8 +4889,12 @@ class ImportExperimentTest(TestCase):
     def test_component_and_component_configuration(self):
         self._create_minimum_objects_to_test_components()
         tms_setting = ObjectsFactory.create_tms_setting(self.experiment)
-        tms = ObjectsFactory.create_component(self.experiment, "tms", kwargs={"tms_set": tms_setting})
-        component_config = ObjectsFactory.create_component_configuration(self.rootcomponent, tms)
+        tms = ObjectsFactory.create_component(
+            self.experiment, "tms", kwargs={"tms_set": tms_setting}
+        )
+        component_config = ObjectsFactory.create_component_configuration(
+            self.rootcomponent, tms
+        )
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -4257,10 +4911,16 @@ class ImportExperimentTest(TestCase):
             )
         self.assertRedirects(response, reverse("import_log"))
 
-        new_components = Component.objects.exclude(id__in=[self.rootcomponent.id, tms.id])
-        new_componentconfiguration = ComponentConfiguration.objects.exclude(id=component_config.id)
+        new_components = Component.objects.exclude(
+            id__in=[self.rootcomponent.id, tms.id]
+        )
+        new_componentconfiguration = ComponentConfiguration.objects.exclude(
+            id=component_config.id
+        )
 
-        self.assertEqual(Component.objects.count(), old_components + len(new_components))
+        self.assertEqual(
+            Component.objects.count(), old_components + len(new_components)
+        )
         self.assertEqual(
             ComponentConfiguration.objects.count(),
             old_componentsconfiguration + len(new_componentconfiguration),
@@ -4370,11 +5030,17 @@ class ImportExperimentTest(TestCase):
 
         # Remove exported files, so we guarantee
         # that the new ones imported have correct files uploaded
-        os.remove(os.path.join(self.TEMP_MEDIA_ROOT, tms_ls.tms_localization_system_image.name))
+        os.remove(
+            os.path.join(
+                self.TEMP_MEDIA_ROOT, tms_ls.tms_localization_system_image.name
+            )
+        )
 
         tms_file_imported = TMSLocalizationSystem.objects.last()
         assert isinstance(tms_file_imported, TMSLocalizationSystem)
-        filepath = os.path.join(self.TEMP_MEDIA_ROOT, tms_file_imported.tms_localization_system_image.name)
+        filepath = os.path.join(
+            self.TEMP_MEDIA_ROOT, tms_file_imported.tms_localization_system_image.name
+        )
         self.assertTrue(os.path.exists(filepath))
 
     # Tests for Additional data collection
@@ -4387,7 +5053,9 @@ class ImportExperimentTest(TestCase):
         patient = UtilTests.create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(patient)
         subject_of_group = ObjectsFactory.create_subject_of_group(group, subject)
-        additional_data = ObjectsFactory.create_additional_data_data(None, subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            None, subject_of_group
+        )
         ObjectsFactory.create_additional_data_file(additional_data)
 
         return experiment
@@ -4396,7 +5064,9 @@ class ImportExperimentTest(TestCase):
         # Additional data doesn't need a data configuration tree to exist,
         # unless they are associated to a step
         experiment = self._create_tms_data_collection_objects()
-        additional_data = ObjectsFactory.create_additional_data_data(self.dct, self.subject_of_group)
+        additional_data = ObjectsFactory.create_additional_data_data(
+            self.dct, self.subject_of_group
+        )
         ObjectsFactory.create_additional_data_file(additional_data)
 
         self._test_creation_and_linking_between_two_models(
@@ -4464,7 +5134,9 @@ class ImportExperimentTest(TestCase):
         # Create base objects for an experiment with one step of digital_phase_data
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
 
         context_tree = ObjectsFactory.create_context_tree(experiment)
         # Create file to context tree
@@ -4483,7 +5155,9 @@ class ImportExperimentTest(TestCase):
             "digital_game_phase",
             kwargs={"software_version": software_version, "context_tree": context_tree},
         )
-        component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, digital_game_phase_step)
+        component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, digital_game_phase_step
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_configuration)
 
         # Create objects for the digital game phase data
@@ -4491,7 +5165,9 @@ class ImportExperimentTest(TestCase):
         patient = UtilTests.create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(patient)
         subject_of_group = ObjectsFactory.create_subject_of_group(group, subject)
-        digital_game_phase_data = ObjectsFactory.create_digital_game_phase_data(dct, subject_of_group)
+        digital_game_phase_data = ObjectsFactory.create_digital_game_phase_data(
+            dct, subject_of_group
+        )
         ObjectsFactory.create_digital_game_phase_file(digital_game_phase_data)
 
         return experiment
@@ -4558,7 +5234,9 @@ class ImportExperimentTest(TestCase):
         dgp_file_imported = DigitalGamePhaseFile.objects.last()
         contexttree_file_imported = ContextTree.objects.last()
         filepath1 = os.path.join(self.TEMP_MEDIA_ROOT, dgp_file_imported.file.name)
-        filepath2 = os.path.join(self.TEMP_MEDIA_ROOT, contexttree_file_imported.setting_file.name)
+        filepath2 = os.path.join(
+            self.TEMP_MEDIA_ROOT, contexttree_file_imported.setting_file.name
+        )
         self.assertTrue(os.path.exists(filepath1))
         self.assertTrue(os.path.exists(filepath2))
 
@@ -4567,7 +5245,9 @@ class ImportExperimentTest(TestCase):
         # Create base objects for an experiment with one step of generic data collection
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
 
         information_type = ObjectsFactory.create_information_type()
 
@@ -4584,7 +5264,9 @@ class ImportExperimentTest(TestCase):
         patient = UtilTests.create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(patient)
         subject_of_group = ObjectsFactory.create_subject_of_group(group, subject)
-        generic_data_collection_data = ObjectsFactory.create_generic_data_collection_data(dct, subject_of_group)
+        generic_data_collection_data = (
+            ObjectsFactory.create_generic_data_collection_data(dct, subject_of_group)
+        )
         ObjectsFactory.create_generic_data_collection_file(generic_data_collection_data)
 
         return experiment
@@ -4655,15 +5337,21 @@ class ImportExperimentTest(TestCase):
         # Create base objects for an experiment with one step of emg
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
 
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         software_version = ObjectsFactory.create_software_version(software)
         emg_setting = ObjectsFactory.create_emg_setting(experiment, software_version)
-        emg_step = ObjectsFactory.create_component(experiment, "emg", kwargs={"emg_set": emg_setting})
+        emg_step = ObjectsFactory.create_component(
+            experiment, "emg", kwargs={"emg_set": emg_setting}
+        )
 
-        component_config = ObjectsFactory.create_component_configuration(rootcomponent, emg_step)
+        component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, emg_step
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         # Create objects for the emg data collection
@@ -4671,7 +5359,9 @@ class ImportExperimentTest(TestCase):
         patient = UtilTests.create_patient(changed_by=self.user)
         subject = ObjectsFactory.create_subject(patient)
         subject_of_group = ObjectsFactory.create_subject_of_group(group, subject)
-        emg_data = ObjectsFactory.create_emg_data_collection_data(dct, subject_of_group, emg_setting)
+        emg_data = ObjectsFactory.create_emg_data_collection_data(
+            dct, subject_of_group, emg_setting
+        )
         ObjectsFactory.create_emg_data_collection_file(emg_data)
 
         return experiment
@@ -4686,9 +5376,15 @@ class ImportExperimentTest(TestCase):
         muscle = ObjectsFactory.create_muscle()
         muscle_subdivision = ObjectsFactory.create_muscle_subdivision(muscle)
         electrode_model = ObjectsFactory.create_electrode_model()
-        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(emg_setting, electrode_model)
-        emg_ep = ObjectsFactory.create_emg_electrode_placement(standardization_system, muscle_subdivision)
-        ObjectsFactory.create_emg_electrode_placement_setting(emg_electrode_setting, emg_ep)
+        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(
+            emg_setting, electrode_model
+        )
+        emg_ep = ObjectsFactory.create_emg_electrode_placement(
+            standardization_system, muscle_subdivision
+        )
+        ObjectsFactory.create_emg_electrode_placement_setting(
+            emg_electrode_setting, emg_ep
+        )
 
         export = ExportExperiment(experiment)
         export.export_all()
@@ -4732,14 +5428,20 @@ class ImportExperimentTest(TestCase):
         with open(file_path_json) as file:
             data = file.read().replace("\n", "")
         serialized = json.loads(data)
-        index = next(index for (index, dict_) in enumerate(serialized) if dict_["model"] == "experiment.fileformat")
+        index = next(
+            index
+            for (index, dict_) in enumerate(serialized)
+            if dict_["model"] == "experiment.fileformat"
+        )
         serialized[index]["pk"] = serialized[index]["pk"] + 1
         with open(file_path_json, "w") as file:
             file.write(json.dumps(serialized))
         # Redirect sys.stderr to doesn't display warning message when write experiment.json to zip file
         stderr_bk, sys.stderr = sys.stderr, open("/dev/null", "w+")
         with zipfile.ZipFile(export.get_file_path(), "a") as zip_file:
-            zip_file.write(export.get_file_path("json").encode("utf-8"), export.FILE_NAME_JSON)
+            zip_file.write(
+                export.get_file_path("json").encode("utf-8"), export.FILE_NAME_JSON
+            )
         sys.stderr = stderr_bk
 
         # Add session variables related to updating/overwrite patients when importing
@@ -4802,34 +5504,54 @@ class ImportExperimentTest(TestCase):
 
     def _create_eeg_data_collection_related_objects(self):
         eeg_setting = ObjectsFactory.create_eeg_setting(self.experiment)
-        eeg_step = ObjectsFactory.create_component(self.experiment, "eeg", kwargs={"eeg_set": eeg_setting})
-        component_configuration = ObjectsFactory.create_component_configuration(self.rootcomponent, eeg_step)
+        eeg_step = ObjectsFactory.create_component(
+            self.experiment, "eeg", kwargs={"eeg_set": eeg_setting}
+        )
+        component_configuration = ObjectsFactory.create_component_configuration(
+            self.rootcomponent, eeg_step
+        )
         dct = ObjectsFactory.create_data_configuration_tree(component_configuration)
         manufacturer = ObjectsFactory.create_manufacturer()
         eeg_electrode_model = ObjectsFactory.create_electrode_model()
-        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(manufacturer, eeg_electrode_model)
+        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(
+            manufacturer, eeg_electrode_model
+        )
         eeg_cap_size = ObjectsFactory.create_eeg_electrode_capsize(eeg_electrode_cap)
-        eeg_data = ObjectsFactory.create_eeg_data(dct, self.subject_of_group, eeg_setting, eeg_cap_size)
+        eeg_data = ObjectsFactory.create_eeg_data(
+            dct, self.subject_of_group, eeg_setting, eeg_cap_size
+        )
         ObjectsFactory.create_eeg_file(eeg_data)
-        eeg_electrode_localization_system = ObjectsFactory.create_eeg_electrode_localization_system()
+        eeg_electrode_localization_system = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
         eeg_electrode_net_system = ObjectsFactory.create_eeg_electrode_net_system(
             eeg_electrode_cap, eeg_electrode_localization_system
         )
-        eeg_electrode_position = ObjectsFactory.create_eeg_electrode_position(eeg_electrode_localization_system)
-        eeg_electrode_layout_setting = ObjectsFactory.create_eeg_electrode_layout_setting(
-            eeg_setting, eeg_electrode_net_system
+        eeg_electrode_position = ObjectsFactory.create_eeg_electrode_position(
+            eeg_electrode_localization_system
         )
-        eeg_electrode_position_setting = ObjectsFactory.create_eeg_electrode_position_setting(
-            eeg_electrode_layout_setting,
-            eeg_electrode_position,
-            eeg_electrode_model,
+        eeg_electrode_layout_setting = (
+            ObjectsFactory.create_eeg_electrode_layout_setting(
+                eeg_setting, eeg_electrode_net_system
+            )
         )
-        ObjectsFactory.create_eeg_electrode_position_collection_status(eeg_data, eeg_electrode_position_setting)
+        eeg_electrode_position_setting = (
+            ObjectsFactory.create_eeg_electrode_position_setting(
+                eeg_electrode_layout_setting,
+                eeg_electrode_position,
+                eeg_electrode_model,
+            )
+        )
+        ObjectsFactory.create_eeg_electrode_position_collection_status(
+            eeg_data, eeg_electrode_position_setting
+        )
 
     @staticmethod
     def _get_relations_eegdata():
         return {
-            ComponentConfiguration: [(DataConfigurationTree, "component_configuration")],
+            ComponentConfiguration: [
+                (DataConfigurationTree, "component_configuration")
+            ],
             # DataConfigurationTree: [(DataConfigurationTree, 'parent')],
             DataConfigurationTree: [(EEGData, "data_configuration_tree")],
             # TODO: FileFormat: test in preloaded models not editable
@@ -4839,9 +5561,13 @@ class ImportExperimentTest(TestCase):
                 (EEGFile, "eeg_data"),
                 (EEGElectrodePositionCollectionStatus, "eeg_data"),
             ],
-            EEGElectrodePositionSetting: [(EEGElectrodePositionCollectionStatus, "eeg_electrode_position_setting")],
+            EEGElectrodePositionSetting: [
+                (EEGElectrodePositionCollectionStatus, "eeg_electrode_position_setting")
+            ],
             EEGCapSize: [(EEGData, "eeg_cap_size")],
-            EEGElectrodeCap: [(EEGCapSize, "eeg_electrode_cap")],  # EEGElectrodeCap: preloaded model not editable
+            EEGElectrodeCap: [
+                (EEGCapSize, "eeg_electrode_cap")
+            ],  # EEGElectrodeCap: preloaded model not editable
         }
 
     # Tests for EEG data collections related models
@@ -4854,7 +5580,9 @@ class ImportExperimentTest(TestCase):
         self._create_eeg_data_collection_related_objects()
 
         relations = self._get_relations_eegdata()
-        pre_loaded_models = [key[0] for key in self._get_pre_loaded_models_eeg_not_editable().keys()]
+        pre_loaded_models = [
+            key[0] for key in self._get_pre_loaded_models_eeg_not_editable().keys()
+        ]
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -4916,7 +5644,9 @@ class ImportExperimentTest(TestCase):
         eeg_file_imported = EEGFile.objects.last()
         eeg_els_imported = EEGElectrodeLocalizationSystem.objects.last()
         filepath1 = os.path.join(self.TEMP_MEDIA_ROOT, eeg_file_imported.file.name)
-        filepath2 = os.path.join(self.TEMP_MEDIA_ROOT, eeg_els_imported.map_image_file.name)
+        filepath2 = os.path.join(
+            self.TEMP_MEDIA_ROOT, eeg_els_imported.map_image_file.name
+        )
         self.assertTrue(os.path.exists(filepath1))
         self.assertTrue(os.path.exists(filepath2))
 
@@ -4930,15 +5660,25 @@ class ImportExperimentTest(TestCase):
         self.subject_of_group = ObjectsFactory.create_subject_of_group(group, subject1)
         subject_of_group2 = ObjectsFactory.create_subject_of_group(group, subject2)
         eeg_setting = ObjectsFactory.create_eeg_setting(self.experiment)
-        eeg_step = ObjectsFactory.create_component(self.experiment, "eeg", kwargs={"eeg_set": eeg_setting})
-        component_configuration1 = ObjectsFactory.create_component_configuration(self.rootcomponent, eeg_step)
-        component_configuration2 = ObjectsFactory.create_component_configuration(self.rootcomponent, eeg_step)
+        eeg_step = ObjectsFactory.create_component(
+            self.experiment, "eeg", kwargs={"eeg_set": eeg_setting}
+        )
+        component_configuration1 = ObjectsFactory.create_component_configuration(
+            self.rootcomponent, eeg_step
+        )
+        component_configuration2 = ObjectsFactory.create_component_configuration(
+            self.rootcomponent, eeg_step
+        )
         dct1 = ObjectsFactory.create_data_configuration_tree(component_configuration1)
-        dct2 = ObjectsFactory.create_data_configuration_tree(component_configuration2, dct1)
+        dct2 = ObjectsFactory.create_data_configuration_tree(
+            component_configuration2, dct1
+        )
         ObjectsFactory.create_eeg_data(dct1, self.subject_of_group, eeg_setting)
         ObjectsFactory.create_eeg_data(dct2, subject_of_group2, eeg_setting)
 
-        ids_objects_before = list(DataConfigurationTree.objects.values_list("id", flat=True))
+        ids_objects_before = list(
+            DataConfigurationTree.objects.values_list("id", flat=True)
+        )
 
         export = ExportExperiment(self.experiment)
         export.export_all()
@@ -4964,14 +5704,22 @@ class ImportExperimentTest(TestCase):
         # Base elements
         research_project = ObjectsFactory.create_research_project(owner=self.user)
         experiment = ObjectsFactory.create_experiment(research_project)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         group = ObjectsFactory.create_group(experiment)
 
         # TMS
         tms_setting = ObjectsFactory.create_tms_setting(experiment)
-        tms_step = ObjectsFactory.create_component(experiment, "tms", kwargs={"tms_set": tms_setting})
-        tms_component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, tms_step)
-        tms_dct = ObjectsFactory.create_data_configuration_tree(tms_component_configuration)
+        tms_step = ObjectsFactory.create_component(
+            experiment, "tms", kwargs={"tms_set": tms_setting}
+        )
+        tms_component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, tms_step
+        )
+        tms_dct = ObjectsFactory.create_data_configuration_tree(
+            tms_component_configuration
+        )
 
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
@@ -4979,14 +5727,22 @@ class ImportExperimentTest(TestCase):
 
         # EMG
         emg_setting = ObjectsFactory.create_emg_setting(experiment, software_version)
-        emg_step = ObjectsFactory.create_component(experiment, "emg", kwargs={"emg_set": emg_setting})
-        emg_component_config = ObjectsFactory.create_component_configuration(rootcomponent, emg_step)
+        emg_step = ObjectsFactory.create_component(
+            experiment, "emg", kwargs={"emg_set": emg_setting}
+        )
+        emg_component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, emg_step
+        )
         emg_dct = ObjectsFactory.create_data_configuration_tree(emg_component_config)
 
         # EEG
         eeg_setting = ObjectsFactory.create_eeg_setting(experiment)
-        eeg_step = ObjectsFactory.create_component(experiment, "eeg", kwargs={"eeg_set": eeg_setting})
-        eeg_component_config = ObjectsFactory.create_component_configuration(rootcomponent, eeg_step)
+        eeg_step = ObjectsFactory.create_component(
+            experiment, "eeg", kwargs={"eeg_set": eeg_setting}
+        )
+        eeg_component_config = ObjectsFactory.create_component_configuration(
+            rootcomponent, eeg_step
+        )
         eeg_dct = ObjectsFactory.create_data_configuration_tree(eeg_component_config)
 
         # Digital Game Phase
@@ -4999,7 +5755,9 @@ class ImportExperimentTest(TestCase):
         dgp_component_configuration = ObjectsFactory.create_component_configuration(
             rootcomponent, digital_game_phase_step
         )
-        dgp_dct = ObjectsFactory.create_data_configuration_tree(dgp_component_configuration)
+        dgp_dct = ObjectsFactory.create_data_configuration_tree(
+            dgp_component_configuration
+        )
 
         # Generic Data Collection
         information_type = ObjectsFactory.create_information_type()
@@ -5009,37 +5767,57 @@ class ImportExperimentTest(TestCase):
         gdc_component_configuration = ObjectsFactory.create_component_configuration(
             rootcomponent, generic_data_collection_step
         )
-        gdc_dct = ObjectsFactory.create_data_configuration_tree(gdc_component_configuration)
+        gdc_dct = ObjectsFactory.create_data_configuration_tree(
+            gdc_component_configuration
+        )
 
         # Task for the Experimenter
-        task_experimenter_step = ObjectsFactory.create_component(experiment, "task_experiment")
-        task_experimenter_component_configuration = ObjectsFactory.create_component_configuration(
-            rootcomponent, task_experimenter_step
+        task_experimenter_step = ObjectsFactory.create_component(
+            experiment, "task_experiment"
+        )
+        task_experimenter_component_configuration = (
+            ObjectsFactory.create_component_configuration(
+                rootcomponent, task_experimenter_step
+            )
         )
 
         # Task for the Participant
         task_step = ObjectsFactory.create_component(experiment, "task")
-        task_component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, task_step)
+        task_component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, task_step
+        )
 
         # Pause
         pause_step = ObjectsFactory.create_component(experiment, "pause")
-        pause_component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, pause_step)
+        pause_component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, pause_step
+        )
 
         # Instruction
         instruction_step = ObjectsFactory.create_component(experiment, "instruction")
-        instruction_component_configuration = ObjectsFactory.create_component_configuration(
-            rootcomponent, instruction_step
+        instruction_component_configuration = (
+            ObjectsFactory.create_component_configuration(
+                rootcomponent, instruction_step
+            )
         )
 
         # Stimulus
         stimulus_type = ObjectsFactory.create_stimulus_type()
 
-        stimulus_step = ObjectsFactory.create_component(experiment, "stimulus", kwargs={"stimulus_type": stimulus_type})
-        stimulus_component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, stimulus_step)
+        stimulus_step = ObjectsFactory.create_component(
+            experiment, "stimulus", kwargs={"stimulus_type": stimulus_type}
+        )
+        stimulus_component_configuration = (
+            ObjectsFactory.create_component_configuration(rootcomponent, stimulus_step)
+        )
 
         # Block
-        block_step = ObjectsFactory.create_component(experiment, "block", "another block component")
-        block_component_configuration = ObjectsFactory.create_component_configuration(rootcomponent, block_step)
+        block_step = ObjectsFactory.create_component(
+            experiment, "block", "another block component"
+        )
+        block_component_configuration = ObjectsFactory.create_component_configuration(
+            rootcomponent, block_step
+        )
 
         dict_ = [
             ["rootcomponent", rootcomponent],
@@ -5058,11 +5836,15 @@ class ImportExperimentTest(TestCase):
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             for component in dict_:
-                with open(os.path.join(tmpdirname, component[0] + "adf.bin"), "wb") as f:
+                with open(
+                    os.path.join(tmpdirname, component[0] + "adf.bin"), "wb"
+                ) as f:
                     f.write(b"carambola")
 
                 with File(open(f.name, "rb")) as file:
-                    ComponentAdditionalFile.objects.create(component=component[1], file=file)
+                    ComponentAdditionalFile.objects.create(
+                        component=component[1], file=file
+                    )
 
         return experiment
 
@@ -5079,7 +5861,9 @@ class ImportExperimentTest(TestCase):
         experiment = self._create_all_data_collections()
 
         # Created right above: to remove files below
-        component_ad_files_ids = ComponentAdditionalFile.objects.all().values_list("id", flat=True)
+        component_ad_files_ids = ComponentAdditionalFile.objects.all().values_list(
+            "id", flat=True
+        )
 
         export = ExportExperiment(experiment)
         export.export_all()
@@ -5100,13 +5884,19 @@ class ImportExperimentTest(TestCase):
             os.remove(
                 os.path.join(
                     self.TEMP_MEDIA_ROOT,
-                    ComponentAdditionalFile.objects.get(id=component_ad_file_id).file.name,
+                    ComponentAdditionalFile.objects.get(
+                        id=component_ad_file_id
+                    ).file.name,
                 )
             )
 
-        component_files_imported = ComponentAdditionalFile.objects.exclude(id__in=component_ad_files_ids)
+        component_files_imported = ComponentAdditionalFile.objects.exclude(
+            id__in=component_ad_files_ids
+        )
         for component_file_imported in component_files_imported:
-            filepath = os.path.join(self.TEMP_MEDIA_ROOT, component_file_imported.file.name)
+            filepath = os.path.join(
+                self.TEMP_MEDIA_ROOT, component_file_imported.file.name
+            )
             self.assertTrue(os.path.exists(filepath))
 
     # Tests for Other models with file
@@ -5201,21 +5991,29 @@ class ImportExperimentTest(TestCase):
         self.assertTrue(os.path.exists(filepath))
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_experiment_with_questionnaire_import_limesurvey_survey_reference(self, mockServer):
+    def test_import_experiment_with_questionnaire_import_limesurvey_survey_reference(
+        self, mockServer
+    ):
         patient = UtilTests.create_patient(changed_by=self.user)
         experiment = self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
 
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
             experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
         )
-        ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step1)
+        ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire_step1
+        )
         survey2 = create_survey(111111)
         questionnaire_step2 = ObjectsFactory.create_component(
             experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey2}
         )
-        ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step2)
+        ObjectsFactory.create_component_configuration(
+            rootcomponent, questionnaire_step2
+        )
 
         ExportExperimentTest.set_export_survey_mock_value(mockServer)
 
@@ -5276,7 +6074,9 @@ class ImportExperimentTest(TestCase):
                 "tid": self.TOKEN_ID_NOT_KEEPED,
             },
         ]
-        mockServer.return_value.get_participant_properties.return_value = {"token": self.TOKEN_KEEPED}
+        mockServer.return_value.get_participant_properties.return_value = {
+            "token": self.TOKEN_KEEPED
+        }
         mockServer.return_value.list_groups.return_value = [
             {
                 "group_order": 1,
@@ -5366,7 +6166,9 @@ class ImportExperimentTest(TestCase):
 
         mockServer.return_value.update_response.return_value = {"status": "OK"}
 
-        mockServer.return_value.delete_participants.return_value = [{"status": "Deleted"}]
+        mockServer.return_value.delete_participants.return_value = [
+            {"status": "Deleted"}
+        ]
         # Get responses from questionnaire for tokens that will be deleted
         # The string corresponds to:
         # b'"id","submitdate","lastpage","startlanguage","token","responsibleid","acquisitiondate","subjectid","firstQuestion","secondQuestion"\n
@@ -5387,7 +6189,9 @@ class ImportExperimentTest(TestCase):
         mockServer.return_value.delete_responses.return_value = {"status": "OK"}
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_keeps_only_responses_from_experiment_participants1(self, mockServer):
+    def test_import_survey_keeps_only_responses_from_experiment_participants1(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5439,11 +6243,15 @@ class ImportExperimentTest(TestCase):
         self.assertTrue(mockServer.return_value.delete_responses.called)
         self.assertEqual(
             mockServer.return_value.delete_responses.call_args,
-            call(self.SESSION_KEY, self.SURVEY_ID, self.LIMESURVEY_RESPONSES_IDS_DELETED),
+            call(
+                self.SESSION_KEY, self.SURVEY_ID, self.LIMESURVEY_RESPONSES_IDS_DELETED
+            ),
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_keeps_only_responses_from_experiment_participants2(self, mockServer):
+    def test_import_survey_keeps_only_responses_from_experiment_participants2(
+        self, mockServer
+    ):
         """Test keeping participants with same questionnaire used in 2 groups"""
 
         self._set_constants()
@@ -5454,27 +6262,39 @@ class ImportExperimentTest(TestCase):
         patient1 = UtilTests.create_patient(changed_by=self.user)
         experiment = self._create_minimum_objects_to_test_patient(patient1)
         subject_of_group1 = SubjectOfGroup.objects.last()
-        rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent1 = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
             experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
         )
-        component_config1 = ObjectsFactory.create_component_configuration(rootcomponent1, questionnaire_step1)
+        component_config1 = ObjectsFactory.create_component_configuration(
+            rootcomponent1, questionnaire_step1
+        )
         dct1 = ObjectsFactory.create_data_configuration_tree(component_config1)
-        ObjectsFactory.create_questionnaire_response(dct1, self.user, self.TOKEN_ID_KEEPED, subject_of_group1)
+        ObjectsFactory.create_questionnaire_response(
+            dct1, self.user, self.TOKEN_ID_KEEPED, subject_of_group1
+        )
 
         # Second objects
         patient2 = UtilTests.create_patient(changed_by=self.user)
         group2 = ObjectsFactory.create_group(experiment)
         subject2 = ObjectsFactory.create_subject(patient2)
         subject_of_group2 = ObjectsFactory.create_subject_of_group(group2, subject2)
-        rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent2 = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         questionnaire_step2 = ObjectsFactory.create_component(
             experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
         )
-        component_config2 = ObjectsFactory.create_component_configuration(rootcomponent2, questionnaire_step2)
+        component_config2 = ObjectsFactory.create_component_configuration(
+            rootcomponent2, questionnaire_step2
+        )
         dct2 = ObjectsFactory.create_data_configuration_tree(component_config2)
-        ObjectsFactory.create_questionnaire_response(dct2, self.user, self.OTHER_TOKEN_ID_KEEPED, subject_of_group2)
+        ObjectsFactory.create_questionnaire_response(
+            dct2, self.user, self.OTHER_TOKEN_ID_KEEPED, subject_of_group2
+        )
 
         ExportExperimentTest.set_export_survey_mock_value(mockServer)
 
@@ -5559,7 +6379,9 @@ class ImportExperimentTest(TestCase):
         mockServer.return_value.update_response.side_effect = check_right_url()
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_updates_responses_subjectid_and_responsibleid(self, mockServer):
+    def test_import_survey_updates_responses_subjectid_and_responsibleid(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5602,17 +6424,23 @@ class ImportExperimentTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_stablish_limesurvey_connection_fails_display_warning_message(self, mockServer):
+    def test_import_survey_stablish_limesurvey_connection_fails_display_warning_message(
+        self, mockServer
+    ):
         patient = UtilTests.create_patient(changed_by=self.user)
         experiment = self._create_minimum_objects_to_test_patient(patient)
-        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        rootcomponent = ObjectsFactory.create_component(
+            experiment, "block", "root component"
+        )
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
             experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
 
-        mockServer.return_value.get_session_key.return_value = {"status": "Invalid user name or password"}
+        mockServer.return_value.get_session_key.return_value = {
+            "status": "Invalid user name or password"
+        }
 
         export = ExportExperiment(experiment)
         export.export_all()
@@ -5625,7 +6453,9 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
@@ -5637,7 +6467,9 @@ class ImportExperimentTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_import_survey_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_import_survey_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5657,7 +6489,9 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
@@ -5669,7 +6503,9 @@ class ImportExperimentTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_list_participants_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_list_participants_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5680,7 +6516,9 @@ class ImportExperimentTest(TestCase):
 
         # There is other returned values with other error status but we treat
         # the difference between error and success considering error a dict returned.
-        mockServer.return_value.list_participants.return_value = {"status": "Error: No token table"}
+        mockServer.return_value.list_participants.return_value = {
+            "status": "Error: No token table"
+        }
 
         # Add session variables related to updating/overwrite patients when importing
         session = self.client.session
@@ -5689,13 +6527,19 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
-        self.assertEqual(message, "Não foi possível remove todos os dados de participantes extras.")
+        self.assertEqual(
+            message, "Não foi possível remove todos os dados de participantes extras."
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_delete_participant_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_delete_participant_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5706,7 +6550,9 @@ class ImportExperimentTest(TestCase):
 
         # There is other returned values with other error status but we treat
         # the difference between error and success considering error a dict returned.
-        mockServer.return_value.delete_participants.return_value = {"status": "Error: No token table"}
+        mockServer.return_value.delete_participants.return_value = {
+            "status": "Error: No token table"
+        }
 
         # Add session variables related to updating/overwrite patients when importing
         session = self.client.session
@@ -5715,13 +6561,19 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
-        self.assertEqual(message, "Não foi possível remove todos os dados de participantes extras.")
+        self.assertEqual(
+            message, "Não foi possível remove todos os dados de participantes extras."
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_export_responses_by_token_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_export_responses_by_token_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5732,7 +6584,9 @@ class ImportExperimentTest(TestCase):
 
         # There is other returned values with other error status but we treat
         # the difference between error and success considering error a dict returned.
-        mockServer.return_value.export_responses_by_token.return_value = {"status": "No Response found for Token"}
+        mockServer.return_value.export_responses_by_token.return_value = {
+            "status": "No Response found for Token"
+        }
 
         # Add session variables related to updating/overwrite patients when importing
         session = self.client.session
@@ -5741,13 +6595,19 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
-        self.assertEqual(message, "Não foi possível remove todos os dados de participantes extras.")
+        self.assertEqual(
+            message, "Não foi possível remove todos os dados de participantes extras."
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_delete_responses_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_delete_responses_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5758,7 +6618,9 @@ class ImportExperimentTest(TestCase):
 
         # There is other returned values with other error status but we treat
         # the difference between error and success considering error a dict returned.
-        mockServer.return_value.delete_responses.return_value = {"status": "Error: during response deletion"}
+        mockServer.return_value.delete_responses.return_value = {
+            "status": "Error: during response deletion"
+        }
 
         # Add session variables related to updating/overwrite patients when importing
         session = self.client.session
@@ -5767,13 +6629,19 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
-        self.assertEqual(message, "Não foi possível remove todos os dados de participantes extras.")
+        self.assertEqual(
+            message, "Não foi possível remove todos os dados de participantes extras."
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_get_participant_properties_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_get_participant_properties_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5784,7 +6652,9 @@ class ImportExperimentTest(TestCase):
 
         # There is other returned values with other error status but we treat
         # the difference between error and success considering error a dict returned.
-        mockServer.return_value.list_groups.return_value = {"status": "Error: Invalid tokenid"}
+        mockServer.return_value.list_groups.return_value = {
+            "status": "Error: Invalid tokenid"
+        }
 
         # Add session variables related to updating/overwrite patients when importing
         session = self.client.session
@@ -5793,7 +6663,9 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
@@ -5802,7 +6674,9 @@ class ImportExperimentTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_list_questions_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_list_questions_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5813,7 +6687,9 @@ class ImportExperimentTest(TestCase):
 
         # There is other returned values with other error status but we treat
         # the difference between error and success considering error a dict returned.
-        mockServer.return_value.list_questions.return_value = {"status": "No questions found"}
+        mockServer.return_value.list_questions.return_value = {
+            "status": "No questions found"
+        }
 
         # Add session variables related to updating/overwrite patients when importing
         session = self.client.session
@@ -5822,16 +6698,21 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
             message,
-            "Não foi possível atualizar as questões de identificação para todas as " "respostas.",
+            "Não foi possível atualizar as questões de identificação para todas as "
+            "respostas.",
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_has_not_Identification_group_display_warning_message(self, mockServer):
+    def test_import_survey_has_not_Identification_group_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5863,7 +6744,9 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
@@ -5872,7 +6755,9 @@ class ImportExperimentTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_has_not_Identification_question_display_warning_message(self, mockServer):
+    def test_import_survey_has_not_Identification_question_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5933,16 +6818,21 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
             message,
-            "Não foi possível atualizar as questões de identificação para todas as " "respostas.",
+            "Não foi possível atualizar as questões de identificação para todas as "
+            "respostas.",
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_import_survey_call_update_response_fails_display_warning_message(self, mockServer):
+    def test_import_survey_call_update_response_fails_display_warning_message(
+        self, mockServer
+    ):
         experiment = self._set_objects_to_test_limesurvey_calls(mockServer)
 
         export = ExportExperiment(experiment)
@@ -5953,7 +6843,9 @@ class ImportExperimentTest(TestCase):
 
         # There is other returned values with other error status but we treat
         # the difference between error and success considering error a dict returned.
-        mockServer.return_value.update_response.return_value = {"status": "Unable to edit response"}
+        mockServer.return_value.update_response.return_value = {
+            "status": "Unable to edit response"
+        }
 
         # Add session variables related to updating/overwrite patients when importing
         session = self.client.session
@@ -5962,7 +6854,9 @@ class ImportExperimentTest(TestCase):
         with open(file_path, "rb") as file:
             session["file_name"] = file.name
             session.save()
-            response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
+            response = self.client.post(
+                reverse("experiment_import"), {"file": file}, follow=True
+            )
 
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(message, "Não foi possível atualizar todas as respostas.")
@@ -5975,13 +6869,17 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         # Create questionnaire data collection in NES
         # TODO: use method already existent in patient.tests. See other places
         self.survey = create_survey(212121)
-        self.component_config = self._create_nes_questionnaire(self.root_component, self.survey)
+        self.component_config = self._create_nes_questionnaire(
+            self.root_component, self.survey
+        )
 
         self.client.login(username=self.user.username, password=self.user_passwd)
 
     @patch("survey.abc_search_engine.Server")
     @patch("experiment.views.check_required_fields")
-    def test_create_questionnaire_response_sent_patient_id_in_redirect_url(self, mockCheckRequiredFields, mockServer):
+    def test_create_questionnaire_response_sent_patient_id_in_redirect_url(
+        self, mockCheckRequiredFields, mockServer
+    ):
         mockCheckRequiredFields.return_value = True
         self._set_mocks_questionnaire_response(mockServer)
 
@@ -6016,7 +6914,9 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         for lang in ["en", "pt_br"]:
             mockServer.return_value.get_session_key.return_value = "abc"
             mockServer.return_value.get_summary.return_value = 1
-            mockServer.return_value.add_participants.return_value = [{"token": "abc", "tid": 1}]
+            mockServer.return_value.add_participants.return_value = [
+                {"token": "abc", "tid": 1}
+            ]
             mockServer.return_value.get_survey_properties.side_effect = [
                 {"active": True},
                 {"language": lang},
@@ -6041,13 +6941,17 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
             self.assertIn("09-24-2020", response.context["URL"])
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_questionnaire_view_updates_response_date_for_completed_fills(self, mockServer):
+    def test_GET_questionnaire_view_updates_response_date_for_completed_fills(
+        self, mockServer
+    ):
         # Acquistion date: 2019-01-03 00:00:00
         mockServer.return_value.export_responses_by_token.return_value = (
             "ImFjcXVpc2l0aW9uZGF0ZSIKIjIwMTktMDEtMDMgMDA6MDA6MDAi"
         )
 
-        ObjectsFactory.create_questionnaire_response(self.dct, self.user, 1, self.subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            self.dct, self.user, 1, self.subject_of_group
+        )
         self.client.get(
             reverse(
                 "questionnaire_view",
@@ -6062,13 +6966,17 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         self.assertEqual(questionnaire_response.date.strftime("%Y-%m-%d"), "2019-01-03")
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_questionnaire_view_updates_response_date_add_updated_key_to_context(self, mockServer):
+    def test_GET_questionnaire_view_updates_response_date_add_updated_key_to_context(
+        self, mockServer
+    ):
         # Acquistion date: 2019-01-03 00:00:00
         mockServer.return_value.export_responses_by_token.return_value = (
             "ImFjcXVpc2l0aW9uZGF0ZSIKIjIwMTktMDEtMDMgMDA6MDA6MDAi"
         )
 
-        ObjectsFactory.create_questionnaire_response(self.dct, self.user, 1, self.subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            self.dct, self.user, 1, self.subject_of_group
+        )
         response = self.client.get(
             reverse(
                 "questionnaire_view",
@@ -6079,16 +6987,24 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
             )
         )
 
-        self.assertTrue(response.context["subject_list"][0]["questionnaire_responses"][0]["acquisitiondate_updated"])
+        self.assertTrue(
+            response.context["subject_list"][0]["questionnaire_responses"][0][
+                "acquisitiondate_updated"
+            ]
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_questionnaire_view_updates_response_date_display_tag_updated_in_template(self, mockServer):
+    def test_GET_questionnaire_view_updates_response_date_display_tag_updated_in_template(
+        self, mockServer
+    ):
         # Acquistion date: 2019-01-03 00:00:00
         mockServer.return_value.export_responses_by_token.return_value = (
             "ImFjcXVpc2l0aW9uZGF0ZSIKIjIwMTktMDEtMDMgMDA6MDA6MDAi"
         )
 
-        ObjectsFactory.create_questionnaire_response(self.dct, self.user, 1, self.subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            self.dct, self.user, 1, self.subject_of_group
+        )
         response = self.client.get(
             reverse(
                 "questionnaire_view",
@@ -6103,13 +7019,17 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         self.assertRegex(str(response.content), "class=.+blink")
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_subject_questionnaire_view_updates_response_date_for_completed_fills(self, mockServer):
+    def test_GET_subject_questionnaire_view_updates_response_date_for_completed_fills(
+        self, mockServer
+    ):
         # Acquistion date: 2019-01-03 00:00:00
         mockServer.return_value.export_responses_by_token.return_value = (
             "ImFjcXVpc2l0aW9uZGF0ZSIKIjIwMTktMDEtMDMgMDA6MDA6MDAi"
         )
 
-        ObjectsFactory.create_questionnaire_response(self.dct, self.user, 1, self.subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            self.dct, self.user, 1, self.subject_of_group
+        )
         self.client.get(
             reverse(
                 "subject_questionnaire",
@@ -6124,13 +7044,17 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         self.assertEqual(questionnaire_response.date.strftime("%Y-%m-%d"), "2019-01-03")
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_subject_questionnaire_view_updates_response_date_add_updated_key_to_context(self, mockServer):
+    def test_GET_subject_questionnaire_view_updates_response_date_add_updated_key_to_context(
+        self, mockServer
+    ):
         # Acquistion date: 2019-01-03 00:00:00
         mockServer.return_value.export_responses_by_token.return_value = (
             "ImFjcXVpc2l0aW9uZGF0ZSIKIjIwMTktMDEtMDMgMDA6MDA6MDAi"
         )
 
-        ObjectsFactory.create_questionnaire_response(self.dct, self.user, 1, self.subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            self.dct, self.user, 1, self.subject_of_group
+        )
         response = self.client.get(
             reverse(
                 "subject_questionnaire",
@@ -6142,17 +7066,23 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         )
 
         self.assertTrue(
-            response.context["subject_questionnaires"][0]["questionnaire_responses"][0]["acquisitiondate_updated"]
+            response.context["subject_questionnaires"][0]["questionnaire_responses"][0][
+                "acquisitiondate_updated"
+            ]
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_subject_questionnaire_view_updates_response_date_display_tag_updated_in_template(self, mockServer):
+    def test_GET_subject_questionnaire_view_updates_response_date_display_tag_updated_in_template(
+        self, mockServer
+    ):
         # Acquistion date: 2019-01-03 00:00:00
         mockServer.return_value.export_responses_by_token.return_value = (
             "ImFjcXVpc2l0aW9uZGF0ZSIKIjIwMTktMDEtMDMgMDA6MDA6MDAi"
         )
 
-        ObjectsFactory.create_questionnaire_response(self.dct, self.user, 1, self.subject_of_group)
+        ObjectsFactory.create_questionnaire_response(
+            self.dct, self.user, 1, self.subject_of_group
+        )
         response = self.client.get(
             reverse(
                 "subject_questionnaire",
@@ -6227,7 +7157,8 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         self.assertContains(response, "Enviar convite para participante")
         self.assertContains(
             response,
-            "Tem certeza que deseja enviar um convite para o " "participante " + self.subject.patient.name + "?",
+            "Tem certeza que deseja enviar um convite para o "
+            "participante " + self.subject.patient.name + "?",
         )
         self.assertContains(response, "Enviar convite")
 
@@ -6303,13 +7234,17 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
 
         questionnaire_response = QuestionnaireResponse.objects.first()
 
-        redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/" "acquisitiondate/%s/subjectid/%s/newtest/Y" % (
-            settings.LIMESURVEY["URL_WEB"],
-            self.component_config.component.survey.lime_survey_id,
-            token_mock,
-            str(self.user.id),
-            questionnaire_response.date.strftime("%m-%d-%Y"),
-            str(questionnaire_response.subject_of_group.subject.patient.id),
+        redirect_url = (
+            "%s/index.php/%s/token/%s/responsibleid/%s/"
+            "acquisitiondate/%s/subjectid/%s/newtest/Y"
+            % (
+                settings.LIMESURVEY["URL_WEB"],
+                self.component_config.component.survey.lime_survey_id,
+                token_mock,
+                str(self.user.id),
+                questionnaire_response.date.strftime("%m-%d-%Y"),
+                str(questionnaire_response.subject_of_group.subject.patient.id),
+            )
         )
 
         self.assertEqual(mock_send_mail.called, True)
@@ -6347,7 +7282,9 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
             follow=True,
         )
 
-        self.assertContains(response, "E-mail enviado com sucesso para " + self.subject.patient.name)
+        self.assertContains(
+            response, "E-mail enviado com sucesso para " + self.subject.patient.name
+        )
 
     @patch("survey.abc_search_engine.Server")
     @patch("experiment.views.check_required_fields")
@@ -6421,7 +7358,9 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         questionnaire = ObjectsFactory.create_component(
             self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
         )
-        component_config = ObjectsFactory.create_component_configuration(root_component, questionnaire)
+        component_config = ObjectsFactory.create_component_configuration(
+            root_component, questionnaire
+        )
         self.dct = ObjectsFactory.create_data_configuration_tree(component_config)
 
         return component_config
@@ -6430,7 +7369,9 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         token_mock = "abc"
         mockServer.return_value.get_session_key.return_value = "ldhfslhdf"
         mockServer.return_value.get_summary.return_value = 1
-        mockServer.return_value.add_participants.return_value = [{"token": token_mock, "tid": 1}]
+        mockServer.return_value.add_participants.return_value = [
+            {"token": token_mock, "tid": 1}
+        ]
         mockServer.return_value.get_participant_properties.return_value = {
             "token": token_mock,
             "completed": "N",

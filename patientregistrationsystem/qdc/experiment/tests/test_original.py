@@ -114,7 +114,9 @@ class ExperimentalProtocolTest(TestCase):
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         software_version = ObjectsFactory.create_software_version(software)
-        self.emg_setting = ObjectsFactory.create_emg_setting(experiment, software_version)
+        self.emg_setting = ObjectsFactory.create_emg_setting(
+            experiment, software_version
+        )
 
     def test_component_list(self):
         experiment = Experiment.objects.first()
@@ -135,7 +137,9 @@ class ExperimentalProtocolTest(TestCase):
         experiment = Experiment.objects.first()
 
         # screen to create a component
-        response = self.client.post(reverse("component_new", args=(experiment.id, "task")))
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "task"))
+        )
         self.assertEqual(response.status_code, 200)
 
         identification = "Task for the subject identification"
@@ -145,11 +149,19 @@ class ExperimentalProtocolTest(TestCase):
             "identification": identification,
             "description": description,
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "task")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "task")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
-        self.assertTrue(Task.objects.filter(description=description, identification=identification).exists())
+        self.assertTrue(
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
+        self.assertTrue(
+            Task.objects.filter(
+                description=description, identification=identification
+            ).exists()
+        )
 
         identification = "Task for the experimenter identification"
         description = "Task for the experimenter description"
@@ -158,12 +170,18 @@ class ExperimentalProtocolTest(TestCase):
             "identification": identification,
             "description": description,
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "task_experiment")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "task_experiment")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
         self.assertTrue(
-            TaskForTheExperimenter.objects.filter(description=description, identification=identification).exists()
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
+        self.assertTrue(
+            TaskForTheExperimenter.objects.filter(
+                description=description, identification=identification
+            ).exists()
         )
 
         identification = "EMG identification"
@@ -174,11 +192,19 @@ class ExperimentalProtocolTest(TestCase):
             "description": description,
             "emg_setting": self.emg_setting.id,
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "emg")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "emg")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
-        self.assertTrue(EMG.objects.filter(description=description, identification=identification).exists())
+        self.assertTrue(
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
+        self.assertTrue(
+            EMG.objects.filter(
+                description=description, identification=identification
+            ).exists()
+        )
 
         identification = "EEG identification"
         description = "EEG description"
@@ -188,11 +214,19 @@ class ExperimentalProtocolTest(TestCase):
             "description": description,
             "eeg_setting": self.eeg_setting.id,
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "eeg")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "eeg")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
-        self.assertTrue(EEG.objects.filter(description=description, identification=identification).exists())
+        self.assertTrue(
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
+        self.assertTrue(
+            EEG.objects.filter(
+                description=description, identification=identification
+            ).exists()
+        )
 
         self.data = {
             "action": "save",
@@ -200,10 +234,14 @@ class ExperimentalProtocolTest(TestCase):
             "description": "Instruction description",
             "text": "Instruction text",
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "instruction")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "instruction")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
+        self.assertTrue(
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
         self.assertTrue(Instruction.objects.filter(text="Instruction text").exists())
 
         stimulus_type = StimulusType.objects.create(name="Auditivo")
@@ -214,12 +252,18 @@ class ExperimentalProtocolTest(TestCase):
             "description": "Stimulus description",
             "stimulus_type": stimulus_type.id,
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "stimulus")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "stimulus")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
         self.assertTrue(
-            Stimulus.objects.filter(identification="Stimulus identification", stimulus_type=stimulus_type).exists()
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
+        self.assertTrue(
+            Stimulus.objects.filter(
+                identification="Stimulus identification", stimulus_type=stimulus_type
+            ).exists()
         )
 
         self.data = {
@@ -229,11 +273,19 @@ class ExperimentalProtocolTest(TestCase):
             "duration_value": 2,
             "duration_unit": "h",
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "pause")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "pause")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
-        self.assertTrue(Pause.objects.filter(identification="Pause identification", duration_value=2).exists())
+        self.assertTrue(
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
+        self.assertTrue(
+            Pause.objects.filter(
+                identification="Pause identification", duration_value=2
+            ).exists()
+        )
 
         # Conecta no Lime Survey
         lime_survey = Questionnaires()
@@ -242,7 +294,9 @@ class ExperimentalProtocolTest(TestCase):
         self.assertIsNotNone(lime_survey.session_key, "Failed to connect LimeSurvey")
 
         # Cria uma survey no Lime Survey
-        survey_id = lime_survey.add_survey(9999, "Questionario de teste - DjangoTests", "en", "G")
+        survey_id = lime_survey.add_survey(
+            9999, "Questionario de teste - DjangoTests", "en", "G"
+        )
 
         try:
             self.data = {
@@ -257,8 +311,14 @@ class ExperimentalProtocolTest(TestCase):
             )
             self.assertEqual(response.status_code, 302)
             # Check if redirected to list of components
-            self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
-            self.assertTrue(Questionnaire.objects.filter(identification="Questionnaire identification").exists())
+            self.assertTrue(
+                "/experiment/" + str(experiment.id) + "/components" in response.url
+            )
+            self.assertTrue(
+                Questionnaire.objects.filter(
+                    identification="Questionnaire identification"
+                ).exists()
+            )
 
             # TODO Adaptar esse teste antigo para cá e verificar o TODO de baixo.
             # Criar um questionario com código do questionário invalido
@@ -283,7 +343,9 @@ class ExperimentalProtocolTest(TestCase):
             "description": "Block description",
             "type": "sequence",
         }
-        response = self.client.post(reverse("component_new", args=(experiment.id, "block")), self.data)
+        response = self.client.post(
+            reverse("component_new", args=(experiment.id, "block")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         block = Block.objects.filter(identification="Block identification").first()
         # Check if redirected to view block
@@ -294,7 +356,9 @@ class ExperimentalProtocolTest(TestCase):
         block = ObjectsFactory.create_block(experiment)
 
         # Screen to add a component
-        response = self.client.get(reverse("component_add_new", args=(block.id, "block")))
+        response = self.client.get(
+            reverse("component_add_new", args=(block.id, "block"))
+        )
         self.assertEqual(response.status_code, 200)
 
         # Add a new component to the parent
@@ -305,12 +369,16 @@ class ExperimentalProtocolTest(TestCase):
             "type": "sequence",
             "number_of_uses_to_insert": 1,
         }
-        response = self.client.post(reverse("component_add_new", args=(block.id, "block")), self.data)
+        response = self.client.post(
+            reverse("component_add_new", args=(block.id, "block")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         component_configuration = ComponentConfiguration.objects.first()
         # Check if redirected to view parent set of steps
         self.assertTrue("/experiment/component/" + str(block.id) in response.url)
-        self.assertTrue(Block.objects.filter(identification="Block identification").exists())
+        self.assertTrue(
+            Block.objects.filter(identification="Block identification").exists()
+        )
         self.assertEqual(component_configuration.parent.id, block.id)
         self.assertEqual(component_configuration.order, 1)
         self.assertEqual(component_configuration.name, None)
@@ -329,7 +397,9 @@ class ExperimentalProtocolTest(TestCase):
             "interval_between_repetitions_value": 2,
             "interval_between_repetitions_unit": "min",
         }
-        response = self.client.post(reverse("component_edit", args=(block.id,)), self.data)
+        response = self.client.post(
+            reverse("component_edit", args=(block.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to view block
         self.assertTrue("/experiment/component/" + str(block.id) in response.url)
@@ -340,7 +410,9 @@ class ExperimentalProtocolTest(TestCase):
                 "component_reuse",
                 args=(
                     block.id,
-                    Block.objects.filter(identification="Block identification").first().id,
+                    Block.objects.filter(identification="Block identification")
+                    .first()
+                    .id,
                 ),
             )
         )
@@ -353,7 +425,9 @@ class ExperimentalProtocolTest(TestCase):
                 "component_reuse",
                 args=(
                     block.id,
-                    Block.objects.filter(identification="Block identification").first().id,
+                    Block.objects.filter(identification="Block identification")
+                    .first()
+                    .id,
                 ),
             ),
             self.data,
@@ -372,7 +446,9 @@ class ExperimentalProtocolTest(TestCase):
             "eeg_setting": eeg_setting.id,
             "number_of_uses_to_insert": 1,
         }
-        response = self.client.post(reverse("component_add_new", args=(block.id, "eeg")), self.data)
+        response = self.client.post(
+            reverse("component_add_new", args=(block.id, "eeg")), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(ComponentConfiguration.objects.count(), 5)
 
@@ -420,10 +496,14 @@ class ExperimentalProtocolTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("component_view", args=(block.id,)), self.data)
+        response = self.client.post(
+            reverse("component_view", args=(block.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
+        self.assertTrue(
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
         self.assertEqual(Block.objects.count(), 0)
         self.assertEqual(Component.objects.count(), 1)
         self.assertEqual(ComponentConfiguration.objects.count(), 0)
@@ -433,10 +513,14 @@ class ExperimentalProtocolTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Updating a component
-        response = self.client.post(reverse("component_edit", args=(task.id,)), self.data)
+        response = self.client.post(
+            reverse("component_edit", args=(task.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to list of components
-        self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
+        self.assertTrue(
+            "/experiment/" + str(experiment.id) + "/components" in response.url
+        )
         self.assertEqual(Task.objects.count(), 0)
         self.assertEqual(Component.objects.count(), 0)
 
@@ -465,19 +549,31 @@ class ExperimentalProtocolTest(TestCase):
         component_configuration2.save()
         self.assertEqual(component_configuration2.order, 2)
 
-        response = self.client.get(reverse("component_change_the_order", args=(block.id, "0-1", "up")))
+        response = self.client.get(
+            reverse("component_change_the_order", args=(block.id, "0-1", "up"))
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to view block
         self.assertTrue("/experiment/component/" + str(block.id) in response.url)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 2)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 1)
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 2
+        )
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 1
+        )
 
-        response = self.client.get(reverse("component_change_the_order", args=(block.id, "0-0", "down")))
+        response = self.client.get(
+            reverse("component_change_the_order", args=(block.id, "0-0", "down"))
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to view block
         self.assertTrue("/experiment/component/" + str(block.id) in response.url)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 1)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 2)
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 1
+        )
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 2
+        )
 
     def test_component_configuration_change_order_accordion(self):
         experiment = Experiment.objects.first()
@@ -518,21 +614,37 @@ class ExperimentalProtocolTest(TestCase):
         component_configuration3.save()
         self.assertEqual(component_configuration3.order, 3)
 
-        response = self.client.get(reverse("component_change_the_order", args=(block.id, "0", "down")))
+        response = self.client.get(
+            reverse("component_change_the_order", args=(block.id, "0", "down"))
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to view block
         self.assertTrue("/experiment/component/" + str(block.id) in response.url)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 2)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 3)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 3").order, 1)
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 2
+        )
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 3
+        )
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 3").order, 1
+        )
 
-        response = self.client.get(reverse("component_change_the_order", args=(block.id, "1", "up")))
+        response = self.client.get(
+            reverse("component_change_the_order", args=(block.id, "1", "up"))
+        )
         self.assertEqual(response.status_code, 302)
         # Check if redirected to view block
         self.assertTrue("/experiment/component/" + str(block.id) in response.url)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 1)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 2)
-        self.assertEqual(ComponentConfiguration.objects.get(name="ComponentConfiguration 3").order, 3)
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 1").order, 1
+        )
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 2").order, 2
+        )
+        self.assertEqual(
+            ComponentConfiguration.objects.get(name="ComponentConfiguration 3").order, 3
+        )
 
 
 class GroupTest(TestCase):
@@ -561,7 +673,9 @@ class GroupTest(TestCase):
         }
 
         # Inserting a group in the experiment
-        response = self.client.post(reverse("group_new", args=(experiment.id,)), self.data)
+        response = self.client.post(
+            reverse("group_new", args=(experiment.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(experiment.groups.count(), 1)
 
@@ -589,7 +703,11 @@ class GroupTest(TestCase):
         response = self.client.post(reverse("group_edit", args=(group.id,)), self.data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(experiment.groups.count(), 1)
-        self.assertTrue(Group.objects.filter(title="Group-1", description="Description of Group-1").exists())
+        self.assertTrue(
+            Group.objects.filter(
+                title="Group-1", description="Description of Group-1"
+            ).exists()
+        )
 
         # Trying to editing a group with no changes
         response = self.client.post(reverse("group_edit", args=(group.id,)), self.data)
@@ -795,7 +913,9 @@ class ExperimentTest(TestCase):
             "title": "Teste Experimento",
             "research_project": self.research_project.id,
         }
-        response = self.client.post(reverse("experiment_edit", args=(experiment.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse("experiment_edit", args=(experiment.pk,)), self.data, follow=True
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_experiment_remove(self):
@@ -812,7 +932,9 @@ class ExperimentTest(TestCase):
             "title": "Teste Experimento",
             "research_project": self.research_project.id,
         }
-        response = self.client.post(reverse("experiment_view", args=(experiment.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse("experiment_view", args=(experiment.pk,)), self.data, follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Experiment.objects.all().count(), count - 1)
 
@@ -852,7 +974,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
             questionnaire.save()
 
             # Include the questionnaire in the root.
-            ComponentConfiguration.objects.create(name="ComponentConfiguration", parent=block, component=questionnaire)
+            ComponentConfiguration.objects.create(
+                name="ComponentConfiguration", parent=block, component=questionnaire
+            )
 
             # Criar um grupo mock para ser utilizado no teste
             group = ObjectsFactory.create_group(experiment, block)
@@ -880,7 +1004,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
         research_project = ObjectsFactory.create_research_project()
         experiment = ObjectsFactory.create_experiment(research_project)
         block = ObjectsFactory.create_block(Experiment.objects.first())
-        new_survey, created = Survey.objects.get_or_create(lime_survey_id=LIME_SURVEY_ID)
+        new_survey, created = Survey.objects.get_or_create(
+            lime_survey_id=LIME_SURVEY_ID
+        )
 
         questionnaire = Questionnaire.objects.create(
             identification="Questionnaire",
@@ -893,7 +1019,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
         component_configuration = ComponentConfiguration.objects.create(
             name="ComponentConfiguration", parent=block, component=questionnaire
         )
-        data_configuration_tree = DataConfigurationTree.objects.create(component_configuration=component_configuration)
+        data_configuration_tree = DataConfigurationTree.objects.create(
+            component_configuration=component_configuration
+        )
         group = ObjectsFactory.create_group(experiment, block)
         util = UtilTests()
         patient = util.create_patient(changed_by=self.user)
@@ -914,7 +1042,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
         questionnaire_response.date = datetime.datetime.now()
         questionnaire_response.save()
 
-        response = self.client.get(reverse("questionnaire_view", args=(group.pk, component_configuration.pk)))
+        response = self.client.get(
+            reverse("questionnaire_view", args=(group.pk, component_configuration.pk))
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_questionnaire_response_view_response(self):
@@ -924,7 +1054,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
         research_project = ObjectsFactory.create_research_project()
         experiment = ObjectsFactory.create_experiment(research_project)
         block = ObjectsFactory.create_block(Experiment.objects.first())
-        new_survey, created = Survey.objects.get_or_create(lime_survey_id=LIME_SURVEY_ID)
+        new_survey, created = Survey.objects.get_or_create(
+            lime_survey_id=LIME_SURVEY_ID
+        )
         questionnaire = Questionnaire.objects.create(
             identification="Questionnaire",
             description="Questionnaire description",
@@ -937,7 +1069,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
             name="ComponentConfiguration", parent=block, component=questionnaire
         )
 
-        data_configuration_tree = DataConfigurationTree.objects.create(component_configuration=component_configuration)
+        data_configuration_tree = DataConfigurationTree.objects.create(
+            component_configuration=component_configuration
+        )
         group = ObjectsFactory.create_group(experiment, block)
 
         util = UtilTests()
@@ -969,7 +1103,9 @@ class SubjectTest(TestCase):
         self.lime_survey = Questionnaires()
 
         # Checa se conseguiu conectar no lime Survey com as credenciais fornecidas no settings.py
-        self.assertIsNotNone(self.lime_survey.session_key, "Failed to connect LimeSurvey")
+        self.assertIsNotNone(
+            self.lime_survey.session_key, "Failed to connect LimeSurvey"
+        )
 
         self.tag_eeg = ObjectsFactory.create_tag("EEG")
 
@@ -1064,7 +1200,9 @@ class SubjectTest(TestCase):
         block = ObjectsFactory.create_block(Experiment.objects.first())
 
         # Using a known questionnaire at LiveSurvey to use in this test.
-        new_survey, created = Survey.objects.get_or_create(lime_survey_id=LIME_SURVEY_ID)
+        new_survey, created = Survey.objects.get_or_create(
+            lime_survey_id=LIME_SURVEY_ID
+        )
 
         # Create a questionnaire
         questionnaire = Questionnaire.objects.create(
@@ -1082,7 +1220,9 @@ class SubjectTest(TestCase):
         )
         component_configuration.save()
 
-        data_configuration_tree = DataConfigurationTree.objects.create(component_configuration=component_configuration)
+        data_configuration_tree = DataConfigurationTree.objects.create(
+            component_configuration=component_configuration
+        )
         data_configuration_tree.save()
 
         # Create a mock group
@@ -1097,10 +1237,16 @@ class SubjectTest(TestCase):
         util = UtilTests()
         patient_mock = util.create_patient(changed_by=self.user)
 
-        count_before_insert_subject = SubjectOfGroup.objects.all().filter(group=group).count()
-        response = self.client.post(reverse("subject_insert", args=(group.pk, patient_mock.pk)))
+        count_before_insert_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
+        response = self.client.post(
+            reverse("subject_insert", args=(group.pk, patient_mock.pk))
+        )
         self.assertEqual(response.status_code, 302)
-        count_after_insert_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_after_insert_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         self.assertEqual(count_after_insert_subject, count_before_insert_subject + 1)
 
         # Setting the response
@@ -1119,27 +1265,53 @@ class SubjectTest(TestCase):
         self.assertEqual(len(response.context["subject_list"]), 1)
 
         # Inserir participante ja inserido para o experimento
-        count_before_insert_subject = SubjectOfGroup.objects.all().filter(group=group).count()
-        response = self.client.post(reverse("subject_insert", args=(group.pk, patient_mock.pk)))
+        count_before_insert_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
+        response = self.client.post(
+            reverse("subject_insert", args=(group.pk, patient_mock.pk))
+        )
         self.assertEqual(response.status_code, 302)
-        count_after_insert_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_after_insert_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         self.assertEqual(count_after_insert_subject, count_before_insert_subject)
 
     @patch("survey.abc_search_engine.Server")
     def test_questionnaire_fill(self, mockServer):
-        mockServer.return_value.get_session_key.return_value = "fmhcr2qv7tz37b3zpkhfz3t6rjj26eri"
+        mockServer.return_value.get_session_key.return_value = (
+            "fmhcr2qv7tz37b3zpkhfz3t6rjj26eri"
+        )
         mockServer.return_value.get_language_properties.side_effect = [
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without access code table"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey inactive"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without identification group"},
+            {
+                "surveyls_title": "NES-TestCase (used by automated tests) - "
+                "Survey without access code table"
+            },
+            {
+                "surveyls_title": "NES-TestCase (used by automated tests) - "
+                "Survey inactive"
+            },
+            {
+                "surveyls_title": "NES-TestCase (used by automated tests) - "
+                "Survey without identification group"
+            },
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without access code table"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey inactive"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without identification group"},
+            {
+                "surveyls_title": "NES-TestCase (used by automated tests) - "
+                "Survey without access code table"
+            },
+            {
+                "surveyls_title": "NES-TestCase (used by automated tests) - "
+                "Survey inactive"
+            },
+            {
+                "surveyls_title": "NES-TestCase (used by automated tests) - "
+                "Survey without identification group"
+            },
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
         ]
         mockServer.return_value.get_summary.side_effect = [
@@ -1166,7 +1338,8 @@ class SubjectTest(TestCase):
                     "group_order": 1,
                     "language": "pt-BR",
                     "sid": 828636,
-                    "description": "Teste de dominância manual baseado em " "Oldfield (1971)",
+                    "description": "Teste de dominância manual baseado em "
+                    "Oldfield (1971)",
                     "id": {"language": "pt-BR", "gid": 1118},
                     "randomization_group": "",
                     "grelevance": "",
@@ -3352,11 +3525,15 @@ class SubjectTest(TestCase):
         block = ObjectsFactory.create_block(Experiment.objects.first())
 
         # Using a known questionnaires at LimeSurvey to use in this test.
-        new_survey, created = Survey.objects.get_or_create(lime_survey_id=LIME_SURVEY_ID)
+        new_survey, created = Survey.objects.get_or_create(
+            lime_survey_id=LIME_SURVEY_ID
+        )
         new_survey_without_access_table, created = Survey.objects.get_or_create(
             lime_survey_id=LIME_SURVEY_ID_WITHOUT_ACCESS_CODE_TABLE
         )
-        new_survey_inactive, created = Survey.objects.get_or_create(lime_survey_id=LIME_SURVEY_ID_INACTIVE)
+        new_survey_inactive, created = Survey.objects.get_or_create(
+            lime_survey_id=LIME_SURVEY_ID_INACTIVE
+        )
         new_survey_without_identification_group, created = Survey.objects.get_or_create(
             lime_survey_id=LIME_SURVEY_ID_WITHOUT_IDENTIFICATION_GROUP
         )
@@ -3404,10 +3581,12 @@ class SubjectTest(TestCase):
         )
         component_configuration.save()
 
-        component_configuration_without_access_table = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration",
-            parent=block,
-            component=questionnaire_without_access_table,
+        component_configuration_without_access_table = (
+            ComponentConfiguration.objects.create(
+                name="ComponentConfiguration",
+                parent=block,
+                component=questionnaire_without_access_table,
+            )
         )
         component_configuration_without_access_table.save()
 
@@ -3418,14 +3597,18 @@ class SubjectTest(TestCase):
         )
         component_configuration_inactive.save()
 
-        component_configuration_without_identification_group = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration",
-            parent=block,
-            component=questionnaire_without_identification_group,
+        component_configuration_without_identification_group = (
+            ComponentConfiguration.objects.create(
+                name="ComponentConfiguration",
+                parent=block,
+                component=questionnaire_without_identification_group,
+            )
         )
         component_configuration_without_identification_group.save()
 
-        data_configuration_tree = DataConfigurationTree.objects.create(component_configuration=component_configuration)
+        data_configuration_tree = DataConfigurationTree.objects.create(
+            component_configuration=component_configuration
+        )
         data_configuration_tree.save()
 
         group = ObjectsFactory.create_group(experiment, block)
@@ -3551,7 +3734,9 @@ class SubjectTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Remove preenchimento da Survey
-        count_before_delete_questionnaire_response = QuestionnaireResponse.objects.all().count()
+        count_before_delete_questionnaire_response = (
+            QuestionnaireResponse.objects.all().count()
+        )
 
         self.data["action"] = "remove"
         response = self.client.post(
@@ -3565,7 +3750,9 @@ class SubjectTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
-        count_after_delete_questionnaire_response = QuestionnaireResponse.objects.all().count()
+        count_after_delete_questionnaire_response = (
+            QuestionnaireResponse.objects.all().count()
+        )
         self.assertEqual(
             count_before_delete_questionnaire_response - 1,
             count_after_delete_questionnaire_response,
@@ -3573,10 +3760,14 @@ class SubjectTest(TestCase):
 
         # Delete participant from a group
         self.data = {"action": "remove-" + str(subject.pk)}
-        count_before_delete_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_before_delete_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         response = self.client.post(reverse("subjects", args=(group.pk,)), self.data)
         self.assertEqual(response.status_code, 302)
-        count_after_delete_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_after_delete_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         self.assertEqual(count_before_delete_subject - 1, count_after_delete_subject)
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -3695,7 +3886,9 @@ class SubjectTest(TestCase):
             "file_format_description": "teste",
             "eeg_setting": eeg_setting.id,
         }
-        response = self.client.post(reverse("eeg_data_edit", args=(eeg_data.id, 1)), self.data)
+        response = self.client.post(
+            reverse("eeg_data_edit", args=(eeg_data.id, 1)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # list eeg data files
@@ -3717,15 +3910,21 @@ class SubjectTest(TestCase):
 
         # Trying to delete participant from a group, but there is a eeg file associated
         self.data = {"action": "remove-" + str(subject_mock.pk)}
-        count_before_delete_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_before_delete_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         response = self.client.post(reverse("subjects", args=(group.pk,)), self.data)
         self.assertEqual(response.status_code, 302)
-        count_after_delete_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_after_delete_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         self.assertEqual(count_before_delete_subject, count_after_delete_subject)
 
         # remove eeg data file from a subject
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("eeg_data_view", args=(eeg_data.id, 1)), self.data)
+        response = self.client.post(
+            reverse("eeg_data_view", args=(eeg_data.id, 1)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(EEGData.objects.all().count(), 0)
 
@@ -3736,10 +3935,14 @@ class SubjectTest(TestCase):
 
         # Delete participant from a group
         self.data = {"action": "remove-" + str(subject_mock.pk)}
-        count_before_delete_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_before_delete_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         response = self.client.post(reverse("subjects", args=(group.pk,)), self.data)
         self.assertEqual(response.status_code, 302)
-        count_after_delete_subject = SubjectOfGroup.objects.all().filter(group=group).count()
+        count_after_delete_subject = (
+            SubjectOfGroup.objects.all().filter(group=group).count()
+        )
         self.assertEqual(count_before_delete_subject - 1, count_after_delete_subject)
 
     def test_subject_upload_consent_file(self):
@@ -3766,7 +3969,9 @@ class SubjectTest(TestCase):
 
         subject_group = SubjectOfGroup.objects.all().first()
         if not subject_group:
-            subject_group = SubjectOfGroup.objects.create(subject=subject_mock, group=group)
+            subject_group = SubjectOfGroup.objects.create(
+                subject=subject_mock, group=group
+            )
 
         subject_group.group = group
         subject_group.subject = subject_mock
@@ -3867,18 +4072,28 @@ class ResearchProjectTest(TestCase):
         }
         response = self.client.post(reverse("research_project_new"), self.data)
         self.assertEqual(ResearchProject.objects.all().count(), 0)
-        self.assertEqual(str(list(response.context["messages"])[0]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[0]), _("Action not available.")
+        )
         self.assertEqual(response.status_code, 200)
 
         # POSTing missing information
         self.data = {"action": "save"}
         response = self.client.post(reverse("research_project_new"), self.data)
         self.assertEqual(ResearchProject.objects.all().count(), 0)
-        self.assertGreaterEqual(len(response.context["research_project_form"].errors), 3)
+        self.assertGreaterEqual(
+            len(response.context["research_project_form"].errors), 3
+        )
         self.assertTrue("title" in response.context["research_project_form"].errors)
-        self.assertTrue("start_date" in response.context["research_project_form"].errors)
-        self.assertTrue("description" in response.context["research_project_form"].errors)
-        self.assertEqual(str(list(response.context["messages"])[0]), _("Information not saved."))
+        self.assertTrue(
+            "start_date" in response.context["research_project_form"].errors
+        )
+        self.assertTrue(
+            "description" in response.context["research_project_form"].errors
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[0]), _("Information not saved.")
+        )
         self.assertEqual(response.status_code, 200)
 
         # Set research project data
@@ -3916,7 +4131,9 @@ class ResearchProjectTest(TestCase):
         )
         request.user = self.user
 
-        response = research_project_update(request, research_project_id=research_project.pk)
+        response = research_project_update(
+            request, research_project_id=research_project.pk
+        )
         self.assertEqual(response.status_code, 200)
 
         # Update
@@ -3971,7 +4188,9 @@ class ResearchProjectTest(TestCase):
         keyword.save()
         self.assertEqual(Keyword.objects.all().count(), 2)
         self.assertEqual(research_project.keywords.count(), 1)
-        response = self.client.get(reverse("keyword_add", args=(research_project.pk, keyword.id)), follow=True)
+        response = self.client.get(
+            reverse("keyword_add", args=(research_project.pk, keyword.id)), follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Keyword.objects.all().count(), 2)
         self.assertEqual(research_project.keywords.count(), 2)
@@ -3989,7 +4208,9 @@ class ResearchProjectTest(TestCase):
         self.assertEqual(research_project2.keywords.count(), 1)
 
         # Add keyword
-        response = self.client.get(reverse("keyword_add", args=(research_project2.pk, keyword.id)), follow=True)
+        response = self.client.get(
+            reverse("keyword_add", args=(research_project2.pk, keyword.id)), follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Keyword.objects.all().count(), 3)
         self.assertEqual(research_project2.keywords.count(), 2)
@@ -4001,8 +4222,12 @@ class ResearchProjectTest(TestCase):
         }
         response = self.client.post(reverse("keywords_search"), self.data)
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, 'Adicionar nova palavra-chave "test_keyword"')  # Already exists.
-        self.assertNotContains(response, "second_test_keyword")  # Already in the project
+        self.assertNotContains(
+            response, 'Adicionar nova palavra-chave "test_keyword"'
+        )  # Already exists.
+        self.assertNotContains(
+            response, "second_test_keyword"
+        )  # Already in the project
         self.assertNotContains(response, "third_test_keyword")  # Already in the project
         self.assertContains(response, "test_keyword")  # Should be suggested
 
@@ -4049,7 +4274,9 @@ class StimuliEqSettingTest(TestCase):
         ObjectsFactory.create_stimuli_eq(ObjectsFactory.create_manufacturer())
 
         # screen to create an stimuli_eq_setting
-        response = self.client.get(reverse("stimuli_eq_setting_new", args=(self.experiment.id,)))
+        response = self.client.get(
+            reverse("stimuli_eq_setting_new", args=(self.experiment.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         name = "Stimuli Eq setting name"
@@ -4062,23 +4289,37 @@ class StimuliEqSettingTest(TestCase):
             "description": description,
             # "stimuli_eq": stimuli_eq.id,
         }
-        response = self.client.post(reverse("stimuli_eq_setting_new", args=(self.experiment.id,)), self.data)
+        response = self.client.post(
+            reverse("stimuli_eq_setting_new", args=(self.experiment.id,)), self.data
+        )
         # Missing stimuli_eq required field
-        self.assertFalse(StimuliEqSetting.objects.filter(name=name, description=description).exists())
+        self.assertFalse(
+            StimuliEqSetting.objects.filter(name=name, description=description).exists()
+        )
 
         self.data["stimuli_eq"] = stimuli_eq.id
-        response = self.client.post(reverse("stimuli_eq_setting_new", args=(self.experiment.id,)), self.data)
+        response = self.client.post(
+            reverse("stimuli_eq_setting_new", args=(self.experiment.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(StimuliEqSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            StimuliEqSetting.objects.filter(name=name, description=description).exists()
+        )
 
-        stimuli_eq_setting = StimuliEqSetting.objects.filter(name=name, description=description)[0]
+        stimuli_eq_setting = StimuliEqSetting.objects.filter(
+            name=name, description=description
+        )[0]
 
         # screen to view an eeg_setting
-        response = self.client.get(reverse("stimuli_eq_setting_view", args=(stimuli_eq_setting.id,)))
+        response = self.client.get(
+            reverse("stimuli_eq_setting_view", args=(stimuli_eq_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # screen to update an eeg_setting
-        response = self.client.get(reverse("stimuli_eq_setting_edit", args=(stimuli_eq_setting.id,)))
+        response = self.client.get(
+            reverse("stimuli_eq_setting_edit", args=(stimuli_eq_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update with no changes
@@ -4093,7 +4334,9 @@ class StimuliEqSettingTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(StimuliEqSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            StimuliEqSetting.objects.filter(name=name, description=description).exists()
+        )
 
         name = "Stimuli Eq setting name updated"
         description = "Stimuli Eq setting description updated"
@@ -4108,7 +4351,9 @@ class StimuliEqSettingTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(StimuliEqSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            StimuliEqSetting.objects.filter(name=name, description=description).exists()
+        )
 
         # remove an eeg_setting
         self.data = {"action": "remove"}
@@ -4132,15 +4377,21 @@ class EEGSettingTest(TestCase):
 
     def test_crud_eeg_setting(self):
         # screen to create an eeg_setting
-        response = self.client.get(reverse("eeg_setting_new", args=(self.experiment.id,)))
+        response = self.client.get(
+            reverse("eeg_setting_new", args=(self.experiment.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         name = "EEG setting name"
         description = "EEG setting description"
         self.data = {"action": "save", "name": name, "description": description}
-        response = self.client.post(reverse("eeg_setting_new", args=(self.experiment.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_new", args=(self.experiment.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(EEGSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            EEGSetting.objects.filter(name=name, description=description).exists()
+        )
 
         eeg_setting = EEGSetting.objects.filter(name=name, description=description)[0]
 
@@ -4154,20 +4405,30 @@ class EEGSettingTest(TestCase):
 
         # update with no changes
         self.data = {"action": "save", "name": name, "description": description}
-        response = self.client.post(reverse("eeg_setting_edit", args=(eeg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_edit", args=(eeg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(EEGSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            EEGSetting.objects.filter(name=name, description=description).exists()
+        )
 
         name = "EEG setting name updated"
         description = "EEG setting description updated"
         self.data = {"action": "save", "name": name, "description": description}
-        response = self.client.post(reverse("eeg_setting_edit", args=(eeg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_edit", args=(eeg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(EEGSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            EEGSetting.objects.filter(name=name, description=description).exists()
+        )
 
         # remove an eeg_setting
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
     # def test_eeg_setting_eeg_machine(self):
@@ -4212,7 +4473,9 @@ class EEGSettingTest(TestCase):
         eeg_amplifier = ObjectsFactory.create_amplifier(manufacturer)
 
         # screen to an (unexisting) eeg_amplifier_setting
-        response = self.client.get(reverse("view_eeg_setting_type", args=(eeg_setting.id, "amplifier")))
+        response = self.client.get(
+            reverse("view_eeg_setting_type", args=(eeg_setting.id, "amplifier"))
+        )
         self.assertEqual(response.status_code, 200)
 
         # create an eeg_amplifier_setting
@@ -4229,11 +4492,15 @@ class EEGSettingTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # screen to view the eeg_amplifier_setting
-        response = self.client.get(reverse("view_eeg_setting_type", args=(eeg_setting.id, "amplifier")))
+        response = self.client.get(
+            reverse("view_eeg_setting_type", args=(eeg_setting.id, "amplifier"))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update the eeg_amplifier_setting
-        response = self.client.get(reverse("edit_eeg_setting_type", args=(eeg_setting.id, "amplifier")))
+        response = self.client.get(
+            reverse("edit_eeg_setting_type", args=(eeg_setting.id, "amplifier"))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {
@@ -4250,7 +4517,9 @@ class EEGSettingTest(TestCase):
 
         # remove an eeg_amplifier_setting
         self.data = {"action": "remove-eeg_amplifier"}
-        response = self.client.post(reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
     def test_eeg_setting_eeg_solution(self):
@@ -4260,7 +4529,9 @@ class EEGSettingTest(TestCase):
         eeg_solution = ObjectsFactory.create_eeg_solution(manufacturer)
 
         # screen to an (unexisting) eeg_solution_setting
-        response = self.client.get(reverse("view_eeg_setting_type", args=(eeg_setting.id, "eeg_solution")))
+        response = self.client.get(
+            reverse("view_eeg_setting_type", args=(eeg_setting.id, "eeg_solution"))
+        )
         self.assertEqual(response.status_code, 200)
 
         # create an eeg_solution_setting
@@ -4272,11 +4543,15 @@ class EEGSettingTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # screen to view the eeg_solution_setting
-        response = self.client.get(reverse("view_eeg_setting_type", args=(eeg_setting.id, "eeg_solution")))
+        response = self.client.get(
+            reverse("view_eeg_setting_type", args=(eeg_setting.id, "eeg_solution"))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update the eeg_solution_setting
-        response = self.client.get(reverse("edit_eeg_setting_type", args=(eeg_setting.id, "eeg_solution")))
+        response = self.client.get(
+            reverse("edit_eeg_setting_type", args=(eeg_setting.id, "eeg_solution"))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "solution_selection": eeg_solution.id}
@@ -4288,7 +4563,9 @@ class EEGSettingTest(TestCase):
 
         # remove an eeg_solution_setting
         self.data = {"action": "remove-eeg_solution"}
-        response = self.client.post(reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
     def test_eeg_setting_eeg_filter(self):
@@ -4297,7 +4574,9 @@ class EEGSettingTest(TestCase):
         filter_type = ObjectsFactory.create_filter_type()
 
         # screen to an (unexisting) eeg_filter_setting
-        response = self.client.get(reverse("view_eeg_setting_type", args=(eeg_setting.id, "filter")))
+        response = self.client.get(
+            reverse("view_eeg_setting_type", args=(eeg_setting.id, "filter"))
+        )
         self.assertEqual(response.status_code, 200)
 
         # create an eeg_filter_setting
@@ -4308,15 +4587,21 @@ class EEGSettingTest(TestCase):
             "low_pass": "20",
             "order": "2",
         }
-        response = self.client.post(reverse("view_eeg_setting_type", args=(eeg_setting.id, "filter")), self.data)
+        response = self.client.post(
+            reverse("view_eeg_setting_type", args=(eeg_setting.id, "filter")), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # screen to view the eeg_filter_setting
-        response = self.client.get(reverse("view_eeg_setting_type", args=(eeg_setting.id, "filter")))
+        response = self.client.get(
+            reverse("view_eeg_setting_type", args=(eeg_setting.id, "filter"))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update the eeg_filter_setting
-        response = self.client.get(reverse("edit_eeg_setting_type", args=(eeg_setting.id, "filter")))
+        response = self.client.get(
+            reverse("edit_eeg_setting_type", args=(eeg_setting.id, "filter"))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {
@@ -4326,12 +4611,16 @@ class EEGSettingTest(TestCase):
             "low_pass": "20",
             "order": "2",
         }
-        response = self.client.post(reverse("edit_eeg_setting_type", args=(eeg_setting.id, "filter")), self.data)
+        response = self.client.post(
+            reverse("edit_eeg_setting_type", args=(eeg_setting.id, "filter")), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # remove an eeg_filter_setting
         self.data = {"action": "remove-eeg_filter"}
-        response = self.client.post(reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
     def test_eeg_setting_eeg_net_system(self):
@@ -4339,14 +4628,20 @@ class EEGSettingTest(TestCase):
 
         manufacturer = ObjectsFactory.create_manufacturer()
         electrode_model = ObjectsFactory.create_electrode_model()
-        eeg_electrode_net = ObjectsFactory.create_eeg_electrode_net(manufacturer, electrode_model)
-        eeg_localization_system = ObjectsFactory.create_eeg_electrode_localization_system()
+        eeg_electrode_net = ObjectsFactory.create_eeg_electrode_net(
+            manufacturer, electrode_model
+        )
+        eeg_localization_system = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
 
         # creating 2 positions to configure be configured when the setting is created
         ObjectsFactory.create_eeg_electrode_position(eeg_localization_system)
         ObjectsFactory.create_eeg_electrode_position(eeg_localization_system)
 
-        ObjectsFactory.create_eeg_electrode_net_system(eeg_electrode_net, eeg_localization_system)
+        ObjectsFactory.create_eeg_electrode_net_system(
+            eeg_electrode_net, eeg_localization_system
+        )
 
         # screen to an (unexisting) eeg_electrode_net_system_setting
         response = self.client.get(
@@ -4383,10 +4678,14 @@ class EEGSettingTest(TestCase):
 
         # update the eeg_electrode_net_system_setting with another localization system
 
-        eeg_localization_system_new = ObjectsFactory.create_eeg_electrode_localization_system()
+        eeg_localization_system_new = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
         ObjectsFactory.create_eeg_electrode_position(eeg_localization_system_new)
         ObjectsFactory.create_eeg_electrode_position(eeg_localization_system_new)
-        ObjectsFactory.create_eeg_electrode_net_system(eeg_electrode_net, eeg_localization_system_new)
+        ObjectsFactory.create_eeg_electrode_net_system(
+            eeg_electrode_net, eeg_localization_system_new
+        )
 
         response = self.client.get(
             reverse(
@@ -4411,14 +4710,20 @@ class EEGSettingTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # configuring the used electrodes
-        response = self.client.get(reverse("eeg_electrode_position_setting", args=(eeg_setting.id,)))
+        response = self.client.get(
+            reverse("eeg_electrode_position_setting", args=(eeg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse("edit_eeg_electrode_position_setting", args=(eeg_setting.id,)))
+        response = self.client.get(
+            reverse("edit_eeg_electrode_position_setting", args=(eeg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         position_setting_list = []
-        for position_setting in eeg_setting.eeg_electrode_layout_setting.positions_setting.all():
+        for (
+            position_setting
+        ) in eeg_setting.eeg_electrode_layout_setting.positions_setting.all():
             position_setting_list.append(position_setting)
 
         self.data = {
@@ -4433,26 +4738,36 @@ class EEGSettingTest(TestCase):
 
         # configuring the electrodes models
 
-        response = self.client.get(reverse("eeg_electrode_position_setting_model", args=(eeg_setting.id,)))
+        response = self.client.get(
+            reverse("eeg_electrode_position_setting_model", args=(eeg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse("edit_eeg_electrode_position_setting_model", args=(eeg_setting.id,)))
+        response = self.client.get(
+            reverse("edit_eeg_electrode_position_setting_model", args=(eeg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {
             "action": "save",
-            "electrode_model_" + str(position_setting_list[0].id): str(electrode_model.id),
-            "electrode_model_" + str(position_setting_list[1].id): str(electrode_model.id),
+            "electrode_model_"
+            + str(position_setting_list[0].id): str(electrode_model.id),
+            "electrode_model_"
+            + str(position_setting_list[1].id): str(electrode_model.id),
         }
         response = self.client.post(
-            reverse("edit_eeg_electrode_position_setting_model", args=(eeg_setting.id,)),
+            reverse(
+                "edit_eeg_electrode_position_setting_model", args=(eeg_setting.id,)
+            ),
             self.data,
         )
         self.assertEqual(response.status_code, 302)
 
         # remove an eeg_electrode_net_system_setting
         self.data = {"action": "remove-eeg_electrode_net_system"}
-        response = self.client.post(reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("eeg_setting_view", args=(eeg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
 
@@ -4482,25 +4797,35 @@ class EEGEquipmentRegisterTest(TestCase):
         # view
         manufacturer = Manufacturer.objects.all().first()
 
-        response = self.client.get(reverse("manufacturer_view", args=(manufacturer.id,)))
+        response = self.client.get(
+            reverse("manufacturer_view", args=(manufacturer.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("manufacturer_edit", args=(manufacturer.id,)))
+        response = self.client.get(
+            reverse("manufacturer_edit", args=(manufacturer.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("manufacturer_edit", args=(manufacturer.id,)), self.data)
+        response = self.client.post(
+            reverse("manufacturer_edit", args=(manufacturer.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("manufacturer_edit", args=(manufacturer.id,)), self.data)
+        response = self.client.post(
+            reverse("manufacturer_edit", args=(manufacturer.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("manufacturer_view", args=(manufacturer.id,)), self.data)
+        response = self.client.post(
+            reverse("manufacturer_view", args=(manufacturer.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Manufacturer.objects.all().count(), 0)
 
@@ -4534,7 +4859,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("amplifier_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Amplifier.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -4542,7 +4869,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("amplifier_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Amplifier.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         amplifier = Amplifier.objects.all().first()
@@ -4561,7 +4890,9 @@ class EEGEquipmentRegisterTest(TestCase):
             "tag_1": "on",
             "tag_2": "on",
         }
-        response = self.client.post(reverse("amplifier_edit", args=(amplifier.id,)), self.data)
+        response = self.client.post(
+            reverse("amplifier_edit", args=(amplifier.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         identification = "Identification changed"
@@ -4572,18 +4903,26 @@ class EEGEquipmentRegisterTest(TestCase):
             "tag_1": "on",
             "tag_2": "on",
         }
-        response = self.client.post(reverse("amplifier_edit", args=(amplifier.id,)), self.data)
+        response = self.client.post(
+            reverse("amplifier_edit", args=(amplifier.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("amplifier_edit", args=(amplifier.id,)), self.data)
+        response = self.client.post(
+            reverse("amplifier_edit", args=(amplifier.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(get_object_or_404(Amplifier, pk=amplifier.id).identification, identification)
+        self.assertEqual(
+            get_object_or_404(Amplifier, pk=amplifier.id).identification, identification
+        )
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("amplifier_view", args=(amplifier.id,)), self.data)
+        response = self.client.post(
+            reverse("amplifier_view", args=(amplifier.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Amplifier.objects.all().count(), 0)
 
@@ -4624,7 +4963,9 @@ class EEGEquipmentRegisterTest(TestCase):
             "manufacturer": str(manufacturer.id),
             "name": name,
         }
-        response = self.client.post(reverse("eegsolution_edit", args=(eeg_solution.id,)), self.data)
+        response = self.client.post(
+            reverse("eegsolution_edit", args=(eeg_solution.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
@@ -4633,12 +4974,16 @@ class EEGEquipmentRegisterTest(TestCase):
             "manufacturer": str(manufacturer.id),
             "name": name,
         }
-        response = self.client.post(reverse("eegsolution_edit", args=(eeg_solution.id,)), self.data)
+        response = self.client.post(
+            reverse("eegsolution_edit", args=(eeg_solution.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("eegsolution_view", args=(eeg_solution.id,)), self.data)
+        response = self.client.post(
+            reverse("eegsolution_view", args=(eeg_solution.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(EEGSolution.objects.all().count(), 0)
 
@@ -4664,7 +5009,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("filtertype_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(FilterType.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -4672,7 +5019,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("filtertype_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(FilterType.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         filter_type = FilterType.objects.all().first()
@@ -4685,23 +5034,31 @@ class EEGEquipmentRegisterTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("filtertype_edit", args=(filter_type.id,)), self.data)
+        response = self.client.post(
+            reverse("filtertype_edit", args=(filter_type.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("filtertype_edit", args=(filter_type.id,)), self.data)
+        response = self.client.post(
+            reverse("filtertype_edit", args=(filter_type.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("filtertype_edit", args=(filter_type.id,)), self.data)
+        response = self.client.post(
+            reverse("filtertype_edit", args=(filter_type.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(get_object_or_404(FilterType, pk=filter_type.id).name, name)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("filtertype_view", args=(filter_type.id,)), self.data)
+        response = self.client.post(
+            reverse("filtertype_view", args=(filter_type.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(FilterType.objects.all().count(), 0)
 
@@ -4719,34 +5076,54 @@ class EEGEquipmentRegisterTest(TestCase):
 
         number_of_registers = StandardizationSystem.objects.all().count()
 
-        response = self.client.post(reverse("standardization_system_new", args=()), self.data)
+        response = self.client.post(
+            reverse("standardization_system_new", args=()), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(StandardizationSystem.objects.all().count(), number_of_registers + 1)
+        self.assertEqual(
+            StandardizationSystem.objects.all().count(), number_of_registers + 1
+        )
 
         # create (trying) but missing information
         self.data = {"action": "save"}
 
-        response = self.client.post(reverse("standardization_system_new", args=()), self.data)
+        response = self.client.post(
+            reverse("standardization_system_new", args=()), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(StandardizationSystem.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            StandardizationSystem.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
 
-        response = self.client.post(reverse("standardization_system_new", args=()), self.data)
+        response = self.client.post(
+            reverse("standardization_system_new", args=()), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(StandardizationSystem.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            StandardizationSystem.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         standardization_system = StandardizationSystem.objects.all().first()
 
-        response = self.client.get(reverse("standardization_system_view", args=(standardization_system.id,)))
+        response = self.client.get(
+            reverse("standardization_system_view", args=(standardization_system.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("standardization_system_edit", args=(standardization_system.id,)))
+        response = self.client.get(
+            reverse("standardization_system_edit", args=(standardization_system.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
@@ -4783,7 +5160,9 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(StandardizationSystem.objects.all().count(), number_of_registers)
+        self.assertEqual(
+            StandardizationSystem.objects.all().count(), number_of_registers
+        )
 
     def test_emg_surface_electrode_placement_register(self):
         standardization_system = ObjectsFactory.create_standardization_system()
@@ -4812,7 +5191,9 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
 
         # create (trying) but missing information
         self.data = {"action": "save"}
@@ -4825,8 +5206,12 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -4839,19 +5224,27 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         emg_electrode_placement = EMGElectrodePlacement.objects.filter(
             standardization_system=standardization_system
         ).first()
 
-        response = self.client.get(reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,)))
+        response = self.client.get(
+            reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("emg_electrode_placement_edit", args=(emg_electrode_placement.id,)))
+        response = self.client.get(
+            reverse("emg_electrode_placement_edit", args=(emg_electrode_placement.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "muscle_subdivision": str(muscle_subdivision.id)}
@@ -4879,7 +5272,9 @@ class EEGEquipmentRegisterTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            get_object_or_404(EMGElectrodePlacement, pk=emg_electrode_placement.id).muscle_subdivision.id,
+            get_object_or_404(
+                EMGElectrodePlacement, pk=emg_electrode_placement.id
+            ).muscle_subdivision.id,
             muscle_subdivision_2.id,
         )
 
@@ -4890,7 +5285,9 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers)
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers
+        )
 
     def test_emg_intramuscular_electrode_placement_register(self):
         standardization_system = ObjectsFactory.create_standardization_system()
@@ -4919,7 +5316,9 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
 
         # create (trying) but missing information
         self.data = {"action": "save"}
@@ -4932,8 +5331,12 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -4946,19 +5349,27 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         emg_electrode_placement = EMGElectrodePlacement.objects.filter(
             standardization_system=standardization_system
         ).first()
 
-        response = self.client.get(reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,)))
+        response = self.client.get(
+            reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("emg_electrode_placement_edit", args=(emg_electrode_placement.id,)))
+        response = self.client.get(
+            reverse("emg_electrode_placement_edit", args=(emg_electrode_placement.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "muscle_subdivision": str(muscle_subdivision.id)}
@@ -4986,7 +5397,9 @@ class EEGEquipmentRegisterTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            get_object_or_404(EMGElectrodePlacement, pk=emg_electrode_placement.id).muscle_subdivision.id,
+            get_object_or_404(
+                EMGElectrodePlacement, pk=emg_electrode_placement.id
+            ).muscle_subdivision.id,
             muscle_subdivision_2.id,
         )
 
@@ -4997,7 +5410,9 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers)
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers
+        )
 
     def test_emg_needle_electrode_placement_register(self):
         standardization_system = ObjectsFactory.create_standardization_system()
@@ -5026,7 +5441,9 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
 
         # create (trying) but missing information
         self.data = {"action": "save"}
@@ -5039,8 +5456,12 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5053,19 +5474,27 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         emg_electrode_placement = EMGElectrodePlacement.objects.filter(
             standardization_system=standardization_system
         ).first()
 
-        response = self.client.get(reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,)))
+        response = self.client.get(
+            reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("emg_electrode_placement_edit", args=(emg_electrode_placement.id,)))
+        response = self.client.get(
+            reverse("emg_electrode_placement_edit", args=(emg_electrode_placement.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "muscle_subdivision": str(muscle_subdivision.id)}
@@ -5093,7 +5522,9 @@ class EEGEquipmentRegisterTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            get_object_or_404(EMGElectrodePlacement, pk=emg_electrode_placement.id).muscle_subdivision.id,
+            get_object_or_404(
+                EMGElectrodePlacement, pk=emg_electrode_placement.id
+            ).muscle_subdivision.id,
             muscle_subdivision_2.id,
         )
 
@@ -5104,7 +5535,9 @@ class EEGEquipmentRegisterTest(TestCase):
             self.data,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(EMGElectrodePlacement.objects.all().count(), number_of_registers)
+        self.assertEqual(
+            EMGElectrodePlacement.objects.all().count(), number_of_registers
+        )
 
     def test_muscle_register(self):
         # list
@@ -5130,7 +5563,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("muscle_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Muscle.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5138,7 +5573,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("muscle_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Muscle.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         muscle = Muscle.objects.all().first()
@@ -5151,23 +5588,31 @@ class EEGEquipmentRegisterTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("muscle_edit", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_edit", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("muscle_edit", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_edit", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("muscle_edit", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_edit", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(get_object_or_404(Muscle, pk=muscle.id).name, name)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("muscle_view", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_view", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Muscle.objects.all().count(), number_of_registers)
 
@@ -5183,54 +5628,84 @@ class EEGEquipmentRegisterTest(TestCase):
         name = "Name"
         self.data = {"action": "save", "name": name}
 
-        response = self.client.post(reverse("muscle_subdivision_new", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_subdivision_new", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(MuscleSubdivision.objects.all().count(), number_of_registers + 1)
+        self.assertEqual(
+            MuscleSubdivision.objects.all().count(), number_of_registers + 1
+        )
 
         # create (trying) but missing information
         self.data = {"action": "save"}
 
-        response = self.client.post(reverse("muscle_subdivision_new", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_subdivision_new", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(MuscleSubdivision.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            MuscleSubdivision.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
 
-        response = self.client.post(reverse("muscle_subdivision_new", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_subdivision_new", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(MuscleSubdivision.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            MuscleSubdivision.objects.all().count(), number_of_registers + 1
+        )
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         muscle_subdivision = MuscleSubdivision.objects.filter(muscle=muscle).first()
 
-        response = self.client.get(reverse("muscle_subdivision_view", args=(muscle_subdivision.id,)))
+        response = self.client.get(
+            reverse("muscle_subdivision_view", args=(muscle_subdivision.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,)))
+        response = self.client.get(
+            reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_subdivision_edit", args=(muscle_subdivision.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(get_object_or_404(MuscleSubdivision, pk=muscle_subdivision.id).name, name)
+        self.assertEqual(
+            get_object_or_404(MuscleSubdivision, pk=muscle_subdivision.id).name, name
+        )
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("muscle_subdivision_view", args=(muscle_subdivision.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_subdivision_view", args=(muscle_subdivision.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(MuscleSubdivision.objects.all().count(), number_of_registers)
 
@@ -5246,25 +5721,35 @@ class EEGEquipmentRegisterTest(TestCase):
         name = "Name"
         self.data = {"action": "save", "name": name}
 
-        response = self.client.post(reverse("muscle_side_new", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_side_new", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(MuscleSide.objects.all().count(), number_of_registers + 1)
 
         # create (trying) but missing information
         self.data = {"action": "save"}
 
-        response = self.client.post(reverse("muscle_side_new", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_side_new", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(MuscleSide.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
 
-        response = self.client.post(reverse("muscle_side_new", args=(muscle.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_side_new", args=(muscle.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(MuscleSide.objects.all().count(), number_of_registers + 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         muscle_side = MuscleSide.objects.filter(muscle=muscle).first()
@@ -5277,23 +5762,31 @@ class EEGEquipmentRegisterTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("muscle_side_edit", args=(muscle_side.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_side_edit", args=(muscle_side.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("muscle_side_edit", args=(muscle_side.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_side_edit", args=(muscle_side.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("muscle_side_edit", args=(muscle_side.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_side_edit", args=(muscle_side.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(get_object_or_404(MuscleSide, pk=muscle_side.id).name, name)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("muscle_side_view", args=(muscle_side.id,)), self.data)
+        response = self.client.post(
+            reverse("muscle_side_view", args=(muscle_side.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(MuscleSide.objects.all().count(), number_of_registers)
 
@@ -5325,7 +5818,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("software_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Software.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5333,7 +5828,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("software_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Software.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         software = Software.objects.all().first()
@@ -5350,7 +5847,9 @@ class EEGEquipmentRegisterTest(TestCase):
             "manufacturer": str(manufacturer.id),
             "name": name,
         }
-        response = self.client.post(reverse("software_edit", args=(software.id,)), self.data)
+        response = self.client.post(
+            reverse("software_edit", args=(software.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
@@ -5359,18 +5858,24 @@ class EEGEquipmentRegisterTest(TestCase):
             "manufacturer": str(manufacturer.id),
             "name": name,
         }
-        response = self.client.post(reverse("software_edit", args=(software.id,)), self.data)
+        response = self.client.post(
+            reverse("software_edit", args=(software.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("software_edit", args=(software.id,)), self.data)
+        response = self.client.post(
+            reverse("software_edit", args=(software.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(get_object_or_404(Software, pk=software.id).name, name)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("software_view", args=(software.id,)), self.data)
+        response = self.client.post(
+            reverse("software_view", args=(software.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Software.objects.all().count(), 0)
 
@@ -5385,54 +5890,78 @@ class EEGEquipmentRegisterTest(TestCase):
         name = "Name"
         self.data = {"action": "save", "name": name}
 
-        response = self.client.post(reverse("software_version_new", args=(software.id,)), self.data)
+        response = self.client.post(
+            reverse("software_version_new", args=(software.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(SoftwareVersion.objects.all().count(), 1)
 
         # create (trying) but missing information
         self.data = {"action": "save"}
 
-        response = self.client.post(reverse("software_version_new", args=(software.id,)), self.data)
+        response = self.client.post(
+            reverse("software_version_new", args=(software.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(SoftwareVersion.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
 
-        response = self.client.post(reverse("software_version_new", args=(software.id,)), self.data)
+        response = self.client.post(
+            reverse("software_version_new", args=(software.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(SoftwareVersion.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         software_version = SoftwareVersion.objects.filter(software=software).first()
 
-        response = self.client.get(reverse("software_version_view", args=(software_version.id,)))
+        response = self.client.get(
+            reverse("software_version_view", args=(software_version.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("software_version_edit", args=(software_version.id,)))
+        response = self.client.get(
+            reverse("software_version_edit", args=(software_version.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("software_version_edit", args=(software_version.id,)), self.data)
+        response = self.client.post(
+            reverse("software_version_edit", args=(software_version.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("software_version_edit", args=(software_version.id,)), self.data)
+        response = self.client.post(
+            reverse("software_version_edit", args=(software_version.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("software_version_edit", args=(software_version.id,)), self.data)
+        response = self.client.post(
+            reverse("software_version_edit", args=(software_version.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(get_object_or_404(SoftwareVersion, pk=software_version.id).name, name)
+        self.assertEqual(
+            get_object_or_404(SoftwareVersion, pk=software_version.id).name, name
+        )
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("software_version_view", args=(software_version.id,)), self.data)
+        response = self.client.post(
+            reverse("software_version_view", args=(software_version.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(SoftwareVersion.objects.all().count(), 0)
 
@@ -5457,7 +5986,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("electrodemodel_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ElectrodeModel.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5465,36 +5996,52 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("electrodemodel_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ElectrodeModel.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         electrode_model = ElectrodeModel.objects.all().first()
 
-        response = self.client.get(reverse("electrodemodel_view", args=(electrode_model.id,)))
+        response = self.client.get(
+            reverse("electrodemodel_view", args=(electrode_model.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("electrodemodel_edit", args=(electrode_model.id,)))
+        response = self.client.get(
+            reverse("electrodemodel_edit", args=(electrode_model.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name, "electrode_type": "surface"}
-        response = self.client.post(reverse("electrodemodel_edit", args=(electrode_model.id,)), self.data)
+        response = self.client.post(
+            reverse("electrodemodel_edit", args=(electrode_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name, "electrode_type": "surface"}
-        response = self.client.post(reverse("electrodemodel_edit", args=(electrode_model.id,)), self.data)
+        response = self.client.post(
+            reverse("electrodemodel_edit", args=(electrode_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("electrodemodel_edit", args=(electrode_model.id,)), self.data)
+        response = self.client.post(
+            reverse("electrodemodel_edit", args=(electrode_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(get_object_or_404(ElectrodeModel, pk=electrode_model.id).name, name)
+        self.assertEqual(
+            get_object_or_404(ElectrodeModel, pk=electrode_model.id).name, name
+        )
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("electrodemodel_view", args=(electrode_model.id,)), self.data)
+        response = self.client.post(
+            reverse("electrodemodel_view", args=(electrode_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(ElectrodeModel.objects.all().count(), 0)
 
@@ -5519,7 +6066,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("material_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Material.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5527,7 +6076,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("material_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Material.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         material = Material.objects.all().first()
@@ -5540,23 +6091,31 @@ class EEGEquipmentRegisterTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("material_edit", args=(material.id,)), self.data)
+        response = self.client.post(
+            reverse("material_edit", args=(material.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name}
-        response = self.client.post(reverse("material_edit", args=(material.id,)), self.data)
+        response = self.client.post(
+            reverse("material_edit", args=(material.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("material_edit", args=(material.id,)), self.data)
+        response = self.client.post(
+            reverse("material_edit", args=(material.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(get_object_or_404(Material, pk=material.id).name, name)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("material_view", args=(material.id,)), self.data)
+        response = self.client.post(
+            reverse("material_view", args=(material.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Material.objects.all().count(), 0)
 
@@ -5590,7 +6149,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("eegelectrodenet_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGElectrodeNet.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5598,16 +6159,22 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("eegelectrodenet_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGElectrodeNet.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         electrode_net = EEGElectrodeNet.objects.all().first()
 
-        response = self.client.get(reverse("eegelectrodenet_view", args=(electrode_net.id,)))
+        response = self.client.get(
+            reverse("eegelectrodenet_view", args=(electrode_net.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("eegelectrodenet_edit", args=(electrode_net.id,)))
+        response = self.client.get(
+            reverse("eegelectrodenet_edit", args=(electrode_net.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {
@@ -5616,7 +6183,9 @@ class EEGEquipmentRegisterTest(TestCase):
             "identification": identification,
             "electrode_model_default": str(electrode_model.id),
         }
-        response = self.client.post(reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         identification = "Identification changed"
@@ -5626,12 +6195,16 @@ class EEGEquipmentRegisterTest(TestCase):
             "identification": identification,
             "electrode_model_default": str(electrode_model.id),
         }
-        response = self.client.post(reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             get_object_or_404(EEGElectrodeNet, pk=electrode_net.id).identification,
@@ -5640,7 +6213,9 @@ class EEGEquipmentRegisterTest(TestCase):
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("eegelectrodenet_view", args=(electrode_net.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_view", args=(electrode_net.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(EEGElectrodeNet.objects.all().count(), 0)
 
@@ -5650,8 +6225,12 @@ class EEGEquipmentRegisterTest(TestCase):
         material = ObjectsFactory.create_material()
         material_2 = ObjectsFactory.create_material()
 
-        electrode_localization_system = ObjectsFactory.create_eeg_electrode_localization_system()
-        electrode_localization_system_2 = ObjectsFactory.create_eeg_electrode_localization_system()
+        electrode_localization_system = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
+        electrode_localization_system_2 = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
 
         # create a electrode_net (cap)
 
@@ -5677,11 +6256,15 @@ class EEGEquipmentRegisterTest(TestCase):
         # view
         electrode_net = EEGElectrodeCap.objects.all().first()
 
-        response = self.client.get(reverse("eegelectrodenet_view", args=(electrode_net.id,)))
+        response = self.client.get(
+            reverse("eegelectrodenet_view", args=(electrode_net.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("eegelectrodenet_edit", args=(electrode_net.id,)))
+        response = self.client.get(
+            reverse("eegelectrodenet_edit", args=(electrode_net.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         identification = "Identification changed"
@@ -5694,75 +6277,107 @@ class EEGEquipmentRegisterTest(TestCase):
             "material": str(material_2.id),
             "localization_system_" + str(electrode_localization_system_2.id): "on",
         }
-        response = self.client.post(reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_edit", args=(electrode_net.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("eegelectrodenet_view", args=(electrode_net.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_view", args=(electrode_net.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(EEGElectrodeNet.objects.all().count(), 0)
 
     def test_cap_size_register(self):
         manufacturer = ObjectsFactory.create_manufacturer()
         electrode_model = ObjectsFactory.create_electrode_model()
-        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(manufacturer, electrode_model)
+        eeg_electrode_cap = ObjectsFactory.create_eeg_electrode_cap(
+            manufacturer, electrode_model
+        )
 
         # create
-        response = self.client.get(reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,)))
+        response = self.client.get(
+            reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         size = "Size"
         self.data = {"action": "save", "size": size}
 
-        response = self.client.post(reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(EEGCapSize.objects.all().count(), 1)
 
         # create (trying) but missing information
         self.data = {"action": "save"}
 
-        response = self.client.post(reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGCapSize.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
 
-        response = self.client.post(reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_add_size", args=(eeg_electrode_cap.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGCapSize.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
-        cap_size = EEGCapSize.objects.filter(eeg_electrode_cap=eeg_electrode_cap).first()
+        cap_size = EEGCapSize.objects.filter(
+            eeg_electrode_cap=eeg_electrode_cap
+        ).first()
 
-        response = self.client.get(reverse("eegelectrodenet_cap_size_view", args=(cap_size.id,)))
+        response = self.client.get(
+            reverse("eegelectrodenet_cap_size_view", args=(cap_size.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,)))
+        response = self.client.get(
+            reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "size": size}
-        response = self.client.post(reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         size = "Size changed"
         self.data = {"action": "save", "size": size}
-        response = self.client.post(reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_cap_size_edit", args=(cap_size.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(get_object_or_404(EEGCapSize, pk=cap_size.id).size, size)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("eegelectrodenet_cap_size_view", args=(cap_size.id,)), self.data)
+        response = self.client.post(
+            reverse("eegelectrodenet_cap_size_view", args=(cap_size.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(EEGCapSize.objects.all().count(), 0)
 
@@ -5794,7 +6409,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("ad_converter_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ADConverter.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5802,16 +6419,22 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("ad_converter_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ADConverter.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         ad_converter = ADConverter.objects.all().first()
 
-        response = self.client.get(reverse("ad_converter_view", args=(ad_converter.id,)))
+        response = self.client.get(
+            reverse("ad_converter_view", args=(ad_converter.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("ad_converter_edit", args=(ad_converter.id,)))
+        response = self.client.get(
+            reverse("ad_converter_edit", args=(ad_converter.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {
@@ -5819,7 +6442,9 @@ class EEGEquipmentRegisterTest(TestCase):
             "manufacturer": str(manufacturer.id),
             "identification": identification,
         }
-        response = self.client.post(reverse("ad_converter_edit", args=(ad_converter.id,)), self.data)
+        response = self.client.post(
+            reverse("ad_converter_edit", args=(ad_converter.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         identification = "Identification changed"
@@ -5828,12 +6453,16 @@ class EEGEquipmentRegisterTest(TestCase):
             "manufacturer": str(manufacturer.id),
             "identification": identification,
         }
-        response = self.client.post(reverse("ad_converter_edit", args=(ad_converter.id,)), self.data)
+        response = self.client.post(
+            reverse("ad_converter_edit", args=(ad_converter.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("ad_converter_edit", args=(ad_converter.id,)), self.data)
+        response = self.client.post(
+            reverse("ad_converter_edit", args=(ad_converter.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             get_object_or_404(ADConverter, pk=ad_converter.id).identification,
@@ -5842,7 +6471,9 @@ class EEGEquipmentRegisterTest(TestCase):
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("ad_converter_view", args=(ad_converter.id,)), self.data)
+        response = self.client.post(
+            reverse("ad_converter_view", args=(ad_converter.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(ADConverter.objects.all().count(), 0)
 
@@ -5870,7 +6501,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("coil_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(CoilModel.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5878,7 +6511,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("coil_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(CoilModel.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         coil_model = CoilModel.objects.all().first()
@@ -5891,23 +6526,31 @@ class EEGEquipmentRegisterTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name, "coil_shape": str(coil_shape.id)}
-        response = self.client.post(reverse("coil_edit", args=(coil_model.id,)), self.data)
+        response = self.client.post(
+            reverse("coil_edit", args=(coil_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         name = "Name changed"
         self.data = {"action": "save", "name": name, "coil_shape": str(coil_shape.id)}
-        response = self.client.post(reverse("coil_edit", args=(coil_model.id,)), self.data)
+        response = self.client.post(
+            reverse("coil_edit", args=(coil_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("coil_edit", args=(coil_model.id,)), self.data)
+        response = self.client.post(
+            reverse("coil_edit", args=(coil_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(get_object_or_404(CoilModel, pk=coil_model.id).name, name)
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("coil_view", args=(coil_model.id,)), self.data)
+        response = self.client.post(
+            reverse("coil_view", args=(coil_model.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(CoilModel.objects.all().count(), 0)
 
@@ -5942,7 +6585,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("tmsdevice_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(TMSDevice.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -5950,7 +6595,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("tmsdevice_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(TMSDevice.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         tms_device = TMSDevice.objects.all().first()
@@ -5968,7 +6615,9 @@ class EEGEquipmentRegisterTest(TestCase):
             "identification": identification,
             "coil_model": str(coil_model.id),
         }
-        response = self.client.post(reverse("tmsdevice_edit", args=(tms_device.id,)), self.data)
+        response = self.client.post(
+            reverse("tmsdevice_edit", args=(tms_device.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         identification = "Identification changed"
@@ -5978,12 +6627,16 @@ class EEGEquipmentRegisterTest(TestCase):
             "identification": identification,
             "coil_model": str(coil_model.id),
         }
-        response = self.client.post(reverse("tmsdevice_edit", args=(tms_device.id,)), self.data)
+        response = self.client.post(
+            reverse("tmsdevice_edit", args=(tms_device.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # update (trying) but missing information
         self.data = {"action": "save"}
-        response = self.client.post(reverse("tmsdevice_edit", args=(tms_device.id,)), self.data)
+        response = self.client.post(
+            reverse("tmsdevice_edit", args=(tms_device.id,)), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             get_object_or_404(TMSDevice, pk=tms_device.id).identification,
@@ -5992,44 +6645,62 @@ class EEGEquipmentRegisterTest(TestCase):
 
         # remove
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("tmsdevice_view", args=(tms_device.id,)), self.data)
+        response = self.client.post(
+            reverse("tmsdevice_view", args=(tms_device.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(TMSDevice.objects.all().count(), 0)
 
     def test_eeg_electrode_localization_system_register(self):
         # list
-        response = self.client.get(reverse("eeg_electrode_localization_system_list", args=()))
+        response = self.client.get(
+            reverse("eeg_electrode_localization_system_list", args=())
+        )
         self.assertEqual(response.status_code, 200)
 
         # create
-        response = self.client.get(reverse("eeg_electrode_localization_system_new", args=()))
+        response = self.client.get(
+            reverse("eeg_electrode_localization_system_new", args=())
+        )
         self.assertEqual(response.status_code, 200)
 
         name = "Name"
         self.data = {"action": "save", "name": name}
 
-        response = self.client.post(reverse("eeg_electrode_localization_system_new", args=()), self.data)
+        response = self.client.post(
+            reverse("eeg_electrode_localization_system_new", args=()), self.data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(EEGElectrodeLocalizationSystem.objects.all().count(), 1)
 
         # create (trying) but missing information
         self.data = {"action": "save"}
 
-        response = self.client.post(reverse("eeg_electrode_localization_system_new", args=()), self.data)
+        response = self.client.post(
+            reverse("eeg_electrode_localization_system_new", args=()), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGElectrodeLocalizationSystem.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
 
-        response = self.client.post(reverse("eeg_electrode_localization_system_new", args=()), self.data)
+        response = self.client.post(
+            reverse("eeg_electrode_localization_system_new", args=()), self.data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGElectrodeLocalizationSystem.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
-        eeg_electrode_localization_system = EEGElectrodeLocalizationSystem.objects.all().first()
+        eeg_electrode_localization_system = (
+            EEGElectrodeLocalizationSystem.objects.all().first()
+        )
 
         response = self.client.get(
             reverse(
@@ -6080,7 +6751,9 @@ class EEGEquipmentRegisterTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            get_object_or_404(EEGElectrodeLocalizationSystem, pk=eeg_electrode_localization_system.id).name,
+            get_object_or_404(
+                EEGElectrodeLocalizationSystem, pk=eeg_electrode_localization_system.id
+            ).name,
             name,
         )
 
@@ -6124,7 +6797,9 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("stimuli_eq_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(StimuliEq.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -6132,18 +6807,24 @@ class EEGEquipmentRegisterTest(TestCase):
         response = self.client.post(reverse("stimuli_eq_new", args=()), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(StimuliEq.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         stimuli_eq: StimuliEq | None = StimuliEq.objects.all().first()
 
         self.assertIsInstance(stimuli_eq, StimuliEq)
         if isinstance(stimuli_eq, StimuliEq):
-            response = self.client.get(reverse("stimuli_eq_view", args=(stimuli_eq.id,)))
+            response = self.client.get(
+                reverse("stimuli_eq_view", args=(stimuli_eq.id,))
+            )
             self.assertEqual(response.status_code, 200)
 
             # update
-            response = self.client.get(reverse("stimuli_eq_edit", args=(stimuli_eq.id,)))
+            response = self.client.get(
+                reverse("stimuli_eq_edit", args=(stimuli_eq.id,))
+            )
             self.assertEqual(response.status_code, 200)
 
             self.data = {
@@ -6151,7 +6832,9 @@ class EEGEquipmentRegisterTest(TestCase):
                 "manufacturer": str(manufacturer.id),
                 "identification": identification,
             }
-            response = self.client.post(reverse("stimuli_eq_edit", args=(stimuli_eq.id,)), self.data)
+            response = self.client.post(
+                reverse("stimuli_eq_edit", args=(stimuli_eq.id,)), self.data
+            )
             self.assertEqual(response.status_code, 302)
 
             identification = "Identification changed"
@@ -6160,12 +6843,16 @@ class EEGEquipmentRegisterTest(TestCase):
                 "manufacturer": str(manufacturer.id),
                 "identification": identification,
             }
-            response = self.client.post(reverse("stimuli_eq_edit", args=(stimuli_eq.id,)), self.data)
+            response = self.client.post(
+                reverse("stimuli_eq_edit", args=(stimuli_eq.id,)), self.data
+            )
             self.assertEqual(response.status_code, 302)
 
             # update (trying) but missing information
             self.data = {"action": "save"}
-            response = self.client.post(reverse("stimuli_eq_edit", args=(stimuli_eq.id,)), self.data)
+            response = self.client.post(
+                reverse("stimuli_eq_edit", args=(stimuli_eq.id,)), self.data
+            )
             self.assertEqual(response.status_code, 200)
             self.assertEqual(
                 get_object_or_404(StimuliEq, pk=stimuli_eq.id).identification,
@@ -6174,12 +6861,16 @@ class EEGEquipmentRegisterTest(TestCase):
 
             # remove
             self.data = {"action": "remove"}
-            response = self.client.post(reverse("stimuli_eq_view", args=(stimuli_eq.id,)), self.data)
+            response = self.client.post(
+                reverse("stimuli_eq_view", args=(stimuli_eq.id,)), self.data
+            )
             self.assertEqual(response.status_code, 302)
             self.assertEqual(StimuliEq.objects.all().count(), 0)
 
     def test_eeg_electrode_position_register(self):
-        eeg_electrode_localization_system = ObjectsFactory.create_eeg_electrode_localization_system()
+        eeg_electrode_localization_system = (
+            ObjectsFactory.create_eeg_electrode_localization_system()
+        )
 
         # create
         response: HttpResponse = self.client.get(
@@ -6215,7 +6906,9 @@ class EEGEquipmentRegisterTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGElectrodePosition.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Information not saved.")
+        )
 
         # create with wrong action
         self.data = {"action": "wrong"}
@@ -6229,18 +6922,24 @@ class EEGEquipmentRegisterTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EEGElectrodePosition.objects.all().count(), 1)
-        self.assertEqual(str(list(response.context["messages"])[-1]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[-1]), _("Action not available.")
+        )
 
         # view
         eeg_electrode_position = EEGElectrodePosition.objects.filter(
             eeg_electrode_localization_system=eeg_electrode_localization_system
         ).first()
 
-        response = self.client.get(reverse("eeg_electrode_position_view", args=(eeg_electrode_position.id,)))
+        response = self.client.get(
+            reverse("eeg_electrode_position_view", args=(eeg_electrode_position.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update
-        response = self.client.get(reverse("eeg_electrode_position_edit", args=(eeg_electrode_position.id,)))
+        response = self.client.get(
+            reverse("eeg_electrode_position_edit", args=(eeg_electrode_position.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "name": name}
@@ -6298,7 +6997,9 @@ class EMGSettingTest(TestCase):
 
     def test_crud_emg_setting(self):
         # create emg setting
-        response = self.client.get(reverse("emg_setting_new", args=(self.experiment.id,)))
+        response = self.client.get(
+            reverse("emg_setting_new", args=(self.experiment.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         name = "EMG setting name"
@@ -6309,9 +7010,13 @@ class EMGSettingTest(TestCase):
             "description": description,
             "software_version": self.software_version.id,
         }
-        response = self.client.post(reverse("emg_setting_new", args=(self.experiment.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_new", args=(self.experiment.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(EMGSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            EMGSetting.objects.filter(name=name, description=description).exists()
+        )
 
         emg_setting = EMGSetting.objects.filter(name=name, description=description)[0]
 
@@ -6330,9 +7035,13 @@ class EMGSettingTest(TestCase):
             "description": description,
             "software_version": self.software_version.id,
         }
-        response = self.client.post(reverse("emg_setting_edit", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_edit", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(EMGSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            EMGSetting.objects.filter(name=name, description=description).exists()
+        )
 
         name = "EMG setting name updated"
         description = "EMG setting description updated"
@@ -6342,17 +7051,25 @@ class EMGSettingTest(TestCase):
             "description": description,
             "software_version": self.software_version.id,
         }
-        response = self.client.post(reverse("emg_setting_edit", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_edit", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(EMGSetting.objects.filter(name=name, description=description).exists())
+        self.assertTrue(
+            EMGSetting.objects.filter(name=name, description=description).exists()
+        )
 
         # remove an emg setting
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("emg_setting_view", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_view", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
     def test_emg_setting_digital_filter(self):
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, self.software_version)
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, self.software_version
+        )
 
         filter_type = ObjectsFactory.create_filter_type()
 
@@ -6366,15 +7083,21 @@ class EMGSettingTest(TestCase):
             "order": "2",
             "notch": "5",
         }
-        response = self.client.post(reverse("emg_setting_digital_filter", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_digital_filter", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # screen to view the emg digital filter setting
-        response = self.client.get(reverse("emg_setting_digital_filter", args=(emg_setting.id,)))
+        response = self.client.get(
+            reverse("emg_setting_digital_filter", args=(emg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update the emg digital filter setting
-        response = self.client.get(reverse("emg_setting_digital_filter_edit", args=(emg_setting.id,)))
+        response = self.client.get(
+            reverse("emg_setting_digital_filter_edit", args=(emg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {
@@ -6393,11 +7116,15 @@ class EMGSettingTest(TestCase):
 
         # remove an emg digital filter setting
         self.data = {"action": "remove-digital_filter"}
-        response = self.client.post(reverse("emg_setting_view", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_view", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
     def test_emg_setting_ad_converter(self):
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, self.software_version)
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, self.software_version
+        )
         manufacturer = ObjectsFactory.create_manufacturer()
 
         ad_converter = ObjectsFactory.create_ad_converter(manufacturer)
@@ -6408,15 +7135,21 @@ class EMGSettingTest(TestCase):
             "ad_converter": ad_converter.id,
             "sampling_rate": "10",
         }
-        response = self.client.post(reverse("emg_setting_ad_converter", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_ad_converter", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # screen to view the emg AD converter  setting
-        response = self.client.get(reverse("emg_setting_ad_converter", args=(emg_setting.id,)))
+        response = self.client.get(
+            reverse("emg_setting_ad_converter", args=(emg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update the emg AD converter  setting
-        response = self.client.get(reverse("emg_setting_ad_converter_edit", args=(emg_setting.id,)))
+        response = self.client.get(
+            reverse("emg_setting_ad_converter_edit", args=(emg_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {
@@ -6424,16 +7157,22 @@ class EMGSettingTest(TestCase):
             "ad_converter": ad_converter.id,
             "sampling_rate": "20",
         }
-        response = self.client.post(reverse("emg_setting_ad_converter_edit", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_ad_converter_edit", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
         # remove an emg AD converter setting
         self.data = {"action": "remove-ad_converter"}
-        response = self.client.post(reverse("emg_setting_view", args=(emg_setting.id,)), self.data)
+        response = self.client.post(
+            reverse("emg_setting_view", args=(emg_setting.id,)), self.data
+        )
         self.assertEqual(response.status_code, 302)
 
     def test_emg_setting_electrode(self):
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, self.software_version)
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, self.software_version
+        )
         electrode_model = ObjectsFactory.create_electrode_model()
         tag_emg = Tag.objects.get(name="EMG")
         electrode_model.tags.add(tag_emg)
@@ -6441,8 +7180,12 @@ class EMGSettingTest(TestCase):
         standardization_system = ObjectsFactory.create_standardization_system()
         muscle = ObjectsFactory.create_muscle()
         muscle_subdivision = ObjectsFactory.create_muscle_subdivision(muscle)
-        electrode_placement = ObjectsFactory.create_emg_electrode_placement(standardization_system, muscle_subdivision)
-        muscle_side = ObjectsFactory.create_muscle_side(electrode_placement.muscle_subdivision.muscle)
+        electrode_placement = ObjectsFactory.create_emg_electrode_placement(
+            standardization_system, muscle_subdivision
+        )
+        muscle_side = ObjectsFactory.create_muscle_side(
+            electrode_placement.muscle_subdivision.muscle
+        )
 
         self.data = {
             "action": "save",
@@ -6462,11 +7205,15 @@ class EMGSettingTest(TestCase):
         self.assertIsInstance(emg_electrode_setting, EMGElectrodeSetting)
         if isinstance(emg_electrode_setting, EMGElectrodeSetting):
             # screen to view the emg electrode  setting
-            response = self.client.get(reverse("emg_electrode_setting_view", args=(emg_electrode_setting.id,)))
+            response = self.client.get(
+                reverse("emg_electrode_setting_view", args=(emg_electrode_setting.id,))
+            )
             self.assertEqual(response.status_code, 200)
 
             # update the emg electrode setting
-            response = self.client.get(reverse("emg_electrode_setting_edit", args=(emg_electrode_setting.id,)))
+            response = self.client.get(
+                reverse("emg_electrode_setting_edit", args=(emg_electrode_setting.id,))
+            )
             self.assertEqual(response.status_code, 200)
 
             self.data = {
@@ -6486,11 +7233,15 @@ class EMGSettingTest(TestCase):
             # remove an emg electrode setting
             self.data = {"action": "remove-electrode-" + str(emg_electrode_setting.id)}
 
-            response = self.client.post(reverse("emg_setting_view", args=(emg_setting.id,)), self.data)
+            response = self.client.post(
+                reverse("emg_setting_view", args=(emg_setting.id,)), self.data
+            )
             self.assertEqual(response.status_code, 302)
 
     def test_emg_setting_preamplifier(self):
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, self.software_version)
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, self.software_version
+        )
         manufacturer = ObjectsFactory.create_manufacturer()
         amplifier = ObjectsFactory.create_amplifier(manufacturer)
         tag_emg = Tag.objects.get(name="EMG")
@@ -6498,25 +7249,39 @@ class EMGSettingTest(TestCase):
 
         electrode_model = ObjectsFactory.create_electrode_model()
 
-        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(emg_setting, electrode_model)
+        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(
+            emg_setting, electrode_model
+        )
 
         standardization_system = ObjectsFactory.create_standardization_system()
         muscle = ObjectsFactory.create_muscle()
         muscle_subdivision = ObjectsFactory.create_muscle_subdivision(muscle)
-        electrode_placement = ObjectsFactory.create_emg_electrode_placement(standardization_system, muscle_subdivision)
-        muscle_side = ObjectsFactory.create_muscle_side(electrode_placement.muscle_subdivision.muscle)
-        ObjectsFactory.create_emg_electrode_placement_setting(emg_electrode_setting, electrode_placement, muscle_side)
+        electrode_placement = ObjectsFactory.create_emg_electrode_placement(
+            standardization_system, muscle_subdivision
+        )
+        muscle_side = ObjectsFactory.create_muscle_side(
+            electrode_placement.muscle_subdivision.muscle
+        )
+        ObjectsFactory.create_emg_electrode_placement_setting(
+            emg_electrode_setting, electrode_placement, muscle_side
+        )
 
         # create an emg  preamplifier setting
         self.data = {"action": "save", "amplifier": amplifier.id, "gain": "10"}
         response = self.client.post(
-            reverse("emg_electrode_setting_preamplifier", args=(emg_electrode_setting.id,)),
+            reverse(
+                "emg_electrode_setting_preamplifier", args=(emg_electrode_setting.id,)
+            ),
             self.data,
         )
         self.assertEqual(response.status_code, 302)
 
         # screen to view the emg  preamplifier setting
-        response = self.client.get(reverse("emg_electrode_setting_preamplifier", args=(emg_electrode_setting.id,)))
+        response = self.client.get(
+            reverse(
+                "emg_electrode_setting_preamplifier", args=(emg_electrode_setting.id,)
+            )
+        )
         self.assertEqual(response.status_code, 200)
 
         # update the emg  preamplifier setting
@@ -6547,7 +7312,9 @@ class EMGSettingTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_emg_setting_amplifier(self):
-        emg_setting = ObjectsFactory.create_emg_setting(self.experiment, self.software_version)
+        emg_setting = ObjectsFactory.create_emg_setting(
+            self.experiment, self.software_version
+        )
         manufacturer = ObjectsFactory.create_manufacturer()
         amplifier = ObjectsFactory.create_amplifier(manufacturer)
         tag_emg = Tag.objects.get(name="EMG")
@@ -6557,27 +7324,39 @@ class EMGSettingTest(TestCase):
         tag_emg = Tag.objects.get(name="EMG")
         electrode_model.tags.add(tag_emg)
 
-        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(emg_setting, electrode_model)
+        emg_electrode_setting = ObjectsFactory.create_emg_electrode_setting(
+            emg_setting, electrode_model
+        )
 
         # create an emg amplifier setting
         self.data = {"action": "save", "amplifier": amplifier.id, "gain": "10"}
         response = self.client.post(
-            reverse("emg_electrode_setting_amplifier", args=(emg_electrode_setting.id,)),
+            reverse(
+                "emg_electrode_setting_amplifier", args=(emg_electrode_setting.id,)
+            ),
             self.data,
         )
         self.assertEqual(response.status_code, 302)
 
         # screen to view the emg amplifier setting
-        response = self.client.get(reverse("emg_electrode_setting_amplifier", args=(emg_electrode_setting.id,)))
+        response = self.client.get(
+            reverse("emg_electrode_setting_amplifier", args=(emg_electrode_setting.id,))
+        )
         self.assertEqual(response.status_code, 200)
 
         # update the emg amplifier setting
-        response = self.client.get(reverse("emg_electrode_setting_amplifier_edit", args=(emg_electrode_setting.id,)))
+        response = self.client.get(
+            reverse(
+                "emg_electrode_setting_amplifier_edit", args=(emg_electrode_setting.id,)
+            )
+        )
         self.assertEqual(response.status_code, 200)
 
         self.data = {"action": "save", "amplifier": amplifier.id, "gain": "20"}
         response = self.client.post(
-            reverse("emg_electrode_setting_amplifier_edit", args=(emg_electrode_setting.id,)),
+            reverse(
+                "emg_electrode_setting_amplifier_edit", args=(emg_electrode_setting.id,)
+            ),
             self.data,
         )
         self.assertEqual(response.status_code, 302)
@@ -6587,9 +7366,15 @@ class EMGSettingTest(TestCase):
         standardization_system = ObjectsFactory.create_standardization_system()
         muscle = ObjectsFactory.create_muscle()
         muscle_subdivision = ObjectsFactory.create_muscle_subdivision(muscle)
-        electrode_placement = ObjectsFactory.create_emg_electrode_placement(standardization_system, muscle_subdivision)
-        muscle_side = ObjectsFactory.create_muscle_side(electrode_placement.muscle_subdivision.muscle)
-        ObjectsFactory.create_emg_electrode_placement_setting(emg_electrode_setting, electrode_placement, muscle_side)
+        electrode_placement = ObjectsFactory.create_emg_electrode_placement(
+            standardization_system, muscle_subdivision
+        )
+        muscle_side = ObjectsFactory.create_muscle_side(
+            electrode_placement.muscle_subdivision.muscle
+        )
+        ObjectsFactory.create_emg_electrode_placement_setting(
+            emg_electrode_setting, electrode_placement, muscle_side
+        )
         self.data = {"action": "remove-amplifier"}
         response = self.client.post(
             reverse("emg_electrode_setting_view", args=(emg_electrode_setting.id,)),
@@ -6613,7 +7398,9 @@ class PublicationTest(TestCase):
 
         ObjectsFactory.create_research_project()
 
-        Publication.objects.create(title="Publication title", citation="Publication citation")
+        Publication.objects.create(
+            title="Publication title", citation="Publication citation"
+        )
 
         # Check if list of publications returns one item after inserting one.
         response = self.client.get(reverse("publication_list"))
@@ -6633,7 +7420,9 @@ class PublicationTest(TestCase):
         }
         response = self.client.post(reverse("publication_new"), self.data)
         self.assertEqual(Publication.objects.all().count(), 0)
-        self.assertEqual(str(list(response.context["messages"])[0]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[0]), _("Action not available.")
+        )
         self.assertEqual(response.status_code, 200)
 
         # POSTing missing information
@@ -6643,7 +7432,9 @@ class PublicationTest(TestCase):
         self.assertGreaterEqual(len(response.context["publication_form"].errors), 2)
         self.assertTrue("title" in response.context["publication_form"].errors)
         self.assertTrue("citation" in response.context["publication_form"].errors)
-        self.assertEqual(str(list(response.context["messages"])[0]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[0]), _("Information not saved.")
+        )
         self.assertEqual(response.status_code, 200)
 
         research_project = ObjectsFactory.create_research_project()
@@ -6696,7 +7487,9 @@ class PublicationTest(TestCase):
             "citation": "New citation",
             "experiments": str(experiment.id),
         }
-        response = self.client.post(reverse("publication_edit", args=(publication.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse("publication_edit", args=(publication.pk,)), self.data, follow=True
+        )
         self.assertEqual(
             str(list(response.context["messages"])[0]),
             _("Publication updated successfully."),
@@ -6704,7 +7497,9 @@ class PublicationTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Update with no changes
-        response = self.client.post(reverse("publication_edit", args=(publication.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse("publication_edit", args=(publication.pk,)), self.data, follow=True
+        )
         self.assertEqual(
             str(list(response.context["messages"])[0]),
             _("There is no changes to save."),
@@ -6721,7 +7516,9 @@ class PublicationTest(TestCase):
         count = Publication.objects.all().count()
 
         self.data = {"action": "remove"}
-        response = self.client.post(reverse("publication_view", args=(publication.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse("publication_view", args=(publication.pk,)), self.data, follow=True
+        )
         self.assertEqual(response.status_code, 200)
 
         # Check if number of publications decreased by 1
@@ -6779,7 +7576,9 @@ class PublicationTest(TestCase):
         count = publication.experiments.count()
 
         self.data = {"action": "remove-" + str(experiment.id)}
-        response = self.client.post(reverse("publication_view", args=(publication.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse("publication_view", args=(publication.pk,)), self.data, follow=True
+        )
         self.assertEqual(response.status_code, 200)
 
         # Check if number of publications decreased by 1
@@ -6858,7 +7657,9 @@ class ContextTreeTest(TestCase):
             self.data,
         )
         self.assertEqual(ContextTree.objects.all().count(), 0)
-        self.assertEqual(str(list(response.context["messages"])[0]), _("Action not available."))
+        self.assertEqual(
+            str(list(response.context["messages"])[0]), _("Action not available.")
+        )
         self.assertEqual(response.status_code, 200)
 
         # POSTing missing information
@@ -6876,7 +7677,9 @@ class ContextTreeTest(TestCase):
         self.assertGreaterEqual(len(response.context["context_tree_form"].errors), 2)
         self.assertTrue("name" in response.context["context_tree_form"].errors)
         self.assertTrue("description" in response.context["context_tree_form"].errors)
-        self.assertEqual(str(list(response.context["messages"])[0]), _("Information not saved."))
+        self.assertEqual(
+            str(list(response.context["messages"])[0]), _("Information not saved.")
+        )
         self.assertEqual(response.status_code, 200)
 
         # Set context tree data

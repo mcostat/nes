@@ -73,13 +73,18 @@ class QuestionnaireUtils:
         self.questionnaires_experiment_data = {}
         self.questionnaire_code_and_id = {}
 
-    def set_questionnaire_header_and_fields(self, questionnaire, entrance_questionnaire):
+    def set_questionnaire_header_and_fields(
+        self, questionnaire, entrance_questionnaire
+    ):
         headers = []
         fields = []
 
         questionnaire_id = questionnaire["id"]
         for output_list in questionnaire["output_list"]:
-            if output_list["field"] != "fileUpload" and output_list["field"] != "fileUpload[filecount]":
+            if (
+                output_list["field"] != "fileUpload"
+                and output_list["field"] != "fileUpload[filecount]"
+            ):
                 headers.append(output_list["header"])
                 fields.append(output_list["field"])
 
@@ -97,7 +102,9 @@ class QuestionnaireUtils:
 
         return headers, fields
 
-    def set_questionnaire_experiment_header_and_fields(self, questionnaire_id, questionnaire):
+    def set_questionnaire_experiment_header_and_fields(
+        self, questionnaire_id, questionnaire
+    ):
         headers = []
         fields = []
 
@@ -110,7 +117,9 @@ class QuestionnaireUtils:
             self.questionnaires_experiment_data[questionnaire_id] = {}
 
         self.questionnaires_experiment_data[questionnaire_id]["header"] = headers
-        self.questionnaires_experiment_data[questionnaire_id]["header_questionnaire"] = headers
+        self.questionnaires_experiment_data[questionnaire_id][
+            "header_questionnaire"
+        ] = headers
         self.questionnaires_experiment_data[questionnaire_id]["fields"] = fields
 
         return headers, fields
@@ -127,12 +136,23 @@ class QuestionnaireUtils:
         for field in fields:
             if considers_questionnaires:
                 if field not in self.questionnaires_data[questionnaire_id]["fields"]:
-                    self.questionnaires_data[questionnaire_id]["header"].append(header[fields.index(field)])
+                    self.questionnaires_data[questionnaire_id]["header"].append(
+                        header[fields.index(field)]
+                    )
                     self.questionnaires_data[questionnaire_id]["fields"].append(field)
             if considers_questionnaires_from_experiment:
-                if field not in self.questionnaires_experiment_data[questionnaire_id]["fields"]:
-                    self.questionnaires_experiment_data[questionnaire_id]["header"].append(header[fields.index(field)])
-                    self.questionnaires_experiment_data[questionnaire_id]["fields"].append(field)
+                if (
+                    field
+                    not in self.questionnaires_experiment_data[questionnaire_id][
+                        "fields"
+                    ]
+                ):
+                    self.questionnaires_experiment_data[questionnaire_id][
+                        "header"
+                    ].append(header[fields.index(field)])
+                    self.questionnaires_experiment_data[questionnaire_id][
+                        "fields"
+                    ].append(field)
 
     def get_header_questionnaire(self, questionnaire_id):
         header = []
@@ -140,15 +160,24 @@ class QuestionnaireUtils:
             header = self.questionnaires_data[questionnaire_id]["header"]
         return header
 
-    def append_questionnaire_experiment_header_and_field(self, questionnaire_id, header, fields):
+    def append_questionnaire_experiment_header_and_field(
+        self, questionnaire_id, header, fields
+    ):
         # only one header, field instance
         for field in fields:
-            if field not in self.questionnaires_experiment_data[questionnaire_id]["fields"]:
-                self.questionnaires_experiment_data[questionnaire_id]["header"].append(header[fields.index(field)])
-                self.questionnaires_experiment_data[questionnaire_id]["header_questionnaire"].append(
+            if (
+                field
+                not in self.questionnaires_experiment_data[questionnaire_id]["fields"]
+            ):
+                self.questionnaires_experiment_data[questionnaire_id]["header"].append(
                     header[fields.index(field)]
                 )
-                self.questionnaires_experiment_data[questionnaire_id]["fields"].append(field)
+                self.questionnaires_experiment_data[questionnaire_id][
+                    "header_questionnaire"
+                ].append(header[fields.index(field)])
+                self.questionnaires_experiment_data[questionnaire_id]["fields"].append(
+                    field
+                )
 
     def get_header_experiment_questionnaire(self, questionnaire_id):
         header = []
@@ -183,11 +212,17 @@ class QuestionnaireUtils:
     def get_header_description(self, questionnaire_id, field, entrance_questionnaire):
         if entrance_questionnaire:
             index = self.questionnaires_data[questionnaire_id]["fields"].index(field)
-            header_description = self.questionnaires_data[questionnaire_id]["header"][index]
+            header_description = self.questionnaires_data[questionnaire_id]["header"][
+                index
+            ]
         else:
             questionnaire_id = str(questionnaire_id)
-            index = self.questionnaires_experiment_data[questionnaire_id]["fields"].index(field)
-            header_description = self.questionnaires_experiment_data[questionnaire_id]["header"][index]
+            index = self.questionnaires_experiment_data[questionnaire_id][
+                "fields"
+            ].index(field)
+            header_description = self.questionnaires_experiment_data[questionnaire_id][
+                "header"
+            ][index]
 
         return header_description
 
@@ -211,8 +246,12 @@ class QuestionnaireUtils:
 
         return new_header, new_fields
 
-    def redefine_header_and_fields_experiment(self, questionnaire_id, header_filtered, fields, header_list):
-        header_questionnaire = self.questionnaires_experiment_data[questionnaire_id]["header_questionnaire"]
+    def redefine_header_and_fields_experiment(
+        self, questionnaire_id, header_filtered, fields, header_list
+    ):
+        header_questionnaire = self.questionnaires_experiment_data[questionnaire_id][
+            "header_questionnaire"
+        ]
         fields_saved = self.questionnaires_experiment_data[questionnaire_id]["fields"]
 
         # new_header = []
@@ -224,11 +263,17 @@ class QuestionnaireUtils:
             new_fields.append(fields_saved[fields.index(item)])
 
             if item in header_filtered:
-                new_header_questionnaire.append(header_questionnaire[fields.index(item)])
+                new_header_questionnaire.append(
+                    header_questionnaire[fields.index(item)]
+                )
                 new_fields.append(fields_saved[fields.index(item)])
 
-        self.questionnaires_experiment_data[questionnaire_id]["header"] = new_header_questionnaire
-        self.questionnaires_experiment_data[questionnaire_id]["header_questionnaire"] = new_header_questionnaire
+        self.questionnaires_experiment_data[questionnaire_id][
+            "header"
+        ] = new_header_questionnaire
+        self.questionnaires_experiment_data[questionnaire_id][
+            "header_questionnaire"
+        ] = new_header_questionnaire
         self.questionnaires_experiment_data[questionnaire_id]["fields"] = new_fields
 
     def include_questionnaire_code_and_id(self, code, questionnaire_id):
@@ -277,18 +322,26 @@ class QuestionnaireUtils:
         """
         # Clear fields
         fields_cleared = [field.split("[")[0] for field in fields]
-        questionnaire_explanation_fields_list = [[item[0] for item in HEADER_EXPLANATION_FIELDS]]
+        questionnaire_explanation_fields_list = [
+            [item[0] for item in HEADER_EXPLANATION_FIELDS]
+        ]
         fields_from_questions = []
         # For each field, verify the question description
-        questionnaire_title = questionnaire_lime_survey.get_survey_title(questionnaire_id, language)
+        questionnaire_title = questionnaire_lime_survey.get_survey_title(
+            questionnaire_id, language
+        )
         questionnaire_code = self.get_questionnaire_code_from_id(questionnaire_id)
         # Get fields description
-        questionnaire_questions = questionnaire_lime_survey.list_questions_ids(questionnaire_id, 0)
+        questionnaire_questions = questionnaire_lime_survey.list_questions_ids(
+            questionnaire_id, 0
+        )
         if not questionnaire_questions:
             return Questionnaires.ERROR_CODE, []
 
         for question in questionnaire_questions:
-            properties = questionnaire_lime_survey.get_question_properties(question, language)
+            properties = questionnaire_lime_survey.get_question_properties(
+                question, language
+            )
             if properties is None:
                 return Questionnaires.ERROR_CODE, []
             question_code = properties["title"] if "title" in properties else None
@@ -296,10 +349,16 @@ class QuestionnaireUtils:
                 fields_from_questions.append(question_code)
                 # clean the question description that came from limesurvey
                 question_description = (
-                    re.sub("{.*?}", "", re.sub("<.*?>", "", properties["question"])).replace("&nbsp;", "").strip()
+                    re.sub("{.*?}", "", re.sub("<.*?>", "", properties["question"]))
+                    .replace("&nbsp;", "")
+                    .strip()
                 )
                 question_type = smart_str(properties["type"])
-                question_type_description = QUESTION_TYPES[question_type][0] if question_type in QUESTION_TYPES else ""
+                question_type_description = (
+                    QUESTION_TYPES[question_type][0]
+                    if question_type in QUESTION_TYPES
+                    else ""
+                )
                 question_group = self.get_group_properties(
                     questionnaire_lime_survey,
                     questionnaire_id,
@@ -343,9 +402,13 @@ class QuestionnaireUtils:
                 options_list = []
 
                 if isinstance(properties["answeroptions"], dict):
-                    options = collections.OrderedDict(sorted(properties["answeroptions"].items()))
+                    options = collections.OrderedDict(
+                        sorted(properties["answeroptions"].items())
+                    )
                     for option_key, option_values in options.items():
-                        options_list.append([smart_str(option_key), smart_str(option_values["answer"])])
+                        options_list.append(
+                            [smart_str(option_key), smart_str(option_values["answer"])]
+                        )
                 else:
                     # Include blank line
                     options_list = [[""] * 2]
@@ -384,7 +447,9 @@ class QuestionnaireUtils:
         if len(fields_cleared) != len(fields_from_questions):
             for field in fields_cleared:
                 if field not in fields_from_questions:
-                    description = self.get_header_description(questionnaire_id, field, entrance_questionnaire)
+                    description = self.get_header_description(
+                        questionnaire_id, field, entrance_questionnaire
+                    )
                     question_list = [
                         smart_str(questionnaire_code),
                         smart_str(questionnaire_title),
@@ -415,7 +480,9 @@ class QuestionnaireUtils:
         questions = []
         for group in result:
             if group["id"]["language"] == language:
-                group_questions = limesurvey_connection.list_questions(survey_id, group["id"]["gid"])
+                group_questions = limesurvey_connection.list_questions(
+                    survey_id, group["id"]["gid"]
+                )
                 if not group_questions:
                     return Questionnaires.ERROR_CODE, []
                 else:
@@ -450,11 +517,17 @@ class QuestionnaireUtils:
         """
         groups = survey.list_groups(survey_id)
         return next(
-            (item for item in groups if item["gid"] == gid and item["language"] == lang),
+            (
+                item
+                for item in groups
+                if item["gid"] == gid and item["language"] == lang
+            ),
             None,
         )
 
-    def get_response_column_name_for_identification_group_questions(self, survey, limesurvey_id, question_title, lang):
+    def get_response_column_name_for_identification_group_questions(
+        self, survey, limesurvey_id, question_title, lang
+    ):
         """
         Return response table column name that is formed by <limesurvey_id>X<group_id>X<question_id>
         :param survey: Limesurvey ABC interface
@@ -465,24 +538,46 @@ class QuestionnaireUtils:
         """
         question_groups = survey.list_groups(limesurvey_id)
         if question_groups is None:
-            return self.LIMESURVEY_ERROR, _("Could not get list of groups from LimeSurvey")
+            return self.LIMESURVEY_ERROR, _(
+                "Could not get list of groups from LimeSurvey"
+            )
         group = next(
-            (item for item in question_groups if item["group_name"] == "Identification"),
+            (
+                item
+                for item in question_groups
+                if item["group_name"] == "Identification"
+            ),
             None,
         )
         if group is None:
-            return self.LIMESURVEY_ERROR, _("There's no group with name Identification.")
+            return self.LIMESURVEY_ERROR, _(
+                "There's no group with name Identification."
+            )
         questions = survey.list_questions(limesurvey_id, group["gid"])
         if questions is None:
-            return self.LIMESURVEY_ERROR, _("Could not get list of groups from LimeSurvey")
+            return self.LIMESURVEY_ERROR, _(
+                "Could not get list of groups from LimeSurvey"
+            )
         index = next(
-            (index for index, dict_ in enumerate(questions) if dict_["title"] == question_title),
+            (
+                index
+                for index, dict_ in enumerate(questions)
+                if dict_["title"] == question_title
+            ),
             None,
         )
         if index is None:
-            return self.LIMESURVEY_ERROR, _("There's no question with name %s" % question_title)
+            return self.LIMESURVEY_ERROR, _(
+                "There's no question with name %s" % question_title
+            )
         else:
-            return str(limesurvey_id) + "X" + str(group["gid"]) + "X" + str(questions[index]["qid"])
+            return (
+                str(limesurvey_id)
+                + "X"
+                + str(group["gid"])
+                + "X"
+                + str(questions[index]["qid"])
+            )
 
 
 def find_questionnaire_name(survey, language_code):

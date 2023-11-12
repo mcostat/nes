@@ -33,13 +33,15 @@ def translate_fixtures_into_english(filename):
                     field_name = field
 
                     if element["fields"][field_name]:
-                        field_data_portuguese = element["fields"][field_name + SUFFIX_pt_br]
+                        field_data_portuguese = element["fields"][
+                            field_name + SUFFIX_pt_br
+                        ]
                         if field_name not in result[element["model"]]:
                             result[element["model"]][field_name] = {}
 
-                        result[element["model"]][field_name][field_data_portuguese] = element["fields"][
-                            field_name + SUFFIX_EN
-                        ]
+                        result[element["model"]][field_name][
+                            field_data_portuguese
+                        ] = element["fields"][field_name + SUFFIX_EN]
 
     return result
 

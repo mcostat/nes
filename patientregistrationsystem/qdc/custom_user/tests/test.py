@@ -5,7 +5,10 @@ from typing import Any
 
 from django.conf import settings
 from django.contrib.auth.models import Group, User
-from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
+from django.contrib.auth.tokens import (
+    PasswordResetTokenGenerator,
+    default_token_generator,
+)
 from django.contrib.messages import get_messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
@@ -18,7 +21,12 @@ from django.utils.http import int_to_base36
 from django.utils.translation import gettext as _
 
 from custom_user.models import Institution, UserProfile
-from custom_user.views import institution_create, institution_update, institution_view, user_update
+from custom_user.views import (
+    institution_create,
+    institution_update,
+    institution_view,
+    user_update,
+)
 
 from .tests_helper import create_user
 
@@ -111,7 +119,9 @@ class FormUserValidation(TestCase):
         subject = "".join(subject.splitlines())
 
         # CHANGES START HERE!
-        plain_text_content = loader.render_to_string(email_template_name.replace("with_html", "plaintext"), context)
+        plain_text_content = loader.render_to_string(
+            email_template_name.replace("with_html", "plaintext"), context
+        )
         html_content = loader.render_to_string(email_template_name, context)
 
         from django.core.mail import EmailMultiAlternatives
@@ -139,7 +149,9 @@ class FormUserValidation(TestCase):
         self.data["login_enabled"] = True
 
         response = self.client.post(reverse(USER_NEW), self.data, follow=True)
-        self.assertFormError(response, "form", "email", "Informe um endereço de email válido.")
+        self.assertFormError(
+            response, "form", "email", "Informe um endereço de email válido."
+        )
         self.assertEqual(User.objects.filter(username="").count(), 0)
 
     def test_user_email_already_registered(self):
@@ -256,7 +268,9 @@ class FormUserValidation(TestCase):
         self.data["first_name"] = first_name
         self.data["login_enabled"] = True
 
-        response = self.client.post(reverse(USER_EDIT, args=(self.user.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse(USER_EDIT, args=(self.user.pk,)), self.data, follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(User.objects.filter(id=self.user.pk).count(), 1)
 
@@ -310,7 +324,9 @@ class FormUserValidation(TestCase):
 
     def test_user_update_failed_because_email_already_registered(self):
         user_str = "user_to_update"
-        new_user = User.objects.create_user(username=user_str, email="test@example.com", password="Bla!123")
+        new_user = User.objects.create_user(
+            username=user_str, email="test@example.com", password="Bla!123"
+        )
         new_user.is_staff = True
         new_user.is_active = True
         new_user.save()
@@ -331,7 +347,9 @@ class FormUserValidation(TestCase):
 
     def test_user_remove(self) -> None:
         user_str = "user_remove"
-        user_to_delete = User.objects.create_user(username=user_str, email="test@delete.com", password="Del!123")
+        user_to_delete = User.objects.create_user(
+            username=user_str, email="test@delete.com", password="Del!123"
+        )
         user_to_delete.is_staff = True
         user_to_delete.is_superuser = True
         user_to_delete.is_active = True
@@ -340,7 +358,9 @@ class FormUserValidation(TestCase):
 
         self.data["action"] = "remove"
 
-        response = self.client.post(reverse(USER_EDIT, args=(user_to_delete.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse(USER_EDIT, args=(user_to_delete.pk,)), self.data, follow=True
+        )
 
         self.assertEqual(response.status_code, 200)
         user_to_delete = get_object_or_404(User, pk=user_to_delete.pk)
@@ -389,7 +409,9 @@ class FormUserValidation(TestCase):
 
         resercher = User.objects.get(username=username)
         self.data["action"] = "remove"
-        response = self.client.post(reverse(USER_VIEW, args=(resercher.pk,)), self.data, follow=True)
+        response = self.client.post(
+            reverse(USER_VIEW, args=(resercher.pk,)), self.data, follow=True
+        )
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
@@ -468,7 +490,9 @@ class InstitutionTests(TestCase):
         logged = self.client.login(username=USER_USERNAME, password=USER_PWD)
         self.assertEqual(logged, True)
 
-        Institution.objects.create(name="CEPID NeuroMat", acronym="NeuroMat", country="BR")
+        Institution.objects.create(
+            name="CEPID NeuroMat", acronym="NeuroMat", country="BR"
+        )
 
     def tearDown(self) -> None:
         settings.DEBUG = self.debug_old
@@ -492,7 +516,9 @@ class InstitutionTests(TestCase):
         }
         response = self.client.post(reverse("institution_new"), self.data)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(Institution.objects.filter(name="Faculdade de Medicina").count(), 1)
+        self.assertEqual(
+            Institution.objects.filter(name="Faculdade de Medicina").count(), 1
+        )
         self.assertEqual(
             str(Institution.objects.filter(name="Faculdade de Medicina").first()),
             self.data["name"],
@@ -529,7 +555,9 @@ class InstitutionTests(TestCase):
         self.assertIsInstance(institution, Institution)
         if isinstance(institution, Institution):
             self.data["action"] = "remove"
-            self.client.post(reverse("institution_view", args=(institution.pk,)), self.data)
+            self.client.post(
+                reverse("institution_view", args=(institution.pk,)), self.data
+            )
             self.assertEqual(Institution.objects.count(), 0)
 
     def test_institution_view_and_action_remove_denied_because_there_are_people_associated(
@@ -543,7 +571,9 @@ class InstitutionTests(TestCase):
             profile.institution = institution
             profile.save()
             self.data["action"] = "remove"
-            response = self.client.post(reverse("institution_view", args=(institution.pk,)), self.data)
+            response = self.client.post(
+                reverse("institution_view", args=(institution.pk,)), self.data
+            )
             self.assertEqual(Institution.objects.count(), 1)
             message = list(get_messages(response.wsgi_request))
             self.assertEqual(len(message), 1)
@@ -551,7 +581,9 @@ class InstitutionTests(TestCase):
     def test_institution_view_and_action_remove_denied_because_there_is_institution_associated(
         self,
     ) -> None:
-        parent = Institution.objects.create(name="Example", acronym="example", country="BR")
+        parent = Institution.objects.create(
+            name="Example", acronym="example", country="BR"
+        )
         institution = Institution.objects.first()
 
         self.assertIsInstance(institution, Institution)
@@ -559,7 +591,9 @@ class InstitutionTests(TestCase):
             institution.parent = parent
             institution.save()
             self.data["action"] = "remove"
-            response = self.client.post(reverse("institution_view", args=(parent.pk,)), self.data)
+            response = self.client.post(
+                reverse("institution_view", args=(parent.pk,)), self.data
+            )
             self.assertEqual(Institution.objects.count(), 2)
             message = list(get_messages(response.wsgi_request))
             self.assertEqual(len(message), 1)
@@ -589,9 +623,13 @@ class InstitutionTests(TestCase):
                 "country": "BR",
                 "action": "save",
             }
-            response = self.client.post(reverse("institution_edit", args=(institution.id,)), self.data)
+            response = self.client.post(
+                reverse("institution_edit", args=(institution.id,)), self.data
+            )
             self.assertEqual(response.status_code, HTTPStatus.FOUND)
-            self.assertEqual(Institution.objects.filter(name="RIDC NeuroMat").count(), 1)
+            self.assertEqual(
+                Institution.objects.filter(name="RIDC NeuroMat").count(), 1
+            )
 
 
 class PasswordResetTests(TestCase):

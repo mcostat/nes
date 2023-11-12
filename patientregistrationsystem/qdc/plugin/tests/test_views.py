@@ -117,7 +117,9 @@ class PluginTest(ExportTestCase):
             response,
             "Questionnaire title for Unified Admission Assessment not available in en",
         )
-        self.assertContains(response, "Questionnaire title for Surgical Assessment not available in en")
+        self.assertContains(
+            response, "Questionnaire title for Surgical Assessment not available in en"
+        )
 
     def test_does_not_define_admission_questionnaire_attribute_does_not_display_plugin_entry_in_menu(
         self,
@@ -169,7 +171,9 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_group_selected_list_in_request_session_removes_session_key(self, mockServer):
+    def test_group_selected_list_in_request_session_removes_session_key(
+        self, mockServer
+    ):
         # Simulate 'group_selected_list' already in request session when
         # sending to Plugin in Per Participant way
         self.append_session_variable("group_selected_list", 21)
@@ -228,7 +232,9 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_returns_zip_file_with_only_data_from_participants_selected(self, mockServer):
+    def test_POST_send_to_plugin_returns_zip_file_with_only_data_from_participants_selected(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
 
         # Reset get_participants_properties to deal with only one participant
@@ -272,18 +278,24 @@ class PluginTest(ExportTestCase):
             self.assertIsNone(zipped_file.testzip())
             # Tests for Per_participant subdir
             list_items = zipped_file.namelist()
-            in_items = re.compile(input_export.BASE_DIRECTORY + "/Per_participant/Participant_%s" % self.patient.code)
+            in_items = re.compile(
+                input_export.BASE_DIRECTORY
+                + "/Per_participant/Participant_%s" % self.patient.code
+            )
             in_items = [in_items.match(item) for item in list_items]
             in_items = [item for item in in_items if item is not None]
             self.assertEqual(3, len(in_items))
-            out_items = re.compile("data/Per_participant/Participant_%s" % patient2.code)
+            out_items = re.compile(
+                "data/Per_participant/Participant_%s" % patient2.code
+            )
             out_items = [out_items.match(item) for item in list_items]
             out_items = [item for item in out_items if item is not None]
             self.assertEqual(0, len(out_items))
 
             # Tests for Per_questionnaire subdir
             questionnaire1 = zipped_file.extract(
-                input_export.BASE_DIRECTORY + "/Per_questionnaire/QA_unified_admission_assessment/Responses_QA_en.csv",
+                input_export.BASE_DIRECTORY
+                + "/Per_questionnaire/QA_unified_admission_assessment/Responses_QA_en.csv",
                 TEMP_MEDIA_ROOT,
             )
             with open(questionnaire1) as q1_file:
@@ -291,7 +303,8 @@ class PluginTest(ExportTestCase):
                 self.assertEqual(2, len(reader))
                 self.assertEqual(self.patient.code, reader[1][0])
             questionnaire2 = zipped_file.extract(
-                input_export.BASE_DIRECTORY + "/Per_questionnaire/QS_surgical_evaluation/Responses_QS_en.csv",
+                input_export.BASE_DIRECTORY
+                + "/Per_questionnaire/QS_surgical_evaluation/Responses_QS_en.csv",
                 TEMP_MEDIA_ROOT,
             )
             with open(questionnaire2) as q3_file:
@@ -299,7 +312,8 @@ class PluginTest(ExportTestCase):
                 self.assertEqual(2, len(reader))
                 self.assertEqual(self.patient.code, reader[1][0])
             questionnaire3 = zipped_file.extract(
-                input_export.BASE_DIRECTORY + "/Per_questionnaire/QF_unified_followup_assessment/Responses_QF_en.csv",
+                input_export.BASE_DIRECTORY
+                + "/Per_questionnaire/QF_unified_followup_assessment/Responses_QF_en.csv",
                 TEMP_MEDIA_ROOT,
             )
             with open(questionnaire3) as q3_file:
@@ -309,7 +323,9 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_adds_plugin_url_session_key_and_redirect_to_send_to_plugin_view(self, mockServer):
+    def test_POST_send_to_plugin_adds_plugin_url_session_key_and_redirect_to_send_to_plugin_view(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
 
         self._create_basic_objects()
@@ -325,13 +341,21 @@ class PluginTest(ExportTestCase):
 
         export = Export.objects.last()
         plugin = RandomForests.objects.last()
-        plugin_url = plugin.plugin_url + "?user_id=" + str(self.user.id) + "&export_id=" + str(export.id)
+        plugin_url = (
+            plugin.plugin_url
+            + "?user_id="
+            + str(self.user.id)
+            + "&export_id="
+            + str(export.id)
+        )
         self.assertEqual(self.client.session.get("plugin_url"), plugin_url)
         self.assertRedirects(response, reverse("send-to-plugin"))
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_redirect_to_send_to_plugin_view_with_right_context(self, mockServer):
+    def test_POST_send_to_plugin_redirect_to_send_to_plugin_view_with_right_context(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
 
         self._create_basic_objects()
@@ -348,7 +372,12 @@ class PluginTest(ExportTestCase):
         self.assertEqual(response.status_code, 200)
 
         export = Export.objects.last()
-        plugin_url = "http://plugin_url?user_id=" + str(self.user.id) + "&export_id=" + str(export.id)
+        plugin_url = (
+            "http://plugin_url?user_id="
+            + str(self.user.id)
+            + "&export_id="
+            + str(export.id)
+        )
         self.assertEqual(response.context["plugin_url"], plugin_url)
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -417,10 +446,14 @@ class PluginTest(ExportTestCase):
         )
 
         message = str(list(get_messages(response.wsgi_request))[0])
-        self.assertEqual(message, _("Data from questionnaires was sent to Forest Plugin"))
+        self.assertEqual(
+            message, _("Data from questionnaires was sent to Forest Plugin")
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_does_not_select_any_attribute_display_warning_message(self, mockServer):
+    def test_POST_send_to_plugin_does_not_select_any_attribute_display_warning_message(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
 
         self._create_basic_objects()
@@ -434,10 +467,14 @@ class PluginTest(ExportTestCase):
         )
         self.assertRedirects(response, reverse("send-to-plugin"))
         message = str(list(get_messages(response.wsgi_request))[0])
-        self.assertEqual(message, _("Please select at least Gender participant attribute"))
+        self.assertEqual(
+            message, _("Please select at least Gender participant attribute")
+        )
 
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_does_not_select_any_patient_display_warning_message(self, mockServer):
+    def test_POST_send_to_plugin_does_not_select_any_patient_display_warning_message(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
 
         self._create_basic_objects()
@@ -455,7 +492,9 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_does_not_select_patient_gender_display_warning_message(self, mockServer):
+    def test_POST_send_to_plugin_does_not_select_patient_gender_display_warning_message(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
 
         self._create_basic_objects()
@@ -469,16 +508,22 @@ class PluginTest(ExportTestCase):
         )
         self.assertRedirects(response, reverse("send-to-plugin"))
         message = str(list(get_messages(response.wsgi_request))[0])
-        self.assertEqual(message, _("The Floresta Plugin needs to send at least Gender attribute"))
+        self.assertEqual(
+            message, _("The Floresta Plugin needs to send at least Gender attribute")
+        )
 
     # TODO: this test will fail after introducing export the third
     #  questionnaire for plugin. The maintenance of extensible mocks is not
     #  more viable. It's necessary to adopt another strategy for the tests
     #  that involve consuming LimeSurvey RPC API.
-    @skip("It's necessary to adopt another strategy for the tests that involve consuming LimeSurvey RPC API.")
+    @skip(
+        "It's necessary to adopt another strategy for the tests that involve consuming LimeSurvey RPC API."
+    )
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_write_files_and_dirs_the_right_way_and_always_in_english(self, mockServer) -> None:
+    def test_POST_send_to_plugin_write_files_and_dirs_the_right_way_and_always_in_english(
+        self, mockServer
+    ) -> None:
         set_limesurvey_api_mocks2(mockServer)
 
         self._create_basic_objects()
@@ -623,20 +668,28 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_make_subdirs_questionnaire_titles_in_english(self, mockServer):
+    def test_POST_send_to_plugin_make_subdirs_questionnaire_titles_in_english(
+        self, mockServer
+    ):
         pass
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_write_csv_participant_data_in_english(self, mockServer):
+    def test_POST_send_to_plugin_write_csv_participant_data_in_english(
+        self, mockServer
+    ):
         pass
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message1(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message1(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not get session key
-        mockServer.return_value.get_session_key.return_value = {"status": "Invalid user name or password"}
+        mockServer.return_value.get_session_key.return_value = {
+            "status": "Invalid user name or password"
+        }
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),
@@ -658,10 +711,14 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message2(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message2(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not get survey properties
-        mockServer.return_value.get_survey_properties.return_value = {"status": "Error: Invalid survey ID"}
+        mockServer.return_value.get_survey_properties.return_value = {
+            "status": "Error: Invalid survey ID"
+        }
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),
@@ -683,10 +740,14 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message3(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message3(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not get responses
-        mockServer.return_value.export_responses.side_effect = 2 * [{"status": "No Data, survey table does not exist."}]
+        mockServer.return_value.export_responses.side_effect = 2 * [
+            {"status": "No Data, survey table does not exist."}
+        ]
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),
@@ -708,7 +769,9 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message4(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message4(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not get responses by token
         mockServer.return_value.export_responses_by_token.side_effect = 4 * [
@@ -735,10 +798,14 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message5(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message5(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not list groups
-        mockServer.return_value.list_groups.side_effect = 8 * [{"status": "No groups found"}]
+        mockServer.return_value.list_groups.side_effect = 8 * [
+            {"status": "No groups found"}
+        ]
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),
@@ -760,10 +827,14 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message6(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message6(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not list questions
-        mockServer.return_value.list_questions.side_effect = 6 * [{"status": "No questions found"}]
+        mockServer.return_value.list_questions.side_effect = 6 * [
+            {"status": "No questions found"}
+        ]
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),
@@ -785,10 +856,14 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message7(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message7(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not get question properties
-        mockServer.return_value.get_question_properties.side_effect = 4 * [{"status": "Error: Invalid questionid"}]
+        mockServer.return_value.get_question_properties.side_effect = 4 * [
+            {"status": "Error: Invalid questionid"}
+        ]
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),
@@ -810,10 +885,14 @@ class PluginTest(ExportTestCase):
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message8(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message8(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not get participant properties
-        mockServer.return_value.get_participant_properties.side_effect = 6 * [{"status": "Error: No token table"}]
+        mockServer.return_value.get_participant_properties.side_effect = 6 * [
+            {"status": "Error: No token table"}
+        ]
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),
@@ -835,10 +914,14 @@ class PluginTest(ExportTestCase):
 
     @skip("get_language_properties already deal with errors returned by LimeSurvey")
     @patch("survey.abc_search_engine.Server")
-    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message9(self, mockServer):
+    def test_POST_send_to_plugin_get_error_in_consuming_limesurvey_api_returns_error_message9(
+        self, mockServer
+    ):
         set_limesurvey_api_mocks(mockServer)
         # Could not get language properties
-        mockServer.return_value.get_language_properties.side_effect = 4 * [{"status": "No valid Data"}]
+        mockServer.return_value.get_language_properties.side_effect = 4 * [
+            {"status": "No valid Data"}
+        ]
         self._create_basic_objects()
         response = self.client.post(
             reverse("send-to-plugin"),

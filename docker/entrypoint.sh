@@ -1,9 +1,6 @@
 #!/bin/sh
 set -e
 
-# Entrypoint only variable
-NES_PROJECT_PATH="$NES_DIR/patientregistrationsystem/qdc"
-
 echo "INFO: Starting Production entrypoint.sh"
 
 if [ "$NES_DB_TYPE" != "pgsql" ]; then

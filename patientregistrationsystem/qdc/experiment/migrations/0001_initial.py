@@ -104,7 +104,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -312,7 +314,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "order",
-                    models.IntegerField(validators=[django.core.validators.MinValueValidator(1)]),
+                    models.IntegerField(
+                        validators=[django.core.validators.MinValueValidator(1)]
+                    ),
                 ),
                 ("random_position", models.BooleanField(blank=True, null=True)),
                 ("requires_start_and_end_datetime", models.BooleanField(default=False)),
@@ -373,7 +377,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -454,7 +460,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -564,7 +572,9 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "unique_together": {("eeg_electrode_localization_system", "channel_default_index")},
+                "unique_together": {
+                    ("eeg_electrode_localization_system", "channel_default_index")
+                },
             },
         ),
         migrations.CreateModel(
@@ -712,7 +722,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -931,7 +943,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -1148,7 +1162,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -1911,7 +1927,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -2072,7 +2090,9 @@ class Migration(migrations.Migration):
                         blank=True,
                         default=datetime.date.today,
                         null=True,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("start_time", models.TimeField(blank=True, null=True)),
@@ -2082,7 +2102,9 @@ class Migration(migrations.Migration):
                         blank=True,
                         default=datetime.date.today,
                         null=True,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("end_time", models.TimeField(blank=True, null=True)),
@@ -2273,7 +2295,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -2443,13 +2467,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -2634,7 +2662,9 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 ("name", models.CharField(max_length=150)),
                 ("description", models.TextField()),
@@ -2705,13 +2735,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -2783,13 +2817,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -2864,13 +2902,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -2945,7 +2987,9 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 ("title", models.CharField(max_length=255)),
                 ("description", models.TextField()),
@@ -3015,13 +3059,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -3111,13 +3159,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -3218,13 +3270,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -3303,13 +3359,17 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[experiment.models.validate_date_questionnaire_response],
+                        validators=[
+                            experiment.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -3508,7 +3568,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="emgsetting",
             name="experiment",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.experiment"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.experiment"
+            ),
         ),
         migrations.CreateModel(
             name="EMGFile",
@@ -3576,12 +3638,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="emgdata",
             name="emg_setting",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.emgsetting"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.emgsetting"
+            ),
         ),
         migrations.AddField(
             model_name="emgdata",
             name="file_format",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"
+            ),
         ),
         migrations.AddField(
             model_name="emgdata",
@@ -3654,7 +3720,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="eegsetting",
             name="experiment",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.experiment"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.experiment"
+            ),
         ),
         migrations.CreateModel(
             name="EEGFile",
@@ -3726,12 +3794,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="eegdata",
             name="eeg_setting",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.eegsetting"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.eegsetting"
+            ),
         ),
         migrations.AddField(
             model_name="eegdata",
             name="file_format",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"
+            ),
         ),
         migrations.AddField(
             model_name="eegdata",
@@ -3770,7 +3842,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="digitalgamephasedata",
             name="file_format",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"
+            ),
         ),
         migrations.AddField(
             model_name="digitalgamephasedata",
@@ -3967,7 +4041,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="additionaldata",
             name="file_format",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="experiment.fileformat"
+            ),
         ),
         migrations.AddField(
             model_name="additionaldata",
@@ -4201,7 +4277,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "conduction_type",
-                    models.CharField(choices=[("gelled", "Gelled"), ("dry", "Dry")], max_length=20),
+                    models.CharField(
+                        choices=[("gelled", "Gelled"), ("dry", "Dry")], max_length=20
+                    ),
                 ),
                 (
                     "electrode_mode",
@@ -4268,7 +4346,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "survey",
-                    models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="survey.survey"),
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="survey.survey"
+                    ),
                 ),
             ],
             bases=("experiment.component",),
@@ -4296,7 +4376,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "survey",
-                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="survey.survey"),
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="survey.survey"
+                    ),
                 ),
             ],
             options={
@@ -4642,7 +4724,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "value",
-                    models.FloatField(validators=[django.core.validators.MinValueValidator(0)]),
+                    models.FloatField(
+                        validators=[django.core.validators.MinValueValidator(0)]
+                    ),
                 ),
                 (
                     "measure_unit",

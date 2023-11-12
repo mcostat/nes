@@ -17,7 +17,9 @@ urlpatterns = [
     re_path(r"^create/$", export_create, name="export_create"),
     re_path(r"^view/$", export_view, name="export_view"),
     re_path(r"^filter_participants/$", filter_participants, name="filter_participants"),
-    re_path(r"^experiment_selection/$", experiment_selection, name="experiment_selection"),
+    re_path(
+        r"^experiment_selection/$", experiment_selection, name="experiment_selection"
+    ),
     # export (ajax)
     re_path(r"^get_locations/$", search_locations, name="search_locations"),
     re_path(r"^get_diagnosis/$", search_diagnosis, name="search_diagnosis"),

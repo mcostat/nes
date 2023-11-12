@@ -6,7 +6,9 @@ from django.utils.translation import gettext_lazy as _
 
 class PasswordChangeFormCustomized(PasswordChangeForm):
     # MIN_LENGTH = 8
-    _password_regex: str = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+    _password_regex: str = (
+        r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         super.__init__(*args, **kwargs)
@@ -60,12 +62,20 @@ class PasswordChangeFormCustomized(PasswordChangeForm):
 
         # At least MIN_LENGTH long
         if len(password1) < PASSWORD_MIN_LEN:
-            raise ValidationError(_(f"The new password must be at least {PASSWORD_MIN_LEN} characters long."))
+            raise ValidationError(
+                _(
+                    f"The new password must be at least {PASSWORD_MIN_LEN} characters long."
+                )
+            )
 
         #  at least one uppercase letter, digit or special character
         ok = False
         for character in password1:
-            if character.isupper() or character.isdigit() or character in r"!@#$%&()*+,-./:;<=>?[\]_{|}~'":
+            if (
+                character.isupper()
+                or character.isdigit()
+                or character in r"!@#$%&()*+,-./:;<=>?[\]_{|}~'"
+            ):
                 ok = True
                 break
         if not ok:

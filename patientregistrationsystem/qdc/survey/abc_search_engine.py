@@ -27,14 +27,21 @@ class ABCSearchEngine(ABC):
     server: Server = None
 
     def __init__(self, limesurvey_rpc=None) -> None:
-        self.limesurvey_rpc: str = limesurvey_rpc or settings.LIMESURVEY["URL_API"] + "/index.php/admin/remotecontrol"
+        self.limesurvey_rpc: str = (
+            limesurvey_rpc
+            or settings.LIMESURVEY["URL_API"] + "/index.php/admin/remotecontrol"
+        )
         self.get_session_key()
 
     def get_session_key(self) -> None:
         self.server = Server(self.limesurvey_rpc)
         try:
-            self.session_key = self.server.get_session_key(settings.LIMESURVEY["USER"], settings.LIMESURVEY["PASSWORD"])
-            self.session_key = None if isinstance(self.session_key, dict) else self.session_key
+            self.session_key = self.server.get_session_key(
+                settings.LIMESURVEY["USER"], settings.LIMESURVEY["PASSWORD"]
+            )
+            self.session_key = (
+                None if isinstance(self.session_key, dict) else self.session_key
+            )
         except:
             self.session_key = None
         # TODO: catch user/password exception
@@ -65,7 +72,9 @@ class ABCSearchEngine(ABC):
 
         if isinstance(list_survey, list):
             for survey in list_survey:
-                if survey["active"] == "Y" and self.survey_has_token_table(survey["sid"]):
+                if survey["active"] == "Y" and self.survey_has_token_table(
+                    survey["sid"]
+                ):
                     list_active_survey.append(survey)
         else:
             list_active_survey = []
@@ -96,9 +105,16 @@ class ABCSearchEngine(ABC):
 
         participant_data = {"email": "", "firstname": "", "lastname": ""}
 
-        result = self.server.add_participants(self.session_key, sid, [participant_data], True)
+        result = self.server.add_participants(
+            self.session_key, sid, [participant_data], True
+        )
 
-        if result and isinstance(result, list) and isinstance(result[0], dict) and "error" not in result[0]:
+        if (
+            result
+            and isinstance(result, list)
+            and isinstance(result[0], dict)
+            and "error" not in result[0]
+        ):
             return {"token": result[0]["token"], "tid": result[0]["tid"]}
         else:
             return None
@@ -110,7 +126,9 @@ class ABCSearchEngine(ABC):
         :param tokens_ids: list of token ids
         :return: on success, a dict of deletion status for each participant; on failure, status dict.
         """
-        result = self.server.delete_participants(self.session_key, survey_id, tokens_ids)
+        result = self.server.delete_participants(
+            self.session_key, survey_id, tokens_ids
+        )
         # TODO: verify if there exists participants table. The questionnary
         #  may be deactivated but NES keep tracking it.
 
@@ -146,7 +164,9 @@ class ABCSearchEngine(ABC):
         :param prop: the name of the property of the survey
         :return: value of the property
         """
-        result = self.server.get_survey_properties(self.session_key, sid, {"method": prop})
+        result = self.server.get_survey_properties(
+            self.session_key, sid, {"method": prop}
+        )
 
         return result.get(prop)
 
@@ -156,7 +176,9 @@ class ABCSearchEngine(ABC):
         :param sid: survey ID
         :return: the base and the additional idioms
         """
-        result = self.server.get_survey_properties(self.session_key, sid, ["additional_languages", "language"])
+        result = self.server.get_survey_properties(
+            self.session_key, sid, ["additional_languages", "language"]
+        )
 
         # If failed to consume API, it return a dict with one element with
         # 'status' as key
@@ -198,7 +220,9 @@ class ABCSearchEngine(ABC):
         if isinstance(prop, str):
             prop = [prop]
 
-        result = self.server.get_participant_properties(self.session_key, survey_id, token_id, prop)
+        result = self.server.get_participant_properties(
+            self.session_key, survey_id, token_id, prop
+        )
 
         # This if-else for backward compatibility with last method signature
         # TODO: refactor the code and remove this if-else
@@ -227,7 +251,9 @@ class ABCSearchEngine(ABC):
         :return: survey ID generated
         """
 
-        survey_id_generated = self.server.add_survey(self.session_key, sid, title, language, survey_format)
+        survey_id_generated = self.server.add_survey(
+            self.session_key, sid, title, language, survey_format
+        )
 
         return survey_id_generated
 
@@ -399,7 +425,10 @@ class ABCSearchEngine(ABC):
         # returns {'status': 'No Response found by Token'} export view call
         # export_responses, that returns a string to responses variable and
         # can mount the screen with the possible data to export
-        if isinstance(responses, dict) and responses["status"] == "No Response found for Token":
+        if (
+            isinstance(responses, dict)
+            and responses["status"] == "No Response found for Token"
+        ):
             try:
                 responses = self.server.export_responses(
                     self.session_key,
@@ -558,7 +587,9 @@ class ABCSearchEngine(ABC):
         return result
 
     def set_participant_properties(self, sid, tid, properties_dict):
-        result = self.server.set_participant_properties(self.session_key, sid, tid, properties_dict)
+        result = self.server.set_participant_properties(
+            self.session_key, sid, tid, properties_dict
+        )
 
         # TODO (NES-963): treat errors
         return result
@@ -629,7 +660,9 @@ class Questionnaires(ABCSearchEngine):
         return super(Questionnaires, self).get_survey_languages(sid)
 
     def get_participant_properties(self, survey_id, token_id, prop=None):
-        return super(Questionnaires, self).get_participant_properties(survey_id, token_id, prop)
+        return super(Questionnaires, self).get_participant_properties(
+            survey_id, token_id, prop
+        )
 
     def get_survey_title(self, sid, language=None):
         return super(Questionnaires, self).get_survey_title(sid, language)
@@ -638,7 +671,9 @@ class Questionnaires(ABCSearchEngine):
         return super(Questionnaires, self).survey_has_token_table(sid)
 
     def add_survey(self, sid, title, language, survey_format):
-        return super(Questionnaires, self).add_survey(sid, title, language, survey_format)
+        return super(Questionnaires, self).add_survey(
+            sid, title, language, survey_format
+        )
 
     def delete_survey(self, sid):
         return super(Questionnaires, self).delete_survey(sid)
@@ -649,14 +684,24 @@ class Questionnaires(ABCSearchEngine):
     def activate_tokens(self, sid):
         return super(Questionnaires, self).activate_tokens(sid)
 
-    def get_responses_by_token(self, sid, token, language=None, doctype="csv", fields=[]):
-        return super(Questionnaires, self).get_responses_by_token(sid, token, language, doctype, fields)
+    def get_responses_by_token(
+        self, sid, token, language=None, doctype="csv", fields=[]
+    ):
+        return super(Questionnaires, self).get_responses_by_token(
+            sid, token, language, doctype, fields
+        )
 
-    def get_responses(self, sid, language, response_type="short", fields=None, heading_type="code"):
-        return super(Questionnaires, self).get_responses(sid, language, response_type, fields, heading_type)
+    def get_responses(
+        self, sid, language, response_type="short", fields=None, heading_type="code"
+    ):
+        return super(Questionnaires, self).get_responses(
+            sid, language, response_type, fields, heading_type
+        )
 
     def get_header_response(self, sid, language, token=1, heading_type="code"):
-        return super(Questionnaires, self).get_header_response(sid, language, token, heading_type)
+        return super(Questionnaires, self).get_header_response(
+            sid, language, token, heading_type
+        )
 
     def get_summary(self, sid, stat_name):
         return super(Questionnaires, self).get_summary(sid, stat_name)
@@ -668,7 +713,9 @@ class Questionnaires(ABCSearchEngine):
         return super(Questionnaires, self).list_questions_ids(sid, gid)
 
     def get_question_properties(self, question_id, language):
-        return super(Questionnaires, self).get_question_properties(question_id, language)
+        return super(Questionnaires, self).get_question_properties(
+            question_id, language
+        )
 
     # TODO (NES-956): see when this was created
     def set_question_properties(self, sid, data):
@@ -684,7 +731,9 @@ class Questionnaires(ABCSearchEngine):
         return super(Questionnaires, self).set_group_properties(sid, data)
 
     def insert_questions(self, sid, questions_data, format_import_file):
-        return super(Questionnaires, self).insert_questions(sid, questions_data, format_import_file)
+        return super(Questionnaires, self).insert_questions(
+            sid, questions_data, format_import_file
+        )
 
     def find_tokens_by_questionnaire(self, sid):
         return super(Questionnaires, self).find_tokens_by_questionnaire(sid)
@@ -696,7 +745,9 @@ class Questionnaires(ABCSearchEngine):
         return super(Questionnaires, self).add_response(sid, response_data)
 
     def set_participant_properties(self, sid, tid, properties_dict):
-        return super(Questionnaires, self).set_participant_properties(sid, tid, properties_dict)
+        return super(Questionnaires, self).set_participant_properties(
+            sid, tid, properties_dict
+        )
 
     def import_survey(self, base64_encoded_lsa_file):
         return super(Questionnaires, self).import_survey(base64_encoded_lsa_file)

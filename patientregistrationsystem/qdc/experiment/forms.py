@@ -254,7 +254,9 @@ class ComponentConfigurationForm(ModelForm):
         required=False,
         empty_value=None,
         choices=((False, _("Fixed")), (True, _("Random"))),
-        widget=RadioSelect(attrs={"class": "form-check-input", "id": "id_random_position"}),
+        widget=RadioSelect(
+            attrs={"class": "form-check-input", "id": "id_random_position"}
+        ),
     )
 
     class Meta:
@@ -371,7 +373,9 @@ class EEGForm(ModelForm):
         super(EEGForm, self).__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
-            self.fields["eeg_setting"].queryset = EEGSetting.objects.filter(experiment=initial["experiment"])
+            self.fields["eeg_setting"].queryset = EEGSetting.objects.filter(
+                experiment=initial["experiment"]
+            )
 
 
 class EMGForm(ModelForm):
@@ -395,7 +399,9 @@ class EMGForm(ModelForm):
         super(EMGForm, self).__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
-            self.fields["emg_setting"].queryset = EMGSetting.objects.filter(experiment=initial["experiment"])
+            self.fields["emg_setting"].queryset = EMGSetting.objects.filter(
+                experiment=initial["experiment"]
+            )
 
 
 class TMSForm(ModelForm):
@@ -419,7 +425,9 @@ class TMSForm(ModelForm):
         super(TMSForm, self).__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
-            self.fields["tms_setting"].queryset = TMSSetting.objects.filter(experiment=initial["experiment"])
+            self.fields["tms_setting"].queryset = TMSSetting.objects.filter(
+                experiment=initial["experiment"]
+            )
 
 
 class DigitalGamePhaseForm(ModelForm):
@@ -450,7 +458,9 @@ class DigitalGamePhaseForm(ModelForm):
         super(DigitalGamePhaseForm, self).__init__(*args, **kwargs)
         initial = kwargs.get("initial")
         if initial:
-            self.fields["context_tree"].queryset = ContextTree.objects.filter(experiment=initial["experiment"])
+            self.fields["context_tree"].queryset = ContextTree.objects.filter(
+                experiment=initial["experiment"]
+            )
 
 
 class GenericDataCollectionForm(ModelForm):
@@ -755,11 +765,15 @@ class EEGDataForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(EEGDataForm, self).__init__(*args, **kwargs)
 
-        self.fields["file_format"].queryset = FileFormat.objects.filter(tags__name="EEG")
+        self.fields["file_format"].queryset = FileFormat.objects.filter(
+            tags__name="EEG"
+        )
 
         initial = kwargs.get("initial")
         if initial and "experiment" in initial:
-            self.fields["eeg_setting"].queryset = EEGSetting.objects.filter(experiment=initial["experiment"])
+            self.fields["eeg_setting"].queryset = EEGSetting.objects.filter(
+                experiment=initial["experiment"]
+            )
         if initial and "eeg_setting" in initial:
             eeg_setting = get_object_or_404(EEGSetting, pk=initial["eeg_setting"])
             self.fields["eeg_cap_size"].queryset = EEGCapSize.objects.filter(id=0)
@@ -842,7 +856,9 @@ class StimuliDataForm(ModelForm):
     def __init__(self, *args, **kwargs) -> None:
         super(StimuliDataForm, self).__init__(*args, **kwargs)
 
-        self.fields["file_format"].queryset = FileFormat.objects.filter(tags__name="EEG")
+        self.fields["file_format"].queryset = FileFormat.objects.filter(
+            tags__name="EEG"
+        )
 
 
 class SourceCodeForm(ModelForm):
@@ -912,7 +928,11 @@ class EquipmentForm(ModelForm):
         model = Equipment
         fields = ["description"]
 
-        widgets = {"description": Textarea(attrs={"class": "form-control", "rows": "4", "disabled": ""})}
+        widgets = {
+            "description": Textarea(
+                attrs={"class": "form-control", "rows": "4", "disabled": ""}
+            )
+        }
 
 
 class EEGAmplifierForm(ModelForm):
@@ -923,7 +943,9 @@ class EEGAmplifierForm(ModelForm):
 
         widgets = {
             "gain": TextInput(attrs={"class": "form-control", "disabled": ""}),
-            "number_of_channels": NumberInput(attrs={"class": "form-control", "disabled": ""}),
+            "number_of_channels": NumberInput(
+                attrs={"class": "form-control", "disabled": ""}
+            ),
         }
 
 
@@ -972,7 +994,11 @@ class EEGFilterForm(ModelForm):
         model = FilterType
         fields = ["description"]
 
-        widgets = {"description": Textarea(attrs={"class": "form-control", "rows": "4", "disabled": ""})}
+        widgets = {
+            "description": Textarea(
+                attrs={"class": "form-control", "rows": "4", "disabled": ""}
+            )
+        }
 
 
 class EEGFilterSettingForm(ModelForm):
@@ -1145,7 +1171,9 @@ class EEGSolutionRegisterForm(ModelForm):
                     "maxlength": "150",
                 }
             ),
-            "components": Textarea(attrs={"id": "id_description", "class": "form-control", "rows": "4"}),
+            "components": Textarea(
+                attrs={"id": "id_description", "class": "form-control", "rows": "4"}
+            ),
             "manufacturer": Select(
                 attrs={
                     "class": "form-select",
@@ -1365,7 +1393,9 @@ class EEGElectrodeNETRegisterForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(EEGElectrodeNETRegisterForm, self).__init__(*args, **kwargs)
 
-        self.fields["electrode_model_default"].queryset = ElectrodeModel.objects.filter(tags__name="EEG")
+        self.fields["electrode_model_default"].queryset = ElectrodeModel.objects.filter(
+            tags__name="EEG"
+        )
 
 
 class EEGElectrodeCapRegisterForm(ModelForm):
@@ -1487,8 +1517,12 @@ class EMGSurfacePlacementRegisterForm(ModelForm):
             "location": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "start_posture": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "orientation": Textarea(attrs={"class": "form-control", "rows": "4"}),
-            "fixation_on_the_skin": Textarea(attrs={"class": "form-control", "rows": "4"}),
-            "reference_electrode": Textarea(attrs={"class": "form-control", "rows": "4"}),
+            "fixation_on_the_skin": Textarea(
+                attrs={"class": "form-control", "rows": "4"}
+            ),
+            "reference_electrode": Textarea(
+                attrs={"class": "form-control", "rows": "4"}
+            ),
             "clinical_test": Textarea(attrs={"class": "form-control", "rows": "4"}),
         }
 
@@ -1514,8 +1548,12 @@ class EMGIntramuscularPlacementRegisterForm(ModelForm):
                 }
             ),
             "location": Textarea(attrs={"class": "form-control", "rows": "4"}),
-            "method_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4"}),
-            "depth_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4"}),
+            "method_of_insertion": Textarea(
+                attrs={"class": "form-control", "rows": "4"}
+            ),
+            "depth_of_insertion": Textarea(
+                attrs={"class": "form-control", "rows": "4"}
+            ),
         }
 
 
@@ -1534,7 +1572,9 @@ class EMGNeedlePlacementRegisterForm(ModelForm):
                 }
             ),
             "location": Textarea(attrs={"class": "form-control", "rows": "4"}),
-            "depth_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4"}),
+            "depth_of_insertion": Textarea(
+                attrs={"class": "form-control", "rows": "4"}
+            ),
         }
 
 
@@ -1719,10 +1759,14 @@ class EMGDataForm(ModelForm):
 
         # emg_setting has no blank option
         self.fields["emg_setting"].empty_label = None
-        self.fields["file_format"].queryset = FileFormat.objects.filter(tags__name="EMG")
+        self.fields["file_format"].queryset = FileFormat.objects.filter(
+            tags__name="EMG"
+        )
         initial = kwargs.get("initial")
         if initial and "experiment" in initial:
-            self.fields["emg_setting"].queryset = EMGSetting.objects.filter(experiment=initial["experiment"])
+            self.fields["emg_setting"].queryset = EMGSetting.objects.filter(
+                experiment=initial["experiment"]
+            )
         if initial and "emg_setting" in initial:
             emg_setting = get_object_or_404(EMGSetting, pk=initial["emg_setting"])
 
@@ -1937,7 +1981,9 @@ class EMGElectrodeSettingForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(EMGElectrodeSettingForm, self).__init__(*args, **kwargs)
 
-        self.fields["electrode"].queryset = ElectrodeModel.objects.filter(tags__name="EMG")
+        self.fields["electrode"].queryset = ElectrodeModel.objects.filter(
+            tags__name="EMG"
+        )
 
 
 class EMGElectrodePlacementSettingForm(ModelForm):
@@ -2128,11 +2174,21 @@ class EMGSurfacePlacementForm(ModelForm):
         ]
 
         widgets = {
-            "start_posture": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""}),
-            "orientation": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""}),
-            "fixation_on_the_skin": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""}),
-            "reference_electrode": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""}),
-            "clinical_test": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""}),
+            "start_posture": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            ),
+            "orientation": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            ),
+            "fixation_on_the_skin": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            ),
+            "reference_electrode": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            ),
+            "clinical_test": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            ),
         }
 
 
@@ -2143,8 +2199,12 @@ class EMGIntramuscularPlacementForm(ModelForm):
         fields = ["method_of_insertion", "depth_of_insertion"]
 
         widgets = {
-            "method_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""}),
-            "depth_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""}),
+            "method_of_insertion": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            ),
+            "depth_of_insertion": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            ),
         }
 
 
@@ -2154,7 +2214,11 @@ class EMGNeedlePlacementForm(ModelForm):
 
         fields = ["depth_of_insertion"]
 
-        widgets = {"depth_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4", "required": ""})}
+        widgets = {
+            "depth_of_insertion": Textarea(
+                attrs={"class": "form-control", "rows": "4", "required": ""}
+            )
+        }
 
 
 class TMSDataForm(ModelForm):
@@ -2213,7 +2277,9 @@ class TMSDataForm(ModelForm):
             "coil_orientation_angle": TextInput(attrs={"class": "form-control"}),
             "direction_of_induced_current": Select(attrs={"class": "form-select"}),
             "resting_motor_threshold": TextInput(attrs={"class": "form-control"}),
-            "test_pulse_intensity_of_simulation": TextInput(attrs={"class": "form-control"}),
+            "test_pulse_intensity_of_simulation": TextInput(
+                attrs={"class": "form-control"}
+            ),
             "second_test_pulse_intensity": TextInput(attrs={"class": "form-control"}),
             "interval_between_pulses": NumberInput(attrs={"class": "form-control"}),
             "interval_between_pulses_unit": Select(attrs={"class": "form-select"}),
@@ -2236,11 +2302,15 @@ class TMSDataForm(ModelForm):
 
         initial = kwargs.get("initial")
         if initial and "experiment" in initial:
-            self.fields["tms_setting"].queryset = TMSSetting.objects.filter(experiment=initial["experiment"])
+            self.fields["tms_setting"].queryset = TMSSetting.objects.filter(
+                experiment=initial["experiment"]
+            )
         if initial and "tms_setting" in initial:
             tms_setting = get_object_or_404(TMSSetting, pk=initial["tms_setting"])
             self.fields["coil_orientation"].queryset = CoilOrientation.objects.all()
-            self.fields["direction_of_induced_current"].queryset = DirectionOfTheInducedCurrent.objects.all()
+            self.fields[
+                "direction_of_induced_current"
+            ].queryset = DirectionOfTheInducedCurrent.objects.all()
 
 
 class HotSpotForm(ModelForm):
@@ -2470,7 +2540,9 @@ class DigitalGamePhaseDataForm(ModelForm):
                     "data-error": _("File format description must be filled."),
                 }
             ),
-            "sequence_used_in_context_tree": Textarea(attrs={"class": "form-control", "rows": "4"})
+            "sequence_used_in_context_tree": Textarea(
+                attrs={"class": "form-control", "rows": "4"}
+            )
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
         }
@@ -2546,7 +2618,9 @@ class GenericDataCollectionDataForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(GenericDataCollectionDataForm, self).__init__(*args, **kwargs)
 
-        self.fields["file_format"].queryset = FileFormat.objects.filter(tags__name="generic")
+        self.fields["file_format"].queryset = FileFormat.objects.filter(
+            tags__name="generic"
+        )
 
 
 class MediaCollectionDataForm(ModelForm):
@@ -2600,7 +2674,9 @@ class MediaCollectionDataForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(MediaCollectionDataForm, self).__init__(*args, **kwargs)
 
-        self.fields["file_format"].queryset = FileFormat.objects.filter(tags__name="media")
+        self.fields["file_format"].queryset = FileFormat.objects.filter(
+            tags__name="media"
+        )
 
 
 class ResendExperimentForm(ModelForm):

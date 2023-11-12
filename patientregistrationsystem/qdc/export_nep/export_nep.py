@@ -57,7 +57,9 @@ for user in users:
                     "nes_id=" + str(research_project.id),
                 ]
             )
-        for experiment in models.Experiment.objects.filter(research_project__id=research_project.id):
+        for experiment in models.Experiment.objects.filter(
+            research_project__id=research_project.id
+        ):
             subprocess.call(
                 [
                     "http",
@@ -65,14 +67,20 @@ for user in users:
                     "lab1:nep-lab1",
                     "--ignore-stdin",
                     "POST",
-                    portal_server + "/api/studies/" + str(research_project.id) + "/experiments/",
+                    portal_server
+                    + "/api/studies/"
+                    + str(research_project.id)
+                    + "/experiments/",
                     "title=" + experiment.title,
                     "description=" + experiment.description,
-                    "data_acquisition_none=" + str(experiment.data_acquisition_is_concluded),
+                    "data_acquisition_none="
+                    + str(experiment.data_acquisition_is_concluded),
                     "nes_id=" + str(experiment.id),
                 ]
             )
-            for component in models.Component.objects.filter(experiment__id=experiment.id):
+            for component in models.Component.objects.filter(
+                experiment__id=experiment.id
+            ):
                 if component.duration_value is None:
                     subprocess.call(
                         [
@@ -81,7 +89,10 @@ for user in users:
                             "lab1:nep-lab1",
                             "--ignore-stdin",
                             "POST",
-                            portal_server + "/api/experiments/" + str(experiment.id) + "/protocol_components/",
+                            portal_server
+                            + "/api/experiments/"
+                            + str(experiment.id)
+                            + "/protocol_components/",
                             "identification=" + component.identification,
                             "description=" + str(component.description),
                             "duration_unit=" + str(component.duration_unit),
@@ -97,7 +108,10 @@ for user in users:
                             "lab1:nep-lab1",
                             "--ignore-stdin",
                             "POST",
-                            portal_server + "/api/experiments/" + str(experiment.id) + "/protocol_components/",
+                            portal_server
+                            + "/api/experiments/"
+                            + str(experiment.id)
+                            + "/protocol_components/",
                             "identification=" + component.identification,
                             "description=" + str(component.description),
                             "duration_value=" + str(component.duration_value),
@@ -106,7 +120,9 @@ for user in users:
                             "nes_id=" + str(component.id),
                         ]
                     )
-                for group in models.Group.objects.filter(experimental_protocol__id=component.id):
+                for group in models.Group.objects.filter(
+                    experimental_protocol__id=component.id
+                ):
                     subprocess.call(
                         [
                             "http",
@@ -114,7 +130,8 @@ for user in users:
                             "lab1:nep-lab1",
                             "--ignore-stdin",
                             "POST",
-                            portal_server + "/api/" "protocol_components/" + str(component.id) + "/groups/",
+                            portal_server + "/api/"
+                            "protocol_components/" + str(component.id) + "/groups/",
                             "title=" + group.title,
                             "nes_id=" + str(group.id),
                         ]
@@ -138,7 +155,9 @@ for subject in models.Subject.objects.all():
             "state=" + str(patient.state),
             "country=" + str(patient.country),
             "gender=" + patient.gender.name,
-            "marital_status=" + patient.marital_status.name if patient.marital_status else "marital_status=",
+            "marital_status=" + patient.marital_status.name
+            if patient.marital_status
+            else "marital_status=",
             "nes_id=" + str(patient.id),
         ]
     )

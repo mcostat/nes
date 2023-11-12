@@ -1007,7 +1007,9 @@ def set_mocks1(mockServer):
             "answeroptions": "No available answer options",
         },
     ]
-    mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Test questionnaire"}
+    mockServer.return_value.get_language_properties.return_value = {
+        "surveyls_title": "Test questionnaire"
+    }
 
 
 def set_mocks2(mockServer):
@@ -1015,7 +1017,9 @@ def set_mocks2(mockServer):
         "additional_languages": "",
         "language": "en",
     }
-    mockServer.return_value.get_participant_properties.side_effect = 3 * [{"completed": "2019-06-24"}] + [
+    mockServer.return_value.get_participant_properties.side_effect = 3 * [
+        {"completed": "2019-06-24"}
+    ] + [
         {"token": "vnCfOsrabtuTfYs"},
         {"completed": "2019-06-24"},
         {"token": "G0lmOoIe6IElYKF"},
@@ -1881,7 +1885,9 @@ def set_mocks2(mockServer):
             "title": "responsibleid",
         },
     ]
-    mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Test questionnaire"}
+    mockServer.return_value.get_language_properties.return_value = {
+        "surveyls_title": "Test questionnaire"
+    }
 
 
 def set_mocks3(mockServer):
@@ -1889,7 +1895,9 @@ def set_mocks3(mockServer):
         "additional_languages": "",
         "language": "en",
     }
-    mockServer.return_value.get_participant_properties.side_effect = 3 * [{"completed": "2019-06-26"}] + [
+    mockServer.return_value.get_participant_properties.side_effect = 3 * [
+        {"completed": "2019-06-26"}
+    ] + [
         {"token": "pO9iPqlkQzD4zwG"},
         {"completed": "2019-06-26"},
         {"token": "g7GaPTLHc2rB6TV"},
@@ -2392,7 +2400,9 @@ def set_mocks3(mockServer):
             "title": "responsibleid",
         },
     ]
-    mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Test questionnaire"}
+    mockServer.return_value.get_language_properties.return_value = {
+        "surveyls_title": "Test questionnaire"
+    }
 
 
 def set_mocks4(mockServer):
@@ -3027,7 +3037,9 @@ def set_mocks4(mockServer):
             "type": "N",
         },
     ]
-    mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Test questionnaire"}
+    mockServer.return_value.get_language_properties.return_value = {
+        "surveyls_title": "Test questionnaire"
+    }
 
 
 def update_mocks4_full_and_abbreviated(mock_server):
@@ -3540,7 +3552,9 @@ def set_mocks5(mockServer):
         "language": "en",
         "additional_languages": "",
     }
-    mockServer.return_value.get_participant_properties.side_effect = [{"token": "ceBAtUYdVXOF3ie"}]
+    mockServer.return_value.get_participant_properties.side_effect = [
+        {"token": "ceBAtUYdVXOF3ie"}
+    ]
     mockServer.return_value.export_responses.return_value = (
         "ImlkIiwic3VibWl0ZGF0ZSIsImxhc3RwYWdlIiwic3RhcnRsYW5ndWFnZSIsInRva2VuIiwicmVzcG9uc2libGVpZCIsImFjcXVpc2l0aW9u"
         "ZGF0ZSIsInN1YmplY3RpZCIsImZpcnN0UXVlc3Rpb24iLCJzZWNvbmRRdWVzdGlvbiIsImZpbGVVcGxvYWQiLCJmaWxlVXBsb2FkW2ZpbGVj"
@@ -3904,7 +3918,9 @@ def set_mocks5(mockServer):
             "type": "N",
         },
     ]
-    mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Test questionnaire"}
+    mockServer.return_value.get_language_properties.return_value = {
+        "surveyls_title": "Test questionnaire"
+    }
     mockServer.return_value.add_participants.return_value = [
         {
             "token": "GQ5rP7eMjbTaNVf",
@@ -4446,7 +4462,9 @@ def set_mocks6(mock_server):
             "attributes": {"hidden": "1"},
         },
     ]
-    mock_server.return_value.get_language_properties.return_value = {"surveyls_title": "Einfacher Fragebogen"}
+    mock_server.return_value.get_language_properties.return_value = {
+        "surveyls_title": "Einfacher Fragebogen"
+    }
 
 
 def update_mocks6_full(mock_server):
@@ -11648,7 +11666,9 @@ def set_mocks8(mock_server):
         "eHQgRnJhZ2UiCiI0IiwiMTk4MC0wMS0wMSAwMDowMDowMCIsIjIiLCJlbiIsIlJOQldlaGl4enQ4U0VlRiIsIjEiLCIyMDIwLTAxLTA4IDAwOj"
         "AwOjAwIiwiNSIsIlRleHRhbnR3b3J0IgoK",
     ]
-    mock_server.return_value.get_language_properties.return_value = {"surveyls_title": "Einfacher Fragebogen"}
+    mock_server.return_value.get_language_properties.return_value = {
+        "surveyls_title": "Einfacher Fragebogen"
+    }
     mock_server.return_value.get_summary.return_value = 1
 
 
@@ -12828,7 +12848,9 @@ def set_mocks10(mock_server):
         {"admin": "Administrator"},
         {"adminemail": "admin@example.com"},
     ]
-    mock_server.return_value.get_participant_properties.return_value = {"token": "SacEKy2OnQDkBwa"}
+    mock_server.return_value.get_participant_properties.return_value = {
+        "token": "SacEKy2OnQDkBwa"
+    }
     mock_server.return_value.export_responses.side_effect = [
         "ImlkIiwic3VibWl0ZGF0ZSIsImxhc3RwYWdlIiwic3RhcnRsYW5ndWFnZSIsInRva2VuIiwicmVzcG9uc2libGVpZCIsImFjcXVpc2l0aW9uZ"
         "GF0ZSIsInN1YmplY3RpZCIsImZ1bmZwdW5rdGV3YWhsIiwiZHJvcGRvd25saXN0ZSIsImxpc3RlcmFkaW8iLCJsaXN0ZW1pdGtvbW1lbnRhci"
@@ -24712,7 +24734,9 @@ def set_mocks11(mock_server):
         "language": "en",
         "additional_languages": "",
     }
-    mock_server.return_value.get_participant_properties.return_value = {"token": "MCWSI30IZ5nhn1H"}
+    mock_server.return_value.get_participant_properties.return_value = {
+        "token": "MCWSI30IZ5nhn1H"
+    }
     mock_server.return_value.export_responses.return_value = (
         "ImlkIiwic3VibWl0ZGF0ZSIsImxhc3RwYWdlIiwic3RhcnRsYW5ndWFnZSIsInRva2VuIiwicmVzcG9uc2libGVpZCIsImFjcXVpc2l0aW9u"
         "ZGF0ZSIsInN1YmplY3RpZCIsImZ1bmZwdW5rdGV3YWhsIiwiZHJvcGRvd25saXN0ZSIsImxpc3RlcmFkaW8iLCJsaXN0ZW1pdGtvbW1lbnRh"

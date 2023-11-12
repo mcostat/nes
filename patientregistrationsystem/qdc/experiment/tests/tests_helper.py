@@ -89,7 +89,14 @@ from experiment.models import (
     TMSLocalizationSystem,
     TMSSetting,
 )
-from patient.models import ClassificationOfDiseases, ComplementaryExam, Diagnosis, ExamFile, MedicalRecordData, Patient
+from patient.models import (
+    ClassificationOfDiseases,
+    ComplementaryExam,
+    Diagnosis,
+    ExamFile,
+    MedicalRecordData,
+    Patient,
+)
 from patient.tests.test_orig import UtilTests
 from survey.tests.tests_helper import create_survey
 
@@ -109,7 +116,9 @@ class ExperimentTestCase(TestCase):
 
         self.patient = UtilTests().create_patient(changed_by=self.user)
         self.subject = ObjectsFactory.create_subject(self.patient)
-        self.subject_of_group = ObjectsFactory.create_subject_of_group(self.group, self.subject)
+        self.subject_of_group = ObjectsFactory.create_subject_of_group(
+            self.group, self.subject
+        )
 
 
 USER_USERNAME = "myadmin"
@@ -156,7 +165,9 @@ class ObjectsFactory(object):
         """
         user, passwd = create_user()
 
-        return ExperimentResearcher.objects.create(experiment=experiment, researcher=user)
+        return ExperimentResearcher.objects.create(
+            experiment=experiment, researcher=user
+        )
 
     @staticmethod
     def create_publication(list_of_experiments):
@@ -165,7 +176,9 @@ class ObjectsFactory(object):
         :return: publication
         """
 
-        publication = Publication.objects.create(title="Publication-Update", citation="Citation-Update")
+        publication = Publication.objects.create(
+            title="Publication-Update", citation="Citation-Update"
+        )
         publication.save()
         for experiment in list_of_experiments:
             publication.experiments.add(experiment)
@@ -236,10 +249,14 @@ class ObjectsFactory(object):
 
     @staticmethod
     def create_emg_electrode_setting(emg_setting, electrode_model):
-        return EMGElectrodeSetting.objects.create(emg_setting=emg_setting, electrode=electrode_model)
+        return EMGElectrodeSetting.objects.create(
+            emg_setting=emg_setting, electrode=electrode_model
+        )
 
     @staticmethod
-    def create_emg_electrode_placement_setting(emg_electrode_setting, electrode_placement, muscle_side=None):
+    def create_emg_electrode_placement_setting(
+        emg_electrode_setting, electrode_placement, muscle_side=None
+    ):
         return EMGElectrodePlacementSetting.objects.create(
             emg_electrode_setting=emg_electrode_setting,
             emg_electrode_placement=electrode_placement,
@@ -270,7 +287,9 @@ class ObjectsFactory(object):
 
     @staticmethod
     def create_muscle_side(muscle: Muscle) -> MuscleSide:
-        muscle_side = MuscleSide.objects.create(name="Muscle side identification", muscle=muscle)
+        muscle_side = MuscleSide.objects.create(
+            name="Muscle side identification", muscle=muscle
+        )
         muscle_side.save()
         return muscle_side
 
@@ -293,7 +312,9 @@ class ObjectsFactory(object):
         return emg_ep
 
     @staticmethod
-    def create_component(experiment, component_type, identification=None, kwargs=None) -> Component:
+    def create_component(
+        experiment, component_type, identification=None, kwargs=None
+    ) -> Component:
         fake = Factory.create()
 
         if component_type == Component.TASK_EXPERIMENT:
@@ -333,7 +354,9 @@ class ObjectsFactory(object):
                 component.software_version = kwargs["software_version"]
                 component.context_tree = kwargs["context_tree"]
             except KeyError:
-                print("You must specify 'software_version' and 'context_tree' key in kwargs dict")
+                print(
+                    "You must specify 'software_version' and 'context_tree' key in kwargs dict"
+                )
         elif component_type == Component.EEG:
             try:
                 component.eeg_setting = kwargs["eeg_set"]
@@ -349,7 +372,9 @@ class ObjectsFactory(object):
                 component.stimulus_type = kwargs["stimulus_type"]
                 component.media_file = kwargs.get("media_file", None)
             except KeyError:
-                print("You must specify 'stimulus_type' and 'media_file' key in kwargs dict")
+                print(
+                    "You must specify 'stimulus_type' and 'media_file' key in kwargs dict"
+                )
         elif component_type == Component.TMS:
             try:
                 component.tms_setting = kwargs["tms_set"]
@@ -358,7 +383,10 @@ class ObjectsFactory(object):
         try:
             component.save()
         except IntegrityError:
-            print("Have you remembered to give specific attribute for " "the specific component?")
+            print(
+                "Have you remembered to give specific attribute for "
+                "the specific component?"
+            )
 
         return component
 
@@ -413,7 +441,9 @@ class ObjectsFactory(object):
 
     @staticmethod
     def create_manufacturer() -> Manufacturer:
-        manufacturer, create = Manufacturer.objects.get_or_create(name="Manufacturer name")
+        manufacturer, create = Manufacturer.objects.get_or_create(
+            name="Manufacturer name"
+        )
         return manufacturer
 
     @staticmethod
@@ -428,7 +458,9 @@ class ObjectsFactory(object):
 
     @staticmethod
     def create_eeg_solution(manufacturer) -> EEGSolution:
-        eeg_solution = EEGSolution.objects.create(manufacturer=manufacturer, name="Solution name")
+        eeg_solution = EEGSolution.objects.create(
+            manufacturer=manufacturer, name="Solution name"
+        )
         eeg_solution.save()
         return eeg_solution
 
@@ -453,7 +485,9 @@ class ObjectsFactory(object):
         return electrode_model
 
     @staticmethod
-    def create_eeg_electrode_net(manufacturer, electrode_model_default) -> EEGElectrodeNet:
+    def create_eeg_electrode_net(
+        manufacturer, electrode_model_default
+    ) -> EEGElectrodeNet:
         eeg_electrode_net = EEGElectrodeNet.objects.create(
             manufacturer=manufacturer,
             equipment_type="eeg_electrode_net",
@@ -464,7 +498,9 @@ class ObjectsFactory(object):
         return eeg_electrode_net
 
     @staticmethod
-    def create_eeg_electrode_net_system(eeg_electrode_net, eeg_electrode_localization_system) -> EEGElectrodeNetSystem:
+    def create_eeg_electrode_net_system(
+        eeg_electrode_net, eeg_electrode_localization_system
+    ) -> EEGElectrodeNetSystem:
         eeg_electrode_net_system = EEGElectrodeNetSystem.objects.create(
             eeg_electrode_net=eeg_electrode_net,
             eeg_electrode_localization_system=eeg_electrode_localization_system,
@@ -478,7 +514,9 @@ class ObjectsFactory(object):
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             bin_file = ObjectsFactory.create_binary_file(tmpdirname)
-            eeg_els = EEGElectrodeLocalizationSystem.objects.create(name=fake.word(), description=fake.text())
+            eeg_els = EEGElectrodeLocalizationSystem.objects.create(
+                name=fake.word(), description=fake.text()
+            )
             with File(open(bin_file.name, "rb")) as f:
                 eeg_els.map_image_file.save("file.bin", f)
             eeg_els.save()
@@ -498,7 +536,9 @@ class ObjectsFactory(object):
         )
 
     @staticmethod
-    def create_eeg_electrode_position_setting(eeg_electrode_layout_setting, eeg_electrode_position, electrode_model):
+    def create_eeg_electrode_position_setting(
+        eeg_electrode_layout_setting, eeg_electrode_position, electrode_model
+    ):
         fake = Factory.create()
         return EEGElectrodePositionSetting.objects.create(
             eeg_electrode_layout_setting=eeg_electrode_layout_setting,
@@ -509,7 +549,9 @@ class ObjectsFactory(object):
         )
 
     @staticmethod
-    def create_eeg_electrode_position_collection_status(eeg_data, eeg_electrode_position_setting):
+    def create_eeg_electrode_position_collection_status(
+        eeg_data, eeg_electrode_position_setting
+    ):
         fake = Factory.create()
         return EEGElectrodePositionCollectionStatus.objects.create(
             eeg_data=eeg_data,
@@ -520,13 +562,17 @@ class ObjectsFactory(object):
 
     @staticmethod
     def create_software(manufacturer):
-        software = Software.objects.create(manufacturer=manufacturer, name="Software name")
+        software = Software.objects.create(
+            manufacturer=manufacturer, name="Software name"
+        )
         software.save()
         return software
 
     @staticmethod
     def create_software_version(software):
-        software_version = SoftwareVersion.objects.create(software=software, name="Software Version name")
+        software_version = SoftwareVersion.objects.create(
+            software=software, name="Software Version name"
+        )
         software_version.save()
         return software_version
 
@@ -545,7 +591,9 @@ class ObjectsFactory(object):
 
     @staticmethod
     def system_authentication(instance):
-        user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         user.is_staff = True
         user.is_superuser = True
         user.save()
@@ -580,7 +628,9 @@ class ObjectsFactory(object):
 
     @staticmethod
     def create_coil_model(coil_shape):
-        coil_model = CoilModel.objects.create(name="Electrode Model name", coil_shape=coil_shape)
+        coil_model = CoilModel.objects.create(
+            name="Electrode Model name", coil_shape=coil_shape
+        )
         coil_model.save()
         return coil_model
 
@@ -594,7 +644,9 @@ class ObjectsFactory(object):
     def create_component_configuration(parent, component):
         fake = Factory.create()
 
-        return ComponentConfiguration.objects.create(name=fake.word(), parent=parent, component=component)
+        return ComponentConfiguration.objects.create(
+            name=fake.word(), parent=parent, component=component
+        )
 
     @staticmethod
     def create_data_configuration_tree(component_config, parent=None):
@@ -626,11 +678,15 @@ class ObjectsFactory(object):
         while True:  # nes_code is unique
             # Change this for changes in real FileFormat objects
             # Mading this way because this data is loaded on NES instalation
-            nes_code = random.choice(["txt", "MNE-RawFromBrainVision", "other", "MNE-NEO-RawBinarySignalIO"])
+            nes_code = random.choice(
+                ["txt", "MNE-RawFromBrainVision", "other", "MNE-NEO-RawBinarySignalIO"]
+            )
             if not FileFormat.objects.filter(nes_code=nes_code).first():
                 break
 
-        return FileFormat.objects.create(nes_code=nes_code, name=fake.file_extension(), description=fake.text())
+        return FileFormat.objects.create(
+            nes_code=nes_code, name=fake.file_extension(), description=fake.text()
+        )
 
     @staticmethod
     def create_generic_data_collection_data(data_conf_tree, subj_of_group):
@@ -671,7 +727,9 @@ class ObjectsFactory(object):
         with tempfile.TemporaryDirectory() as tmpdirname:
             bin_file = ObjectsFactory.create_binary_file(tmpdirname)
 
-            gdcf = GenericDataCollectionFile.objects.create(generic_data_collection_data=gdc_data)
+            gdcf = GenericDataCollectionFile.objects.create(
+                generic_data_collection_data=gdc_data
+            )
             with File(open(bin_file.name, "rb")) as f:
                 gdcf.file.save("file.bin", f)
             gdcf.save()
@@ -721,7 +779,9 @@ class ObjectsFactory(object):
     @staticmethod
     def create_tms_data_collection_data(data_conf_tree, subj_of_group, tms_set):
         fake = Factory.create()
-        doic = DirectionOfTheInducedCurrent.objects.create(name="Direction of Induced Current")
+        doic = DirectionOfTheInducedCurrent.objects.create(
+            name="Direction of Induced Current"
+        )
         coilor = CoilOrientation.objects.create(name="Coil Orientation")
 
         return TMSData.objects.create(
@@ -736,12 +796,16 @@ class ObjectsFactory(object):
     @staticmethod
     def create_tms_localization_system_file():
         brainareasystem = BrainAreaSystem.objects.create(name="Lobo frontal")
-        brainarea = BrainArea.objects.create(name="Lobo frontal", brain_area_system=brainareasystem)
+        brainarea = BrainArea.objects.create(
+            name="Lobo frontal", brain_area_system=brainareasystem
+        )
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             bin_file = ObjectsFactory.create_binary_file(tmpdirname)
 
-            tmslsf = TMSLocalizationSystem.objects.create(name="TMS name", brain_area=brainarea)
+            tmslsf = TMSLocalizationSystem.objects.create(
+                name="TMS name", brain_area=brainarea
+            )
             with File(open(bin_file.name, "rb")) as f:
                 tmslsf.tms_localization_system_image.save("file.bin", f)
             tmslsf.save()
@@ -801,7 +865,9 @@ class ObjectsFactory(object):
     def create_additional_data_file(ad_data) -> AdditionalDataFile:
         with tempfile.TemporaryDirectory() as tmpdirname:
             bin_file: BufferedWriter = ObjectsFactory.create_binary_file(tmpdirname)
-            adf: AdditionalDataFile = AdditionalDataFile.objects.create(additional_data=ad_data)
+            adf: AdditionalDataFile = AdditionalDataFile.objects.create(
+                additional_data=ad_data
+            )
             with File(open(bin_file.name, "rb")) as f:
                 adf.file.save("file.bin", f)
             adf.save()
@@ -815,7 +881,9 @@ class ObjectsFactory(object):
 
     @staticmethod
     def create_stimulus_step(stimulus_type, mediafile):
-        return Stimulus.objects.create(stimulus_type=stimulus_type, media_file=mediafile)
+        return Stimulus.objects.create(
+            stimulus_type=stimulus_type, media_file=mediafile
+        )
 
     @staticmethod
     def create_hotspot_data_collection_file(hotspot):
@@ -836,7 +904,9 @@ class ObjectsFactory(object):
         component2 = ObjectsFactory.create_component(experiment, Component.PAUSE)
         ObjectsFactory.create_component_configuration(rootcomponent, component2)
         survey = create_survey(123458)
-        component3 = ObjectsFactory.create_component(experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey})
+        component3 = ObjectsFactory.create_component(
+            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+        )
         ObjectsFactory.create_component_configuration(rootcomponent, component3)
         stimulus_type = ObjectsFactory.create_stimulus_type()
         component4 = ObjectsFactory.create_component(
@@ -845,19 +915,29 @@ class ObjectsFactory(object):
         ObjectsFactory.create_component_configuration(rootcomponent, component4)
         component5 = ObjectsFactory.create_component(experiment, Component.TASK)
         ObjectsFactory.create_component_configuration(rootcomponent, component5)
-        component6 = ObjectsFactory.create_component(experiment, Component.TASK_EXPERIMENT)
+        component6 = ObjectsFactory.create_component(
+            experiment, Component.TASK_EXPERIMENT
+        )
         ObjectsFactory.create_component_configuration(rootcomponent, component6)
         eeg_setting = ObjectsFactory.create_eeg_setting(experiment)
-        component9 = ObjectsFactory.create_component(experiment, Component.EEG, kwargs={"eeg_set": eeg_setting})
+        component9 = ObjectsFactory.create_component(
+            experiment, Component.EEG, kwargs={"eeg_set": eeg_setting}
+        )
         ObjectsFactory.create_component_configuration(rootcomponent, component9)
         manufacturer = ObjectsFactory.create_manufacturer()
         software = ObjectsFactory.create_software(manufacturer)
         acquisition_software = ObjectsFactory.create_software_version(software)
-        emg_setting = ObjectsFactory.create_emg_setting(experiment, acquisition_software)
-        component10 = ObjectsFactory.create_component(experiment, Component.EMG, kwargs={"emg_set": emg_setting})
+        emg_setting = ObjectsFactory.create_emg_setting(
+            experiment, acquisition_software
+        )
+        component10 = ObjectsFactory.create_component(
+            experiment, Component.EMG, kwargs={"emg_set": emg_setting}
+        )
         ObjectsFactory.create_component_configuration(rootcomponent, component10)
         tms_setting = ObjectsFactory.create_tms_setting(experiment)
-        component11 = ObjectsFactory.create_component(experiment, Component.TMS, kwargs={"tms_set": tms_setting})
+        component11 = ObjectsFactory.create_component(
+            experiment, Component.TMS, kwargs={"tms_set": tms_setting}
+        )
         ObjectsFactory.create_component_configuration(rootcomponent, component11)
         context_tree = ObjectsFactory.create_context_tree(experiment)
         component12 = ObjectsFactory.create_component(
@@ -897,8 +977,12 @@ class ObjectsFactory(object):
             description=fake.text(),
             abbreviated_description=fake.word(),
         )
-        medical_record = MedicalRecordData.objects.create(patient=patient, record_responsible=user)
-        diagnosis = Diagnosis.objects.create(medical_record_data=medical_record, classification_of_diseases=cid10)
+        medical_record = MedicalRecordData.objects.create(
+            patient=patient, record_responsible=user
+        )
+        diagnosis = Diagnosis.objects.create(
+            medical_record_data=medical_record, classification_of_diseases=cid10
+        )
         complementary_exam = ComplementaryExam.objects.create(
             diagnosis=diagnosis, date=datetime.date.today(), description=fake.text()
         )

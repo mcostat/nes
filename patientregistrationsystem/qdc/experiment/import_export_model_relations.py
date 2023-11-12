@@ -73,7 +73,9 @@ FOREIGN_RELATIONS = {
         ["experiment.eegelectrodelayoutsetting", "eeg_electrode_layout_setting"],
         ["experiment.eegelectrodeposition", "eeg_electrode_position"],
     ],
-    "experiment.eegelectrodelayoutsetting": [("experiment.eegelectrodenetsystem", "eeg_electrode_net_system")],
+    "experiment.eegelectrodelayoutsetting": [
+        ("experiment.eegelectrodenetsystem", "eeg_electrode_net_system")
+    ],
     "experiment.eegelectrodeposition": [
         (
             "experiment.eegelectrodelocalizationsystem",
@@ -87,7 +89,9 @@ FOREIGN_RELATIONS = {
         ),
         ("experiment.eegelectrodenet", "eeg_electrode_net"),
     ],
-    "experiment.eegelectrodenet": [("experiment.electrodemodel", "electrode_model_default")],
+    "experiment.eegelectrodenet": [
+        ("experiment.electrodemodel", "electrode_model_default")
+    ],
     "experiment.eegcapsize": [("experiment.eegelectrodecap", "eeg_electrode_cap")],
     "experiment.eegfiltersetting": [("experiment.filtertype", "eeg_filter_type")],
     "experiment.eegamplifiersetting": [("experiment.amplifier", "eeg_amplifier")],
@@ -155,12 +159,16 @@ FOREIGN_RELATIONS = {
     ],
     "experiment.directionoftheinducedcurrent": [("", "")],
     "experiment.coilorientation": [("", "")],
-    "experiment.hotspot": [("experiment.tmslocalizationsystem", "tms_localization_system")],
+    "experiment.hotspot": [
+        ("experiment.tmslocalizationsystem", "tms_localization_system")
+    ],
     "experiment.tmslocalizationsystem": [("experiment.brainarea", "brain_area")],
     "experiment.brainarea": [("experiment.brainareasystem", "brain_area_system")],
     "experiment.brainareasystem": [("", "")],
     "experiment.additionaldatafile": [("experiment.additionaldata", "additional_data")],
-    "experiment.fileformat": [("", "")],  # TODO (NES-965): see why this is not in MODEL_ROOT_NODES
+    "experiment.fileformat": [
+        ("", "")
+    ],  # TODO (NES-965): see why this is not in MODEL_ROOT_NODES
     "experiment.additionaldata": [
         ("experiment.subjectofgroup", "subject_of_group"),
         ("experiment.dataconfigurationtree", "data_configuration_tree"),
@@ -171,13 +179,17 @@ FOREIGN_RELATIONS = {
         ("experiment.subjectofgroup", "subject_of_group"),
         ("experiment.fileformat", "file_format"),
     ],
-    "experiment.digitalgamephasefile": [("experiment.digitalgamephasedata", "digital_game_phase_data")],
+    "experiment.digitalgamephasefile": [
+        ("experiment.digitalgamephasedata", "digital_game_phase_data")
+    ],
     "experiment.genericdatacollectiondata": [
         ("experiment.dataconfigurationtree", "data_configuration_tree"),
         ("experiment.subjectofgroup", "subject_of_group"),
         ("experiment.fileformat", "file_format"),
     ],
-    "experiment.genericdatacollectionfile": [("experiment.genericdatacollectiondata", "generic_data_collection_data")],
+    "experiment.genericdatacollectionfile": [
+        ("experiment.genericdatacollectiondata", "generic_data_collection_data")
+    ],
     "experiment.emgdata": [
         ("experiment.dataconfigurationtree", "data_configuration_tree"),
         ("experiment.subjectofgroup", "subject_of_group"),
@@ -443,7 +455,9 @@ PRE_LOADED_MODELS_FOREIGN_KEYS = {
     ): [
         ("experiment.emgelectrodeplacement", "muscle_subdivision"),
     ],
-    ("experiment.muscleside", ("name",)): [("experiment.emgelectrodeplacementsetting", "muscle_side")],
+    ("experiment.muscleside", ("name",)): [
+        ("experiment.emgelectrodeplacementsetting", "muscle_side")
+    ],
     ("experiment.filtertype", ("name", "description")): [
         ("experiment.emgdigitalfiltersetting", "filter_type"),
         ("experiment.eegfiltersetting", "eeg_filter_type"),
@@ -487,8 +501,12 @@ PRE_LOADED_MODELS_FOREIGN_KEYS = {
         ("experiment.eegelectrodenetsystem", "eeg_electrode_localization_system"),
         ("experiment.eegelectrodeposition", "eeg_electrode_localization_system"),
     ],
-    ("experiment.eegelectrodenet", ""): [("experiment.eegelectrodenetsystem", "eeg_electrode_net")],
-    ("experiment.eegsolution", ("name", "components")): [("experiment.eegsolutionsetting", "eeg_solution")],
+    ("experiment.eegelectrodenet", ""): [
+        ("experiment.eegelectrodenetsystem", "eeg_electrode_net")
+    ],
+    ("experiment.eegsolution", ("name", "components")): [
+        ("experiment.eegsolutionsetting", "eeg_solution")
+    ],
     (
         "experiment.emgsurfaceplacement",
         (

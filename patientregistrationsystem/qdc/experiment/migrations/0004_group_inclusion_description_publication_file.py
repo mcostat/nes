@@ -19,6 +19,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="publication",
             name="file",
-            field=models.FileField(blank=True, null=True, upload_to=experiment.models.get_publication_dir),
+            field=models.FileField(
+                blank=True, null=True, upload_to=experiment.models.get_publication_dir
+            ),
         ),
     ]

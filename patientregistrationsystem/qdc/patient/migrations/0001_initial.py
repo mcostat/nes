@@ -483,7 +483,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "gender",
-                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="patient.gender"),
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="patient.gender"
+                    ),
                 ),
                 (
                     "marital_status",
@@ -1018,7 +1020,9 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[patient.models.validate_date_questionnaire_response],
+                        validators=[
+                            patient.models.validate_date_questionnaire_response
+                        ],
                     ),
                 ),
                 ("is_completed", models.CharField(default="", max_length=50)),
@@ -1039,7 +1043,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "survey",
-                    models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="survey.survey"),
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="survey.survey"
+                    ),
                 ),
             ],
             options={
@@ -1080,7 +1086,9 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "permissions": (("export_medicalrecorddata", "Can export medical record"),),
+                "permissions": (
+                    ("export_medicalrecorddata", "Can export medical record"),
+                ),
             },
         ),
         migrations.CreateModel(
@@ -1088,7 +1096,9 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 ("number", models.CharField(max_length=15)),
                 (
@@ -1164,7 +1174,9 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 ("smoker", models.BooleanField(null=True)),
                 ("ex_smoker", models.BooleanField(null=True)),
@@ -1258,7 +1270,9 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 ("natural_of", models.CharField(blank=True, max_length=50, null=True)),
                 (
@@ -1638,7 +1652,9 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
                 ),
                 ("code", models.CharField(db_index=True, max_length=10)),
                 ("name", models.CharField(blank=True, default="", max_length=50)),
@@ -2036,12 +2052,16 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "unique_together": {("medical_record_data", "classification_of_diseases")},
+                "unique_together": {
+                    ("medical_record_data", "classification_of_diseases")
+                },
             },
         ),
         migrations.AddField(
             model_name="complementaryexam",
             name="diagnosis",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="patient.diagnosis"),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="patient.diagnosis"
+            ),
         ),
     ]

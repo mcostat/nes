@@ -108,7 +108,7 @@ services:
       - limesurvey
 
 volumes:
-  nes_data: 
+  nes_data:
   nes_pgdata:
   limesurvey_pgdata:
   limesurvey_data:

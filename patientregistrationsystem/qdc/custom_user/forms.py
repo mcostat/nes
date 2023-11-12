@@ -84,7 +84,9 @@ class UserForm(ModelForm):
                     "placeholder": _("Type password"),
                     "data-minlength": "8",
                     "data-maxlength": "128",
-                    "data-error": _("Password must contain at least a number and a lowercase letter (8-127)"),
+                    "data-error": _(
+                        "Password must contain at least a number and a lowercase letter (8-127)"
+                    ),
                     "pattern": PASSWORD_REGEX,
                     "onkeyup": "passwordForce(); if(beginCheckPassword1)checkPassExt();",
                 }
@@ -97,7 +99,12 @@ class UserForm(ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        if email and User.objects.filter(email=email, is_active=True).exclude(id=self.instance.id).count():
+        if (
+            email
+            and User.objects.filter(email=email, is_active=True)
+            .exclude(id=self.instance.id)
+            .count()
+        ):
             raise ValidationError(_("E-mail already registered"))
         return email
 
@@ -120,7 +127,9 @@ class UserFormUpdate(UserForm):
                 "placeholder": _("Type password"),
                 "data-minlength": "8",
                 "data-maxlength": "128",
-                "data-error": _("Password must contain at least a number and a lowercase letter (8-127)"),
+                "data-error": _(
+                    "Password must contain at least a number and a lowercase letter (8-127)"
+                ),
                 "pattern": PASSWORD_REGEX,
                 "onkeyup": "passwordForce(); if(beginCheckPassword1)checkPassExt();",
             }
@@ -160,7 +169,9 @@ class UserProfileForm(ModelForm):
         widgets = {
             "institution": Select(attrs={"class": "form-select"}),
             "login_enabled": RadioSelect(attrs={"class": "form-check-input"}),
-            "citation_name": TextInput(attrs={"class": "form-control", "placeholder": _("Type citation name")}),
+            "citation_name": TextInput(
+                attrs={"class": "form-control", "placeholder": _("Type citation name")}
+            ),
         }
 
 
@@ -206,7 +217,9 @@ class ResearcherForm(ModelForm):
                     "data-error": _("Invalid e-mail"),
                 }
             ),
-            "citation_name": TextInput(attrs={"class": "form-control", "placeholder": _("Type citation name")}),
+            "citation_name": TextInput(
+                attrs={"class": "form-control", "placeholder": _("Type citation name")}
+            ),
         }
 
     def clean_first_name(self) -> str:

@@ -76,7 +76,9 @@ urlpatterns = [
         views.experiment_create,
         name="experiment_new",
     ),
-    re_path(r"^(?P<experiment_id>\d+)/$", views.experiment_view, name="experiment_view"),
+    re_path(
+        r"^(?P<experiment_id>\d+)/$", views.experiment_view, name="experiment_view"
+    ),
     re_path(
         r"^edit/(?P<experiment_id>\d+)/$",
         views.experiment_update,
@@ -113,7 +115,9 @@ urlpatterns = [
         name="schedule_of_sending_list",
     ),
     # group
-    re_path(r"^(?P<experiment_id>\d+)/group/new/$", views.group_create, name="group_new"),
+    re_path(
+        r"^(?P<experiment_id>\d+)/group/new/$", views.group_create, name="group_new"
+    ),
     re_path(r"^group/(?P<group_id>\d+)/$", views.group_view, name="group_view"),
     re_path(r"^group/edit/(?P<group_id>\d+)/$", views.group_update, name="group_edit"),
     # equipment
@@ -175,8 +179,12 @@ urlpatterns = [
         name="filtertype_edit",
     ),
     # register electrode model
-    re_path(r"^electrodemodel/list/$", views.electrodemodel_list, name="electrodemodel_list"),
-    re_path(r"^electrodemodel/new/$", views.electrodemodel_create, name="electrodemodel_new"),
+    re_path(
+        r"^electrodemodel/list/$", views.electrodemodel_list, name="electrodemodel_list"
+    ),
+    re_path(
+        r"^electrodemodel/new/$", views.electrodemodel_create, name="electrodemodel_new"
+    ),
     re_path(
         r"^electrodemodel/(?P<electrodemodel_id>\d+)/$",
         views.electrodemodel_view,
@@ -190,7 +198,9 @@ urlpatterns = [
     # register material
     re_path(r"^material/list/$", views.material_list, name="material_list"),
     re_path(r"^material/new/$", views.material_create, name="material_new"),
-    re_path(r"^material/(?P<material_id>\d+)/$", views.material_view, name="material_view"),
+    re_path(
+        r"^material/(?P<material_id>\d+)/$", views.material_view, name="material_view"
+    ),
     re_path(
         r"^material/edit/(?P<material_id>\d+)/$",
         views.material_update,
@@ -286,7 +296,9 @@ urlpatterns = [
     re_path(r"^muscle/list/$", views.muscle_list, name="muscle_list"),
     re_path(r"^muscle/new/$", views.muscle_create, name="muscle_new"),
     re_path(r"^muscle/(?P<muscle_id>\d+)/$", views.muscle_view, name="muscle_view"),
-    re_path(r"^muscle/edit/(?P<muscle_id>\d+)/$", views.muscle_update, name="muscle_edit"),
+    re_path(
+        r"^muscle/edit/(?P<muscle_id>\d+)/$", views.muscle_update, name="muscle_edit"
+    ),
     re_path(
         r"^muscle/(?P<muscle_id>\d+)/new_muscle_subdivision/$",
         views.muscle_subdivision_create,
@@ -336,7 +348,9 @@ urlpatterns = [
     # register software
     re_path(r"^software/list/$", views.software_list, name="software_list"),
     re_path(r"^software/new/$", views.software_create, name="software_new"),
-    re_path(r"^software/(?P<software_id>\d+)/$", views.software_view, name="software_view"),
+    re_path(
+        r"^software/(?P<software_id>\d+)/$", views.software_view, name="software_view"
+    ),
     re_path(
         r"^software/edit/(?P<software_id>\d+)/$",
         views.software_update,
@@ -545,7 +559,9 @@ urlpatterns = [
         r"^solution/(?P<solution_id>\d+)/attributes/$",
         views.get_json_solution_attributes,
     ),
-    re_path(r"^filter/(?P<filter_id>\d+)/attributes/$", views.get_json_filter_attributes),
+    re_path(
+        r"^filter/(?P<filter_id>\d+)/attributes/$", views.get_json_filter_attributes
+    ),
     re_path(
         r"^equipment/get_localization_system_by_electrode_net/(?P<equipment_id>\d+)/$",
         views.get_localization_system_by_electrode_net,
@@ -825,7 +841,9 @@ urlpatterns = [
         views.subject_emg_data_create,
         name="subject_emg_data_create",
     ),
-    re_path(r"^emg_data/(?P<emg_data_id>\d+)/$", views.emg_data_view, name="emg_data_view"),
+    re_path(
+        r"^emg_data/(?P<emg_data_id>\d+)/$", views.emg_data_view, name="emg_data_view"
+    ),
     re_path(
         r"^emg_data/edit/(?P<emg_data_id>\d+)/$",
         views.emg_data_edit,
@@ -842,7 +860,9 @@ urlpatterns = [
         views.subject_tms_data_create,
         name="subject_tms_data_create",
     ),
-    re_path(r"^tms_data/(?P<tms_data_id>\d+)/$", views.tms_data_view, name="tms_data_view"),
+    re_path(
+        r"^tms_data/(?P<tms_data_id>\d+)/$", views.tms_data_view, name="tms_data_view"
+    ),
     re_path(
         r"^tms_data/edit/(?P<tms_data_id>\d+)/(?P<tab>\d+)/$",
         views.tms_data_edit,
@@ -860,7 +880,8 @@ urlpatterns = [
     ),
     # data collection
     re_path(
-        r"^group/(?P<group_id>\d+)/data_collection_manage/" r"(?P<path_of_configuration>[0-9-]+)/(?P<data_type>\w+)/$",
+        r"^group/(?P<group_id>\d+)/data_collection_manage/"
+        r"(?P<path_of_configuration>[0-9-]+)/(?P<data_type>\w+)/$",
         views.data_collection_manage,
         name="data_collection_manage",
     ),

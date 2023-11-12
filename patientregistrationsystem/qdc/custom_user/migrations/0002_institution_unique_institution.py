@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name="institution",
-            constraint=models.UniqueConstraint(fields=("name", "acronym", "country"), name="unique_institution"),
+            constraint=models.UniqueConstraint(
+                fields=("name", "acronym", "country"), name="unique_institution"
+            ),
         ),
     ]

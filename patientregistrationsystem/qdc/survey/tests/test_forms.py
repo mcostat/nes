@@ -13,7 +13,9 @@ USER_PWD = "mypassword"
 # Briefly, this class tests the first form of the tab 0 of app Patient
 class SurveyFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = User.objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()

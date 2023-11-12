@@ -1,4 +1,4 @@
-FROM python:3.11-slim-bookworm as wheeler
+FROM python:3.11-slim-bookworm AS wheeler
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -30,18 +30,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 
-RUN mkdir -p $NES_DIR  && \
-    if [ $NES_BRANCH != "unset" ]; then \
-    echo Cloning $NES_BRANCH branch ;\
-    git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/mcostat/nes.git $NES_DIR ;\
+RUN mkdir -p "$NES_DIR"  && \
+    if [ "$NES_BRANCH" != "unset" ]; then \
+    echo Cloning "$NES_BRANCH" branch ;\
+    git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/mcostat/nes.git "$NES_DIR" ;\
     else \
     echo Cloning master branch ;\
-    git clone -j $(nproc) https://github.com/mcostat/nes.git $NES_DIR ;\
+    git clone -j $(nproc) https://github.com/mcostat/nes.git "$NES_DIR" ;\
     fi
 
 
 RUN mkdir -p /wheels/requirement && \
-    cp $NES_DIR/patientregistrationsystem/qdc/requirements.txt /wheels/requirement
+    cp "$NES_DIR"/patientregistrationsystem/qdc/requirements.txt /wheels/requirement
 
 WORKDIR /wheels
 

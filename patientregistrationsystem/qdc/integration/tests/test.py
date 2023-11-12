@@ -18,9 +18,15 @@ class LimeSurveyIntegrationTestCase(TestCase):
     def test_acquisitiondate_field_is_not_hidden(self) -> None:
         ls = Questionnaires()
         groups = ls.list_groups(LS_ID)
-        identification_group = next(item for item in groups if item["group_name"] == "Identification")
+        identification_group = next(
+            item for item in groups if item["group_name"] == "Identification"
+        )
         questions = ls.list_questions(LS_ID, identification_group["gid"])
-        acquisitiondate_question = next(item for item in questions if item["title"] == "acquisitiondate")
-        question_properties = ls.get_question_properties(acquisitiondate_question["qid"], "en")
+        acquisitiondate_question = next(
+            item for item in questions if item["title"] == "acquisitiondate"
+        )
+        question_properties = ls.get_question_properties(
+            acquisitiondate_question["qid"], "en"
+        )
 
         self.assertEqual(question_properties["attributes"]["hidden"], "0")
