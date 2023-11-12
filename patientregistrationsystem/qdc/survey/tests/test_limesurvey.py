@@ -32,17 +32,13 @@ class LimeSurveyAPITest(TestCase):
         ), kwargs = mockServer.return_value.get_question_properties.call_args
         self.assertTrue(
             set(question_properties).issubset(properties),
-            str(set(question_properties))
-            + " is not a subset of "
-            + str(set(properties)),
+            str(set(question_properties)) + " is not a subset of " + str(set(properties)),
         )
 
 
 class SurveyUtilsTest(TestCase):
     @patch("survey.abc_search_engine.Server")
-    def test_create_questionnaire_explanation_fields_has_question_order(
-        self, mockServerClass
-    ):
+    def test_create_questionnaire_explanation_fields_has_question_order(self, mockServerClass):
         # There are fields that
         # create_questionnaire_explanation_fields method get filled we must
         # to define before calling it (fake values)
@@ -51,13 +47,9 @@ class SurveyUtilsTest(TestCase):
         fields = ["question"]
         survey_utils.questionnaires_experiment_data[questionnaire_id] = {}
         survey_utils.questionnaires_experiment_data[questionnaire_id]["fields"] = fields
-        survey_utils.questionnaires_experiment_data[questionnaire_id][
-            "header"
-        ] = "dummie_header"
+        survey_utils.questionnaires_experiment_data[questionnaire_id]["header"] = "dummie_header"
         # mock needed LimeSurvey RPC API methods
-        mockServerClass.return_value.get_language_properties.return_value = {
-            "surveyls_title": "Ein wunderbar Titel"
-        }
+        mockServerClass.return_value.get_language_properties.return_value = {"surveyls_title": "Ein wunderbar Titel"}
         mockServerClass.return_value.list_questions.return_value = [{"id": {"qid": 1}}]
         # mock get_question_properties LimeSurvey API method using
         # ABCSearchEngine.QUESTION_PROPERTIES constant list with fake values
@@ -80,9 +72,7 @@ class SurveyUtilsTest(TestCase):
                 ],
             )
         )
-        mockServerClass.return_value.get_question_properties.return_value = (
-            question_properties
-        )
+        mockServerClass.return_value.get_question_properties.return_value = question_properties
         # mock list_groups LimeSurvey API method (fake values)
         language = "en"
         entrance_survey = False

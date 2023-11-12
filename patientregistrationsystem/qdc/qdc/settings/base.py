@@ -38,9 +38,7 @@ DEBUG404 = True
 IS_TESTING = True
 
 
-AXES_COOLOFF_MESSAGE = _(
-    "Your accouunt has been locked for 30 MINUTES: too many login attempts."
-)
+AXES_COOLOFF_MESSAGE = _("Your accouunt has been locked for 30 MINUTES: too many login attempts.")
 AXES_FAILURE_LIMIT = 5
 AXES_RESET_ON_SUCCESS = True
 AXES_COOLOFF_TIME = 0.5
@@ -75,14 +73,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:8080",
     "https://" + os.getenv("NES_IP", "127.0.0.1"),
     "https://" + os.getenv("NES_HOSTNAME", "localhost"),
-    "https://"
-    + os.getenv("LIMESURVEY_HOST", "localhost")
-    + ":"
-    + os.getenv("LIMESURVEY_PORT", "8080"),
-    "http://"
-    + os.getenv("LIMESURVEY_URL_WEB", "localhost")
-    + ":"
-    + os.getenv("LIMESURVEY_PORT", "8080"),
+    "https://" + os.getenv("LIMESURVEY_HOST", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
+    "http://" + os.getenv("LIMESURVEY_URL_WEB", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
 ]
 
 
@@ -334,14 +326,8 @@ DATABASES = {
 
 # LimeSurvey configuration
 LIMESURVEY = {
-    "URL_API": "http://"
-    + os.getenv("LIMESURVEY_HOST", "localhost")
-    + ":"
-    + os.getenv("LIMESURVEY_PORT", "8080"),
-    "URL_WEB": "http://"
-    + os.getenv("LIMESURVEY_URL_WEB", "localhost")
-    + ":"
-    + os.getenv("LIMESURVEY_PORT", "8080"),
+    "URL_API": "http://" + os.getenv("LIMESURVEY_HOST", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
+    "URL_WEB": "http://" + os.getenv("LIMESURVEY_URL_WEB", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
     "USER": os.getenv("LIMESURVEY_ADMIN_USER", "lime_admin"),
     "PASSWORD": os.getenv("LIMESURVEY_ADMIN_PASSWORD", "lime_admin_password"),
 }

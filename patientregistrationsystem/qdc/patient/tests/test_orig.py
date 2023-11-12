@@ -28,14 +28,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from faker import Factory
 
-from experiment.models import (
-    Block,
-    ComponentConfiguration,
-    DataConfigurationTree,
-    Experiment,
-    Group,
-    Questionnaire,
-)
+from experiment.models import Block, ComponentConfiguration, DataConfigurationTree, Experiment, Group, Questionnaire
 from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
 from experiment.models import ResearchProject, Subject, SubjectOfGroup
 from patient.management.commands.import_icd import import_classification_of_diseases
@@ -55,10 +48,7 @@ from patient.models import (
     Schooling,
     Telephone,
 )
-from patient.tests.update_english_data import (
-    translate_fixtures_into_english,
-    update_translated_data,
-)
+from patient.tests.update_english_data import translate_fixtures_into_english, update_translated_data
 from patient.validation import CPF
 from patient.views import (
     diagnosis_create,
@@ -169,25 +159,19 @@ class UtilTests:
 
     @staticmethod
     def create_medical_record(user, patient) -> MedicalRecordData:
-        return MedicalRecordData.objects.create(
-            patient=patient, record_responsible=user
-        )
+        return MedicalRecordData.objects.create(patient=patient, record_responsible=user)
 
     @staticmethod
     def create_diagnosis(medical_record, cid10=None) -> Diagnosis:
         if cid10 is None:
             cid10 = UtilTests.create_cid10()
-        return Diagnosis.objects.create(
-            medical_record_data=medical_record, classification_of_diseases=cid10
-        )
+        return Diagnosis.objects.create(medical_record_data=medical_record, classification_of_diseases=cid10)
 
     # TODO (NES-1032): removes from here. Creates in Survey tests helper (
     #  already exists)
     @staticmethod
     def create_survey(survey_id, is_initial_evaluation) -> Survey:
-        return Survey.objects.create(
-            lime_survey_id=survey_id, is_initial_evaluation=is_initial_evaluation
-        )
+        return Survey.objects.create(lime_survey_id=survey_id, is_initial_evaluation=is_initial_evaluation)
 
     @staticmethod
     def create_token_id(survey):
@@ -327,9 +311,7 @@ class PatientFormValidation(TestCase):
     def setUp(self):
         """Set up authentication and variables to start each test"""
 
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -362,9 +344,7 @@ class PatientFormValidation(TestCase):
 
         response = self.client.post(reverse(PATIENT_NEW), self.data)
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(
-            response, "patient_form", "cpf", "CPF " + cpf + _(" is not valid")
-        )
+        self.assertFormError(response, "patient_form", "cpf", "CPF " + cpf + _(" is not valid"))
 
     def test_patient_empty_cpf(self):
         """
@@ -463,9 +443,7 @@ class PatientFormValidation(TestCase):
 
         self.client.post(reverse(PATIENT_NEW), data, follow=True)
         self.assertEqual(
-            Patient.objects.filter(
-                date_birth="1995-02-01", gender=self.data["gender"], name="", cpf=None
-            ).count(),
+            Patient.objects.filter(date_birth="1995-02-01", gender=self.data["gender"], name="", cpf=None).count(),
             1,
         )
 
@@ -511,20 +489,14 @@ class PatientFormValidation(TestCase):
         self.data["currentTab"] = 1
         assert isinstance(patient_to_update, Patient)
         # Success case
-        response = self.client.post(
-            reverse(PATIENT_EDIT, args=(patient_to_update.pk,)), self.data, follow=True
-        )
+        response = self.client.post(reverse(PATIENT_EDIT, args=(patient_to_update.pk,)), self.data, follow=True)
         self.assertEqual(Patient.objects.filter(name=self.data["name"]).count(), 1)
-        self.assertContains(
-            response, _("Social demographic data successfully written.")
-        )
+        self.assertContains(response, _("Social demographic data successfully written."))
         self.assertNotContains(response, _("Social class was not calculated"))
 
         # Error case
         self.data.pop("wash_machine")
-        response = self.client.post(
-            reverse(PATIENT_EDIT, args=(patient_to_update.pk,)), self.data, follow=True
-        )
+        response = self.client.post(reverse(PATIENT_EDIT, args=(patient_to_update.pk,)), self.data, follow=True)
         self.assertContains(response, _("Social class was not calculated"))
 
     def fill_social_history_data(self):
@@ -712,9 +684,7 @@ class PatientFormValidation(TestCase):
         Teste de visualizacao de participante apos cadastro na base de dados
         """
 
-        self.user.user_permissions.add(
-            Permission.objects.get(codename="sensitive_data_patient")
-        )
+        self.user.user_permissions.add(Permission.objects.get(codename="sensitive_data_patient"))
 
         patient = self.util.create_patient(changed_by=self.user)
         patient.cpf = "374.276.738-08"  # to test search for cpf
@@ -884,9 +854,7 @@ class PatientFormValidation(TestCase):
 
         response = restore_patient(request, patient_id=patient.pk)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(
-            Patient.objects.filter(name=patient.name).exclude(removed=True).count(), 1
-        )
+        self.assertEqual(Patient.objects.filter(name=patient.name).exclude(removed=True).count(), 1)
 
         self.data["search_text"] = 374
         response = self.client.post(reverse(PATIENT_SEARCH), self.data)
@@ -917,9 +885,7 @@ class PatientFormValidation(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym"].count(), 1)
 
-        response = self.client.post(
-            reverse("patients_verify_homonym_excluded"), self.data
-        )
+        response = self.client.post(reverse("patients_verify_homonym_excluded"), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym_excluded"].count(), 0)
 
@@ -928,9 +894,7 @@ class PatientFormValidation(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym"].count(), 1)
 
-        response = self.client.post(
-            reverse("patients_verify_homonym_excluded"), self.data
-        )
+        response = self.client.post(reverse("patients_verify_homonym_excluded"), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym_excluded"].count(), 0)
 
@@ -955,9 +919,7 @@ class PatientFormValidation(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym"].count(), 0)
 
-        response = self.client.post(
-            reverse("patients_verify_homonym_excluded"), self.data
-        )
+        response = self.client.post(reverse("patients_verify_homonym_excluded"), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym_excluded"].count(), 1)
 
@@ -967,9 +929,7 @@ class PatientFormValidation(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym"].count(), 0)
 
-        response = self.client.post(
-            reverse("patients_verify_homonym_excluded"), self.data
-        )
+        response = self.client.post(reverse("patients_verify_homonym_excluded"), self.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_homonym_excluded"].count(), 1)
 
@@ -980,9 +940,7 @@ class MedicalRecordFormValidation(TestCase):
     util = UtilTests()
 
     def setUp(self) -> None:
-        self.user: User = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user: User = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -1083,9 +1041,7 @@ class MedicalRecordFormValidation(TestCase):
             )
         )
         request.user = self.user
-        response = medical_record_create_diagnosis_create(
-            request, patient_id=patient.pk, cid10_id=cid10.pk
-        )
+        response = medical_record_create_diagnosis_create(request, patient_id=patient.pk, cid10_id=cid10.pk)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(
             Diagnosis.objects.filter(
@@ -1097,9 +1053,7 @@ class MedicalRecordFormValidation(TestCase):
         )
 
         # Test a Medical Record View method
-        medical_record_data = MedicalRecordData.objects.filter(
-            patient_id=Patient.objects.get(pk=patient.pk)
-        ).first()
+        medical_record_data = MedicalRecordData.objects.filter(patient_id=Patient.objects.get(pk=patient.pk)).first()
 
         url = reverse(
             "medical_record_view",
@@ -1136,9 +1090,7 @@ class MedicalRecordFormValidation(TestCase):
         self.util.create_cid10()
         self.util.create_medical_record(self.user, patient)
 
-        response = self.client.get(
-            reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=3"
-        )
+        response = self.client.get(reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=3")
         self.assertEqual(response.status_code, 200)
         # self.assertEqual(medical_record.pk, response.context['medical_record'])
 
@@ -1146,9 +1098,7 @@ class MedicalRecordFormValidation(TestCase):
         patient = self.util.create_patient(changed_by=self.user)
         self.util.create_medical_record(self.user, patient)
 
-        response = self.client.get(
-            reverse(PATIENT_EDIT, args=[patient.pk]) + "?currentTab=3"
-        )
+        response = self.client.get(reverse(PATIENT_EDIT, args=[patient.pk]) + "?currentTab=3")
         self.assertEqual(response.status_code, 200)
 
         self.data["action"] = "save"
@@ -1175,9 +1125,7 @@ class MedicalRecordFormValidation(TestCase):
         request = self.factory.get(url + "?status=edit")
         request.user = self.user
 
-        response = medical_record_update(
-            request, patient_id=patient.pk, record_id=medical_record.pk
-        )
+        response = medical_record_update(request, patient_id=patient.pk, record_id=medical_record.pk)
         self.assertEqual(response.status_code, 200)
 
         # It makes tests with a invalid ID for method medical record edit
@@ -1191,9 +1139,7 @@ class MedicalRecordFormValidation(TestCase):
             )
             request = self.factory.get(url + "?status=edit")
             request.user = self.user
-            response = medical_record_update(
-                request, patient_id=patient.pk, record_id=9999
-            )
+            response = medical_record_update(request, patient_id=patient.pk, record_id=9999)
             self.assertEqual(response.status_code, 200)
         except Http404:
             pass
@@ -1227,27 +1173,21 @@ class MedicalRecordFormValidation(TestCase):
 
         count_diagnosis = Diagnosis.objects.all().count()
         self.data["action"] = "detail-" + str(diagnosis_id)
-        self.data[
-            "description-" + str(diagnosis_id)
-        ] = diagnosis.classification_of_diseases.description
+        self.data["description-" + str(diagnosis_id)] = diagnosis.classification_of_diseases.description
         self.data["date-" + str(diagnosis_id)] = "21/02/2015"
         url = reverse("medical_record_edit", args=(patient.pk, medical_record.pk))
         response = self.client.post(url + "?status=edit", self.data)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Diagnosis.objects.all().count(), count_diagnosis)
-        self.assertEqual(
-            Diagnosis.objects.filter(pk=diagnosis_id, date="2015-02-21").count(), 1
-        )
+        self.assertEqual(Diagnosis.objects.filter(pk=diagnosis_id, date="2015-02-21").count(), 1)
 
         # incorrect date
         self.data["date-" + str(diagnosis_id)] = "99/02/2015"
         url = reverse("medical_record_edit", args=(patient.pk, medical_record.pk))
         response = self.client.post(url + "?status=edit", self.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            Diagnosis.objects.filter(pk=diagnosis_id, date="2015-02-21").count(), 1
-        )
+        self.assertEqual(Diagnosis.objects.filter(pk=diagnosis_id, date="2015-02-21").count(), 1)
 
         # no date
         self.data["date-" + str(diagnosis_id)] = ""
@@ -1406,9 +1346,7 @@ class MedicalRecordFormValidation(TestCase):
         # Tests delete file from exam
         exams_file = ExamFile.objects.all()
         for exam_file in exams_file:
-            response = self.client.post(
-                reverse("exam_file_delete", args=(exam_file.id,)), self.data
-            )
+            response = self.client.post(reverse("exam_file_delete", args=(exam_file.id,)), self.data)
             self.assertEqual(response.status_code, 302)
 
     def test_exam_file_upload(self):
@@ -1438,17 +1376,13 @@ class MedicalRecordFormValidation(TestCase):
                 self.data,
             )
             request.user = self.user
-            response = exam_view(
-                request, patient.pk, medical_record.pk, complementary_exam.pk
-            )
+            response = exam_view(request, patient.pk, medical_record.pk, complementary_exam.pk)
             self.assertEqual(response.status_code, 200)
 
             # Tests delete file from exam
             exam_file = ExamFile.objects.all().first()
 
-            response = self.client.post(
-                reverse("exam_file_delete", args=(exam_file.id,)), self.data
-            )
+            response = self.client.post(reverse("exam_file_delete", args=(exam_file.id,)), self.data)
             self.assertEqual(response.status_code, 302)
 
             # It will delete first exam created
@@ -1533,9 +1467,7 @@ class QuestionnaireFormValidation(TestCase):
     util = UtilTests()
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -1547,9 +1479,7 @@ class QuestionnaireFormValidation(TestCase):
 
     @staticmethod
     def _set_mocks(mockServer):
-        mockServer.return_value.get_session_key.return_value = (
-            "gvq89d8y3nn8m9um5makg6qiixkqwai9"
-        )
+        mockServer.return_value.get_session_key.return_value = "gvq89d8y3nn8m9um5makg6qiixkqwai9"
         mockServer.return_value.add_participants.return_value = [
             {
                 "completed": "N",
@@ -1579,9 +1509,7 @@ class QuestionnaireFormValidation(TestCase):
             "language": "pt-BR",
             "additional_languages": "",
         }
-        mockServer.return_value.get_language_properties.return_value = {
-            "surveyls_title": "Rapid Turn Test"
-        }
+        mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Rapid Turn Test"}
         mockServer.return_value.list_groups.return_value = [
             {
                 "description": "<p>O Rapid Turn Test é uma medida de equilíbrio dinâmico em que a pessoa deve "
@@ -1911,12 +1839,8 @@ class QuestionnaireFormValidation(TestCase):
         """Test list of entrance evaluation of the entrance
         evaluation questionnaire type
         """
-        mockServer.return_value.get_session_key.return_value = (
-            "gvq89d8y3nn8m9um5makg6qiixkqwai9"
-        )
-        mockServer.return_value.get_language_properties.return_value = {
-            "surveyls_title": "Rapid Turn Test"
-        }
+        mockServer.return_value.get_session_key.return_value = "gvq89d8y3nn8m9um5makg6qiixkqwai9"
+        mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Rapid Turn Test"}
         mockServer.return_value.add_participants.return_value = [
             {
                 "completed": "N",
@@ -1945,19 +1869,13 @@ class QuestionnaireFormValidation(TestCase):
 
         patient = self.util.create_patient(self.user)
 
-        response = self.client.get(
-            reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4"
-        )
+        response = self.client.get(reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["patient_questionnaires_data_list"], [])
 
         # LimeSurvey system not available
-        settings.LIMESURVEY[
-            "URL_API"
-        ] = "https://surveys.numec.prp.usp.br/"  # with error
-        request = self.factory.get(
-            reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4"
-        )
+        settings.LIMESURVEY["URL_API"] = "https://surveys.numec.prp.usp.br/"  # with error
+        request = self.factory.get(reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4")
         request.user = self.user
         request.LANGUAGE_CODE = "pt-BR"
 
@@ -1975,9 +1893,7 @@ class QuestionnaireFormValidation(TestCase):
         # new filling - creating one survey - no responses
         survey = self.util.create_survey(CLEAN_QUESTIONNAIRE, True)
 
-        response = self.client.get(
-            reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4"
-        )
+        response = self.client.get(reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["patient_questionnaires_data_list"]), 1)
         self.assertEqual(
@@ -1989,26 +1905,18 @@ class QuestionnaireFormValidation(TestCase):
             survey.lime_survey_id,
         )
         self.assertEqual(
-            len(
-                response.context["patient_questionnaires_data_list"][0][
-                    "questionnaire_responses"
-                ]
-            ),
+            len(response.context["patient_questionnaires_data_list"][0]["questionnaire_responses"]),
             0,
         )
 
         self.util.create_response_survey(self.user, patient, survey, is_completed="N")
-        response = self.client.get(
-            reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4"
-        )
+        response = self.client.get(reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4")
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(len(response.context["patient_questionnaires_data_list"]), 1)
         entrance_evaluation = response.context["patient_questionnaires_data_list"][0]
         self.assertEqual(len(entrance_evaluation["questionnaire_responses"]), 1)
-        response_survey = entrance_evaluation["questionnaire_responses"][0][
-            "questionnaire_response"
-        ]
+        response_survey = entrance_evaluation["questionnaire_responses"][0]["questionnaire_response"]
         self.assertEqual(response_survey.token_id, int(response_survey.token_id))
 
         completed = entrance_evaluation["questionnaire_responses"][0]["completed"]
@@ -2020,9 +1928,7 @@ class QuestionnaireFormValidation(TestCase):
         """Test if LimeSurvey is available under circumstances"""
         patient = self.util.create_patient(self.user)
 
-        request = self.factory.get(
-            reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4"
-        )
+        request = self.factory.get(reverse(PATIENT_VIEW, args=[patient.pk]) + "?currentTab=4")
         request.user = self.user
 
         # test limesurvey available
@@ -2033,9 +1939,7 @@ class QuestionnaireFormValidation(TestCase):
         surveys.release_session_key()
 
         # Test limesurvey not available
-        settings.LIMESURVEY[
-            "URL_API"
-        ] = "https://surveys.numec.prp.usp.br/"  # with error
+        settings.LIMESURVEY["URL_API"] = "https://surveys.numec.prp.usp.br/"  # with error
 
         surveys = Questionnaires()
 
@@ -2044,9 +1948,7 @@ class QuestionnaireFormValidation(TestCase):
 
         surveys.release_session_key()
 
-        settings.LIMESURVEY[
-            "URL_API"
-        ] = "https://survey.numec.prp.usp.br/"  # without error
+        settings.LIMESURVEY["URL_API"] = "https://survey.numec.prp.usp.br/"  # without error
 
     @patch("survey.abc_search_engine.Server")
     def test_entrance_evaluation_response_create(self, mockServer) -> None:
@@ -2091,13 +1993,9 @@ class QuestionnaireFormValidation(TestCase):
 
         patient = self.util.create_patient(self.user)
         survey = self.util.create_survey(CLEAN_QUESTIONNAIRE, True)
-        response_survey = self.util.create_response_survey(
-            self.user, patient, survey, 21
-        )
+        response_survey = self.util.create_response_survey(self.user, patient, survey, 21)
 
-        url1 = reverse(
-            QUESTIONNAIRE_EDIT, args=[response_survey.pk], current_app="patient"
-        )
+        url1 = reverse(QUESTIONNAIRE_EDIT, args=[response_survey.pk], current_app="patient")
         url2 = url1.replace("experiment", "patient")
         response = self.client.get(url2 + "?origin=subject&status=edit")
         self.assertEqual(response.status_code, 200)
@@ -2107,9 +2005,7 @@ class QuestionnaireFormValidation(TestCase):
         )
 
         self.data["action"] = "save"
-        response = self.client.post(
-            url2 + "?origin=subject&status=edit", self.data, follow=True
-        )
+        response = self.client.post(url2 + "?origin=subject&status=edit", self.data, follow=True)
         self.assertEqual(response.status_code, 200)
 
     @patch("survey.abc_search_engine.Server")
@@ -2117,9 +2013,7 @@ class QuestionnaireFormValidation(TestCase):
         """Test delete from 2 views: update and view
         of the type: entrance evaluation questionnaire
         """
-        mockServer.return_value.get_session_key.return_value = (
-            "smq6aggip5w97mccxhxete7fwfwfs6pr"
-        )
+        mockServer.return_value.get_session_key.return_value = "smq6aggip5w97mccxhxete7fwfwfs6pr"
         mockServer.return_value.add_participants.side_effect = [
             [
                 {
@@ -2173,9 +2067,7 @@ class QuestionnaireFormValidation(TestCase):
             {"4228": "Deleted"},
             {"4229": "Deleted"},
         ]
-        mockServer.return_value.get_language_properties.return_value = {
-            "surveyls_title": "Rapid Turn Test"
-        }
+        mockServer.return_value.get_language_properties.return_value = {"surveyls_title": "Rapid Turn Test"}
         mockServer.return_value.get_survey_properties.return_value = {
             "language": "pt-BR",
             "additional_languages": "",
@@ -2187,46 +2079,32 @@ class QuestionnaireFormValidation(TestCase):
 
         patient = self.util.create_patient(self.user)
         survey = self.util.create_survey(CLEAN_QUESTIONNAIRE, True)
-        response_survey = self.util.create_response_survey(
-            self.user, patient, survey, token_id=4228, is_completed="N"
-        )
+        response_survey = self.util.create_response_survey(self.user, patient, survey, token_id=4228, is_completed="N")
 
         # Delete questionnaire response when it is in mode
-        url1 = reverse(
-            QUESTIONNAIRE_VIEW, args=[response_survey.pk], current_app="patient"
-        )
+        url1 = reverse(QUESTIONNAIRE_VIEW, args=[response_survey.pk], current_app="patient")
         url2 = url1.replace("experiment", "patient")
         self.data["action"] = "remove"
-        response = self.client.post(
-            url2 + "?origin=subject&status=edit", self.data, follow=True
-        )
+        response = self.client.post(url2 + "?origin=subject&status=edit", self.data, follow=True)
         self.assertEqual(response.status_code, 200)
 
         # Workaround because reverse is getting experiment url instead of
         # patient
-        url1 = reverse(
-            QUESTIONNAIRE_EDIT, args=[response_survey.pk], current_app="patient"
-        )
+        url1 = reverse(QUESTIONNAIRE_EDIT, args=[response_survey.pk], current_app="patient")
         url2 = url1.replace("experiment", "patient")
 
         self.data["action"] = "remove"
-        response = self.client.post(
-            url2 + "?origin=subject&status=edit", self.data, follow=True
-        )
+        response = self.client.post(url2 + "?origin=subject&status=edit", self.data, follow=True)
         self.assertEqual(response.status_code, 404)
 
         response_survey = self.util.create_response_survey(self.user, patient, survey)
 
         # Workaround because reverse is getting experiment url instead of patient
-        url1 = reverse(
-            QUESTIONNAIRE_EDIT, args=[response_survey.pk], current_app="patient"
-        )
+        url1 = reverse(QUESTIONNAIRE_EDIT, args=[response_survey.pk], current_app="patient")
         url2 = url1.replace("experiment", "patient")
 
         self.data["action"] = "remove"
-        response = self.client.post(
-            url2 + "?origin=subject&status=edit", self.data, follow=True
-        )
+        response = self.client.post(url2 + "?origin=subject&status=edit", self.data, follow=True)
         self.assertEqual(response.status_code, 200)  # Now it is deleted
 
     @patch("survey.abc_search_engine.Server")
@@ -2238,13 +2116,9 @@ class QuestionnaireFormValidation(TestCase):
 
         patient = self.util.create_patient(self.user)
         survey = self.util.create_survey(CLEAN_QUESTIONNAIRE, True)
-        response_survey = self.util.create_response_survey(
-            self.user, patient, survey, 2
-        )
+        response_survey = self.util.create_response_survey(self.user, patient, survey, 2)
 
-        url1 = reverse(
-            QUESTIONNAIRE_VIEW, args=[response_survey.pk], current_app="patient"
-        )
+        url1 = reverse(QUESTIONNAIRE_VIEW, args=[response_survey.pk], current_app="patient")
         url2 = url1.replace("experiment", "patient")
         response = self.client.get(url2 + "?origin=subject&status=edit")
         self.assertEqual(response.status_code, 200)
@@ -2277,13 +2151,9 @@ class QuestionnaireFormValidation(TestCase):
         usermethod = self.user
         patient_mock = self.util.create_patient(usermethod)
         survey_mock = self.util.create_survey(CLEAN_QUESTIONNAIRE, True)
-        response_survey_mock = self.util.create_response_survey(
-            self.user, patient_mock, survey_mock, 2
-        )
+        response_survey_mock = self.util.create_response_survey(self.user, patient_mock, survey_mock, 2)
 
-        url1 = reverse(
-            QUESTIONNAIRE_VIEW, args=[response_survey_mock.pk], current_app="patient"
-        )
+        url1 = reverse(QUESTIONNAIRE_VIEW, args=[response_survey_mock.pk], current_app="patient")
         url2 = url1.replace("experiment", "patient")
         response = self.client.get(url2 + "?origin=subject&status=edit")
         self.assertEqual(response.status_code, 200)
@@ -2336,13 +2206,9 @@ class QuestionnaireFormValidation(TestCase):
         usermethod = self.user
         patient_mock = self.util.create_patient(usermethod)
         survey_mock = self.util.create_survey(CLEAN_QUESTIONNAIRE, True)
-        response_survey_mock = self.util.create_response_survey(
-            self.user, patient_mock, survey_mock, 2
-        )
+        response_survey_mock = self.util.create_response_survey(self.user, patient_mock, survey_mock, 2)
 
-        url1 = reverse(
-            QUESTIONNAIRE_VIEW, args=[response_survey_mock.pk], current_app="patient"
-        )
+        url1 = reverse(QUESTIONNAIRE_VIEW, args=[response_survey_mock.pk], current_app="patient")
         url2 = url1.replace("experiment", "patient")
         response = self.client.get(url2 + "?origin=subject&status=edit")
         self.assertEqual(response.status_code, 200)
@@ -2375,9 +2241,7 @@ class QuestionnaireFormValidation(TestCase):
     def test_experiment_response_view(self, mockServer):
         """Test complete visualization of answered questionnaire in LimeSurvey"""
 
-        mockServer.return_value.get_session_key.return_value = (
-            "smq6aggip5w97mccxhxete7fwfwfs6pr"
-        )
+        mockServer.return_value.get_session_key.return_value = "smq6aggip5w97mccxhxete7fwfwfs6pr"
         mockServer.return_value.add_survey.return_value = 99999
         mockServer.return_value.delete_survey.return_value = {"status": "OK"}
         mockServer.return_value.get_language_properties.return_value = {
@@ -2486,12 +2350,8 @@ class QuestionnaireFormValidation(TestCase):
             # We don't get any error, because the method get_questionnaire_responses called by
             # questionnaire_response_edit simply returns an empty list of responses.
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(
-                len(response.context["patient_questionnaires_data_list"]), 0
-            )  # no entrance evaluation
-            self.assertEqual(
-                len(response.context["questionnaires_data"]), 1
-            )  # experiment questionnaire
+            self.assertEqual(len(response.context["patient_questionnaires_data_list"]), 0)  # no entrance evaluation
+            self.assertEqual(len(response.context["questionnaires_data"]), 1)  # experiment questionnaire
 
         finally:
             # Deleta a survey gerada no Lime Survey
@@ -2587,9 +2447,7 @@ A000,Cholera due to Vibrio cholerae 01 biovar cholerae,Cólera devida a Vibrio c
 """
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -2652,12 +2510,8 @@ A000,Cholera due to Vibrio cholerae 01 biovar cholerae,Cólera devida a Vibrio c
     def test_check_filename(self) -> None:
         """Test to see if file is open correctly"""
 
-        self.assertRaises(
-            FileNotFoundError, import_classification_of_diseases, "incorrect_file_name"
-        )
-        self.assertRaises(
-            IOError, import_classification_of_diseases, "incorrect_file_name"
-        )
+        self.assertRaises(FileNotFoundError, import_classification_of_diseases, "incorrect_file_name")
+        self.assertRaises(IOError, import_classification_of_diseases, "incorrect_file_name")
 
         filename = os.path.join(settings.MEDIA_ROOT, "output.xml")
 
@@ -2665,9 +2519,7 @@ A000,Cholera due to Vibrio cholerae 01 biovar cholerae,Cólera devida a Vibrio c
             f.write("incorrect data")
         f.close()
 
-        self.assertRaises(
-            ElementTree.ParseError, import_classification_of_diseases, filename
-        )
+        self.assertRaises(ElementTree.ParseError, import_classification_of_diseases, filename)
 
         os.remove(filename)
 
@@ -2676,9 +2528,7 @@ A000,Cholera due to Vibrio cholerae 01 biovar cholerae,Cólera devida a Vibrio c
             settings.BASE_DIR,
             os.path.join(
                 "patient",
-                os.path.join(
-                    "data_migrations", "0006_translate_data_into_english.json"
-                ),
+                os.path.join("data_migrations", "0006_translate_data_into_english.json"),
             ),
         )
         # Does not display "Installed fixtures message"

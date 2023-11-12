@@ -36,6 +36,8 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON: false
           VALIDATE_PYTHON_ISORT: false
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_YAML: false
           VALIDATE_CSS: false
           VALIDATE_HTML: false
           VALIDATE_JAVASCRIPT_STANDARD: false

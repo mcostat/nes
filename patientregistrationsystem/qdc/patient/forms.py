@@ -1,14 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django import forms
 from django.core.validators import EMPTY_VALUES
-from django.forms import (
-    CheckboxInput,
-    ModelForm,
-    RadioSelect,
-    Select,
-    TextInput,
-    TypedChoiceField,
-)
+from django.forms import CheckboxInput, ModelForm, RadioSelect, Select, TextInput, TypedChoiceField
 from django.forms.widgets import Textarea
 from django.utils.translation import gettext as _
 
@@ -77,9 +70,7 @@ class PatientForm(ModelForm):
                     "oninput": "this.value = this.value.toUpperCase()",
                 }
             ),
-            "cpf": TextInput(
-                attrs={"class": "form-control", "placeholder": "xxx.xxx.xxx-xx"}
-            ),
+            "cpf": TextInput(attrs={"class": "form-control", "placeholder": "xxx.xxx.xxx-xx"}),
             "origin": TextInput(attrs={"class": "form-control"}),
             "medical_record": TextInput(attrs={"class": "form-control"}),
             "date_birth": TextInput(
@@ -203,12 +194,8 @@ class SocialDemographicDataForm(ModelForm):
             "schooling": Select(attrs={"class": "form-select"}),
             "flesh_tone": Select(attrs={"class": "form-select"}),
             "religion": Select(attrs={"class": "form-select"}),
-            "profession": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Type in profession")}
-            ),
-            "occupation": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Inform occupation")}
-            ),
+            "profession": TextInput(attrs={"class": "form-control", "placeholder": _("Type in profession")}),
+            "occupation": TextInput(attrs={"class": "form-control", "placeholder": _("Inform occupation")}),
             "payment": Select(attrs={"class": "form-select"}),
             "tv": RadioSelect(
                 choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
@@ -365,15 +352,9 @@ class ComplementaryExamForm(ModelForm):
                     "data-error": _("Description must be filled in"),
                 }
             ),
-            "doctor": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Doctor")}
-            ),
-            "doctor_register": TextInput(
-                attrs={"class": "form-control", "placeholder": _("CRM")}
-            ),
-            "exam_site": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Place of execution")}
-            ),
+            "doctor": TextInput(attrs={"class": "form-control", "placeholder": _("Doctor")}),
+            "doctor_register": TextInput(attrs={"class": "form-control", "placeholder": _("CRM")}),
+            "exam_site": TextInput(attrs={"class": "form-control", "placeholder": _("Place of execution")}),
         }
 
 

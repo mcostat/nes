@@ -1,8 +1,15 @@
 {
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
     },
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
@@ -19,11 +26,6 @@
             "name": "django",
             "depth": 10,
             "includeAllSymbols": true
-        },
-        {
-            "name": "custom_user",
-            "depth": 10,
-            "includeAllSymbols": true
         }
     ],
     "pylint.args": [
@@ -31,17 +33,16 @@
         "--load-plugins",
         "pylint_django"
     ],
-    "pylint.path": [],
     "python.analysis.include": [],
     "python.analysis.exclude": [
-        "../docs/",
+        "**/docs/",
         ".git",
-        "docs/"
+        "**/migrations",
+        "**/tests"
     ],
     "python.autoComplete.extraPaths": [
         "${localWorkspaceFolder}, /usr/local/bin/python"
     ],
-    "python.defaultInterpreterPath": "/usr/local/bin/python",
     "python.analysis.extraPaths": [
         "${localWorkspaceFolder}",
         "patientregistrationsystem/qdc"
@@ -87,7 +88,7 @@
         "H031"
     ],
     "djlint.extendExclude": [
-        ".py"
+        "*.py"
     ],
     "[django-html]": {
         "editor.defaultFormatter": "monosans.djlint"
@@ -102,5 +103,7 @@
     "[json]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true
-    }
+    },
+    "editor.formatOnSave": true,
+    "prettier.printWidth": 120
 }

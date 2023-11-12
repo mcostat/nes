@@ -27,7 +27,6 @@ from .models import (
     TetheringSystem,
 )
 
-
 admin.site.register(QuestionnaireResponse, SimpleHistoryAdmin)
 
 

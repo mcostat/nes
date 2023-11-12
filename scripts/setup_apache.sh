@@ -56,7 +56,7 @@ else
     CustomLog ${APACHE_LOG_DIR}/nes_access.log combined
 </VirtualHost>
 	EOF
-
+    
     cat <<-EOF >/etc/apache2/sites-available/nes-ssl.conf
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
@@ -103,10 +103,10 @@ else
     WSGIProcessGroup nes-ssl
 
     SSLEngine on
- 
+
     SSLCertificateFile  /etc/apache2/ssl-certs/cert.pem
     SSLCertificateKeyFile /etc/apache2/ssl-certs/key.pem
- 
+
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
             SSLOptions +StdEnvVars
     </FilesMatch>
@@ -120,9 +120,9 @@ else
 </VirtualHost>
 </IfModule>
 	EOF
-
+    
     mkcert -key-file /etc/apache2/ssl-certs/key.pem -cert-file /etc/apache2/ssl-certs/cert.pem "$NES_HOSTNAME" "$NES_IP" localhost 0.0.0.0
-
+    
     a2enmod ssl
     a2enmod http2
     a2enmod headers

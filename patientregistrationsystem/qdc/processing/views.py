@@ -47,9 +47,7 @@ def handle_uploaded_file(file: File) -> str:
 
 
 @login_required
-def index(
-    request: HttpRequest, template_name: str = "processing/file_selection.html"
-) -> HttpResponse:
+def index(request: HttpRequest, template_name: str = "processing/file_selection.html") -> HttpResponse:
     research_projects = ResearchProject.objects.order_by("start_date")
     experiment_list = get_avaliable_projects()
     group_list = None
@@ -65,18 +63,14 @@ def index(
             if groups_selected:
                 for group_selected_id in groups_selected:
                     group_selected = Group.objects.filter(pk=group_selected_id)
-                    subject_of_groups = SubjectOfGroup.objects.filter(
-                        group__in=group_selected
-                    )
+                    subject_of_groups = SubjectOfGroup.objects.filter(group__in=group_selected)
                     for subject_of_group in subject_of_groups:
                         patient = subject_of_group.subject.patient
                         if patient.id not in subject_list:
                             subject_list.append(patient.id)
 
                 participants_list = participants_list.filter(pk__in=subject_list)
-                request.session["filtered_participant_data"] = [
-                    item.id for item in participants_list
-                ]
+                request.session["filtered_participant_data"] = [item.id for item in participants_list]
 
                 redirect_url = reverse("select_files", args=())
                 return HttpResponseRedirect(redirect_url)
@@ -95,9 +89,7 @@ def index(
 
 
 @login_required
-def select_files(
-    request: HttpRequest, template_name: str = "processing/file_selection.html"
-) -> HttpResponse:
+def select_files(request: HttpRequest, template_name: str = "processing/file_selection.html") -> HttpResponse:
     return None
 
 

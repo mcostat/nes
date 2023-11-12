@@ -54,7 +54,9 @@
 				"VisualStudioExptTeam.vscodeintellicode-completions",
 				"monosans.djlint",
 				"github.vscode-github-actions",
-				"esbenp.prettier-vscode"
+				"esbenp.prettier-vscode",
+				"SonarSource.sonarlint-vscode",
+				"tamasfe.even-better-toml"
 			]
 		}
 	}

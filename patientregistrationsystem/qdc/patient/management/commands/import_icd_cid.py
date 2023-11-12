@@ -12,39 +12,34 @@ from patient.models import ClassificationOfDiseases
 class Command(BaseCommand):
     help = "Import ICD for translation"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser) -> None:
         parser.add_argument("--file", nargs="?", type=str, help="codes filename")
 
-    def handle(self, *args, **options):
-        # filename = 'icd10cid10v2017.csv'
+    def handle(self, *args, **options) -> None:
         if options["file"]:
             filename = options["file"]
             try:
                 import_classification_of_icd_cid(filename)
             except IOError:
-                raise CommandError('Filename "%s" does not exist.' % filename)
+                raise CommandError(f'Filename "{filename}" does not exist.')
             except UnicodeDecodeError:
-                raise CommandError('Filename "%s" has incorrect format.' % filename)
+                raise CommandError(f'Filename "{filename}" has incorrect format.')
 
 
 def import_classification_of_icd_cid(file_name: str) -> None:
     filename = os.path.join(
         settings.BASE_DIR,
-        os.path.join(
-            "..", "..", os.path.join("resources", "load-idc-table", file_name)
-        ),
+        os.path.join("..", "..", os.path.join("resources", "load-idc-table", file_name)),
     )
 
     increment = 2  # start of second line, without header
 
-    with open(filename) as csvfile:
-        total_lines = sum(1 for row in csvfile)
-    if total_lines:
-        pass
-    else:
+    with open(filename, encoding="utf-8") as csvfile:
+        total_lines = sum(1 for _ in csvfile)
+    if not total_lines:
         return print("File Empty")
 
-    with open(filename, "r") as csvFile:
+    with open(filename, "r", encoding="utf-8") as csvFile:
         reader = csv.reader(csvFile)
         next(reader, None)
         for row in reader:

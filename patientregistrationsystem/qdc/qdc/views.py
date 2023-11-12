@@ -37,18 +37,13 @@ def contact(request: HttpRequest) -> HttpResponse:
         if request.user.has_perm("configuration.upgrade_rights"):
             messages.info(
                 request,
-                mark_safe(
-                    '<a href="/home/upgrade_nes/">There is a new version of NES. Click '
-                    "for upgrade</a>"
-                ),
+                mark_safe('<a href="/home/upgrade_nes/">There is a new version of NES. Click ' "for upgrade</a>"),
             )
 
         else:
             messages.success(
                 request,
-                _(
-                    "There is a new version, please contact your NES administrator to update !"
-                ),
+                _("There is a new version, please contact your NES administrator to update !"),
             )
 
     context = {
@@ -88,9 +83,7 @@ def check_upgrade(request: HttpRequest) -> bool:
                 git.tag().split("\n"),
                 key=lambda s: list(map(int, s.replace("-", ".").split(".")[1:])),
             )[-1]
-            new_version = Version(current_tag.split("-")[-1]) < Version(
-                new_version_tag.split("-")[-1]
-            )
+            new_version = Version(current_tag.split("-")[-1]) < Version(new_version_tag.split("-")[-1])
 
     else:
         messages.success(
@@ -169,9 +162,7 @@ def upgrade_nes(request: HttpRequest) -> HttpResponseRedirect:
         else:
             print("There are not migrations")
 
-        os.system(
-            f"touch {path_git_repo_local}patientregistrationsystem/qdc/qdc/wsgi.py"
-        )
+        os.system(f"touch {path_git_repo_local}patientregistrationsystem/qdc/qdc/wsgi.py")
 
         # check if the current TAG is the latest tag
         if git.describe() == new_version_tag:
@@ -180,9 +171,7 @@ def upgrade_nes(request: HttpRequest) -> HttpResponseRedirect:
         else:
             messages.info(
                 request,
-                _(
-                    "An unknown error ocurred ! Please contact your administrator system."
-                ),
+                _("An unknown error ocurred ! Please contact your administrator system."),
             )
             print("NES was not updated " + new_version_tag)
 

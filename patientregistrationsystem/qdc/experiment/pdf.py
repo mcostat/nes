@@ -42,7 +42,8 @@ def render(template_src, context_dict, css_source=None):
             encoding="UTF-8",
             link_callback=fetch_resources,
             default_css=open(
-                os.path.join(settings.BASE_DIR, "static", "css", css_source)
+                os.path.join(settings.BASE_DIR, "static", "css", css_source),
+                encoding="utf-8",
             ).read(),
         )
     else:

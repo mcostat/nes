@@ -136,9 +136,7 @@ class ParticipantsSelectionForm(ModelForm):
 
         widgets = {
             "gender": SelectMultiple(attrs={"class": "form-select", "disabled": ""}),
-            "marital_status": SelectMultiple(
-                attrs={"class": "form-select", "disabled": ""}
-            ),
+            "marital_status": SelectMultiple(attrs={"class": "form-select", "disabled": ""}),
             "country": SelectMultiple(attrs={"class": "form-select", "disabled": ""}),
             "state": SelectMultiple(attrs={"class": "form-select", "disabled": ""}),
             "city": SelectMultiple(attrs={"class": "form-select", "disabled": ""}),
@@ -221,7 +219,5 @@ class DiagnosisSelectionForm(ModelForm):
         fields = ["description"]
 
         widgets = {
-            "description": SelectMultiple(
-                attrs={"class": "form-select", "required": "", "disabled": ""}
-            ),
+            "description": SelectMultiple(attrs={"class": "form-select", "required": "", "disabled": ""}),
         }

@@ -93,10 +93,7 @@ class CPF(object):
         """
 
         d = iter("..-")
-        s: list[str] = [
-            str(x) + (next(d) if i + 1 in range(3, 12, 3) else "")
-            for (i, x) in enumerate(self.cpf)
-        ]
+        s: list[str] = [str(x) + (next(d) if i + 1 in range(3, 12, 3) else "") for (i, x) in enumerate(self.cpf)]
         r = "".join(s)
         return r
 

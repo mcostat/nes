@@ -34,19 +34,13 @@ class Institution(models.Model):  # type: ignore [django-manager-missing]
         ordering = ["name"]
 
         constraints = [
-            models.UniqueConstraint(
-                fields=["name", "acronym", "country"], name="unique_institution"
-            ),
+            models.UniqueConstraint(fields=["name", "acronym", "country"], name="unique_institution"),
         ]
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="user_profile"
-    )
-    institution = models.ForeignKey(
-        Institution, on_delete=models.CASCADE, null=True, blank=True
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_profile")
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
     login_enabled = models.BooleanField(default=False, choices=LOGIN)
     force_password_change = models.BooleanField(default=True)
     citation_name = models.CharField(max_length=150, blank=True, default="")
@@ -102,10 +96,6 @@ def password_change_signal(sender, instance, **kwargs) -> None:
         pass
 
 
-signals.pre_save.connect(
-    password_change_signal, sender=User, dispatch_uid="accounts.models"
-)
+signals.pre_save.connect(password_change_signal, sender=User, dispatch_uid="accounts.models")
 
-signals.post_save.connect(
-    create_user_profile_signal, sender=User, dispatch_uid="accounts.models"
-)
+signals.post_save.connect(create_user_profile_signal, sender=User, dispatch_uid="accounts.models")

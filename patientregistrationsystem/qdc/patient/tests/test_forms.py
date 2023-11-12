@@ -27,9 +27,7 @@ USER_PWD = "mypassword"
 # Briefly, this class tests the first form of the tab 0 of app Patient
 class PatientFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -112,9 +110,7 @@ class PatientFormValidation(TestCase):
 # Briefly, this class tests the second form of the tab 0 of app Patient
 class TelephoneFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -123,9 +119,7 @@ class TelephoneFormValidation(TestCase):
 
         self.patient = util.create_patient(changed_by=self.user)
 
-        phone_type = Telephone.objects.create(
-            type="HO", changed_by_id=self.user.id, patient_id=self.patient.id
-        )
+        phone_type = Telephone.objects.create(type="HO", changed_by_id=self.user.id, patient_id=self.patient.id)
         self.data = {
             "number": "123456789",
             "type": phone_type.type,
@@ -150,23 +144,17 @@ class TelephoneFormValidation(TestCase):
 
     # Test if the form without the "number" of the patient filled is not valid
     def test_TelephoneForm_is_not_valid_without_number(self):
-        telephone = TelephoneForm(
-            data={"number": "", "type": self.data["type"], "note": self.data["note"]}
-        )
+        telephone = TelephoneForm(data={"number": "", "type": self.data["type"], "note": self.data["note"]})
         self.assertFalse(telephone.is_valid())
 
     # Test if the form without the "type" of the patient filled is not valid
     def test_TelephoneForm_is_not_valid_without_type(self):
-        telephone = TelephoneForm(
-            data={"number": self.data["number"], "type": "", "note": self.data["note"]}
-        )
+        telephone = TelephoneForm(data={"number": self.data["number"], "type": "", "note": self.data["note"]})
         self.assertTrue(telephone.is_valid())
 
     # Test if the form without the "note" of the patient filled is not valid
     def test_TelephoneForm_is_not_valid_without_note(self):
-        telephone = TelephoneForm(
-            data={"number": self.data["number"], "type": self.data["type"], "note": ""}
-        )
+        telephone = TelephoneForm(data={"number": self.data["number"], "type": self.data["type"], "note": ""})
         self.assertTrue(telephone.is_valid())
 
 
@@ -174,9 +162,7 @@ class TelephoneFormValidation(TestCase):
 # Briefly, this class tests the form of the tab 1 of app Patient
 class SocialDemographicDataFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -236,9 +222,7 @@ class SocialDemographicDataFormValidation(TestCase):
 # Briefly, this class tests the form of the tab 2 of app Patient
 class SocialHistoryFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -325,9 +309,7 @@ class SocialHistoryFormValidation(TestCase):
 # Briefly, this class tests the form of the tab 3 of app Patient
 class MedicalRecordFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -346,16 +328,12 @@ class MedicalRecordFormValidation(TestCase):
 
     # Test if the form without the description is not valid
     def test_Medical_Record_is_not_valid_without_description(self):
-        medicalrecord = ComplementaryExamForm(
-            data={"description": "", "date": self.data["date"]}
-        )
+        medicalrecord = ComplementaryExamForm(data={"description": "", "date": self.data["date"]})
         self.assertFalse(medicalrecord.is_valid())
 
     # Test if the form without the date is not valid
     def test_Medical_Record_is_not_valid_without_date(self):
-        medicalrecord = ComplementaryExamForm(
-            data={"description": self.data["description"], "date": ""}
-        )
+        medicalrecord = ComplementaryExamForm(data={"description": self.data["description"], "date": ""})
         self.assertFalse(medicalrecord.is_valid())
 
 
@@ -363,9 +341,7 @@ class MedicalRecordFormValidation(TestCase):
 # Briefly, this class tests the form of the tab 4 of app Patient
 class QuestionnaireResponseFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
-        )
+        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()

@@ -20,9 +20,7 @@ urlpatterns = [
         name="patients_verify_homonym_excluded",
     ),
     re_path(r"^(?P<patient_id>\d+)/$", views.patient_view, name="patient_view"),
-    re_path(
-        r"^restore/(?P<patient_id>\d+)/$", views.restore_patient, name="patient_restore"
-    ),
+    re_path(r"^restore/(?P<patient_id>\d+)/$", views.restore_patient, name="patient_restore"),
     # medical_record (create, read, update)
     re_path(
         r"^(?P<patient_id>\d+)/medical_record/new/$",
