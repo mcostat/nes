@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 
 RUN mkdir -p "$NES_DIR"  && \
-    if [ "$NES_BRANCH" != ""]; then \
+    if [ "$NES_BRANCH"]; then \
     echo Cloning "$NES_BRANCH" branch ;\
     git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/mcostat/nes.git "$NES_DIR" ;\
     else \
