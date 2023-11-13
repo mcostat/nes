@@ -4,6 +4,7 @@
 [![Quality check status](https://github.com/mcostat/nes/actions/workflows/quality.yml/badge.svg)](https://github.com/mcostat/nes/actions/workflows/quality.yml)
 [![MSDO](https://github.com/mcostat/nes/actions/workflows/defender-for-devops.yml/badge.svg)](https://github.com/mcostat/nes/actions/workflows/defender-for-devops.yml)
 [![CodeQL](https://github.com/mcostat/nes/actions/workflows/github-code-scanning/codeql/badge.svg?branch=master)](https://github.com/mcostat/nes/actions/workflows/github-code-scanning/codeql)
+[![codecov](https://codecov.io/gh/mcostat/nes/graph/badge.svg?token=HDXN9OX7B9)](https://codecov.io/gh/mcostat/nes)
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
