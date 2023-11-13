@@ -1,7 +1,15 @@
-# coding=utf-8
+from custom_user.forms import (
+    InstitutionForm,
+    ResearcherForm,
+    UserForm,
+    UserFormUpdate,
+    UserProfileForm,
+)
+from custom_user.models import Institution, UserProfile
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.http import (
     HttpRequest,
     HttpResponse,
@@ -12,17 +20,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from custom_user.forms import (
-    InstitutionForm,
-    ResearcherForm,
-    UserForm,
-    UserFormUpdate,
-    UserProfileForm,
-)
-from custom_user.models import Institution, UserProfile
 
-
-def get_group_permissions(user: User) -> list[dict[str, object]]:
+def get_group_permissions(user) -> list[dict[str, object]]:
     group_permissions: list[dict[str, object]] = []
     for group in Group.objects.all():
         checked: bool = False
@@ -38,7 +37,7 @@ def user_list(
     request: HttpRequest,
     template_name: str = "custom_user/user_institution_list.html",
 ) -> HttpResponse:
-    users = User.objects.filter(is_active=True).order_by("first_name", "last_name")
+    users = get_user_model().objects.filter(is_active=True).order_by("first_name", "last_name")
     institutions = Institution.objects.all().order_by("name")
     data = {
         "object_list": users,
@@ -50,9 +49,7 @@ def user_list(
 
 @login_required
 @permission_required("auth.add_user")
-def user_create(
-    request: HttpRequest, template_name: str = "custom_user/user_register.html"
-) -> HttpResponse:
+def user_create(request: HttpRequest, template_name: str = "custom_user/user_register.html") -> HttpResponse:
     form = UserForm(request.POST or None)
     profile_form = UserProfileForm(request.POST or None)
     group_permissions: list = []
@@ -63,12 +60,10 @@ def user_create(
 
     if request.method == "POST":
         if request.POST["action"] == "save" and request.POST["login_enabled"] == "True":
-            if not User.objects.filter(email=request.POST["email"]).exists():
+            if not get_user_model().objects.filter(email=request.POST["email"]).exists():
                 if form.is_valid() and profile_form.is_valid():
                     user = form.save()
-                    profile = UserProfileForm(
-                        request.POST or None, instance=user.user_profile
-                    )
+                    profile = UserProfileForm(request.POST or None, instance=user.user_profile)
                     user.save()
                     profile.save()
                     messages.success(request, _("Researcher created successfully."))
@@ -84,19 +79,14 @@ def user_create(
                 )
                 return redirect("user_new")
 
-        if (
-            request.POST["action"] == "save"
-            and request.POST["login_enabled"] == "False"
-        ):
-            if not User.objects.filter(email=request.POST["email"]).exists():
+        if request.POST["action"] == "save" and request.POST["login_enabled"] == "False":
+            if not get_user_model().objects.filter(email=request.POST["email"]).exists():
                 researcher_form = ResearcherForm(request.POST or None)
                 if researcher_form.is_valid():
                     new_reserch = researcher_form.save(commit=False)
                     new_reserch.username = new_reserch.email
                     new_reserch.save()
-                    profile = UserProfileForm(
-                        request.POST or None, instance=new_reserch.user_profile
-                    )
+                    profile = UserProfileForm(request.POST or None, instance=new_reserch.user_profile)
                     profile.save()
                     messages.success(request, _("Researcher created successfully."))
                     redirect_url = reverse("user_view", args=(new_reserch.pk,))
@@ -128,7 +118,7 @@ def user_view(
     user_id: int,
     template_name: str = "custom_user/user_register.html",
 ) -> HttpResponse:
-    user: User = get_object_or_404(User, pk=user_id)
+    user = get_object_or_404(get_user_model(), pk=user_id)
     form = UserFormUpdate(request.POST or None, instance=user)
     profile_form = UserProfileForm(request.POST or None, instance=user.user_profile)
     group_permissions = get_group_permissions(user)
@@ -168,7 +158,7 @@ def user_update(
     user_id: int,
     template_name: str = "custom_user/user_register.html",
 ) -> HttpResponse:
-    user: User = get_object_or_404(User, pk=user_id)
+    user = get_object_or_404(get_user_model(), pk=user_id)
 
     if user and user.is_active:
         form = UserFormUpdate(request.POST or None, instance=user)
@@ -176,20 +166,15 @@ def user_update(
         group_permissions = get_group_permissions(user)
 
         if request.method == "POST":
-            if (
-                request.POST["action"] == "save"
-                and request.POST["login_enabled"] == "True"
-            ):
+            if request.POST["action"] == "save" and request.POST["login_enabled"] == "True":
                 if form.is_valid() and profile_form.is_valid():
                     form.save()
                     profile_form.save()
 
                     if "password_flag" in request.POST:
                         if request.POST["password"]:
-                            user = get_object_or_404(User, id=user_id)
-                            profile, created = UserProfile.objects.get_or_create(
-                                user=user
-                            )
+                            user = get_object_or_404(get_user_model(), id=user_id)
+                            profile, _ = UserProfile.objects.get_or_create(user=user)
                             profile.force_password_change = True
                             profile.save()
 
@@ -197,19 +182,14 @@ def user_update(
                     redirect_url = reverse("user_view", args=(user_id,))
                     return HttpResponseRedirect(redirect_url)
 
-            if (
-                request.POST["action"] == "save"
-                and request.POST["login_enabled"] == "False"
-            ):
+            if request.POST["action"] == "save" and request.POST["login_enabled"] == "False":
                 researcher_form = ResearcherForm(request.POST or None, instance=user)
 
                 if researcher_form.is_valid():
                     if researcher_form.has_changed() or profile_form.has_changed():
                         if (
                             "email" in researcher_form.changed_data
-                            and User.objects.filter(
-                                email=request.POST["email"]
-                            ).exists()
+                            and get_user_model().objects.filter(email=request.POST["email"]).exists()
                         ):
                             messages.error(request, _("E-mail already registered"))
                             redirect_url = reverse("user_view", args=(user_id,))
@@ -217,9 +197,7 @@ def user_update(
                         else:
                             researcher_form.save()
                             profile_form.save()
-                            messages.success(
-                                request, _("Researcher updated successfully.")
-                            )
+                            messages.success(request, _("Researcher updated successfully."))
                             redirect_url = reverse("user_view", args=(user_id,))
                             return HttpResponseRedirect(redirect_url)
                     else:
@@ -228,14 +206,14 @@ def user_update(
                         return HttpResponseRedirect(redirect_url)
 
             if request.POST["action"] == "remove":
-                user = get_object_or_404(User, id=user_id)
+                user = get_object_or_404(get_user_model(), id=user_id)
                 user.is_active = False
                 user.save()
                 messages.success(request, _("Researcher deleted successfully."))
                 return redirect("user_list")
 
             if request.POST["action"] == "deactivate":
-                user = get_object_or_404(User, id=user_id)
+                user = get_object_or_404(get_user_model(), id=user_id)
                 user.set_unusable_password()
                 user.save()
                 if profile_form.is_valid():
@@ -301,9 +279,7 @@ def institution_view(
             if institution_used.exists():
                 messages.warning(
                     request,
-                    _(
-                        "This institution cannot be removed because there are researchers associated with it."
-                    ),
+                    _("This institution cannot be removed because there are researchers associated with it."),
                 )
 
                 redirect_url = reverse("institution_view", args=(institution_id,))

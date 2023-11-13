@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.cache import caches
 from django.db import models
 from django.db.models import signals
@@ -6,7 +6,6 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
-
 from patient.models import COUNTRIES
 
 LOGIN = (
@@ -34,25 +33,19 @@ class Institution(models.Model):  # type: ignore [django-manager-missing]
         ordering = ["name"]
 
         constraints = [
-            models.UniqueConstraint(
-                fields=["name", "acronym", "country"], name="unique_institution"
-            ),
+            models.UniqueConstraint(fields=["name", "acronym", "country"], name="unique_institution"),
         ]
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="user_profile"
-    )
-    institution = models.ForeignKey(
-        Institution, on_delete=models.CASCADE, null=True, blank=True
-    )
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name="user_profile")
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
     login_enabled = models.BooleanField(default=False, choices=LOGIN)
     force_password_change = models.BooleanField(default=True)
     citation_name = models.CharField(max_length=150, blank=True, default="")
 
     @staticmethod
-    def cached_force_password_change(_user: User) -> bool:
+    def cached_force_password_change(_user) -> bool:
         key = f"pw_change_{_user.username}"
         cache = caches["redis"]
         pw_change = cache.get(key, None)
@@ -71,7 +64,7 @@ class UserProfile(models.Model):
 
 
 @receiver((post_delete, post_save), sender=UserProfile)
-def invalidate_force_password_change_cache(sender, instance, **kwargs):
+def invalidate_force_password_change_cache(sender, instance, **kwargs) -> None:
     """
     Invalidate the book cached data when a book is changed or deleted
     """
@@ -86,10 +79,10 @@ def create_user_profile_signal(sender, instance, created, **kwargs) -> None:
 
 def password_change_signal(sender, instance, **kwargs) -> None:
     try:
-        if User.objects.all().count() == 0:
+        if get_user_model().objects.all().count() == 0:
             return
 
-        user: User = User.objects.get(username=instance.username)
+        user = get_user_model().objects.get(username=instance.username)
 
         if user.is_superuser:
             return
@@ -98,14 +91,10 @@ def password_change_signal(sender, instance, **kwargs) -> None:
             profile, _ = UserProfile.objects.get_or_create(user=user)
             profile.force_password_change = False
             profile.save()
-    except User.DoesNotExist:
+    except get_user_model().DoesNotExist:
         pass
 
 
-signals.pre_save.connect(
-    password_change_signal, sender=User, dispatch_uid="accounts.models"
-)
+signals.pre_save.connect(password_change_signal, sender=get_user_model(), dispatch_uid="accounts.models")
 
-signals.post_save.connect(
-    create_user_profile_signal, sender=User, dispatch_uid="accounts.models"
-)
+signals.post_save.connect(create_user_profile_signal, sender=get_user_model(), dispatch_uid="accounts.models")

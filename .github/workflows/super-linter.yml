@@ -38,8 +38,10 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JSCPD: false
           VALIDATE_DOCKERFILE_HADOLINT: false
+          # Python linting is done on other action
           VALIDATE_PYTHON: false
-          VALIDATE_PYTHON_FLAKE8: false # enable this as soon as posible
+          VALIDATE_PYTHON_DARK: false
+          VALIDATE_PYTHON_FLAKE8: false
           VALIDATE_PYTHON_ISORT: false
           VALIDATE_PYTHON_MYPY: false
           VALIDATE_YAML: false

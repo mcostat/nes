@@ -1,10 +1,9 @@
 from typing import Any
 
+from custom_user.models import Institution
 from django.db import models
 from django_stubs_ext.db.models import TypedModelMeta
 from solo.models import SingletonModel
-
-from custom_user.models import Institution
 
 
 def get_institution_logo_dir(instance: Any, filename: str) -> str:
@@ -13,9 +12,7 @@ def get_institution_logo_dir(instance: Any, filename: str) -> str:
 
 class LocalInstitution(SingletonModel):
     code = models.CharField(max_length=150, null=True, blank=True)
-    institution = models.ForeignKey(
-        Institution, on_delete=models.CASCADE, null=True, blank=True
-    )
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
 
     url = models.URLField(null=True, blank=True)
     logo = models.FileField(upload_to=get_institution_logo_dir, null=True, blank=True)

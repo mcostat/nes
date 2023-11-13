@@ -3,9 +3,9 @@ from typing import Any, Iterable
 
 from custom_user.models import Institution, UserProfile
 from custom_user.regex_utils import PASSWORD_REGEX, USERNAME_REGEX
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
 from django.forms import (
     CharField,
     CheckboxSelectMultiple,
@@ -56,7 +56,7 @@ class UserForm(ModelForm):
     )
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ["first_name", "last_name", "username", "password", "email", "groups"]
 
         widgets = {
@@ -83,9 +83,7 @@ class UserForm(ModelForm):
                     "placeholder": _("Type password"),
                     "data-minlength": "8",
                     "data-maxlength": "128",
-                    "data-error": _(
-                        "Password must contain at least a number and a lowercase letter (8-127)"
-                    ),
+                    "data-error": _("Password must contain at least a number and a lowercase letter (8-127)"),
                     "pattern": PASSWORD_REGEX,
                     "onkeyup": "passwordForce(); if(beginCheckPassword1)checkPassExt();",
                 }
@@ -98,12 +96,7 @@ class UserForm(ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        if (
-            email
-            and User.objects.filter(email=email, is_active=True)
-            .exclude(id=self.instance.id)
-            .count()
-        ):
+        if email and get_user_model().objects.filter(email=email, is_active=True).exclude(id=self.instance.id).count():
             raise ValidationError(_("E-mail already registered"))
         return email
 
@@ -126,20 +119,18 @@ class UserFormUpdate(UserForm):
                 "placeholder": _("Type password"),
                 "data-minlength": "8",
                 "data-maxlength": "128",
-                "data-error": _(
-                    "Password must contain at least a number and a lowercase letter (8-127)"
-                ),
+                "data-error": _("Password must contain at least a number and a lowercase letter (8-127)"),
                 "pattern": PASSWORD_REGEX,
                 "onkeyup": "passwordForce(); if(beginCheckPassword1)checkPassExt();",
             }
         ),
     )
 
-    def clean_password(self):
+    def clean_password(self) -> str:
         if self.cleaned_data["password"]:
             return make_password(self.cleaned_data["password"])
-        else:
-            return self.instance.password
+
+        return str(self.instance.password)
 
 
 class CustomPasswordResetForm(PasswordResetForm):
@@ -147,12 +138,10 @@ class CustomPasswordResetForm(PasswordResetForm):
         if not super().is_valid():
             return False
 
-        # get_users returns a generator object
         users: Iterable[Any] = self.get_users(self.cleaned_data["email"])
 
         try:
-            # trying to get the first element from the generator object using __next__() once
-            iter(users).__next__()
+            next(iter(users))
             return True
         except StopIteration:
             self.add_error("email", _("E-mail is not registered"))
@@ -168,9 +157,7 @@ class UserProfileForm(ModelForm):
         widgets = {
             "institution": Select(attrs={"class": "form-select"}),
             "login_enabled": RadioSelect(attrs={"class": "form-check-input"}),
-            "citation_name": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Type citation name")}
-            ),
+            "citation_name": TextInput(attrs={"class": "form-control", "placeholder": _("Type citation name")}),
         }
 
 
@@ -181,7 +168,7 @@ class ResearcherForm(ModelForm):
     citation_name = CharField(required=False)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ["first_name", "last_name", "email", "citation_name"]
 
         widgets = {
@@ -216,9 +203,7 @@ class ResearcherForm(ModelForm):
                     "data-error": _("Invalid e-mail"),
                 }
             ),
-            "citation_name": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Type citation name")}
-            ),
+            "citation_name": TextInput(attrs={"class": "form-control", "placeholder": _("Type citation name")}),
         }
 
     def clean_first_name(self) -> str:
@@ -270,6 +255,7 @@ class InstitutionForm(ModelForm):
 
 def get_institutions_recursively(institution: Institution) -> list[Institution]:
     institution_list = [institution]
+
     children = Institution.objects.filter(parent=institution)
     for child in children:
         if child not in institution_list:

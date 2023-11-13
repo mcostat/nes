@@ -1,6 +1,5 @@
-from django.urls import re_path
-
 from custom_user import views
+from django.urls import re_path
 
 urlpatterns = [
     # Reseracher

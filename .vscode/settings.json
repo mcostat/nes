@@ -28,10 +28,14 @@
             "includeAllSymbols": true
         }
     ],
+    "pylint.importStrategy": "fromEnvironment",
     "pylint.args": [
         "--disable=C0111",
+        "--disable=line-too-long",
+        "--load-plugins=pylint_django",
         "--load-plugins",
-        "pylint_django"
+        "pylint_django.checkers.migrations",
+        // "--django-settings-module=qdc.settings.dev"
     ],
     "python.analysis.include": [],
     "python.analysis.exclude": [
@@ -39,9 +43,6 @@
         ".git",
         "**/migrations",
         "**/tests"
-    ],
-    "python.autoComplete.extraPaths": [
-        "${localWorkspaceFolder}, /usr/local/bin/python"
     ],
     "python.analysis.extraPaths": [
         "${localWorkspaceFolder}",

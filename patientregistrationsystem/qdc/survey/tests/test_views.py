@@ -1,17 +1,17 @@
 from base64 import b64decode
+from typing import Any
 from unittest.mock import patch
 from xmlrpc.client import Error
 
+from custom_user.tests.tests_helper import create_user
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings, tag
 from django.test.client import RequestFactory
 from django.urls import reverse
-from jsonrpclib import Server
-
-from custom_user.tests.tests_helper import create_user
 from experiment.models import Component, QuestionnaireResponse
 from experiment.tests.tests_helper import ObjectsFactory
+from jsonrpclib import Server
 from patient.models import QuestionnaireResponse as PatientQuestionnaireResponse
 from patient.tests.test_orig import UtilTests
 from survey.abc_search_engine import Questionnaires
@@ -34,17 +34,11 @@ class ABCSearchEngineTest(TestCase):
     test_sid = None
 
     def setUp(self):
-        self.server = Server(
-            settings.LIMESURVEY["URL_API"] + "/index.php/admin/remotecontrol"
-        )
+        self.server = Server(settings.LIMESURVEY["URL_API"] + "/index.php/admin/remotecontrol")
 
         try:
-            self.session_key = self.server.get_session_key(
-                settings.LIMESURVEY["USER"], settings.LIMESURVEY["PASSWORD"]
-            )
-            self.session_key = (
-                None if isinstance(self.session_key, dict) else self.session_key
-            )
+            self.session_key = self.server.get_session_key(settings.LIMESURVEY["USER"], settings.LIMESURVEY["PASSWORD"])
+            self.session_key = None if isinstance(self.session_key, dict) else self.session_key
 
             lime_survey = Questionnaires()
 
@@ -52,14 +46,10 @@ class ABCSearchEngineTest(TestCase):
             self.test_sid = lime_survey.add_survey(9999, title_survey, "en", "G")
 
             # Importar grupo de questoes
-            with open(
-                "static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8"
-            ) as handle_file_import:
+            with open("static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8") as handle_file_import:
                 questions_data = handle_file_import.read()
 
-            questions_id = lime_survey.insert_questions(
-                self.test_sid, questions_data, "lsg"
-            )
+            lime_survey.insert_questions(self.test_sid, questions_data, "lsg")
 
             lime_survey.activate_tokens(self.test_sid)
             lime_survey.activate_survey(self.test_sid)
@@ -68,9 +58,7 @@ class ABCSearchEngineTest(TestCase):
             result_token = lime_survey.add_participant(self.test_sid)
 
             # Verifica se o token está presente na tabela de participantes
-            token = lime_survey.get_participant_properties(
-                self.test_sid, result_token, "token"
-            )
+            lime_survey.get_participant_properties(self.test_sid, result_token, "token")
 
         # except TRANSPORT_ERROR:
         except Error as e:
@@ -103,9 +91,7 @@ class ABCSearchEngineTest(TestCase):
             self.assertEqual(survey_admin, None)
 
             # Importar grupo de questoes
-            with open(
-                "static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8"
-            ) as handle_file_import:
+            with open("static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8") as handle_file_import:
                 questions_data = handle_file_import.read()
 
             questions_id = lime_survey.insert_questions(sid, questions_data, "lsg")
@@ -171,9 +157,7 @@ class ABCSearchEngineTest(TestCase):
             if survey["active"] == "Y" and survey_has_token is True:
                 list_active_survey.append(survey)
 
-        self.assertEqual(
-            questionnaires.find_all_active_questionnaires(), list_active_survey
-        )
+        self.assertEqual(questionnaires.find_all_active_questionnaires(), list_active_survey)
 
         questionnaires.release_session_key()
 
@@ -208,9 +192,7 @@ class ABCSearchEngineTest(TestCase):
 
     def test_add_and_delete_survey(self):
         """TDD - Criar uma survey de teste e apos devera ser excluida"""
-        survey_id_generated = self.server.add_survey(
-            self.session_key, 9999, "Questionario de Teste", "en", "G"
-        )
+        survey_id_generated = self.server.add_survey(self.session_key, 9999, "Questionario de Teste", "en", "G")
         self.assertGreaterEqual(survey_id_generated, 0)
 
         status = self.server.delete_survey(self.session_key, survey_id_generated)
@@ -256,6 +238,8 @@ class ABCSearchEngineTest(TestCase):
 
 
 class SurveyTest(TestCase):
+    data: dict[str, Any] = {}
+
     def setUp(self):
         # create the groups of users and their permissions
         exec(open("add_initial_data.py", encoding="utf-8").read())
@@ -266,18 +250,12 @@ class SurveyTest(TestCase):
         self.survey = create_survey()
         self.patient = UtilTests.create_patient(self.user)
         # token_id=1 from mocks
-        self.response = UtilTests.create_response_survey(
-            self.user, self.patient, self.survey, token_id=1
-        )
+        self.response = UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
 
     @patch("survey.abc_search_engine.Server")
-    def test_survey_list(self, mockServer):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
-        mockServer.return_value.get_language_properties.return_value = {
-            "status": "Error: Invalid survey ID"
-        }
+    def test_survey_list(self, mock_server):
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
+        mock_server.return_value.get_language_properties.return_value = {"status": "Error: Invalid survey ID"}
 
         survey_response = PatientQuestionnaireResponse.objects.first()
 
@@ -293,11 +271,9 @@ class SurveyTest(TestCase):
         self.assertEqual(len(response.context["questionnaires_list"]), 1)
 
     @patch("survey.abc_search_engine.Server")
-    def test_survey_create(self, mockServer):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
-        mockServer.return_value.list_surveys.return_value = [
+    def test_survey_create(self, mock_server):
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
+        mock_server.return_value.list_surveys.return_value = [
             {
                 "sid": 915325,
                 "active": "Y",
@@ -313,7 +289,7 @@ class SurveyTest(TestCase):
                 "startdate": None,
             },
         ]
-        mockServer.return_value.get_summary.return_value = 2
+        mock_server.return_value.get_summary.return_value = 2
 
         # Request the survey register screen
         response = self.client.get(reverse("survey_create"))
@@ -339,22 +315,15 @@ class SurveyTest(TestCase):
         self.assertEqual(count_after_insert, count_before_insert + 1)
 
     @patch("survey.abc_search_engine.Server")
-    def test_survey_update(self, mockServer):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
+    def test_survey_update(self, mock_server):
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
         # TODO (NES-981): probably this errors are due to running without LIMESURVEY=remote.
         #  Run with it.
-        mockServer.return_value.get_survey_properties.return_value = {
-            "status": "Error: Invalid survey ID"
-        }
-        mockServer.return_value.get_language_properties.return_value = {
-            "status": "Error: Invalid survey ID"
-        }
+        mock_server.return_value.get_survey_properties.return_value = {"status": "Error: Invalid survey ID"}
+        mock_server.return_value.get_language_properties.return_value = {"status": "Error: Invalid survey ID"}
 
         # Create an instance of a GET request.
-        self.factory = RequestFactory()
-        request = self.factory.get(
+        request = RequestFactory().get(
             reverse(
                 "survey_edit",
                 args=[
@@ -370,37 +339,31 @@ class SurveyTest(TestCase):
 
         # Update with changes
         self.data = {"action": "save", "is_initial_evaluation": True, "Title": "1 - 1"}
-        response = self.client.post(
-            reverse("survey_edit", args=(self.survey.pk,)), self.data, follow=True
-        )
+        response = self.client.post(reverse("survey_edit", args=(self.survey.pk,)), self.data, follow=True)
         self.assertEqual(response.status_code, 200)
 
         # Update without changes
-        response = self.client.post(
-            reverse("survey_edit", args=(self.survey.pk,)), self.data, follow=True
-        )
+        response = self.client.post(reverse("survey_edit", args=(self.survey.pk,)), self.data, follow=True)
         self.assertEqual(response.status_code, 200)
 
     @patch("survey.abc_search_engine.Server")
-    def test_survey_view(self, mockServer):
-        self._set_mocks(mockServer)
+    def test_survey_view(self, mock_server):
+        self._set_mocks(mock_server)
         response = self.client.get(reverse("survey_view", args=(self.survey.pk,)))
         self.assertEqual(response.status_code, 200)
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_survey_view_display_update_acquisitiondate_buttons(self, mockServer):
-        self._set_mocks(mockServer)
+    def test_get_survey_view_display_update_acquisitiondate_buttons(self, mock_server):
+        self._set_mocks(mock_server)
         # token_id=2 from mocks
         self.create_experiment_questionnaire_response(self.patient, 2, self.survey)
 
         response = self.client.get(reverse("survey_view", args=(self.survey.pk,)))
-        self.assertContains(
-            response, "Atualizar data de preenchimento do LimeSurvey", 2
-        )
+        self.assertContains(response, "Atualizar data de preenchimento do LimeSurvey", 2)
 
     @patch("survey.abc_search_engine.Server")
-    def test_update_acquisitiondate_from_limesurvey(self, mockServer):
-        self._set_mocks(mockServer)
+    def test_update_acquisitiondate_from_limesurvey(self, mock_server):
+        self._set_mocks(mock_server)
 
         self.create_experiment_questionnaire_response(self.patient, 2, self.survey)
 
@@ -409,16 +372,10 @@ class SurveyTest(TestCase):
         new_acquisitiondate_1 = "03/09/2021"
         new_acquisitiondate_2 = "04/09/2021"
 
-        self.client.get(
-            reverse("update_survey_acquisitiondate", args=(self.survey.pk,))
-        )
+        self.client.get(reverse("update_survey_acquisitiondate", args=(self.survey.pk,)))
 
-        entrance_questionnaire_response = PatientQuestionnaireResponse.objects.get(
-            token_id=1
-        )
-        experiment_questionnaire_response = QuestionnaireResponse.objects.get(
-            token_id=2
-        )
+        entrance_questionnaire_response = PatientQuestionnaireResponse.objects.get(token_id=1)
+        experiment_questionnaire_response = QuestionnaireResponse.objects.get(token_id=2)
 
         self.assertEqual(
             entrance_questionnaire_response.date.strftime("%m/%d/%Y"),
@@ -430,14 +387,12 @@ class SurveyTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_update_acquisitiondate_from_limesurvey_with_date_in_wrong_format_fails_silently(
-        self, mockServer
-    ):
-        self._set_mocks(mockServer)
+    def test_update_acquisitiondate_from_limesurvey_with_date_in_wrong_format_fails_silently(self, mock_server):
+        self._set_mocks(mock_server)
 
         # Refefine the two responses so the response from token_id=2 is 'N/A':
         # bad format for the date
-        mockServer.return_value.export_responses.return_value = (
+        mock_server.return_value.export_responses.return_value = (
             "ImlkIiwic3VibWl0ZGF0ZSIsImxhc3RwYWdlIiwic3RhcnRsYW5ndWFnZSIsInR"
             "va2VuIiwicmVzcG9uc2libGVpZCIsImFjcXVpc2l0aW9uZGF0ZSIsInN1YmplY3"
             "RpZCIsImFiYyIKIjIiLCIxOTgwLTAxLTAxIDAwOjAwOjAwIiwiMiIsImVuIiwiZ"
@@ -451,32 +406,24 @@ class SurveyTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_update_survey_acquisitiondate_view_redirects_to_survey_view(
-        self, mockServer
-    ):
-        self._set_mocks(mockServer)
+    def test_get_update_survey_acquisitiondate_view_redirects_to_survey_view(self, mock_server):
+        self._set_mocks(mock_server)
 
-        response = self.client.get(
-            reverse("update_survey_acquisitiondate", args=(self.survey.pk,))
-        )
+        response = self.client.get(reverse("update_survey_acquisitiondate", args=(self.survey.pk,)))
         survey_view_url = reverse("survey_view", args=(self.survey.pk,))
         self.assertRedirects(response, survey_view_url, 302)
 
     @patch("survey.abc_search_engine.Server")
-    def test_update_acquisitiondate_from_limesurvey_returns_responses_updated1(
-        self, mockServer
-    ):
+    def test_update_acquisitiondate_from_limesurvey_returns_responses_updated1(self, mock_server):
         """Two responses are updated"""
 
-        self._set_mocks(mockServer)
+        self._set_mocks(mock_server)
 
         patient2 = UtilTests.create_patient(self.user)
         UtilTests.create_response_survey(self.user, patient2, self.survey, token_id=2)
 
-        tokens = mockServer.return_value.list_participants.return_value
-        ls_responses = b64decode(
-            mockServer.return_value.export_responses.return_value
-        ).decode()
+        tokens = mock_server.return_value.list_participants.return_value
+        ls_responses = b64decode(mock_server.return_value.export_responses.return_value).decode()
         nes_responses = PatientQuestionnaireResponse.objects.all()
 
         responses = update_acquisitiondate(tokens, ls_responses, nes_responses)
@@ -486,12 +433,10 @@ class SurveyTest(TestCase):
         self.assertEqual(len(responses), 2)
 
     @patch("survey.abc_search_engine.Server")
-    def test_update_acquisitiondate_from_limesurvey_returns_responses_updated2(
-        self, mockServer
-    ):
+    def test_update_acquisitiondate_from_limesurvey_returns_responses_updated2(self, mock_server):
         """No responses were updated"""
 
-        self._set_mocks(mockServer)
+        self._set_mocks(mock_server)
 
         patient2 = UtilTests.create_patient(self.user)
 
@@ -499,17 +444,13 @@ class SurveyTest(TestCase):
         self.response.date = "2021-03-09"
         self.response.save()
 
-        questionnaire_response_2 = UtilTests.create_response_survey(
-            self.user, patient2, self.survey, token_id=2
-        )
+        questionnaire_response_2 = UtilTests.create_response_survey(self.user, patient2, self.survey, token_id=2)
         # The date in ls_responses for the first token
         questionnaire_response_2.date = "2021-04-09"
         questionnaire_response_2.save()
 
-        tokens = mockServer.return_value.list_participants.return_value
-        ls_responses = b64decode(
-            mockServer.return_value.export_responses.return_value
-        ).decode()
+        tokens = mock_server.return_value.list_participants.return_value
+        ls_responses = b64decode(mock_server.return_value.export_responses.return_value).decode()
         nes_responses = PatientQuestionnaireResponse.objects.all()
 
         responses = update_acquisitiondate(tokens, ls_responses, nes_responses)
@@ -519,12 +460,10 @@ class SurveyTest(TestCase):
         self.assertEqual(len(responses), 0)
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_update_survey_acquisitiondate_view_redirects_to_survey_view_with_right_message1(
-        self, mockServer
-    ):
+    def test_get_update_survey_acquisitiondate_view_redirects_to_survey_view_with_right_message1(self, mock_server):
         """No responses were updated"""
 
-        self._set_mocks(mockServer)
+        self._set_mocks(mock_server)
 
         patient2 = UtilTests.create_patient(self.user)
 
@@ -532,9 +471,7 @@ class SurveyTest(TestCase):
         self.response.date = "2021-03-09"
         self.response.save()
 
-        questionnaire_response_2 = UtilTests.create_response_survey(
-            self.user, patient2, self.survey, token_id=2
-        )
+        questionnaire_response_2 = UtilTests.create_response_survey(self.user, patient2, self.survey, token_id=2)
         # The date in ls_responses for the first token
         questionnaire_response_2.date = "2021-04-09"
         questionnaire_response_2.save()
@@ -554,12 +491,10 @@ class SurveyTest(TestCase):
         )
 
     @patch("survey.abc_search_engine.Server")
-    def test_GET_update_survey_acquisitiondate_view_redirects_to_survey_view_with_right_message2(
-        self, mockServer
-    ):
+    def test_get_update_survey_acquisitiondate_view_redirects_to_survey_view_with_right_message2(self, mock_server):
         """Two responses were updated"""
 
-        self._set_mocks(mockServer)
+        self._set_mocks(mock_server)
 
         patient2 = UtilTests.create_patient(self.user)
         self.create_experiment_questionnaire_response(patient2, 2, self.survey)
@@ -573,14 +508,10 @@ class SurveyTest(TestCase):
 
     @patch("survey.abc_search_engine.Server")
     def test_survey_without_pt_title_gets_pt_title_filled_with_limesurvey_code_when_there_is_not_en_title(
-        self, mockServer
+        self, mock_server
     ):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
-        mockServer.return_value.get_language_properties.return_value = {
-            "status": "Error: Invalid survey ID"
-        }
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
+        mock_server.return_value.get_language_properties.return_value = {"status": "Error: Invalid survey ID"}
 
         # Create a survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1)
@@ -596,14 +527,10 @@ class SurveyTest(TestCase):
     @override_settings(LANGUAGE_CODE="en")
     @patch("survey.abc_search_engine.Server")
     def test_survey_without_en_title_gets_en_title_filled_with_limesurvey_code_when_there_is_not_pt_title(
-        self, mockServer
+        self, mock_server
     ):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
-        mockServer.return_value.get_language_properties.return_value = {
-            "status": "Error: Invalid survey ID"
-        }
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
+        mock_server.return_value.get_language_properties.return_value = {"status": "Error: Invalid survey ID"}
 
         # Create a survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1)
@@ -616,12 +543,8 @@ class SurveyTest(TestCase):
         self.assertEqual(len(response.context["questionnaires_list"]), 2)
 
     @patch("survey.abc_search_engine.Server")
-    def test_survey_without_pt_title_gets_listed_with_en_title_instead_but_remains_without_pt_title(
-        self, mockServer
-    ):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
+    def test_survey_without_pt_title_gets_listed_with_en_title_instead_but_remains_without_pt_title(self, mock_server):
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
 
         # Create an survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1, en_title="Test_en_title")
@@ -639,12 +562,8 @@ class SurveyTest(TestCase):
 
     @override_settings(LANGUAGE_CODE="en")
     @patch("survey.abc_search_engine.Server")
-    def test_survey_without_en_title_gets_listed_with_pt_title_instead_but_remains_without_en_title(
-        self, mockServer
-    ):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
+    def test_survey_without_en_title_gets_listed_with_pt_title_instead_but_remains_without_en_title(self, mock_server):
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
 
         # Create a survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1, pt_title="Teste_pt_title")
@@ -662,18 +581,16 @@ class SurveyTest(TestCase):
 
     @patch("survey.abc_search_engine.Server")
     def test_survey_without_pt_or_en_title_returns_default_language_title_to_be_listed_but_does_not_save(
-        self, mockServer
+        self, mock_server
     ):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
-        mockServer.return_value.add_survey.return_value = 21212150
-        mockServer.return_value.get_language_properties.side_effect = [
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
+        mock_server.return_value.add_survey.return_value = 21212150
+        mock_server.return_value.get_language_properties.side_effect = [
             {"surveyls_title": None},
             {"surveyls_title": None},
             {"surveyls_title": "Test Questionnaire in French"},
         ]
-        mockServer.return_value.get_survey_properties.return_value = {"active": "N"}
+        mock_server.return_value.get_survey_properties.return_value = {"active": "N"}
 
         lime_survey = Questionnaires()
 
@@ -692,18 +609,16 @@ class SurveyTest(TestCase):
         self.assertIsNone(Survey.objects.last().pt_title)
 
     @patch("survey.abc_search_engine.Server")
-    def test_surveys_list_get_updated(self, mockServer):
-        mockServer.return_value.get_session_key.return_value = (
-            "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
-        )
-        mockServer.return_value.add_survey.return_value = 212121
-        mockServer.return_value.get_language_properties.side_effect = [
+    def test_surveys_list_get_updated(self, mock_server):
+        mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
+        mock_server.return_value.add_survey.return_value = 212121
+        mock_server.return_value.get_language_properties.side_effect = [
             {"surveyls_title": "Questionário Teste"},
             {"surveyls_title": None},
             {"surveyls_title": "Questionário Teste"},
             {"surveyls_title": None},
         ]
-        mockServer.return_value.get_survey_properties.return_value = {"active": "N"}
+        mock_server.return_value.get_survey_properties.return_value = {"active": "N"}
 
         # Simulate a discrepancy between the survey informations at
         # limesurvey and NES
@@ -719,19 +634,15 @@ class SurveyTest(TestCase):
         self.assertEqual(Survey.objects.last().pt_title, "Questionário Teste")
 
     @staticmethod
-    def _set_mocks(mockServer):
-        mockServer.return_value.get_session_key.return_value = "abc"
-        mockServer.return_value.get_survey_properties.return_value = {
+    def _set_mocks(mock_server):
+        mock_server.return_value.get_session_key.return_value = "abc"
+        mock_server.return_value.get_survey_properties.return_value = {
             "language": "en",
             "additional_languages": "",
         }
-        mockServer.return_value.get_participant_properties.return_value = {
-            "completed": "2020-09-25 09:19"
-        }
-        mockServer.return_value.get_language_properties.return_value = {
-            "surveyls_title": "Survey title"
-        }
-        mockServer.return_value.list_participants.return_value = [
+        mock_server.return_value.get_participant_properties.return_value = {"completed": "2020-09-25 09:19"}
+        mock_server.return_value.get_language_properties.return_value = {"surveyls_title": "Survey title"}
+        mock_server.return_value.list_participants.return_value = [
             {
                 "tid": 1,
                 "token": "gdue1HlTvgKBx2g",
@@ -743,7 +654,7 @@ class SurveyTest(TestCase):
                 "participant_info": {"firstname": "", "lastname": "", "email": ""},
             },
         ]
-        mockServer.return_value.export_responses.return_value = (
+        mock_server.return_value.export_responses.return_value = (
             "ImlkIiwic3VibWl0ZGF0ZSIsImxhc3RwYWdlIiwic3RhcnRsYW5ndWFnZSIsIn"
             "Rva2VuIiwicmVzcG9uc2libGVpZCIsImFjcXVpc2l0aW9uZGF0ZSIsInN1Ympl"
             "Y3RpZCIsImFiYyIKIjIiLCIxOTgwLTAxLTAxIDAwOjAwOjAwIiwiMiIsImVuIi"
@@ -759,15 +670,9 @@ class SurveyTest(TestCase):
         group = ObjectsFactory.create_group(experiment)
         subject = ObjectsFactory.create_subject(patient)
         subject_of_group = ObjectsFactory.create_subject_of_group(group, subject)
-        rootcomponent = ObjectsFactory.create_component(
-            experiment, "block", "root component"
-        )
-        questionnaire = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
-        )
-        component_config = ObjectsFactory.create_component_configuration(
-            rootcomponent, questionnaire
-        )
+        rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
+        questionnaire = ObjectsFactory.create_component(experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey})
+        component_config = ObjectsFactory.create_component_configuration(rootcomponent, questionnaire)
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
         ObjectsFactory.create_questionnaire_response(
             dct, self.user, token_id=token_id, subject_of_group=subject_of_group

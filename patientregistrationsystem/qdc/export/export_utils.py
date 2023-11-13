@@ -1,5 +1,4 @@
 import mne
-
 from experiment.models import ComponentConfiguration
 from experiment.views import eeg_data_reading
 
@@ -7,18 +6,13 @@ from experiment.views import eeg_data_reading
 def create_list_of_trees(block_id, component_type, numeration=""):
     list_of_path = []
 
-    configurations = ComponentConfiguration.objects.filter(parent_id=block_id).order_by(
-        "order"
-    )
+    configurations = ComponentConfiguration.objects.filter(parent_id=block_id).order_by("order")
 
     counter = 1
     for configuration in configurations:
         sub_numeration = (numeration + "." if numeration else "") + str(counter)
 
-        if (
-            not component_type
-            or configuration.component.component_type == component_type
-        ):
+        if not component_type or configuration.component.component_type == component_type:
             list_of_path.append(
                 [
                     [
@@ -33,9 +27,7 @@ def create_list_of_trees(block_id, component_type, numeration=""):
 
         # Look for steps in descendant blocks
         if configuration.component.component_type == "block":
-            list_of_configurations = create_list_of_trees(
-                configuration.component.id, component_type, sub_numeration
-            )
+            list_of_configurations = create_list_of_trees(configuration.component.id, component_type, sub_numeration)
             for item in list_of_configurations:
                 item.insert(
                     0,
