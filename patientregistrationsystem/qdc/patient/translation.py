@@ -84,6 +84,4 @@ class ClassificationOfDiseasesTranslationOptions(TranslationOptions):
     )
 
 
-translator.register(
-    ClassificationOfDiseases, ClassificationOfDiseasesTranslationOptions
-)
+translator.register(ClassificationOfDiseases, ClassificationOfDiseasesTranslationOptions)

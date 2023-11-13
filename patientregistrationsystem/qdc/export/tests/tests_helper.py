@@ -51,10 +51,7 @@ class ExportTestCase(ExperimentTestCase):
                 os.path.join(
                     "Per_participant",
                     "Participant_" + self.patient.code,
-                    "Step_"
-                    + str(step_number)
-                    + "_"
-                    + component_step.component_type.upper(),
+                    "Step_" + str(step_number) + "_" + component_step.component_type.upper(),
                     data_collection_folder,
                     filename,
                 )
@@ -64,10 +61,7 @@ class ExportTestCase(ExperimentTestCase):
             os.path.join(
                 "Per_participant",
                 "Participant_" + self.patient.code,
-                "Step_"
-                + str(step_number)
-                + "_"
-                + component_step.component_type.upper(),
+                "Step_" + str(step_number) + "_" + component_step.component_type.upper(),
                 data_collection_folder,
                 filename,
             )
@@ -82,10 +76,7 @@ class ExportTestCase(ExperimentTestCase):
             any(
                 os.path.join(
                     "Experimental_protocol",
-                    "Step_"
-                    + str(step_number)
-                    + "_"
-                    + component_step.component_type.upper(),
+                    "Step_" + str(step_number) + "_" + component_step.component_type.upper(),
                     data_collection_folder,
                     filename,
                 )
@@ -94,10 +85,7 @@ class ExportTestCase(ExperimentTestCase):
             ),
             os.path.join(
                 "Experimental_protocol",
-                "Step_"
-                + str(step_number)
-                + "_"
-                + component_step.component_type.upper(),
+                "Step_" + str(step_number) + "_" + component_step.component_type.upper(),
                 data_collection_folder,
                 filename,
             )
@@ -109,7 +97,6 @@ class ExportTestCase(ExperimentTestCase):
     def subject_age(birth_date, data_collection=None) -> str:
         date_ = data_collection.date if data_collection else date.today()
         return format(
-            (date_ - datetime.strptime(birth_date, "%Y-%m-%d").date())
-            / timedelta(days=365.2425),
+            (date_ - datetime.strptime(birth_date, "%Y-%m-%d").date()) / timedelta(days=365.2425),
             "0.4",
         )

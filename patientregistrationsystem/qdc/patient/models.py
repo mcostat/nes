@@ -361,21 +361,13 @@ class AlcoholPeriod(models.Model):
 class Patient(models.Model):
     code = models.CharField(max_length=10, null=False, unique=True)
     name = models.CharField(blank=True, max_length=50, default="")
-    cpf = models.CharField(
-        null=True, blank=True, max_length=15, unique=True, validators=[validate_cpf]
-    )
+    cpf = models.CharField(null=True, blank=True, max_length=15, unique=True, validators=[validate_cpf])
     origin = models.CharField(max_length=50, null=True, blank=True)
     medical_record = models.CharField(max_length=25, null=True, blank=True)
-    date_birth = models.DateField(
-        null=False, blank=False, validators=[validate_date_birth]
-    )
-    gender = models.ForeignKey(
-        Gender, on_delete=models.CASCADE, null=False, blank=False
-    )
+    date_birth = models.DateField(null=False, blank=False, validators=[validate_date_birth])
+    gender = models.ForeignKey(Gender, on_delete=models.CASCADE, null=False, blank=False)
     rg = models.CharField(max_length=15, null=True, blank=True)
-    marital_status = models.ForeignKey(
-        MaritalStatus, on_delete=models.CASCADE, null=True, blank=True
-    )
+    marital_status = models.ForeignKey(MaritalStatus, on_delete=models.CASCADE, null=True, blank=True)
     country = models.CharField(max_length=30, choices=COUNTRIES, null=True, blank=True)
     zipcode = models.CharField(max_length=12, null=True, blank=True)
     street = models.CharField(max_length=50, null=True, blank=True)
@@ -468,21 +460,13 @@ class Telephone(models.Model):
 class SocialDemographicData(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     natural_of = models.CharField(max_length=50, null=True, blank=True)
-    citizenship = models.CharField(
-        max_length=50, choices=COUNTRIES, null=True, blank=True
-    )
-    religion = models.ForeignKey(
-        Religion, on_delete=models.CASCADE, null=True, blank=True
-    )
+    citizenship = models.CharField(max_length=50, choices=COUNTRIES, null=True, blank=True)
+    religion = models.ForeignKey(Religion, on_delete=models.CASCADE, null=True, blank=True)
     profession = models.CharField(null=True, blank=True, max_length=50)
     occupation = models.CharField(null=True, blank=True, max_length=50)
     benefit_government = models.BooleanField(null=True)
-    payment = models.ForeignKey(
-        Payment, on_delete=models.CASCADE, null=True, blank=True
-    )
-    flesh_tone = models.ForeignKey(
-        FleshTone, on_delete=models.CASCADE, null=True, blank=True
-    )
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
+    flesh_tone = models.ForeignKey(FleshTone, on_delete=models.CASCADE, null=True, blank=True)
     patient_schooling = models.ForeignKey(
         Schooling,
         on_delete=models.CASCADE,
@@ -567,17 +551,11 @@ class SocialDemographicData(models.Model):
 class SocialHistoryData(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     smoker = models.BooleanField(null=True)
-    amount_cigarettes = models.ForeignKey(
-        AmountCigarettes, on_delete=models.CASCADE, null=True, blank=True
-    )
+    amount_cigarettes = models.ForeignKey(AmountCigarettes, on_delete=models.CASCADE, null=True, blank=True)
     ex_smoker = models.BooleanField(null=True)
     alcoholic = models.BooleanField(null=True)
-    alcohol_frequency = models.ForeignKey(
-        AlcoholFrequency, on_delete=models.CASCADE, null=True, blank=True
-    )
-    alcohol_period = models.ForeignKey(
-        AlcoholPeriod, on_delete=models.CASCADE, null=True, blank=True
-    )
+    alcohol_frequency = models.ForeignKey(AlcoholFrequency, on_delete=models.CASCADE, null=True, blank=True)
+    alcohol_period = models.ForeignKey(AlcoholPeriod, on_delete=models.CASCADE, null=True, blank=True)
     drugs = models.CharField(max_length=25, null=True, blank=True)
 
     medical_drugs_history = models.TextField(null=True, blank=True)
@@ -618,13 +596,7 @@ class MedicalRecordData(models.Model):
         )
 
     def __str__(self) -> str:
-        return (
-            str(self.patient)
-            + " "
-            + str(self.record_date)
-            + " "
-            + str(self.record_responsible)
-        )
+        return str(self.patient) + " " + str(self.record_date) + " " + str(self.record_responsible)
 
 
 class ClassificationOfDiseasesManager(models.Manager):
@@ -636,9 +608,7 @@ class ClassificationOfDiseases(models.Model):  # type: ignore [django-manager-mi
     code = models.CharField(max_length=10, null=False)
     description = models.CharField(max_length=300, null=False)
     abbreviated_description = models.CharField(max_length=190, null=False)
-    parent = models.ForeignKey(
-        "self", on_delete=models.CASCADE, null=True, related_name="children"
-    )
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, related_name="children")
 
     objects: ClassificationOfDiseasesManager = ClassificationOfDiseasesManager()
 
@@ -650,12 +620,8 @@ class ClassificationOfDiseases(models.Model):  # type: ignore [django-manager-mi
 
 
 class Diagnosis(models.Model):
-    medical_record_data = models.ForeignKey(
-        MedicalRecordData, on_delete=models.CASCADE, null=False
-    )
-    classification_of_diseases = models.ForeignKey(
-        ClassificationOfDiseases, on_delete=models.CASCADE, null=False
-    )
+    medical_record_data = models.ForeignKey(MedicalRecordData, on_delete=models.CASCADE, null=False)
+    classification_of_diseases = models.ForeignKey(ClassificationOfDiseases, on_delete=models.CASCADE, null=False)
     date = models.DateField(null=True)
     description = models.CharField(max_length=300, null=True)
 
@@ -676,9 +642,7 @@ class Diagnosis(models.Model):
 
 
 class ComplementaryExam(models.Model):
-    diagnosis = models.ForeignKey(
-        Diagnosis, on_delete=models.CASCADE, null=False, blank=False
-    )
+    diagnosis = models.ForeignKey(Diagnosis, on_delete=models.CASCADE, null=False, blank=False)
     date = models.DateField(null=False, blank=False)
     description = models.CharField(max_length=500, null=False, blank=False)
     doctor = models.CharField(max_length=50, null=True, blank=True)
@@ -715,9 +679,7 @@ class QuestionnaireResponse(models.Model):
         null=False,
         validators=[validate_date_questionnaire_response],
     )
-    questionnaire_responsible = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=False, related_name="+"
-    )
+    questionnaire_responsible = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="+")
     is_completed = models.CharField(null=False, max_length=50, default="")
 
     class Meta:

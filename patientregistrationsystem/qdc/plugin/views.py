@@ -39,14 +39,10 @@ def participants_dict(survey):
     """
     participants = {}
 
-    for response in IndependentResponse.objects.filter(survey=survey).filter(
-        patient__removed=False
-    ):
+    for response in IndependentResponse.objects.filter(survey=survey).filter(patient__removed=False):
         participants[response.patient.id] = {
             "patient_id": response.patient.id,
-            "patient_name": response.patient.name
-            if response.patient.name
-            else response.patient.code,
+            "patient_name": response.patient.name if response.patient.name else response.patient.code,
         }
 
     return participants
@@ -71,9 +67,7 @@ def has_questionnaire(components, survey):
             if has_questionnaire(component["component"], survey):
                 return True
         if component["component"]["component_type"] == Component.QUESTIONNAIRE:
-            questionnaire = Questionnaire.objects.get(
-                id=component["component"]["component"].id
-            )
+            questionnaire = Questionnaire.objects.get(id=component["component"]["component"].id)
             if questionnaire.survey == survey:
                 return True
 
@@ -104,10 +98,7 @@ def build_questionnaires_list(language_code, groups=None):
             dict0["index"],
             dict0["sid"],
             dict0["title"],
-            [
-                (dict1["header"], dict1["field"])
-                for index1, dict1 in enumerate(dict0["output_list"])
-            ],
+            [(dict1["header"], dict1["field"]) for index1, dict1 in enumerate(dict0["output_list"])],
         ]
         for index, dict0 in enumerate(questionnaires)
     ]
@@ -177,9 +168,7 @@ def build_zip_file(
     }
     export = Export.objects.create(user=request.user)
     # TODO (NES-983): creation of export_dir is made calling export_create bellow
-    export_dir = path.join(
-        settings.MEDIA_ROOT, "export", str(request.user.id), str(export.id)
-    )
+    export_dir = path.join(settings.MEDIA_ROOT, "export", str(request.user.id), str(export.id))
     pathlib.Path(export_dir).mkdir(parents=True, exist_ok=True)
     # os.makedirs(export_dir)
     input_filename = path.join(export_dir, "json_export.json")
@@ -250,24 +239,16 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
             # TODO (NES-995): change name for subjects_of_groups_selected
             subjects_of_groups = request.POST.getlist("patients_selected[]")
             group_ids = (
-                Group.objects.filter(subjectofgroup__in=subjects_of_groups)
-                .distinct()
-                .values_list("id", flat=True)
+                Group.objects.filter(subjectofgroup__in=subjects_of_groups).distinct().values_list("id", flat=True)
             )
-            request.session["group_selected_list"] = [
-                str(group_id) for group_id in list(group_ids)
-            ]
+            request.session["group_selected_list"] = [str(group_id) for group_id in list(group_ids)]
             request.session["license"] = 0
             # Need to delete before call export_create method
             if "filtered_participant_data" in request.session:
                 del request.session["filtered_participant_data"]
-            participants_headers = update_patient_attributes(
-                request.POST.getlist("patient_selected")
-            )
+            participants_headers = update_patient_attributes(request.POST.getlist("patient_selected"))
             # TODO (NES-995): build always in English, but possibly not hard coded
-            limesurvey_error, questionnaires = build_questionnaires_list(
-                "en", group_ids
-            )
+            limesurvey_error, questionnaires = build_questionnaires_list("en", group_ids)
             if limesurvey_error:
                 messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
@@ -281,28 +262,15 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
                 export = Export.objects.last()
                 if isinstance(export, Export):
                     plugin_url = RandomForests.objects.first().plugin_url
-                    plugin_url += (
-                        "?user_id="
-                        + str(request.user.id)
-                        + "&export_id="
-                        + str(export.id)
-                    )
+                    plugin_url += "?user_id=" + str(request.user.id) + "&export_id=" + str(export.id)
                     # Puts in session to open plugin and load posted values
                     request.session["plugin_url"] = plugin_url
-                    request.session["experiment_selected_id"] = int(
-                        request.POST.get("experiment_selected", None)
-                    )
-                    request.session["participants_from"] = list(
-                        map(int, request.POST.getlist("from[]", None))
-                    )
-                    request.session["participants_to"] = list(
-                        map(int, request.POST.getlist("patients_selected[]"))
-                    )
+                    request.session["experiment_selected_id"] = int(request.POST.get("experiment_selected", None))
+                    request.session["participants_from"] = list(map(int, request.POST.getlist("from[]", None)))
+                    request.session["participants_to"] = list(map(int, request.POST.getlist("patients_selected[]")))
                 return redirect(reverse("send-to-plugin"))
             else:
-                messages.error(
-                    request, _("Could not open zip file to send to Forest Plugin")
-                )
+                messages.error(request, _("Could not open zip file to send to Forest Plugin"))
                 return redirect(reverse("send-to-plugin"))
         else:
             if "group_selected_list" in request.session:
@@ -314,9 +282,7 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
             # attribute selected (patient_selected is the list of attributes).
             # This may be changed to a better key name
             if not request.POST.getlist("patient_selected"):
-                messages.warning(
-                    request, _("Please select at least Gender participant attribute")
-                )
+                messages.warning(request, _("Please select at least Gender participant attribute"))
                 return redirect(reverse("send-to-plugin"))
             if "gender__name*gender" not in request.POST.getlist("patient_selected"):
                 messages.warning(
@@ -325,12 +291,8 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
                 )
                 return redirect(reverse("send-to-plugin"))
             participants = request.POST.getlist("patients_selected[]")
-            participants_headers = update_patient_attributes(
-                request.POST.getlist("patient_selected")
-            )
-            limesurvey_error, questionnaires = build_questionnaires_list(
-                request.LANGUAGE_CODE
-            )
+            participants_headers = update_patient_attributes(request.POST.getlist("patient_selected"))
+            limesurvey_error, questionnaires = build_questionnaires_list(request.LANGUAGE_CODE)
             if limesurvey_error:
                 messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
@@ -344,15 +306,11 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
                 export = Export.objects.last()
                 assert isinstance(export, Export)
                 plugin_url = RandomForests.objects.first().plugin_url
-                plugin_url += (
-                    "?user_id=" + str(request.user.id) + "&export_id=" + str(export.id)
-                )
+                plugin_url += "?user_id=" + str(request.user.id) + "&export_id=" + str(export.id)
                 request.session["plugin_url"] = plugin_url
                 return redirect(reverse("send-to-plugin"))
             else:
-                messages.error(
-                    request, _("Could not open zip file to send to Forest Plugin")
-                )
+                messages.error(request, _("Could not open zip file to send to Forest Plugin"))
                 return redirect(reverse("send-to-plugin"))
 
     try:
@@ -382,23 +340,11 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
         followup = Survey.objects.get(pk=random_forests.followup_assessment.pk)
         followup_participants = participants_dict(followup)
         if admission:
-            admission_title = (
-                admission.en_title
-                if request.LANGUAGE_CODE == "en"
-                else admission.pt_title
-            )
+            admission_title = admission.en_title if request.LANGUAGE_CODE == "en" else admission.pt_title
         if surgical:
-            surgical_title = (
-                surgical.en_title
-                if request.LANGUAGE_CODE == "en"
-                else surgical.pt_title
-            )
+            surgical_title = surgical.en_title if request.LANGUAGE_CODE == "en" else surgical.pt_title
         if followup:
-            followup_title = (
-                followup.en_title
-                if request.LANGUAGE_CODE == "en"
-                else followup.pt_title
-            )
+            followup_title = followup.en_title if request.LANGUAGE_CODE == "en" else followup.pt_title
 
     # The intersection of admission assessment, surgical evaluation and
     # followup questionnaires
@@ -446,9 +392,7 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
         admission = Survey.objects.get(pk=random_forests.admission_assessment.pk)
         surgical = Survey.objects.get(pk=random_forests.surgical_evaluation.pk)
         followup = Survey.objects.get(pk=random_forests.followup_assessment.pk)
-        questionnaires = Questionnaire.objects.filter(
-            survey__in=[admission, surgical, followup]
-        )
+        questionnaires = Questionnaire.objects.filter(survey__in=[admission, surgical, followup])
         questionnaire_responses = ExperimentResponse.objects.filter(
             data_configuration_tree__component_configuration__component__in=questionnaires
         )
@@ -457,33 +401,23 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
         ).distinct()
 
         context["experiments"] = experiments
-        context["experiment_selected_id"] = request.session.get(
-            "experiment_selected_id", None
-        )
+        context["experiment_selected_id"] = request.session.get("experiment_selected_id", None)
         if "experiment_selected_id" in request.session:
             del request.session["experiment_selected_id"]
 
-        context["participants_from"] = dict(
-            (el, "") for el in request.session.get("participants_from", [])
-        )
+        context["participants_from"] = dict((el, "") for el in request.session.get("participants_from", []))
         for key in context["participants_from"]:
             subject_of_group = SubjectOfGroup.objects.get(pk=key)
             patient = subject_of_group.subject.patient
-            context["participants_from"][key] = (
-                patient.name + " - " + subject_of_group.group.title
-            )
+            context["participants_from"][key] = patient.name + " - " + subject_of_group.group.title
         if "participants_from" in request.session:
             del request.session["participants_from"]
 
-        context["participants_to"] = dict(
-            (el, "") for el in request.session.get("participants_to", [])
-        )
+        context["participants_to"] = dict((el, "") for el in request.session.get("participants_to", []))
         for key in context["participants_to"]:
             subject_of_group = SubjectOfGroup.objects.get(pk=key)
             patient = subject_of_group.subject.patient
-            context["participants_to"][key] = (
-                patient.name + " - " + subject_of_group.group.title
-            )
+            context["participants_to"][key] = patient.name + " - " + subject_of_group.group.title
         if "participants_to" in request.session:
             del request.session["participants_to"]
 
@@ -503,9 +437,7 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
     plugin_url = request.session.get("plugin_url", None)
     if plugin_url is not None:
         context["plugin_url"] = plugin_url
-        messages.success(
-            request, _("Data from questionnaires was sent to Forest Plugin")
-        )
+        messages.success(request, _("Data from questionnaires was sent to Forest Plugin"))
         del request.session["plugin_url"]
 
     return render(request, template_name, context)

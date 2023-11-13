@@ -86,11 +86,7 @@ class RestApiClient(object):
         try:
             url = (
                 settings.PORTAL_API["URL"]
-                + (
-                    ":" + settings.PORTAL_API["PORT"]
-                    if settings.PORTAL_API["PORT"]
-                    else ""
-                )
+                + (":" + settings.PORTAL_API["PORT"] if settings.PORTAL_API["PORT"] else "")
                 + "/api/schema/"
             )
 
@@ -122,18 +118,14 @@ def send_experiment_to_portal(experiment: Experiment):
         "data_acquisition_done": str(experiment.data_acquisition_is_concluded),
         "project_url": experiment.source_code_url,
         "ethics_committee_url": experiment.ethics_committee_project_url,
-        "release_notes": experiment.schedule_of_sending.get(
-            status="scheduled"
-        ).reason_for_resending,
+        "release_notes": experiment.schedule_of_sending.get(status="scheduled").reason_for_resending,
     }
 
     action_keys = ["experiments", "create"]
 
     if experiment.ethics_committee_project_file:
         with open(
-            path.join(
-                settings.MEDIA_ROOT, experiment.ethics_committee_project_file.name
-            ),
+            path.join(settings.MEDIA_ROOT, experiment.ethics_committee_project_file.name),
             "rb",
         ) as f:
             params["ethics_committee_file"] = coreapi.utils.File(
@@ -144,9 +136,7 @@ def send_experiment_to_portal(experiment: Experiment):
                 rest.schema, action_keys, params=params, encoding="multipart/form-data"
             )
     else:
-        portal_experiment = rest.client.action(
-            rest.schema, action_keys, params=params, encoding="multipart/form-data"
-        )
+        portal_experiment = rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
 
     return portal_experiment
 
@@ -219,9 +209,7 @@ def send_publication_to_portal(publication, experiment_id):
     return portal_publications
 
 
-def send_experimental_protocol_to_portal(
-    portal_group_id, textual_description, image, root_step_id
-):
+def send_experimental_protocol_to_portal(portal_group_id, textual_description, image, root_step_id):
     rest = RestApiClient()
 
     if not rest.active:
@@ -244,9 +232,7 @@ def send_experimental_protocol_to_portal(
                 rest.schema, action_keys, params=params, encoding="multipart/form-data"
             )
     else:
-        portal_experimental_protocol = rest.client.action(
-            rest.schema, action_keys, params=params
-        )
+        portal_experimental_protocol = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_experimental_protocol
 
@@ -287,9 +273,7 @@ def send_eeg_setting_to_portal(eeg_setting: EEGSetting):
 
     # filter setting
     if hasattr(eeg_setting, "eeg_filter_setting"):
-        eeg_filter_setting = send_eeg_filter_setting_to_portal(
-            portal_eeg_setting["id"], eeg_setting.eeg_filter_setting
-        )
+        eeg_filter_setting = send_eeg_filter_setting_to_portal(portal_eeg_setting["id"], eeg_setting.eeg_filter_setting)
 
     # electrode layout setting
     if hasattr(eeg_setting, "eeg_electrode_layout_setting"):
@@ -309,22 +293,16 @@ def send_eeg_setting_to_portal(eeg_setting: EEGSetting):
             portal_eeg_setting["id"], localization_system
         )
 
-        for (
-            position
-        ) in eeg_setting.eeg_electrode_layout_setting.positions_setting.all():
+        for position in eeg_setting.eeg_electrode_layout_setting.positions_setting.all():
             if position.used:
                 # electrode model
                 if position.electrode_model.id not in electrode_models:
                     electrode_model_portal = send_electrode_model_to_portal(
                         eeg_setting.experiment_id, position.electrode_model
                     )
-                    electrode_models[
-                        position.electrode_model.id
-                    ] = electrode_model_portal
+                    electrode_models[position.electrode_model.id] = electrode_model_portal
                 else:
-                    electrode_model_portal = electrode_models[
-                        position.electrode_model.id
-                    ]
+                    electrode_model_portal = electrode_models[position.electrode_model.id]
 
                 # electrode position
                 electrode_position_portal = send_eeg_electrode_position_to_portal(
@@ -355,9 +333,7 @@ def send_amplifier_to_portal(experiment_nes_id, amplifier: Amplifier):
         "amplifier_detection_type_name": amplifier.amplifier_detection_type.name
         if amplifier.amplifier_detection_type
         else None,
-        "tethering_system_name": amplifier.tethering_system.name
-        if amplifier.tethering_system
-        else None,
+        "tethering_system_name": amplifier.tethering_system.name if amplifier.tethering_system else None,
     }
 
     action_keys = ["experiments", "amplifier", "create"]
@@ -387,16 +363,12 @@ def send_eeg_amplifier_setting_to_portal(
 
     action_keys = ["eeg_setting", "eeg_amplifier_setting", "create"]
 
-    portal_eeg_amplifier_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_eeg_amplifier_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_eeg_amplifier_setting
 
 
-def send_eeg_solution_setting_to_portal(
-    portal_eeg_setting_id, eeg_solution_setting: EEGSolutionSetting
-):
+def send_eeg_solution_setting_to_portal(portal_eeg_setting_id, eeg_solution_setting: EEGSolutionSetting):
     rest = RestApiClient()
 
     if not rest.active:
@@ -416,9 +388,7 @@ def send_eeg_solution_setting_to_portal(
     return portal_participant
 
 
-def send_eeg_filter_setting_to_portal(
-    portal_eeg_setting_id, eeg_filter_setting: EEGFilterSetting
-):
+def send_eeg_filter_setting_to_portal(portal_eeg_setting_id, eeg_filter_setting: EEGFilterSetting):
     rest = RestApiClient()
 
     if not rest.active:
@@ -444,9 +414,7 @@ def send_eeg_filter_setting_to_portal(
     return portal_participant
 
 
-def send_eeg_electrode_net_setting_to_portal(
-    portal_eeg_setting_id, eeg_electrode_net: EEGElectrodeNet
-):
+def send_eeg_electrode_net_setting_to_portal(portal_eeg_setting_id, eeg_electrode_net: EEGElectrodeNet):
     rest = RestApiClient()
 
     if not rest.active:
@@ -498,9 +466,7 @@ def send_eeg_electrode_localization_system_to_portal(
 
     action_keys = ["eeg_setting", "eeg_electrode_localization_system", "create"]
 
-    portal_participant = rest.client.action(
-        rest.schema, action_keys, params=params, encoding="multipart/form-data"
-    )
+    portal_participant = rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
 
     return portal_participant
 
@@ -555,29 +521,21 @@ def send_electrode_model_to_portal(experiment_nes_id, electrode_model: Electrode
 
     if electrode_model.electrode_type == "surface":
         action_keys = ["experiments", "surface_electrode", "create"]
-        electrode_instance: SurfaceElectrode = SurfaceElectrode.objects.filter(
-            id=electrode_model.id
-        ).get(id=1)
+        electrode_instance: SurfaceElectrode = SurfaceElectrode.objects.filter(id=electrode_model.id).get(id=1)
         if electrode_instance:
             # electrode_instance = electrode_instance
             params["conduction_type"] = electrode_instance.conduction_type
             params["electrode_mode"] = electrode_instance.electrode_mode
             params["electrode_shape_name"] = electrode_instance.electrode_shape.name
             if electrode_instance.electrodesurfacemeasure_set:
-                params[
-                    "electrode_shape_measure_value"
-                ] = electrode_instance.electrodesurfacemeasure_set.first().value
+                params["electrode_shape_measure_value"] = electrode_instance.electrodesurfacemeasure_set.first().value
                 params[
                     "electrode_shape_measure_unit"
-                ] = (
-                    electrode_instance.electrodesurfacemeasure_set.first().measure_unit.name
-                )
+                ] = electrode_instance.electrodesurfacemeasure_set.first().measure_unit.name
 
     elif electrode_model.electrode_type == "needle":
         action_keys = ["experiments", "needle_electrode", "create"]
-        electrode_instance: NeedleElectrode = NeedleElectrode.objects.get(
-            pk=electrode_model.id
-        )
+        electrode_instance: NeedleElectrode = NeedleElectrode.objects.get(pk=electrode_model.id)
         params["size"] = electrode_instance.size
         params["size_unit"] = electrode_instance.size_unit
         params[
@@ -589,19 +547,13 @@ def send_electrode_model_to_portal(experiment_nes_id, electrode_model: Electrode
 
     else:
         action_keys = ["experiments", "intramuscular_electrode", "create"]
-        electrode_instance: IntramuscularElectrode = IntramuscularElectrode.objects.get(
-            pk=electrode_model.id
-        )
+        electrode_instance: IntramuscularElectrode = IntramuscularElectrode.objects.get(pk=electrode_model.id)
         params["strand"] = electrode_instance.strand
         params["insulation_material_name"] = (
-            electrode_instance.insulation_material.name
-            if electrode_instance.insulation_material
-            else None
+            electrode_instance.insulation_material.name if electrode_instance.insulation_material else None
         )
         params["insulation_material_description"] = (
-            electrode_instance.insulation_material.description
-            if electrode_instance.insulation_material
-            else None
+            electrode_instance.insulation_material.description if electrode_instance.insulation_material else None
         )
         params["length_of_exposed_tip"] = electrode_instance.length_of_exposed_tip
 
@@ -681,9 +633,7 @@ def send_emg_ad_converter_setting_to_portal(
 
     action_keys = ["emg_setting", "emg_ad_converter_setting", "create"]
 
-    portal_ad_converter_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_ad_converter_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_ad_converter_setting
 
@@ -705,9 +655,7 @@ def send_emg_electrode_setting_to_portal(
 
     action_keys = ["emg_setting", "emg_electrode_setting", "create"]
 
-    portal_electrode_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_electrode_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_electrode_setting
 
@@ -730,9 +678,7 @@ def send_emg_preamplifier_setting_to_portal(
 
     action_keys = ["emg_electrode_setting", "emg_preamplifier_setting", "create"]
 
-    portal_preamplifier_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_preamplifier_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_preamplifier_setting
 
@@ -755,9 +701,7 @@ def send_emg_amplifier_setting_to_portal(
 
     action_keys = ["emg_electrode_setting", "emg_amplifier_setting", "create"]
 
-    portal_amplifier_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_amplifier_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_amplifier_setting
 
@@ -784,9 +728,7 @@ def send_emg_preamplifier_filter_setting_to_portal(
 
     action_keys = ["emg_electrode_setting", "emg_preamplifier_filter_setting", "create"]
 
-    portal_preamplifier_filter_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_preamplifier_filter_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_preamplifier_filter_setting
 
@@ -812,16 +754,12 @@ def send_emg_analog_filter_setting_to_portal(
 
     action_keys = ["emg_electrode_setting", "emg_analog_filter_setting", "create"]
 
-    portal_preamplifier_filter_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_preamplifier_filter_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_preamplifier_filter_setting
 
 
-def send_emg_surface_placement_to_portal(
-    experiment_nes_id, emg_surface_placement: EMGSurfacePlacement
-):
+def send_emg_surface_placement_to_portal(experiment_nes_id, emg_surface_placement: EMGSurfacePlacement):
     rest = RestApiClient()
 
     if not rest.active:
@@ -848,9 +786,7 @@ def send_emg_surface_placement_to_portal(
             path.join(settings.MEDIA_ROOT, emg_surface_placement.photo.name),
             "rb",
         )
-        params["photo"] = coreapi.utils.File(
-            os.path.basename(emg_surface_placement.photo.name), photo_file
-        )
+        params["photo"] = coreapi.utils.File(os.path.basename(emg_surface_placement.photo.name), photo_file)
 
     action_keys = ["experiments", "emg_surface_placement", "create"]
 
@@ -887,9 +823,7 @@ def send_emg_intramuscular_placement_to_portal(
             path.join(settings.MEDIA_ROOT, emg_intramuscular_placement.photo.name),
             "rb",
         )
-        params["photo"] = coreapi.utils.File(
-            os.path.basename(emg_intramuscular_placement.photo.name), photo_file
-        )
+        params["photo"] = coreapi.utils.File(os.path.basename(emg_intramuscular_placement.photo.name), photo_file)
 
     action_keys = ["experiments", "emg_intramuscular_placement", "create"]
 
@@ -900,9 +834,7 @@ def send_emg_intramuscular_placement_to_portal(
     return portal_intramuscular_placement
 
 
-def send_emg_needle_placement_to_portal(
-    experiment_nes_id, emg_needle_placement: EMGNeedlePlacement
-):
+def send_emg_needle_placement_to_portal(experiment_nes_id, emg_needle_placement: EMGNeedlePlacement):
     rest = RestApiClient()
 
     if not rest.active:
@@ -925,9 +857,7 @@ def send_emg_needle_placement_to_portal(
             path.join(settings.MEDIA_ROOT, emg_needle_placement.photo.name),
             "rb",
         )
-        params["photo"] = coreapi.utils.File(
-            os.path.basename(emg_needle_placement.photo.name), photo_file
-        )
+        params["photo"] = coreapi.utils.File(os.path.basename(emg_needle_placement.photo.name), photo_file)
 
     action_keys = ["experiments", "emg_needle_placement", "create"]
 
@@ -962,9 +892,7 @@ def send_emg_electrode_placement_setting_to_portal(
 
     action_keys = ["emg_electrode_setting", "emg_electrode_placement_setting", "create"]
 
-    portal_preamplifier_setting = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_preamplifier_setting = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_preamplifier_setting
 
@@ -1015,13 +943,9 @@ def send_emg_setting_to_portal(emg_setting: EMGSetting):
             electrode_model_portal = send_electrode_model_to_portal(
                 emg_setting.experiment_id, emg_electrode_setting.electrode
             )
-            electrode_models[
-                emg_electrode_setting.electrode.id
-            ] = electrode_model_portal
+            electrode_models[emg_electrode_setting.electrode.id] = electrode_model_portal
         else:
-            electrode_model_portal = electrode_models[
-                emg_electrode_setting.electrode.id
-            ]
+            electrode_model_portal = electrode_models[emg_electrode_setting.electrode.id]
 
         # electrode setting
         portal_emg_electrode_setting = send_emg_electrode_setting_to_portal(
@@ -1085,46 +1009,35 @@ def send_emg_setting_to_portal(emg_setting: EMGSetting):
 
             # surface placement
             if placement_setting.emg_electrode_placement.placement_type == "surface":
-                emg_surface_placement = EMGSurfacePlacement.objects.get(
-                    pk=placement_setting.emg_electrode_placement.id
-                )
+                emg_surface_placement = EMGSurfacePlacement.objects.get(pk=placement_setting.emg_electrode_placement.id)
 
                 portal_emg_electrode_placement = send_emg_surface_placement_to_portal(
                     emg_setting.experiment_id, emg_surface_placement
                 )
 
             # intramuscular placement
-            elif (
-                placement_setting.emg_electrode_placement.placement_type
-                == "intramuscular"
-            ):
+            elif placement_setting.emg_electrode_placement.placement_type == "intramuscular":
                 emg_intramuscular_placement = EMGIntramuscularPlacement.objects.get(
                     pk=placement_setting.emg_electrode_placement.id
                 )
 
-                portal_emg_electrode_placement = (
-                    send_emg_intramuscular_placement_to_portal(
-                        emg_setting.experiment_id, emg_intramuscular_placement
-                    )
+                portal_emg_electrode_placement = send_emg_intramuscular_placement_to_portal(
+                    emg_setting.experiment_id, emg_intramuscular_placement
                 )
 
             # needle placement
             else:
-                emg_needle_placement = EMGNeedlePlacement.objects.get(
-                    pk=placement_setting.emg_electrode_placement.id
-                )
+                emg_needle_placement = EMGNeedlePlacement.objects.get(pk=placement_setting.emg_electrode_placement.id)
 
                 portal_emg_electrode_placement = send_emg_needle_placement_to_portal(
                     emg_setting.experiment_id, emg_needle_placement
                 )
 
             # placement setting
-            portal_emg_electrode_placement_setting = (
-                send_emg_electrode_placement_setting_to_portal(
-                    portal_emg_electrode_setting["id"],
-                    portal_emg_electrode_placement["id"],
-                    emg_electrode_setting.emg_electrode_placement_setting,
-                )
+            portal_emg_electrode_placement_setting = send_emg_electrode_placement_setting_to_portal(
+                portal_emg_electrode_setting["id"],
+                portal_emg_electrode_placement["id"],
+                emg_electrode_setting.emg_electrode_placement_setting,
             )
 
     return portal_emg_setting
@@ -1262,21 +1175,15 @@ def send_context_tree_to_portal(context_tree: ContextTree):
             path.join(settings.MEDIA_ROOT, context_tree.setting_file.name),
             "rb",
         ) as f:
-            params["setting_file"] = coreapi.utils.File(
-                os.path.basename(context_tree.setting_file.name), f
-            )
-            portal_group = rest.client.action(
-                rest.schema, action_keys, params=params, encoding="multipart/form-data"
-            )
+            params["setting_file"] = coreapi.utils.File(os.path.basename(context_tree.setting_file.name), f)
+            portal_group = rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
     else:
         portal_group = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_group
 
 
-def send_participant_to_portal(
-    schedule_of_sending, portal_group_id, subject: Subject, first_data_collection
-):
+def send_participant_to_portal(schedule_of_sending, portal_group_id, subject: Subject, first_data_collection):
     rest = RestApiClient()
 
     if not rest.active:
@@ -1333,9 +1240,7 @@ def send_research_project_to_portal(experiment: Experiment):
 
     action_keys = ["experiments", "studies", "create"]
 
-    portal_research_project = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_research_project = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_research_project
 
@@ -1442,18 +1347,14 @@ def send_steps_to_portal(
     component_configuration = None
 
     if component_configuration_id:
-        component_configuration = ComponentConfiguration.objects.get(
-            pk=component_configuration_id
-        )
+        component_configuration = ComponentConfiguration.objects.get(pk=component_configuration_id)
 
     rest = RestApiClient()
 
     if not rest.active:
         return None
 
-    numeration = (
-        component_tree["numeration"] if component_tree["numeration"] != "" else "0"
-    )
+    numeration = component_tree["numeration"] if component_tree["numeration"] != "" else "0"
 
     survey = None
 
@@ -1477,18 +1378,14 @@ def send_steps_to_portal(
         "type": step_type,
         "parent": parent,
         "order": component_configuration.order if component_configuration else 0,
-        "number_of_repetitions": component_configuration.number_of_repetitions
-        if component_configuration
-        else None,
+        "number_of_repetitions": component_configuration.number_of_repetitions if component_configuration else None,
         "interval_between_repetitions_value": component_configuration.interval_between_repetitions_value
         if component_configuration
         else None,
         "interval_between_repetitions_unit": component_configuration.interval_between_repetitions_unit
         if component_configuration
         else None,
-        "random_position": component_configuration.random_position
-        if component_configuration
-        else None,
+        "random_position": component_configuration.random_position if component_configuration else None,
     }
 
     api_step_method = "step"
@@ -1524,25 +1421,15 @@ def send_steps_to_portal(
 
     elif step_type == "generic_data_collection":
         api_step_method = "generic_data_collection_step"
-        step_specialization: GenericDataCollection = GenericDataCollection.objects.get(
-            pk=component.id
-        )
+        step_specialization: GenericDataCollection = GenericDataCollection.objects.get(pk=component.id)
         params["information_type_name"] = step_specialization.information_type.name
-        params[
-            "information_type_description"
-        ] = step_specialization.information_type.description
+        params["information_type_description"] = step_specialization.information_type.description
 
     elif step_type == "media_collection":
         api_step_method = "generic_data_collection_step"
-        step_specialization: MediaCollection = MediaCollection.objects.get(
-            pk=component.id
-        )
-        params[
-            "information_type_media_name"
-        ] = step_specialization.information_type_media.name
-        params[
-            "information_type_media_description"
-        ] = step_specialization.information_type_media.description
+        step_specialization: MediaCollection = MediaCollection.objects.get(pk=component.id)
+        params["information_type_media_name"] = step_specialization.information_type_media.name
+        params["information_type_media_description"] = step_specialization.information_type_media.description
 
     elif step_type == "stimulus":
         api_step_method = "stimulus_step"
@@ -1553,33 +1440,21 @@ def send_steps_to_portal(
                 path.join(settings.MEDIA_ROOT, step_specialization.media_file.name),
                 "rb",
             )
-            params["media_file"] = coreapi.utils.File(
-                os.path.basename(step_specialization.media_file.name), media_file
-            )
+            params["media_file"] = coreapi.utils.File(os.path.basename(step_specialization.media_file.name), media_file)
 
     elif step_type == "goalkeeper_game":
         api_step_method = "goalkeeper_game_step"
-        step_specialization: DigitalGamePhase = DigitalGamePhase.objects.get(
-            pk=component.id
-        )
+        step_specialization: DigitalGamePhase = DigitalGamePhase.objects.get(pk=component.id)
         params["software_name"] = step_specialization.software_version.software.name
-        params[
-            "software_description"
-        ] = step_specialization.software_version.software.description
+        params["software_description"] = step_specialization.software_version.software.description
         params["software_version"] = step_specialization.software_version.name
-        params["context_tree"] = list_of_context_tree[
-            step_specialization.context_tree_id
-        ]
+        params["context_tree"] = list_of_context_tree[step_specialization.context_tree_id]
 
     elif step_type == "block":
         api_step_method = "set_of_step"
         step_specialization: Block = Block.objects.get(pk=component.id)
-        params[
-            "number_of_mandatory_steps"
-        ] = step_specialization.number_of_mandatory_components
-        params["is_sequential"] = (
-            True if step_specialization.type == Block.SEQUENCE else False
-        )
+        params["number_of_mandatory_steps"] = step_specialization.number_of_mandatory_components
+        params["is_sequential"] = True if step_specialization.type == Block.SEQUENCE else False
 
     elif step_type == "questionnaire":
         api_step_method = "questionnaire_step"
@@ -1589,9 +1464,7 @@ def send_steps_to_portal(
 
     action_keys = ["groups", api_step_method, "create"]
 
-    portal_step = rest.client.action(
-        rest.schema, action_keys, params=params, encoding="multipart/form-data"
-    )
+    portal_step = rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
 
     return_dict = {numeration: {"portal_step_id": portal_step["id"]}}
 
@@ -1620,13 +1493,9 @@ def send_steps_to_portal(
         if survey_languages["additional_languages"]:
             # additional are not default language
             params["is_default"] = False
-            for additional_language in survey_languages["additional_languages"].split(
-                " "
-            ):
+            for additional_language in survey_languages["additional_languages"].split(" "):
                 if additional_language != "":
-                    survey_metadata, survey_name = get_survey_information(
-                        additional_language, survey, surveys
-                    )
+                    survey_metadata, survey_name = get_survey_information(additional_language, survey, surveys)
                     params["survey_name"] = survey_name
                     params["survey_metadata"] = survey_metadata
                     params["language_code"] = additional_language
@@ -1643,20 +1512,14 @@ def send_steps_to_portal(
             )
             params = {
                 "id": portal_step["id"],
-                "file": coreapi.utils.File(
-                    os.path.basename(additional_file.file.name), file
-                ),
+                "file": coreapi.utils.File(os.path.basename(additional_file.file.name), file),
             }
             action_keys = ["step", "step_additional_file", "create"]
-            rest.client.action(
-                rest.schema, action_keys, params=params, encoding="multipart/form-data"
-            )
+            rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
 
     # sending sub-steps
     if component_tree["list_of_component_configuration"]:
-        for component_configuration in component_tree[
-            "list_of_component_configuration"
-        ]:
+        for component_configuration in component_tree["list_of_component_configuration"]:
             sub_step_list = send_steps_to_portal(
                 portal_group_id,
                 component_configuration["component"],
@@ -1676,9 +1539,7 @@ def send_steps_to_portal(
 def get_survey_information(language, survey, surveys):
     survey_name = surveys.get_survey_title(survey.lime_survey_id, language)
     questionnaire_utils = QuestionnaireUtils()
-    fields = get_questionnaire_fields_for_portal(
-        surveys, survey.lime_survey_id, language
-    )
+    fields = get_questionnaire_fields_for_portal(surveys, survey.lime_survey_id, language)
     (
         error,
         questionnaire_fields,
@@ -1697,9 +1558,7 @@ def get_survey_information(language, survey, surveys):
     return survey_metadata, survey_name
 
 
-def get_questionnaire_fields_for_portal(
-    questionnaire_lime_survey, lime_survey_id, language_code
-):
+def get_questionnaire_fields_for_portal(questionnaire_lime_survey, lime_survey_id, language_code):
     """
     :param questionnaire_lime_survey: object to get limesurvey info
     :param lime_survey_id: limesurvey id
@@ -1708,9 +1567,7 @@ def get_questionnaire_fields_for_portal(
     """
 
     fields = []
-    responses_text = questionnaire_lime_survey.get_responses(
-        lime_survey_id, language_code
-    )
+    responses_text = questionnaire_lime_survey.get_responses(lime_survey_id, language_code)
     if responses_text:
         # header
         header_fields = next(reader(StringIO(responses_text), delimiter=","))
@@ -1733,9 +1590,7 @@ def send_file_to_portal(file):
 
     with open(path.join(settings.MEDIA_ROOT, file), "rb") as f:
         params["file"] = coreapi.utils.File(os.path.basename(file), f)
-        portal_file = rest.client.action(
-            rest.schema, action_keys, params=params, encoding="multipart/form-data"
-        )
+        portal_file = rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
 
     return portal_file
 
@@ -1809,9 +1664,7 @@ def send_emg_data_to_portal(
     return portal_emg_data
 
 
-def send_tms_data_to_portal(
-    portal_participant_id, portal_step_id, portal_tms_setting_id, tms_data: TMSData
-):
+def send_tms_data_to_portal(portal_participant_id, portal_step_id, portal_tms_setting_id, tms_data: TMSData):
     rest = RestApiClient()
 
     if not rest.active:
@@ -1831,9 +1684,7 @@ def send_tms_data_to_portal(
         "time_between_mep_trials": tms_data.time_between_mep_trials,
         "time_between_mep_trials_unit": tms_data.time_between_mep_trials_unit,
         "repetitive_pulse_frequency": tms_data.repetitive_pulse_frequency,
-        "coil_orientation": tms_data.coil_orientation.name
-        if tms_data.coil_orientation
-        else None,
+        "coil_orientation": tms_data.coil_orientation.name if tms_data.coil_orientation else None,
         "coil_orientation_angle": tms_data.coil_orientation_angle,
         "direction_of_induced_current": tms_data.direction_of_induced_current.name
         if tms_data.direction_of_induced_current
@@ -1855,14 +1706,9 @@ def send_tms_data_to_portal(
             path.join(settings.MEDIA_ROOT, tms_data.hotspot.hot_spot_map.name),
             "rb",
         )
-        params["hot_spot_map"] = coreapi.utils.File(
-            os.path.basename(tms_data.hotspot.hot_spot_map.name), hotspot_map
-        )
+        params["hot_spot_map"] = coreapi.utils.File(os.path.basename(tms_data.hotspot.hot_spot_map.name), hotspot_map)
 
-    if (
-        tms_data.hotspot
-        and tms_data.hotspot.tms_localization_system.tms_localization_system_image
-    ):
+    if tms_data.hotspot and tms_data.hotspot.tms_localization_system.tms_localization_system_image:
         localization_system_image = open(
             path.join(
                 settings.MEDIA_ROOT,
@@ -1871,17 +1717,13 @@ def send_tms_data_to_portal(
             "rb",
         )
         params["localization_system_image"] = coreapi.utils.File(
-            os.path.basename(
-                tms_data.hotspot.tms_localization_system.tms_localization_system_image.name
-            ),
+            os.path.basename(tms_data.hotspot.tms_localization_system.tms_localization_system_image.name),
             localization_system_image,
         )
 
     action_keys = ["tms_data", "create"]
 
-    portal_tms_data = rest.client.action(
-        rest.schema, action_keys, params=params, encoding="multipart/form-data"
-    )
+    portal_tms_data = rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
 
     return portal_tms_data
 
@@ -1901,9 +1743,7 @@ def send_digital_game_phase_data_to_portal(
         "participant": portal_participant_id,
         "step": portal_step_id,
         "date": digital_game_phase_data.date.strftime("%Y-%m-%d"),
-        "time": digital_game_phase_data.time.strftime("%H:%M:%S")
-        if digital_game_phase_data.time
-        else None,
+        "time": digital_game_phase_data.time.strftime("%H:%M:%S") if digital_game_phase_data.time else None,
         "description": digital_game_phase_data.description,
         "file_format": digital_game_phase_data.file_format.name,
         "sequence_used_in_context_tree": digital_game_phase_data.sequence_used_in_context_tree,
@@ -1935,9 +1775,7 @@ def send_questionnaire_response_to_portal(
         "participant": portal_participant_id,
         "step": portal_step_id,
         "date": questionnaire_response.date.strftime("%Y-%m-%d"),
-        "time": questionnaire_response.time.strftime("%H:%M:%S")
-        if questionnaire_response.time
-        else None,
+        "time": questionnaire_response.time.strftime("%H:%M:%S") if questionnaire_response.time else None,
         "limesurvey_response": limesurvey_response,
     }
 
@@ -1963,9 +1801,7 @@ def send_additional_data_to_portal(
         "participant": portal_participant_id,
         "step": portal_step_id,
         "date": additional_data.date.strftime("%Y-%m-%d"),
-        "time": additional_data.time.strftime("%H:%M:%S")
-        if additional_data.time
-        else None,
+        "time": additional_data.time.strftime("%H:%M:%S") if additional_data.time else None,
         "description": additional_data.description,
         "file_format": additional_data.file_format.name,
         "files": [],
@@ -1996,9 +1832,7 @@ def send_media_collection_data_to_portal(
         "participant": portal_participant_id,
         "step": portal_step_id,
         "date": media_collection_data.date.strftime("%Y-%m-%d"),
-        "time": media_collection_data.time.strftime("%H:%M:%S")
-        if media_collection_data.time
-        else None,
+        "time": media_collection_data.time.strftime("%H:%M:%S") if media_collection_data.time else None,
         "description": media_collection_data.description,
         "file_format": media_collection_data.file_format.name,
         "files": [],
@@ -2009,9 +1843,7 @@ def send_media_collection_data_to_portal(
 
     action_keys = ["media_collection_data", "create"]
 
-    portal_media_collection_data = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_media_collection_data = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_media_collection_data
 
@@ -2031,9 +1863,7 @@ def send_generic_data_collection_data_to_portal(
         "participant": portal_participant_id,
         "step": portal_step_id,
         "date": generic_data_collection_data.date.strftime("%Y-%m-%d"),
-        "time": generic_data_collection_data.time.strftime("%H:%M:%S")
-        if generic_data_collection_data.time
-        else None,
+        "time": generic_data_collection_data.time.strftime("%H:%M:%S") if generic_data_collection_data.time else None,
         "description": generic_data_collection_data.description,
         "file_format": generic_data_collection_data.file_format.name,
         "files": [],
@@ -2044,8 +1874,6 @@ def send_generic_data_collection_data_to_portal(
 
     action_keys = ["generic_data_collection_data", "create"]
 
-    portal_generic_data_collection_data = rest.client.action(
-        rest.schema, action_keys, params=params
-    )
+    portal_generic_data_collection_data = rest.client.action(rest.schema, action_keys, params=params)
 
     return portal_generic_data_collection_data

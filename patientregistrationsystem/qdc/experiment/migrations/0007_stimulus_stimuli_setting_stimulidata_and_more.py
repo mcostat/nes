@@ -43,9 +43,7 @@ class Migration(migrations.Migration):
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[
-                            experiment.models.validate_date_questionnaire_response
-                        ],
+                        validators=[experiment.models.validate_date_questionnaire_response],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),
@@ -87,17 +85,13 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigIntegerField(
-                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
-                    ),
+                    models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name="ID"),
                 ),
                 (
                     "date",
                     models.DateField(
                         default=datetime.date.today,
-                        validators=[
-                            experiment.models.validate_date_questionnaire_response
-                        ],
+                        validators=[experiment.models.validate_date_questionnaire_response],
                     ),
                 ),
                 ("time", models.TimeField(blank=True, null=True)),

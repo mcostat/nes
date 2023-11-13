@@ -70,14 +70,10 @@ def patient_view(request: HttpRequest, patient_id: int) -> HttpResponse:
                 patient.save()
             elif request.POST["action"] == "show_previous":
                 redirect_url = reverse("patient_view", args=(patient_id,))
-                return HttpResponseRedirect(
-                    redirect_url + "?currentTab=" + str(int(current_tab) - 1)
-                )
+                return HttpResponseRedirect(redirect_url + "?currentTab=" + str(int(current_tab) - 1))
             elif request.POST["action"] == "show_next":
                 redirect_url = reverse("patient_view", args=(patient_id,))
-                return HttpResponseRedirect(
-                    redirect_url + "?currentTab=" + str(int(current_tab) + 1)
-                )
+                return HttpResponseRedirect(redirect_url + "?currentTab=" + str(int(current_tab) + 1))
             else:
                 redirect_url = reverse("patient_edit", args=(patient_id,))
                 return HttpResponseRedirect(redirect_url + "?currentTab=" + current_tab)
@@ -110,13 +106,9 @@ def patient_view(request: HttpRequest, patient_id: int) -> HttpResponse:
 
 @login_required
 @permission_required("patient.add_patient")
-def patient_create(
-    request: HttpRequest, template_name: str = "patient/register_personal_data.html"
-) -> HttpResponse:
+def patient_create(request: HttpRequest, template_name: str = "patient/register_personal_data.html") -> HttpResponse:
     patient_form = PatientForm(request.POST or None)
-    telephone_inlineformset = inlineformset_factory(
-        Patient, Telephone, form=TelephoneForm
-    )
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm)
 
     if request.method == "POST":
         patient_form.city = request.POST["city"] if "city" in request.POST else ""
@@ -151,13 +143,9 @@ def patient_create(
 
                 if patient_found:
                     if patient_found[0].removed:
-                        patient_form.errors["cpf"][0] = _(
-                            "Participant with this CPF has already removed."
-                        )
+                        patient_form.errors["cpf"][0] = _("Participant with this CPF has already removed.")
                     else:
-                        patient_form.errors["cpf"][0] = _(
-                            "There is already registered participant with this CPF."
-                        )
+                        patient_form.errors["cpf"][0] = _("There is already registered participant with this CPF.")
 
     else:
         telephone_formset = telephone_inlineformset()
@@ -211,14 +199,10 @@ def get_current_tab(request: HttpRequest) -> str:
     return current_tab
 
 
-def patient_update_personal_data(
-    request: HttpRequest, patient: Patient, context: dict[str, Any]
-) -> HttpResponse:
+def patient_update_personal_data(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     patient_form = PatientForm(request.POST or None, instance=patient)
 
-    telephone_inlineformset = inlineformset_factory(
-        Patient, Telephone, form=TelephoneForm
-    )
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm)
 
     if not patient.name:
         patient_form.fields["anonymous"].widget.attrs["checked"] = True
@@ -226,9 +210,7 @@ def patient_update_personal_data(
     if request.method == "POST":
         patient_form_is_valid = patient_form.is_valid()
 
-        telephone_formset = telephone_inlineformset(
-            request.POST, request.FILES, instance=patient
-        )
+        telephone_formset = telephone_inlineformset(request.POST, request.FILES, instance=patient)
         telephone_formset_is_valid = telephone_formset.is_valid()
 
         if patient_form_is_valid and telephone_formset_is_valid:
@@ -274,15 +256,11 @@ def patient_update_social_demographic_data(
 ) -> HttpResponse:
     try:
         p_social_demo = SocialDemographicData.objects.get(patient_id=patient.id)
-        social_demographic_form = SocialDemographicDataForm(
-            request.POST or None, instance=p_social_demo
-        )
+        social_demographic_form = SocialDemographicDataForm(request.POST or None, instance=p_social_demo)
     except SocialDemographicData.DoesNotExist:
         new_sdd = SocialDemographicData()
         new_sdd.patient = patient
-        social_demographic_form = SocialDemographicDataForm(
-            request.POST or None, instance=new_sdd
-        )
+        social_demographic_form = SocialDemographicDataForm(request.POST or None, instance=new_sdd)
 
     if request.method == "POST":
         if social_demographic_form.is_valid():
@@ -337,44 +315,31 @@ def patient_update_social_demographic_data(
                     ):
                         messages.warning(
                             request,
-                            _(
-                                "Social class was not calculated, "
-                                "because all the necessary fields were not filled."
-                            ),
+                            _("Social class was not calculated, " "because all the necessary fields were not filled."),
                         )
 
                 new_social_demographic_data.changed_by = request.user
                 new_social_demographic_data.save()
 
-                messages.success(
-                    request, _("Social demographic data successfully written.")
-                )
+                messages.success(request, _("Social demographic data successfully written."))
 
             return finish_handling_post(request, patient.id, 1)
         else:
             social_demographic_form.social_class = ""
 
-    context.update(
-        {"social_demographic_form": social_demographic_form, "code": patient.code}
-    )
+    context.update({"social_demographic_form": social_demographic_form, "code": patient.code})
 
     return render(request, "patient/register_socialdemographic_data.html", context)
 
 
-def patient_update_social_history(
-    request: HttpRequest, patient: Patient, context: dict[str, Any]
-) -> HttpResponse:
+def patient_update_social_history(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     try:
         p_social_hist = SocialHistoryData.objects.get(patient_id=patient.id)
-        social_history_form = SocialHistoryDataForm(
-            request.POST or None, instance=p_social_hist
-        )
+        social_history_form = SocialHistoryDataForm(request.POST or None, instance=p_social_hist)
     except SocialHistoryData.DoesNotExist:
         new_shd = SocialHistoryData()
         new_shd.patient = patient
-        social_history_form = SocialHistoryDataForm(
-            request.POST or None, instance=new_shd
-        )
+        social_history_form = SocialHistoryDataForm(request.POST or None, instance=new_shd)
 
     if request.method == "POST":
         if social_history_form.is_valid():
@@ -383,9 +348,7 @@ def patient_update_social_history(
                     new_social_history_data = social_history_form.save(commit=False)
                     new_social_history_data.changed_by = request.user
                     new_social_history_data.save()
-                    messages.success(
-                        request, _("Social history successfully recorded.")
-                    )
+                    messages.success(request, _("Social history successfully recorded."))
                 except ValueError:
                     messages.error(request, _("The combination is not allowed."))
             return finish_handling_post(request, patient.id, 2)
@@ -396,39 +359,27 @@ def patient_update_social_history(
     return render(request, "patient/register_social_history.html", context)
 
 
-def patient_update_medical_record(
-    request: HttpRequest, patient: Patient, context
-) -> HttpResponse:
+def patient_update_medical_record(request: HttpRequest, patient: Patient, context) -> HttpResponse:
     if request.method == "POST":
         return finish_handling_post(request, patient.id, 3)
 
-    medical_record = MedicalRecordData.objects.filter(patient=patient).order_by(
-        "record_date"
-    )
+    medical_record = MedicalRecordData.objects.filter(patient=patient).order_by("record_date")
 
     context.update({"medical_record": medical_record, "code": patient.code})
 
     return render(request, "patient/register_medical_record.html", context)
 
 
-def finish_handling_post(
-    request: HttpRequest, patient_id: int, current_tab: int
-) -> HttpResponse:
+def finish_handling_post(request: HttpRequest, patient_id: int, current_tab: int) -> HttpResponse:
     if "action" in request.POST:
         redirect_url = reverse("patient_edit", args=(patient_id,))
 
         if request.POST["action"] == "show_previous":
-            return HttpResponseRedirect(
-                redirect_url + "?currentTab=" + str(current_tab - 1)
-            )
+            return HttpResponseRedirect(redirect_url + "?currentTab=" + str(current_tab - 1))
         elif request.POST["action"] == "show_next":
-            return HttpResponseRedirect(
-                redirect_url + "?currentTab=" + str(current_tab + 1)
-            )
+            return HttpResponseRedirect(redirect_url + "?currentTab=" + str(current_tab + 1))
         elif request.POST["action"] == "change_tab":
-            return HttpResponseRedirect(
-                redirect_url + "?currentTab=" + request.POST["nextTab"]
-            )
+            return HttpResponseRedirect(redirect_url + "?currentTab=" + request.POST["nextTab"])
         elif request.POST["action"] == "more_phones":
             return HttpResponseRedirect(redirect_url + "?currentTab=0")
 
@@ -436,14 +387,10 @@ def finish_handling_post(
     return HttpResponseRedirect(redirect_url + "?currentTab=" + str(current_tab))
 
 
-def patient_view_personal_data(
-    request: HttpRequest, patient: Patient, context: dict[str, Any]
-) -> HttpResponse:
+def patient_view_personal_data(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     patient_form = PatientForm(instance=patient)
 
-    telephone_inlineformset = inlineformset_factory(
-        Patient, Telephone, form=TelephoneForm, extra=1
-    )
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=1)
     telephone_formset = telephone_inlineformset(instance=patient)
     patient_form.fields["anonymous"].widget.attrs["checked"] = True
     if not patient.name:
@@ -479,16 +426,12 @@ def patient_view_social_demographic_data(
     for field in social_demographic_form.fields:
         social_demographic_form.fields[field].widget.attrs["disabled"] = True
 
-    context.update(
-        {"social_demographic_form": social_demographic_form, "code": patient.code}
-    )
+    context.update({"social_demographic_form": social_demographic_form, "code": patient.code})
 
     return render(request, "patient/register_socialdemographic_data.html", context)
 
 
-def patient_view_social_history(
-    request: HttpRequest, patient: Patient, context: dict[str, Any]
-) -> HttpResponse:
+def patient_view_social_history(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     try:
         p_social_hist = SocialHistoryData.objects.get(patient_id=patient.id)
         social_history_form = SocialHistoryDataForm(instance=p_social_hist)
@@ -503,13 +446,9 @@ def patient_view_social_history(
     return render(request, "patient/register_social_history.html", context)
 
 
-def patient_view_medical_record(
-    request: HttpRequest, patient: Patient, context: dict[str, Any]
-) -> HttpResponse:
+def patient_view_medical_record(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     medical_record = (
-        MedicalRecordData.objects.filter(patient_id=patient.id)
-        .prefetch_related("patient")
-        .order_by("record_date")
+        MedicalRecordData.objects.filter(patient_id=patient.id).prefetch_related("patient").order_by("record_date")
     )
 
     context.update({"medical_record": medical_record, "code": patient.code})
@@ -534,16 +473,12 @@ def patient_view_questionnaires(
         patient_questionnaires_data_dictionary[initial_evaluation.lime_survey_id] = {
             "is_initial_evaluation": True,
             "survey_id": initial_evaluation.pk,
-            "questionnaire_title": find_questionnaire_name(
-                initial_evaluation, language_code
-            )["name"],
+            "questionnaire_title": find_questionnaire_name(initial_evaluation, language_code)["name"],
             "questionnaire_responses": [],
         }
 
     # ...after, add questionnaire responses
-    questionnaire_responses = QuestionnaireResponse.objects.filter(
-        patient=patient
-    ).order_by("date")
+    questionnaire_responses = QuestionnaireResponse.objects.filter(patient=patient).order_by("date")
 
     for questionnaire_response in questionnaire_responses:
         limesurvey_id = questionnaire_response.survey.lime_survey_id
@@ -551,19 +486,13 @@ def patient_view_questionnaires(
             patient_questionnaires_data_dictionary[limesurvey_id] = {
                 "is_initial_evaluation": False,
                 "survey_id": questionnaire_response.survey.pk,
-                "questionnaire_title": find_questionnaire_name(
-                    questionnaire_response.survey, language_code
-                )["name"],
+                "questionnaire_title": find_questionnaire_name(questionnaire_response.survey, language_code)["name"],
                 "questionnaire_responses": [],
             }
 
-        properties = surveys.get_participant_properties(
-            limesurvey_id, questionnaire_response.token_id
-        )
+        properties = surveys.get_participant_properties(limesurvey_id, questionnaire_response.token_id)
         if properties:
-            update_completed_status(
-                limesurvey_id, properties["completed"], questionnaire_response
-            )
+            update_completed_status(limesurvey_id, properties["completed"], questionnaire_response)
             language = get_questionnaire_language(surveys, limesurvey_id, language_code)
             acquisitiondate_updated = update_acquisition_date(
                 limesurvey_id, properties["token"], questionnaire_response, language
@@ -571,15 +500,11 @@ def patient_view_questionnaires(
 
             response_result = questionnaire_response.is_completed
 
-            patient_questionnaires_data_dictionary[limesurvey_id][
-                "questionnaire_responses"
-            ].append(
+            patient_questionnaires_data_dictionary[limesurvey_id]["questionnaire_responses"].append(
                 {
                     "questionnaire_response": questionnaire_response,
                     "token_id": questionnaire_response.token_id,
-                    "completed": None
-                    if response_result is None
-                    else response_result != "N" and response_result != "",
+                    "completed": None if response_result is None else response_result != "N" and response_result != "",
                     "acquisitiondate_updated": acquisitiondate_updated,
                 }
             )
@@ -592,9 +517,7 @@ def patient_view_questionnaires(
 
     # Sorting by questionnaire_title and is_initial_evaluation (reversed),
     # where is_initial_evaluation is more relevant.
-    patient_questionnaires_data_list = sorted(
-        patient_questionnaires_data_list, key=itemgetter("questionnaire_title")
-    )
+    patient_questionnaires_data_list = sorted(patient_questionnaires_data_list, key=itemgetter("questionnaire_title"))
     patient_questionnaires_data_list = sorted(
         patient_questionnaires_data_list,
         key=itemgetter("is_initial_evaluation"),
@@ -604,9 +527,7 @@ def patient_view_questionnaires(
     additional_survey_list = []
     if is_update:
         for survey in Survey.objects.exclude(
-            lime_survey_id__in=[
-                item["limesurvey_id"] for item in patient_questionnaires_data_list
-            ]
+            lime_survey_id__in=[item["limesurvey_id"] for item in patient_questionnaires_data_list]
         ):
             additional_survey_list.append(
                 {
@@ -621,27 +542,16 @@ def patient_view_questionnaires(
     subject = Subject.objects.filter(patient=patient)
     subject_of_group_list = SubjectOfGroup.objects.filter(subject__in=subject)
     for subject_of_group in subject_of_group_list:
-        experiment_questionnaire_responses = (
-            ExperimentQuestionnaireResponse.objects.filter(
-                subject_of_group=subject_of_group
-            )
+        experiment_questionnaire_responses = ExperimentQuestionnaireResponse.objects.filter(
+            subject_of_group=subject_of_group
         )
         for questionnaire_response in experiment_questionnaire_responses:
-            component_configuration = (
-                questionnaire_response.data_configuration_tree.component_configuration
-            )
-            limesurvey_id = (
-                component_configuration.component.questionnaire.survey.lime_survey_id
-            )
+            component_configuration = questionnaire_response.data_configuration_tree.component_configuration
+            limesurvey_id = component_configuration.component.questionnaire.survey.lime_survey_id
 
-            if (
-                questionnaire_response.is_completed == "N"
-                or questionnaire_response.is_completed == ""
-            ):
+            if questionnaire_response.is_completed == "N" or questionnaire_response.is_completed == "":
                 is_completed = (
-                    surveys.get_participant_properties(
-                        limesurvey_id, questionnaire_response.token_id, "completed"
-                    )
+                    surveys.get_participant_properties(limesurvey_id, questionnaire_response.token_id, "completed")
                     or ""
                 )
                 questionnaire_response.is_completed = is_completed
@@ -660,9 +570,7 @@ def patient_view_questionnaires(
                     )["name"],
                     "questionnaire_response": questionnaire_response,
                     "token_id": questionnaire_response.token_id,
-                    "completed": None
-                    if response_result is None
-                    else response_result != "N" and response_result != "",
+                    "completed": None if response_result is None else response_result != "N" and response_result != "",
                 }
             )
     surveys.release_session_key()
@@ -680,29 +588,21 @@ def patient_view_questionnaires(
 
 
 def update_completed_status(limesurvey_id, is_completed, questionnaire_response):
-    if (
-        questionnaire_response.is_completed == "N"
-        or questionnaire_response.is_completed == ""
-    ):
+    if questionnaire_response.is_completed == "N" or questionnaire_response.is_completed == "":
         questionnaire_response.is_completed = is_completed
         questionnaire_response.save()
 
 
 def update_acquisition_date(limesurvey_id, token, questionnaire_response, language):
     updated = False
-    if (
-        questionnaire_response.is_completed != "N"
-        and questionnaire_response.is_completed != ""
-    ):
+    if questionnaire_response.is_completed != "N" and questionnaire_response.is_completed != "":
         surveys = Questionnaires()
 
         responses = surveys.get_responses_by_token(limesurvey_id, token, language)
         if responses:
             responses_list = csv_to_list(responses)
             if responses_list[0]["acquisitiondate"]:
-                new_date = datetime.datetime.strptime(
-                    responses_list[0]["acquisitiondate"], "%Y-%m-%d %H:%M:%S"
-                ).date()
+                new_date = datetime.datetime.strptime(responses_list[0]["acquisitiondate"], "%Y-%m-%d %H:%M:%S").date()
                 if questionnaire_response.date != new_date:
                     questionnaire_response.date = new_date
                     questionnaire_response.save()
@@ -746,26 +646,16 @@ def search_patients_ajax(request: HttpRequest) -> HttpResponse:
         if search_text:
             if re.match(r"P[\d]", search_text):
                 patient_list = (
-                    Patient.objects.filter(code__icontains=search_text)
-                    .exclude(removed=True)
-                    .order_by("code")
+                    Patient.objects.filter(code__icontains=search_text).exclude(removed=True).order_by("code")
                 )
             elif re.match(r"^[a-zA-Z][a-zA-Z ]*$", search_text) and sensitive_perm:
                 patient_list = (
-                    Patient.objects.filter(name__icontains=search_text)
-                    .exclude(removed=True)
-                    .order_by("name")
+                    Patient.objects.filter(name__icontains=search_text).exclude(removed=True).order_by("name")
                 )
             elif re.match(r"^[\d][0-9-.]*$", search_text):
-                patient_list = (
-                    Patient.objects.filter(cpf__icontains=search_text)
-                    .exclude(removed=True)
-                    .order_by("name")
-                )
+                patient_list = Patient.objects.filter(cpf__icontains=search_text).exclude(removed=True).order_by("name")
             else:
-                patient_list = (
-                    Patient.objects.all().exclude(removed=True).order_by("name")
-                )
+                patient_list = Patient.objects.all().exclude(removed=True).order_by("name")
 
     return render(
         None,
@@ -785,19 +675,13 @@ def patients_verify_homonym(request: HttpRequest) -> HttpResponse:
         search_text = request.POST["search_text"].strip()
         if search_text:
             if re.match("[a-zA-Z ]+", search_text):
-                patient_homonym = Patient.objects.filter(name=search_text).exclude(
-                    removed=True
-                )
+                patient_homonym = Patient.objects.filter(name=search_text).exclude(removed=True)
             else:
-                patient_homonym = Patient.objects.filter(cpf=search_text).exclude(
-                    removed=True
-                )
+                patient_homonym = Patient.objects.filter(cpf=search_text).exclude(removed=True)
         else:
             patient_homonym = None
 
-    return render(
-        None, "patient/ajax_homonym.html", {"patient_homonym": patient_homonym}
-    )
+    return render(None, "patient/ajax_homonym.html", {"patient_homonym": patient_homonym})
 
 
 @login_required
@@ -808,13 +692,9 @@ def patients_verify_homonym_excluded(request: HttpRequest) -> HttpResponse:
         search_text = request.POST["search_text"]
         if search_text:
             if re.match("[a-zA-Z ]+", search_text):
-                patient_homonym_excluded = Patient.objects.filter(
-                    name=search_text, removed=True
-                )
+                patient_homonym_excluded = Patient.objects.filter(name=search_text, removed=True)
             else:
-                patient_homonym_excluded = Patient.objects.filter(
-                    cpf=search_text, removed=True
-                )
+                patient_homonym_excluded = Patient.objects.filter(cpf=search_text, removed=True)
         else:
             patient_homonym_excluded = None
 
@@ -905,14 +785,10 @@ def medical_record_view(
         patient = current_patient.code
 
     if medical_record:
-        diagnosis_list = Diagnosis.objects.filter(
-            medical_record_data=record_id
-        ).order_by("classification_of_diseases")
+        diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
         complementary_exams_list = []
         for diagnosis in diagnosis_list:
-            complementary_exams_list.append(
-                ComplementaryExam.objects.filter(diagnosis=diagnosis.pk)
-            )
+            complementary_exams_list.append(ComplementaryExam.objects.filter(diagnosis=diagnosis.pk))
 
         lists_diagnosis_exams = list(zip(diagnosis_list, complementary_exams_list))
 
@@ -936,9 +812,7 @@ def medical_record_view(
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def medical_record_update(
-    request, patient_id, record_id, template_name="patient/medical_record.html"
-):
+def medical_record_update(request, patient_id, record_id, template_name="patient/medical_record.html"):
     status = ""
     if "status" in request.GET:
         status = request.GET["status"]
@@ -954,15 +828,11 @@ def medical_record_update(
         patient = current_patient.code
 
     if medical_record:
-        diagnosis_list = Diagnosis.objects.filter(
-            medical_record_data=record_id
-        ).order_by("classification_of_diseases")
+        diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
         complementary_exams_list = []
 
         for diagnosis in diagnosis_list:
-            complementary_exams_list.append(
-                ComplementaryExam.objects.filter(diagnosis=diagnosis.pk)
-            )
+            complementary_exams_list.append(ComplementaryExam.objects.filter(diagnosis=diagnosis.pk))
 
         lists_diagnosis_exams = list(zip(diagnosis_list, complementary_exams_list))
 
@@ -980,20 +850,14 @@ def medical_record_update(
 
                 try:
                     if date_text:
-                        diagnosis.date = datetime.datetime.strptime(
-                            date_text, _("%m/%d/%Y")
-                        )
+                        diagnosis.date = datetime.datetime.strptime(date_text, _("%m/%d/%Y"))
                     else:
                         diagnosis.date = None
 
                     diagnosis.save()
-                    messages.success(
-                        request, _("Diagnosis details successfully changed.")
-                    )
+                    messages.success(request, _("Diagnosis details successfully changed."))
 
-                    redirect_url = reverse(
-                        "medical_record_edit", args=(patient_id, record_id)
-                    )
+                    redirect_url = reverse("medical_record_edit", args=(patient_id, record_id))
                     return HttpResponseRedirect(redirect_url + "?status=edit")
 
                 except ValueError:
@@ -1020,9 +884,7 @@ def medical_record_update(
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def medical_record_delete(
-    request: HttpRequest, patient_id: int, record_id: int
-) -> HttpResponseRedirect:
+def medical_record_delete(request: HttpRequest, patient_id: int, record_id: int) -> HttpResponseRedirect:
     medical_record = MedicalRecordData.objects.get(pk=record_id)
     medical_record.delete()
     messages.success(request, _("Medical evaluation successfully deleted."))
@@ -1039,16 +901,10 @@ def diagnosis_create(
     medical_record = MedicalRecordData.objects.get(pk=medical_record_id)
     cid10 = ClassificationOfDiseases.objects.get(pk=cid10_id)
 
-    if Diagnosis.objects.filter(medical_record_data=medical_record).filter(
-        classification_of_diseases=cid10
-    ):
-        messages.warning(
-            request, _("Diagnosis has already exist in this medical assessment.")
-        )
+    if Diagnosis.objects.filter(medical_record_data=medical_record).filter(classification_of_diseases=cid10):
+        messages.warning(request, _("Diagnosis has already exist in this medical assessment."))
     else:
-        diagnosis = Diagnosis(
-            medical_record_data=medical_record, classification_of_diseases=cid10
-        )
+        diagnosis = Diagnosis(medical_record_data=medical_record, classification_of_diseases=cid10)
         diagnosis.save()
 
     redirect_url = reverse(
@@ -1064,9 +920,7 @@ def diagnosis_create(
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def medical_record_create_diagnosis_create(
-    request, patient_id, cid10_id: int
-) -> HttpResponseRedirect:
+def medical_record_create_diagnosis_create(request, patient_id, cid10_id: int) -> HttpResponseRedirect:
     current_patient = Patient.objects.get(id=patient_id)
 
     new_medical_record = MedicalRecordData()
@@ -1076,9 +930,7 @@ def medical_record_create_diagnosis_create(
 
     cid10 = ClassificationOfDiseases.objects.get(pk=cid10_id)
 
-    diagnosis = Diagnosis(
-        medical_record_data=new_medical_record, classification_of_diseases=cid10
-    )
+    diagnosis = Diagnosis(medical_record_data=new_medical_record, classification_of_diseases=cid10)
     diagnosis.save()
 
     redirect_url = reverse(
@@ -1096,9 +948,7 @@ def medical_record_create_diagnosis_create(
 def diagnosis_delete(request, patient_id, diagnosis_id):
     exams = ComplementaryExam.objects.filter(diagnosis=diagnosis_id)
     if exams:
-        messages.error(
-            request, _("Diagnosis can not be deleted. You must delete exams before.")
-        )
+        messages.error(request, _("Diagnosis can not be deleted. You must delete exams before."))
         diagnosis = get_object_or_404(Diagnosis, pk=diagnosis_id)
     else:
         diagnosis = get_object_or_404(Diagnosis, pk=diagnosis_id)
@@ -1124,9 +974,7 @@ def diagnosis_delete(request, patient_id, diagnosis_id):
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def exam_create(
-    request, patient_id, record_id, diagnosis_id, template_name="patient/exams.html"
-):
+def exam_create(request, patient_id, record_id, diagnosis_id, template_name="patient/exams.html"):
     form = ComplementaryExamForm(request.POST or None)
 
     status = ""
@@ -1228,9 +1076,7 @@ def exam_edit(
         patient = current_patient.code
 
     if complementary_exam:
-        complementary_exam_form = ComplementaryExamForm(
-            request.POST or None, instance=complementary_exam
-        )
+        complementary_exam_form = ComplementaryExamForm(request.POST or None, instance=complementary_exam)
         exam_file_list = ExamFile.objects.filter(exam=exam_id)
         length = exam_file_list.__len__()
 
@@ -1257,9 +1103,7 @@ def exam_edit(
                     return HttpResponseRedirect(redirect_url + "?status=" + status)
 
             else:
-                messages.error(
-                    request, _("It is not possible to save exam without files.")
-                )
+                messages.error(request, _("It is not possible to save exam without files."))
 
         else:
             file_form = ExamFileForm(request.POST)
@@ -1331,9 +1175,7 @@ def exam_view(
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def exam_delete(
-    request: HttpRequest, patient_id: int, record_id: int, exam_id: int
-) -> HttpResponseRedirect:
+def exam_delete(request: HttpRequest, patient_id: int, record_id: int, exam_id: int) -> HttpResponseRedirect:
     status = ""
     if "status" in request.GET:
         status = request.GET["status"]
@@ -1385,9 +1227,7 @@ def exam_file_delete(request: HttpRequest, exam_file_id: int) -> HttpResponseRed
 
     complementary_exam = get_object_or_404(ComplementaryExam, pk=exam_file.exam_id)
     diagnosis = get_object_or_404(Diagnosis, pk=complementary_exam.diagnosis_id)
-    medical_record = get_object_or_404(
-        MedicalRecordData, pk=diagnosis.medical_record_data_id
-    )
+    medical_record = get_object_or_404(MedicalRecordData, pk=diagnosis.medical_record_data_id)
 
     redirect_url = reverse(
         "exam_edit",
@@ -1397,9 +1237,7 @@ def exam_file_delete(request: HttpRequest, exam_file_id: int) -> HttpResponseRed
             complementary_exam.pk,
         ),
     )
-    return HttpResponseRedirect(
-        redirect_url + "?status=" + status + ("&mr=new" if new_medical_record else "")
-    )
+    return HttpResponseRedirect(redirect_url + "?status=" + status + ("&mr=new" if new_medical_record else ""))
 
 
 def get_origin(request: HttpRequest) -> str:
@@ -1421,14 +1259,9 @@ def questionnaire_response_view(
     questionnaire_response_id: int,
     template_name: str = "experiment/subject_questionnaire_response_form.html",
 ) -> HttpResponseRedirect | HttpResponse:
-    questionnaire_response = get_object_or_404(
-        QuestionnaireResponse, pk=questionnaire_response_id
-    )
+    questionnaire_response = get_object_or_404(QuestionnaireResponse, pk=questionnaire_response_id)
 
-    if (
-        questionnaire_response.is_completed == "N"
-        or questionnaire_response.is_completed == ""
-    ):
+    if questionnaire_response.is_completed == "N" or questionnaire_response.is_completed == "":
         surveys = Questionnaires()
         is_completed = (
             surveys.get_participant_properties(
@@ -1444,9 +1277,7 @@ def questionnaire_response_view(
 
     survey_completed = questionnaire_response.is_completed != "N"
 
-    questionnaire_response_form = QuestionnaireResponseForm(
-        None, instance=questionnaire_response
-    )
+    questionnaire_response_form = QuestionnaireResponseForm(None, instance=questionnaire_response)
 
     showing = True
 
@@ -1467,10 +1298,7 @@ def questionnaire_response_view(
                     if result == "Deleted" or result == "Invalid token ID":
                         can_delete = True
                 else:
-                    if (
-                        "status" in result
-                        and result["status"] == "Error: Invalid survey ID"
-                    ):
+                    if "status" in result and result["status"] == "Error: Invalid survey ID":
                         can_delete = True
 
                 if can_delete:
@@ -1479,10 +1307,7 @@ def questionnaire_response_view(
                 else:
                     messages.error(request, _("Error trying to delete"))
 
-                redirect_url = (
-                    reverse("patient_edit", args=(questionnaire_response.patient.id,))
-                    + "?currentTab=4"
-                )
+                redirect_url = reverse("patient_edit", args=(questionnaire_response.patient.id,)) + "?currentTab=4"
                 return HttpResponseRedirect(redirect_url)
             else:
                 raise PermissionDenied
@@ -1495,9 +1320,7 @@ def questionnaire_response_view(
 
     response_is_reused_in_experiment = False
     # steps that use this survey
-    questionnaire_component_list = Questionnaire.objects.filter(
-        survey=questionnaire_response.survey
-    )
+    questionnaire_component_list = Questionnaire.objects.filter(survey=questionnaire_response.survey)
     if questionnaire_component_list:
         # experiment questionnaire responses that reused this token
         response_is_reused_in_experiment = ExperimentQuestionnaireResponse.objects.filter(
@@ -1573,9 +1396,7 @@ def questionnaire_response_create(
     survey = get_object_or_404(Survey, pk=survey_id)
 
     surveys = Questionnaires()
-    language = get_questionnaire_language(
-        surveys, survey.lime_survey_id, request.LANGUAGE_CODE
-    )
+    language = get_questionnaire_language(surveys, survey.lime_survey_id, request.LANGUAGE_CODE)
     survey_title = surveys.get_survey_title(survey.lime_survey_id, language)
     surveys.release_session_key()
 
@@ -1591,9 +1412,7 @@ def questionnaire_response_create(
             (
                 redirect_url,
                 questionnaire_response_id,
-            ) = questionnaire_response_start_fill_questionnaire(
-                request, patient_id, survey
-            )
+            ) = questionnaire_response_start_fill_questionnaire(request, patient_id, survey)
 
             if not redirect_url:
                 fail = True
@@ -1602,9 +1421,7 @@ def questionnaire_response_create(
 
                 showing = True
                 for field in questionnaire_response_form.fields:
-                    questionnaire_response_form.fields[field].widget.attrs[
-                        "disabled"
-                    ] = True
+                    questionnaire_response_form.fields[field].widget.attrs["disabled"] = True
 
     origin = get_origin(request)
 
@@ -1634,17 +1451,11 @@ def questionnaire_response_update(
     questionnaire_response_id: int,
     template_name: str = "experiment/subject_questionnaire_response_form.html",
 ) -> HttpResponseRedirect | HttpResponse:
-    questionnaire_response = get_object_or_404(
-        QuestionnaireResponse, pk=questionnaire_response_id
-    )
+    questionnaire_response = get_object_or_404(QuestionnaireResponse, pk=questionnaire_response_id)
 
     surveys = Questionnaires()
-    language = get_questionnaire_language(
-        surveys, questionnaire_response.survey.lime_survey_id, request.LANGUAGE_CODE
-    )
-    survey_title = surveys.get_survey_title(
-        questionnaire_response.survey.lime_survey_id, language
-    )
+    language = get_questionnaire_language(surveys, questionnaire_response.survey.lime_survey_id, request.LANGUAGE_CODE)
+    survey_title = surveys.get_survey_title(questionnaire_response.survey.lime_survey_id, language)
     survey_completed = (
         surveys.get_participant_properties(
             questionnaire_response.survey.lime_survey_id,
@@ -1657,9 +1468,7 @@ def questionnaire_response_update(
 
     patient = get_object_or_404(Patient, pk=questionnaire_response.patient_id)
 
-    questionnaire_response_form = QuestionnaireResponseForm(
-        None, instance=questionnaire_response
-    )
+    questionnaire_response_form = QuestionnaireResponseForm(None, instance=questionnaire_response)
 
     fail = None
     redirect_url = None
@@ -1691,10 +1500,7 @@ def questionnaire_response_update(
                     if result == "Deleted" or result == "Invalid token ID":
                         can_delete = True
                 else:
-                    if (
-                        "status" in result
-                        and result["status"] == "Error: Invalid survey ID"
-                    ):
+                    if "status" in result and result["status"] == "Error: Invalid survey ID":
                         can_delete = True
 
                 if can_delete:
@@ -1703,9 +1509,7 @@ def questionnaire_response_update(
                 else:
                     messages.error(request, _("Error trying to delete"))
 
-                redirect_url = (
-                    reverse("patient_edit", args=(patient.id,)) + "?currentTab=4"
-                )
+                redirect_url = reverse("patient_edit", args=(patient.id,)) + "?currentTab=4"
                 return HttpResponseRedirect(redirect_url)
             else:
                 raise PermissionDenied
@@ -1739,9 +1543,7 @@ def questionnaire_response_update(
     return render(request, template_name, context)
 
 
-def questionnaire_response_start_fill_questionnaire(
-    request: HttpRequest, patient_id: int, survey: Survey
-) -> tuple:
+def questionnaire_response_start_fill_questionnaire(request: HttpRequest, patient_id: int, survey: Survey) -> tuple:
     questionnaire_response_form = QuestionnaireResponseForm(request.POST)
 
     if questionnaire_response_form.is_valid():
@@ -1752,28 +1554,17 @@ def questionnaire_response_start_fill_questionnaire(
         patient = get_object_or_404(Patient, pk=patient_id)
 
         if not questionnaire_lime_survey.survey_has_token_table(survey.lime_survey_id):
-            messages.warning(
-                request, _("Not available filling - tokens table not started")
-            )
+            messages.warning(request, _("Not available filling - tokens table not started"))
             return None, None
 
-        if (
-            questionnaire_lime_survey.get_survey_properties(
-                survey.lime_survey_id, "active"
-            )
-            == "N"
-        ):
-            messages.warning(
-                request, _("Not available filling - questionnaire not active")
-            )
+        if questionnaire_lime_survey.get_survey_properties(survey.lime_survey_id, "active") == "N":
+            messages.warning(request, _("Not available filling - questionnaire not active"))
             return None, None
 
         if not check_required_fields(questionnaire_lime_survey, survey.lime_survey_id):
             messages.warning(
                 request,
-                _(
-                    "Not available filling - questionnaire does not contain standard fields"
-                ),
+                _("Not available filling - questionnaire does not contain standard fields"),
             )
             return None, None
 
@@ -1784,10 +1575,7 @@ def questionnaire_response_start_fill_questionnaire(
         if not result:
             messages.warning(
                 request,
-                _(
-                    "Failed to generate token to answer the questionnaire. "
-                    "Make sure the questionnaire is active"
-                ),
+                _("Failed to generate token to answer the questionnaire. " "Make sure the questionnaire is active"),
             )
             return None, None
 
@@ -1823,9 +1611,7 @@ def check_required_fields(surveys, lime_survey_id) -> bool:
 
     if "status" not in groups:
         for group in groups:
-            question_list = surveys.list_questions_ids(
-                lime_survey_id, group["id"]["gid"]
-            )
+            question_list = surveys.list_questions_ids(lime_survey_id, group["id"]["gid"])
             for question in question_list:
                 question_properties = surveys.get_question_properties(question, None)
                 if question_properties["title"] in fields_to_validate:
@@ -1852,17 +1638,13 @@ def get_limesurvey_response_url(questionnaire_response: QuestionnaireResponse) -
         "token",
     )
 
-    redirect_url = (
-        "%s/index.php/%s/token/%s/responsibleid/%s/acquisitiondate/%s/"
-        "subjectid/%s/newtest/Y"
-        % (
-            settings.LIMESURVEY["URL_WEB"],
-            questionnaire_response.survey.lime_survey_id,
-            token,
-            str(questionnaire_response.questionnaire_responsible.id),
-            questionnaire_response.date.strftime("%m-%d-%Y"),
-            str(questionnaire_response.patient.id),
-        )
+    redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/acquisitiondate/%s/" "subjectid/%s/newtest/Y" % (
+        settings.LIMESURVEY["URL_WEB"],
+        questionnaire_response.survey.lime_survey_id,
+        token,
+        str(questionnaire_response.questionnaire_responsible.id),
+        questionnaire_response.date.strftime("%m-%d-%Y"),
+        str(questionnaire_response.patient.id),
     )
 
     questionnaire_lime_survey.release_session_key()

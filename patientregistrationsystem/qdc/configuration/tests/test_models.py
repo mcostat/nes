@@ -23,9 +23,7 @@ class LocalInstiutionTest(TestCase):
         self.assertEqual(str(localinstitution), "Local Institution")
 
     def test_adding_multiple_LocalInstitution(self) -> None:
-        LocalInstitution.objects.create(
-            code="1234", institution=Institution.objects.first(), url="https://ufrj.br/"
-        )
+        LocalInstitution.objects.create(code="1234", institution=Institution.objects.first(), url="https://ufrj.br/")
 
         with self.assertRaises(IntegrityError):
             LocalInstitution.objects.create(

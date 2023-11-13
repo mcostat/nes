@@ -29,9 +29,7 @@ class Command(BaseCommand):
 def import_classification_of_icd_cid(file_name: str) -> None:
     filename = os.path.join(
         settings.BASE_DIR,
-        os.path.join(
-            "..", "..", os.path.join("resources", "load-idc-table", file_name)
-        ),
+        os.path.join("..", "..", os.path.join("resources", "load-idc-table", file_name)),
     )
 
     increment = 2  # start of second line, without header

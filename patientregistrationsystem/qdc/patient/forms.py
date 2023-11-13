@@ -77,9 +77,7 @@ class PatientForm(ModelForm):
                     "oninput": "this.value = this.value.toUpperCase()",
                 }
             ),
-            "cpf": TextInput(
-                attrs={"class": "form-control", "placeholder": "xxx.xxx.xxx-xx"}
-            ),
+            "cpf": TextInput(attrs={"class": "form-control", "placeholder": "xxx.xxx.xxx-xx"}),
             "origin": TextInput(attrs={"class": "form-control"}),
             "medical_record": TextInput(attrs={"class": "form-control"}),
             "date_birth": TextInput(
@@ -202,12 +200,8 @@ class SocialDemographicDataForm(ModelForm):
             "schooling": Select(attrs={"class": "form-select"}),
             "flesh_tone": Select(attrs={"class": "form-select"}),
             "religion": Select(attrs={"class": "form-select"}),
-            "profession": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Type in profession")}
-            ),
-            "occupation": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Inform occupation")}
-            ),
+            "profession": TextInput(attrs={"class": "form-control", "placeholder": _("Type in profession")}),
+            "occupation": TextInput(attrs={"class": "form-control", "placeholder": _("Inform occupation")}),
             "payment": Select(attrs={"class": "form-select"}),
             "tv": RadioSelect(
                 choices=RATINGS_CHOICE,
@@ -363,15 +357,9 @@ class ComplementaryExamForm(ModelForm):
                     "data-error": _("Description must be filled in"),
                 }
             ),
-            "doctor": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Doctor")}
-            ),
-            "doctor_register": TextInput(
-                attrs={"class": "form-control", "placeholder": _("CRM")}
-            ),
-            "exam_site": TextInput(
-                attrs={"class": "form-control", "placeholder": _("Place of execution")}
-            ),
+            "doctor": TextInput(attrs={"class": "form-control", "placeholder": _("Doctor")}),
+            "doctor_register": TextInput(attrs={"class": "form-control", "placeholder": _("CRM")}),
+            "exam_site": TextInput(attrs={"class": "form-control", "placeholder": _("Place of execution")}),
         }
 
 

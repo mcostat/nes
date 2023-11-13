@@ -57,9 +57,7 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "permissions": (
-                    ("can_send_data_to_plugin", "Can send data to plugin"),
-                ),
+                "permissions": (("can_send_data_to_plugin", "Can send data to plugin"),),
             },
         ),
     ]
