@@ -58,7 +58,7 @@ CONN_HEALTH_CHECKS = True
 
 CSP_IMG_SRC = ["'self'", "data:"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
-CSP_SCRIPT_SRC = ["'self'"]
+CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'"]
 CSP_BASE_URI = "'none'"
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 

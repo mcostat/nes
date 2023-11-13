@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xml:lang="en" lang="en">
+{% load static i18n l10n %}
 
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+
+<html lang="{{ LANGUAGE_CODE }}" xml:lang="{{ LANGUAGE_CODE }}">
   <head>
-
-    {% load static i18n l10n %}
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
