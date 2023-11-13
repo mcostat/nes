@@ -10,8 +10,6 @@ ENV LC_ALL en_US.UTF-8
 
 
 ARG NES_BRANCH="unset"
-ARG NES_DIR=/usr/local/nes
-ENV NES_DIR=$NES_DIR
 
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -58,11 +56,6 @@ ENV PYTHONOPTIMIZE=1
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8  
-
-ARG NES_DIR=/usr/local/nes
-ENV NES_DIR=$NES_DIR
-
-ARG HTTPS_CERT_KEY
 
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

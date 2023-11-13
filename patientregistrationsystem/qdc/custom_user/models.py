@@ -28,7 +28,7 @@ class Institution(models.Model):  # type: ignore [django-manager-missing]
     )
 
     def __str__(self) -> str:
-        return "%s" % self.name
+        return f"{self.name}"
 
     class Meta(TypedModelMeta):
         ordering = ["name"]
