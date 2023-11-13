@@ -1,4 +1,4 @@
-## Changes
+# Changes
 
 updated to python 3.11
 
@@ -16,7 +16,7 @@ added cache (redis)
 
 added CSP (Content Security Policy) and CORS
 
-### Improved project structure:
+### Improved project structure
 
     https://studygyaan.com/django/best-practice-to-structure-django-project-directories-and-files
 
@@ -34,9 +34,9 @@ added a modular settings system
 
 improved deploy
 
-added CI using github actions
+added CI using GitHub actions
 
-## TODO:
+## TODO
 
 finish portuguese translation
 

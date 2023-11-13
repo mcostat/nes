@@ -3914,7 +3914,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @skipIf(
         os.getenv("GITHUB_ACTIONS"),
-        reason="I dont know why this does not work on github actions",
+        reason="I dont know why this does not work on GitHub actions",
     )
     def test_export_per_experiment_adds_experimental_protocol_image_file(self):
         self._create_eeg_export_data()

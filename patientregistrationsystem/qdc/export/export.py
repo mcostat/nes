@@ -1531,7 +1531,7 @@ class ExportExecution:
     ):
         # Get fields from patient
         export_participant_row = self.process_participant_data(
-            self.get_input_data("participants"), participant_list
+            self.get_input_data("participants"), participant_list, "pt-br"
         )
 
         # Merge fields from questionnaires and patient

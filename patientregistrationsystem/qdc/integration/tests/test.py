@@ -2,7 +2,6 @@ import os
 from unittest import skipIf
 
 from django.test import TestCase
-
 from survey.abc_search_engine import Questionnaires
 
 # This is the survey id of the lss survey file for the integration tests
@@ -13,7 +12,7 @@ LS_ID = 472711
 class LimeSurveyIntegrationTestCase(TestCase):
     @skipIf(
         os.getenv("GITHUB_ACTIONS"),
-        reason="No way of currently test this on github actions",
+        reason="No way of currently test this on GitHub actions",
     )
     def test_acquisitiondate_field_is_not_hidden(self) -> None:
         ls = Questionnaires()

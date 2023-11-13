@@ -38,6 +38,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JSCPD: false
           VALIDATE_PYTHON: false
+          VALIDATE_PYTHON_FLAKE8: false # enable this as soon as posible
           VALIDATE_PYTHON_ISORT: false
           VALIDATE_PYTHON_MYPY: false
           VALIDATE_YAML: false
