@@ -327,7 +327,7 @@ DATABASES = {
         "NAME": os.getenv("NES_DB", "nes_db"),
         "USER": os.getenv("NES_DB_USER", "nes_user"),
         "PASSWORD": os.getenv("NES_DB_PASSWORD", "nes_password"),
-        "HOST": os.getenv("NES_DB_HOST", "localhost"),
+        "HOST": os.getenv("NES_DB_HOST", "nes_db"),
         "PORT": os.getenv("NES_DB_PORT", "5432"),
     }
 }
@@ -335,7 +335,7 @@ DATABASES = {
 # LimeSurvey configuration
 LIMESURVEY = {
     "URL_API": "http://"
-    + os.getenv("LIMESURVEY_HOST", "localhost")
+    + os.getenv("LIMESURVEY_HOST", "limesurvey")
     + ":"
     + os.getenv("LIMESURVEY_PORT", "8080"),
     "URL_WEB": "http://"

@@ -744,21 +744,19 @@ def search_patients_ajax(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         search_text = request.POST["search_text"]
         if search_text:
-            if re.match(r"P{1}[0-9]", search_text):
+            if re.match(r"P[\d]", search_text):
                 patient_list = (
                     Patient.objects.filter(code__icontains=search_text)
                     .exclude(removed=True)
                     .order_by("code")
                 )
-            elif (
-                re.match(r"^[a-zA-Z]{1}[a-zA-Z ]{0,}$", search_text) and sensitive_perm
-            ):
+            elif re.match(r"^[a-zA-Z][a-zA-Z ]*$", search_text) and sensitive_perm:
                 patient_list = (
                     Patient.objects.filter(name__icontains=search_text)
                     .exclude(removed=True)
                     .order_by("name")
                 )
-            elif re.match(r"^[0-9]{1}[0-9-.]{0,}$", search_text):
+            elif re.match(r"^[\d][0-9-.]*$", search_text):
                 patient_list = (
                     Patient.objects.filter(cpf__icontains=search_text)
                     .exclude(removed=True)

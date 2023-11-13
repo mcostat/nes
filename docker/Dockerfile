@@ -9,7 +9,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8  
 
 
-ARG NES_BRANCH=dev
+ARG NES_BRANCH="unset"
 ARG NES_DIR=/usr/local/nes
 ENV NES_DIR=$NES_DIR
 

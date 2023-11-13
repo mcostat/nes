@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class PasswordChangeFormCustomized(PasswordChangeForm):
-    # MIN_LENGTH = 8
     _password_regex: str = (
         r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
     )

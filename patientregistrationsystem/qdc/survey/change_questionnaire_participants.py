@@ -20,7 +20,7 @@ def parse_options(argv) -> list[str]:
     questionnaire_id = ""
     new_limesurvey_id = ""
     try:
-        opts, args = getopt.getopt(argv, "hq:l:", ["questionnaire=", "new_limesurvey="])
+        opts, _ = getopt.getopt(argv, "hq:l:", ["questionnaire=", "new_limesurvey="])
     except getopt.GetoptError:
         print(
             "change_questionnaire_participants.py -q <questionnaire_id> -l "

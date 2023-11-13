@@ -53,7 +53,7 @@ class UserProfile(models.Model):
 
     @staticmethod
     def cached_force_password_change(_user: User) -> bool:
-        key = "pw_change_{}".format(_user.username)
+        key = f"pw_change_{_user.username}"
         cache = caches["redis"]
         pw_change = cache.get(key, None)
 
@@ -75,7 +75,7 @@ def invalidate_force_password_change_cache(sender, instance, **kwargs):
     """
     Invalidate the book cached data when a book is changed or deleted
     """
-    key = "pw_change_{}".format(instance.user.username)
+    key = f"pw_change_{instance.user.username}"
     caches["redis"].delete(key)
 
 
@@ -94,8 +94,8 @@ def password_change_signal(sender, instance, **kwargs) -> None:
         if user.is_superuser:
             return
 
-        if not user.password == instance.password:
-            profile, created = UserProfile.objects.get_or_create(user=user)
+        if user.password != instance.password:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
             profile.force_password_change = False
             profile.save()
     except User.DoesNotExist:

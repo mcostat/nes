@@ -6,7 +6,6 @@ from git.repo import Repo
 
 def check_upgrade() -> bool:
     # FIXME arrumar isso
-    # print(os.path.dirname(os.path.abspath(__file__)))
     repo = Repo("https://github.com/mcostat/nes.git")
     for remote in repo.remotes:
         remote.fetch()

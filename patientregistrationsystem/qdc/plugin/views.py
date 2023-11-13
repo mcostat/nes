@@ -25,6 +25,12 @@ from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 
 
+LIMESURVEY_ERROR_MSG = _(
+    "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
+    "If problem persists please contact System Administrator."
+)
+
+
 def participants_dict(survey):
     """
     Function to check who answered a questionnaire
@@ -263,25 +269,13 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
                 "en", group_ids
             )
             if limesurvey_error:
-                messages.error(
-                    request,
-                    _(
-                        "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
-                        "If problem persists please contact System Administrator."
-                    ),
-                )
+                messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
             limesurvey_error, zip_file = build_zip_file(
                 request, subjects_of_groups, participants_headers, questionnaires
             )
             if limesurvey_error:
-                messages.error(
-                    request,
-                    _(
-                        "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
-                        "If problem persists please contact System Administrator."
-                    ),
-                )
+                messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
             if zip_file:
                 export = Export.objects.last()
@@ -338,25 +332,13 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
                 request.LANGUAGE_CODE
             )
             if limesurvey_error:
-                messages.error(
-                    request,
-                    _(
-                        "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
-                        "If problem persists please contact System Administrator."
-                    ),
-                )
+                messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
             limesurvey_error, zip_file = build_zip_file(
                 request, participants, participants_headers, questionnaires, False
             )
             if limesurvey_error:
-                messages.error(
-                    request,
-                    _(
-                        "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
-                        "If problem persists please contact System Administrator."
-                    ),
-                )
+                messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
             if zip_file:
                 export = Export.objects.last()

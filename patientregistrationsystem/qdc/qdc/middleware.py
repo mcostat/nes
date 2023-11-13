@@ -8,7 +8,6 @@ from django.utils.deprecation import MiddlewareMixin
 from custom_user.models import UserProfile
 
 
-# TODO: This is not very efficient, checks de database every non-auth request
 class PasswordChangeMiddleware(MiddlewareMixin):
     @staticmethod
     def process_request(request: HttpRequest):
@@ -17,6 +16,6 @@ class PasswordChangeMiddleware(MiddlewareMixin):
             and not re.search(r"/password_change/?", request.path)
             and not re.search(r"/logout/?", request.path)
             and not request.user.is_superuser
+            and UserProfile.cached_force_password_change(request.user)
         ):
-            if UserProfile.cached_force_password_change(request.user):
-                return redirect(reverse("password_change"))
+            return redirect(reverse("password_change"))

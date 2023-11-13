@@ -503,7 +503,7 @@ class ExportExecution:
                 subjects_of_group = SubjectOfGroup.objects.filter(group=group)
             title = slugify(group.title).replace("-", "_")
 
-            description = group.description  # TODO: code bloat
+            description = group.description
             if group_id not in self.per_group_data:
                 self.per_group_data[group_id] = {}
             self.per_group_data[group_id]["group"] = {

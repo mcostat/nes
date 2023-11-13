@@ -140,19 +140,17 @@ class QuestionnaireUtils:
                         header[fields.index(field)]
                     )
                     self.questionnaires_data[questionnaire_id]["fields"].append(field)
-            if considers_questionnaires_from_experiment:
-                if (
+            if (
+                considers_questionnaires_from_experiment
+                and field
+                not in self.questionnaires_experiment_data[questionnaire_id]["fields"]
+            ):
+                self.questionnaires_experiment_data[questionnaire_id]["header"].append(
+                    header[fields.index(field)]
+                )
+                self.questionnaires_experiment_data[questionnaire_id]["fields"].append(
                     field
-                    not in self.questionnaires_experiment_data[questionnaire_id][
-                        "fields"
-                    ]
-                ):
-                    self.questionnaires_experiment_data[questionnaire_id][
-                        "header"
-                    ].append(header[fields.index(field)])
-                    self.questionnaires_experiment_data[questionnaire_id][
-                        "fields"
-                    ].append(field)
+                )
 
     def get_header_questionnaire(self, questionnaire_id):
         header = []
@@ -254,7 +252,6 @@ class QuestionnaireUtils:
         ]
         fields_saved = self.questionnaires_experiment_data[questionnaire_id]["fields"]
 
-        # new_header = []
         new_fields = []
         new_header_questionnaire = []
 
@@ -349,7 +346,7 @@ class QuestionnaireUtils:
                 fields_from_questions.append(question_code)
                 # clean the question description that came from limesurvey
                 question_description = (
-                    re.sub("{.*?}", "", re.sub("<.*?>", "", properties["question"]))
+                    re.sub(r"{.*?}", "", re.sub(r"<.*?>", "", properties["question"]))
                     .replace("&nbsp;", "")
                     .strip()
                 )

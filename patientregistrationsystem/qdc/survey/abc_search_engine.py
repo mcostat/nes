@@ -296,7 +296,7 @@ class ABCSearchEngine(ABC):
                     "short",
                     fields,
                 )
-            except (AttributeError, TypeError) as error:
+            except (AttributeError, TypeError):
                 if doctype == "csv-allanswer":
                     responses = self.server.export_responses_by_token(
                         self.session_key,
@@ -397,7 +397,7 @@ class ABCSearchEngine(ABC):
                     heading_type,
                     "short",
                 )
-            except (AttributeError, TypeError) as error:
+            except (AttributeError, TypeError):
                 # TODO: sid: 843661
                 responses = self.server.export_responses_by_token(
                     self.session_key,

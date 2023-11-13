@@ -22,6 +22,7 @@ from patient.models import (
 )
 
 NULLBOOLEAN_CHOICE = ((True, _("Yes")), (False, _("No")), (None, _("Unknown")))
+RATINGS_CHOICE = ((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +")))
 
 
 class PatientForm(ModelForm):
@@ -82,7 +83,6 @@ class PatientForm(ModelForm):
             "origin": TextInput(attrs={"class": "form-control"}),
             "medical_record": TextInput(attrs={"class": "form-control"}),
             "date_birth": TextInput(
-                # format=_("%m/%d/%Y"),
                 attrs={
                     "type": "date",
                     "pattern": r"\d{4}-\d{2}-\d{2}",
@@ -210,55 +210,55 @@ class SocialDemographicDataForm(ModelForm):
             ),
             "payment": Select(attrs={"class": "form-select"}),
             "tv": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "dvd": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "radio": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "bath": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "automobile": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "house_maid": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "wash_machine": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "refrigerator": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
             ),
             "freezer": RadioSelect(
-                choices=((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +"))),
+                choices=RATINGS_CHOICE,
                 attrs={
                     "class": "form-check-input",
                 },
@@ -343,7 +343,6 @@ class ComplementaryExamForm(ModelForm):
 
         widgets = {
             "date": TextInput(
-                # format=_("%m/%d/%Y"),
                 attrs={
                     "type": "date",
                     "pattern": r"\d{4}-\d{2}-\d{2}",
@@ -389,7 +388,6 @@ class QuestionnaireResponseForm(ModelForm):
 
         widgets = {
             "date": TextInput(
-                # format=_("%m/%d/%Y"),
                 attrs={
                     "type": "date",
                     "class": "form-control",

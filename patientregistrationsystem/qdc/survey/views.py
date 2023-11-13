@@ -161,19 +161,18 @@ def survey_create(request, template_name="survey/survey_register.html"):
     questionnaires_list = []
 
     if request.method == "POST":
-        if request.POST["action"] == "save":
-            if survey_form.is_valid():
-                survey_added = survey_form.save(commit=False)
-                survey, created = Survey.objects.get_or_create(
-                    lime_survey_id=request.POST["questionnaire_selected"],
-                    is_initial_evaluation=survey_added.is_initial_evaluation,
-                )
-                surveys.release_session_key()
-                if created:
-                    messages.success(request, _("Questionnaire created successfully."))
-                    redirect_url = reverse("survey_list")
+        if request.POST["action"] == "save" and survey_form.is_valid():
+            survey_added = survey_form.save(commit=False)
+            survey, created = Survey.objects.get_or_create(
+                lime_survey_id=request.POST["questionnaire_selected"],
+                is_initial_evaluation=survey_added.is_initial_evaluation,
+            )
+            surveys.release_session_key()
+            if created:
+                messages.success(request, _("Questionnaire created successfully."))
+                redirect_url = reverse("survey_list")
 
-                    return HttpResponseRedirect(redirect_url)
+                return HttpResponseRedirect(redirect_url)
 
     if limesurvey_available:
         questionnaires_list = surveys.find_all_active_questionnaires()
@@ -223,16 +222,15 @@ def survey_update(request, survey_id, template_name="survey/survey_register.html
     )
 
     if request.method == "POST":
-        if request.POST["action"] == "save":
-            if survey_form.is_valid():
-                if survey_form.has_changed():
-                    survey_form.save()
-                    messages.success(request, _("Questionnaire updated successfully."))
-                else:
-                    messages.success(request, _("There are no changes to save."))
+        if request.POST["action"] == "save" and survey_form.is_valid():
+            if survey_form.has_changed():
+                survey_form.save()
+                messages.success(request, _("Questionnaire updated successfully."))
+            else:
+                messages.success(request, _("There are no changes to save."))
 
-                redirect_url = reverse("survey_view", args=(survey.id,))
-                return HttpResponseRedirect(redirect_url)
+            redirect_url = reverse("survey_view", args=(survey.id,))
+            return HttpResponseRedirect(redirect_url)
 
     context = {
         "limesurvey_available": limesurvey_available,
@@ -880,7 +878,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
 
                     # cleaning the question field
                     properties["question"] = re.sub(
-                        "{.*?}", "", re.sub("<.*?>", "", properties["question"])
+                        r"{.*?}", "", re.sub(r"<.*?>", "", properties["question"])
                     )
                     properties["question"] = (
                         properties["question"].replace("&nbsp;", "").strip()
@@ -1044,7 +1042,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                 answer: str = ""
                                 no_response_flag = False
 
-                                if not question["type"] == "X":
+                                if question["type"] != "X":
                                     if question["type"] == "1":
                                         answer_list = []
                                         if (
