@@ -3047,7 +3047,7 @@ class ExportExecution:
 
                             # TODO (NES-991): treat error!
                             # TODO (NES-991): QuestionnaireUtils already in self.questionnaire_utils
-                            error, questions = QuestionnaireUtils.get_questions(
+                            _, questions = QuestionnaireUtils.get_questions(
                                 questionnaire_lime_survey, questionnaire_id, language
                             )
 

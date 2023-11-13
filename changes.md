@@ -16,7 +16,7 @@ added cache (redis)
 
 added CSP (Content Security Policy) and CORS
 
-### Improved project structure
+## Improved project structure
 
     https://studygyaan.com/django/best-practice-to-structure-django-project-directories-and-files
 
