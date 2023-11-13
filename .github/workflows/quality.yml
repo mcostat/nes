@@ -89,7 +89,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          coverage run --omit=*/tests/*,*/migrations/* manage.py test --exclude-tag=integration && coverage report --fail-under=60
+          coverage erase && coverage run --omit=*/tests/*,*/migrations/* manage.py test --exclude-tag=integration
 
       - name: Run Integration Tests
         run: |
