@@ -58,6 +58,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8  
 
+ENV $NES_DIR="/usr/local/nes"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
