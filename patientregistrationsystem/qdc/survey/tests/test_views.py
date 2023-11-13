@@ -143,8 +143,8 @@ class ABCSearchEngineTest(TestCase):
         list_survey = self.server.list_surveys(self.session_key, None)
         self.server.release_session_key(self.session_key)
         self.assertEqual(
-            questionnaires.find_questionnaire_by_id(list_survey[3]["sid"]),
-            list_survey[3],
+            questionnaires.find_questionnaire_by_id(list_survey[0]["sid"]),
+            list_survey[0],
         )
         questionnaires.release_session_key()
 
