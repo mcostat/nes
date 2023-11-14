@@ -983,7 +983,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                                 # type "D" means "Date/Time"
                                                 if question["type"] == "D":
                                                     if responses_list[1][index]:
-                                                        answer: datetime.datetime = datetime.datetime.strptime(
+                                                        answer = datetime.datetime.strptime(
                                                             responses_list[1][index],
                                                             r"%Y-%m-%d %H:%M:%S",
                                                         )

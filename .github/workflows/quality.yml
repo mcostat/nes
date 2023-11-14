@@ -81,7 +81,7 @@ jobs:
 
       - name: Run NES setup
         run: |
-          sh ../../scripts/setup_nes.sh
+          sh ../../scripts/setup_nes_test.sh
 
       - name: Check Djando deploy
         run: |

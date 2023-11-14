@@ -31,7 +31,6 @@
     "pylint.importStrategy": "fromEnvironment",
     "pylint.args": [
         "--disable=C0111",
-        "--disable=line-too-long",
         "--load-plugins=pylint_django",
         "--load-plugins=pylint_django.checkers.migrations",
         // "--django-settings-module=patientregistrationsystem.qdc.qdc.settings.dev",
