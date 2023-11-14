@@ -12,18 +12,18 @@ def _exceptions(cpf):
     if len(cpf) != 11:
         return True
     else:
-        s = "".join(str(x) for x in cpf)
-        if (
-            s == "00000000000"
-            or s == "11111111111"
-            or s == "22222222222"
-            or s == "33333333333"
-            or s == "44444444444"
-            or s == "55555555555"
-            or s == "66666666666"
-            or s == "77777777777"
-            or s == "88888888888"
-            or s == "99999999999"
+        cpf_str = "".join(str(x) for x in cpf)
+        if cpf_str in (
+            "00000000000",
+            "11111111111",
+            "22222222222",
+            "33333333333",
+            "44444444444",
+            "55555555555",
+            "66666666666",
+            "77777777777",
+            "88888888888",
+            "99999999999",
         ):
             return True
     return False
@@ -44,7 +44,7 @@ def _gen(cpf):
         return 0
 
 
-class CPF(object):
+class CPF:
     _gen = staticmethod(_gen)
     _translate = staticmethod(_translate)
 
@@ -97,7 +97,7 @@ class CPF(object):
         r = "".join(s)
         return r
 
-    def isValid(self) -> bool:
+    def is_valid(self) -> bool:
         """Valida o número de cpf"""
 
         if _exceptions(self.cpf):

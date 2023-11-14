@@ -265,7 +265,7 @@ def validate_date_questionnaire_response(value) -> None:
 # Valida CPF
 def validate_cpf(value) -> None:
     validation = CPF(value)
-    if not validation.isValid():
+    if not validation.is_valid():
         # raise ValidationError(u'CPF %s não é válido' % value)
         raise ValidationError(_("CPF %(CPF)s invalid") % {"CPF": value})
 

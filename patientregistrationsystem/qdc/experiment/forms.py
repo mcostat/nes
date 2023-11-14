@@ -2399,7 +2399,6 @@ class ContextTreeForm(ModelForm):
                 attrs={
                     "class": "form-control",
                     "style": "resize: vertical;",
-                    "style": "resize: vertical;",
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),

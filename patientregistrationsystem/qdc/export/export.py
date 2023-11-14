@@ -301,6 +301,7 @@ class ExportExecution:
         self.participants_filtered_data = []
         self.per_group_data = {}
         self.questionnaire_utils = QuestionnaireUtils()
+        self.questionnaires_responses = {}
 
     @staticmethod
     def _temp_method_to_remove_undesirable_line(fields):
@@ -1729,7 +1730,7 @@ class ExportExecution:
             self.get_input_data("experiment_data_directory"),
         )
 
-        for group_id in self.per_group_data.items():
+        for group_id in self.per_group_data:
             group_title = self.per_group_data[group_id]["group"]["title"]
             directory_group_name = "Group_" + group_title
 
@@ -1832,7 +1833,7 @@ class ExportExecution:
 
         filesformat_type = self.get_input_data("filesformat_type")
 
-        for group_id in self.per_group_data.items():
+        for group_id in self.per_group_data:
             if "questionnaires_per_group" in self.per_group_data[group_id]:
                 questionnaire_list = self.per_group_data[group_id]["questionnaires_per_group"]
                 for questionnaire_id in questionnaire_list:
@@ -1938,71 +1939,71 @@ class ExportExecution:
                                 index = len(fields_description) + 1
                                 fields_description.insert(index, sublist)
 
-                        # Header
-                        if fields_description:
-                            field_type = "fields" if heading_type == "code" else "header_questionnaire"
-                            header = self.build_header_questionnaire_per_participant(
-                                rows_participant_data[0], answer_list[0][field_type]
-                            )
-                            fields_description.insert(0, header)
+                            # Header
+                            if fields_description:
+                                field_type = "fields" if heading_type == "code" else "header_questionnaire"
+                                header = self.build_header_questionnaire_per_participant(
+                                    rows_participant_data[0], answer_list[0][field_type]
+                                )
+                                fields_description.insert(0, header)
 
-                            ###
-                            # Jury-rig detected!
-                            file_exists = False
-                            for item in self.files_to_zip_list:
-                                if complete_filename in item[0]:
-                                    # Append in complete_filename fields_description in the file
-                                    # that already exists
+                                ###
+                                # Jury-rig detected!
+                                file_exists = False
+                                for item in self.files_to_zip_list:
+                                    if complete_filename in item[0]:
+                                        # Append in complete_filename fields_description in the file
+                                        # that already exists
+                                        save_to_csv(
+                                            complete_filename,
+                                            fields_description[1:],
+                                            filesformat_type,
+                                            mode="a",
+                                        )
+                                        file_exists = True
+                                        break
+                                ###
+
+                                # Save array list into a file to expor
+                                questionnaire_lime_survey = Questionnaires()
+                                if not file_exists:
                                     save_to_csv(
                                         complete_filename,
-                                        fields_description[1:],
+                                        fields_description,
                                         filesformat_type,
-                                        mode="a",
                                     )
-                                    file_exists = True
-                                    break
-                            ###
-
-                            # Save array list into a file to expor
-                            questionnaire_lime_survey = Questionnaires()
-                            if not file_exists:
-                                save_to_csv(
-                                    complete_filename,
-                                    fields_description,
-                                    filesformat_type,
-                                )
-                                # TODO (NES-991): treat possible error
-                                error, questions = QuestionnaireUtils.get_questions(
-                                    questionnaire_lime_survey,
-                                    questionnaire_id,
-                                    language,
-                                )
-                                self.files_to_zip_list.append(
-                                    [
-                                        complete_filename,
-                                        export_directory,
-                                        {
-                                            "name": slugify(export_filename),
-                                            "title": export_filename,
-                                            "path": path.join(
-                                                export_directory,
-                                                export_filename + "." + filesformat_type,
-                                            ),
-                                            "format": filesformat_type,
-                                            "mediatype": "text/" + filesformat_type,
-                                            "description": "Questionnaire response",
-                                            "profile": "tabular-data-resource",
-                                            "schema": {
-                                                "fields": self._set_questionnaire_response_fields(
-                                                    heading_type,
-                                                    rows_participant_data[0],
-                                                    answer_list[0],
-                                                    questions,
-                                                )
+                                    # TODO (NES-991): treat possible error
+                                    error, questions = QuestionnaireUtils.get_questions(
+                                        questionnaire_lime_survey,
+                                        questionnaire_id,
+                                        language,
+                                    )
+                                    self.files_to_zip_list.append(
+                                        [
+                                            complete_filename,
+                                            export_directory,
+                                            {
+                                                "name": slugify(export_filename),
+                                                "title": export_filename,
+                                                "path": path.join(
+                                                    export_directory,
+                                                    export_filename + "." + filesformat_type,
+                                                ),
+                                                "format": filesformat_type,
+                                                "mediatype": "text/" + filesformat_type,
+                                                "description": "Questionnaire response",
+                                                "profile": "tabular-data-resource",
+                                                "schema": {
+                                                    "fields": self._set_questionnaire_response_fields(
+                                                        heading_type,
+                                                        rows_participant_data[0],
+                                                        answer_list[0],
+                                                        questions,
+                                                    )
+                                                },
                                             },
-                                        },
-                                    ]
-                                )
+                                        ]
+                                    )
 
                     # Questionnaire metadata directory
                     entrance_questionnaire = False
@@ -3530,6 +3531,8 @@ class ExportExecution:
         elif model_field is BooleanField:
             return "boolean"
 
+        return None
+
     def _set_datapackage_table_schema(self, headers, model_fields):
         fields = []
         for header, field in zip(headers, model_fields):
@@ -3861,7 +3864,7 @@ class ExportExecution:
         )
 
         # Process of filename for description of each group
-        for group_id in self.per_group_data.items():
+        for group_id in self.per_group_data:
             group = get_object_or_404(Group, pk=group_id)
             if group.experimental_protocol:
                 tree = get_block_tree(group.experimental_protocol, language_code)

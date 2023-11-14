@@ -5,7 +5,6 @@ import os
 import sys
 
 import django
-
 from experiment.models import Questionnaire
 from experiment.models import QuestionnaireResponse as EQuestionnaireResponse
 from patient.models import QuestionnaireResponse as PQuestionnaireResponse
@@ -22,11 +21,11 @@ def parse_options(argv) -> list[str]:
     try:
         opts, _ = getopt.getopt(argv, "hq:l:", ["questionnaire=", "new_limesurvey="])
     except getopt.GetoptError:
-        print("change_questionnaire_participants.py -q <questionnaire_id> -l " "<new_limesurvey_id>")
+        print("change_questionnaire_participants.py -q <questionnaire_id> -l " + "<new_limesurvey_id>")
         sys.exit(2)
     for opt, arg in opts:
         if opt == "-h":
-            print("change_questionnaire_participants.py -q <questionnaire_id> " "-l <new_limesurvey_id>")
+            print("change_questionnaire_participants.py -q <questionnaire_id> " + "-l <new_limesurvey_id>")
             sys.exit(1)
         elif opt in ("-q", "--questionnaire"):
             questionnaire_id = arg
@@ -34,7 +33,7 @@ def parse_options(argv) -> list[str]:
             new_limesurvey_id = arg
 
     if questionnaire_id == "" or new_limesurvey_id == "":
-        print("change_questionnaire_participants.py -q <questionnaire_id> -l " "<new_limesurvey_id>")
+        print("change_questionnaire_participants.py -q <questionnaire_id> -l " + "<new_limesurvey_id>")
         sys.exit(2)
 
     return [questionnaire_id, new_limesurvey_id]

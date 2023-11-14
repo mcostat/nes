@@ -11,12 +11,11 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.forms.models import inlineformset_factory
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseNotFound, HttpResponseRedirect
 from django.http.response import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-
 from experiment.models import Questionnaire
 from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
 from experiment.models import Subject, SubjectOfGroup
@@ -182,8 +181,10 @@ def patient_update(request, patient_id):
         else:  # current_tab == '4'
             if request.user.has_perm("survey.view_survey"):
                 return patient_view_questionnaires(request, patient, context, True)
-            else:
-                raise PermissionDenied
+
+            raise PermissionDenied
+
+    return HttpResponseNotFound()
 
 
 def get_current_tab(request: HttpRequest) -> str:

@@ -24,7 +24,6 @@ from plugin.models import RandomForests
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 
-
 LIMESURVEY_ERROR_MSG = _(
     "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
     "If problem persists please contact System Administrator."
@@ -229,7 +228,7 @@ def select_participants(request, experiment_id: int):
     else:
         json_participants = json.dumps({})
 
-    return HttpResponse(json_participants, content_type="application/json")
+    return HttpResponse(json_participants, JsonResponse())
 
 
 @login_required
@@ -269,9 +268,10 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
                     request.session["participants_from"] = list(map(int, request.POST.getlist("from[]", None)))
                     request.session["participants_to"] = list(map(int, request.POST.getlist("patients_selected[]")))
                 return redirect(reverse("send-to-plugin"))
-            else:
-                messages.error(request, _("Could not open zip file to send to Forest Plugin"))
-                return redirect(reverse("send-to-plugin"))
+
+            messages.error(request, _("Could not open zip file to send to Forest Plugin"))
+            return redirect(reverse("send-to-plugin"))
+
         else:
             if "group_selected_list" in request.session:
                 del request.session["group_selected_list"]
@@ -309,9 +309,9 @@ def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
                 plugin_url += "?user_id=" + str(request.user.id) + "&export_id=" + str(export.id)
                 request.session["plugin_url"] = plugin_url
                 return redirect(reverse("send-to-plugin"))
-            else:
-                messages.error(request, _("Could not open zip file to send to Forest Plugin"))
-                return redirect(reverse("send-to-plugin"))
+
+            messages.error(request, _("Could not open zip file to send to Forest Plugin"))
+            return redirect(reverse("send-to-plugin"))
 
     try:
         random_forests = RandomForests.objects.get()

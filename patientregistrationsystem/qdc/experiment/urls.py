@@ -1,5 +1,4 @@
 from django.urls import re_path
-
 from experiment import views
 
 urlpatterns = [
@@ -860,7 +859,8 @@ urlpatterns = [
     ),
     # data collection
     re_path(
-        r"^group/(?P<group_id>\d+)/data_collection_manage/" r"(?P<path_of_configuration>[0-9-]+)/(?P<data_type>\w+)/$",
+        r"^group/(?P<group_id>\d+)/data_collection_manage/"
+        + r"(?P<path_of_configuration>[0-9-]+)/(?P<data_type>\w+)/$",
         views.data_collection_manage,
         name="data_collection_manage",
     ),

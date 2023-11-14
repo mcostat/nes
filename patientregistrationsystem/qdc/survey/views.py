@@ -314,7 +314,7 @@ def survey_update_sensitive_questions(request, survey_id, template_name="survey/
     return render(request, template_name, context)
 
 
-def is_type_of_question_in_survey(surveys, survey, type):
+def is_type_of_question_in_survey(surveys, survey, type_):
     groups_list = surveys.list_groups(sid=survey.lime_survey_id)
     if "status" not in groups_list:
         for group in groups_list:
@@ -323,7 +323,7 @@ def is_type_of_question_in_survey(surveys, survey, type):
             for question in group_questions:
                 group_properties = surveys.get_question_properties(question_id=question, language=group["language"])
                 if "type" in group_properties:
-                    if group_properties["type"] == type:
+                    if group_properties["type"] == type_:
                         return True
     return False
 

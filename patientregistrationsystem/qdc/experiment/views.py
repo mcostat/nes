@@ -39,6 +39,7 @@ from django.http import (
     HttpResponse,
     HttpResponseNotAllowed,
     HttpResponseRedirect,
+    JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -776,7 +777,7 @@ def get_experiments_by_research_project(request, research_project_id):
 
     json_experiment_list = serializers.serialize("json", list_of_experiments)
 
-    return HttpResponse(json_experiment_list, content_type="application/json")
+    return HttpResponse(json_experiment_list, JsonResponse())
 
 
 @login_required
@@ -2750,7 +2751,7 @@ def get_json_equipment_by_manufacturer(request, equipment_type, manufacturer_id)
     if manufacturer_id != "0":
         equipment = equipment.filter(manufacturer_id=manufacturer_id)
     json_equipment = serializers.serialize("json", equipment)
-    return HttpResponse(json_equipment, content_type="application/json")
+    return HttpResponse(json_equipment, JsonResponse())
 
 
 @login_required
@@ -2767,7 +2768,7 @@ def get_json_equipment_attributes(request, equipment_id):
         response_data["gain"] = equipment.gain
         response_data["number_of_channels"] = equipment.number_of_channels
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 @login_required
@@ -2779,7 +2780,7 @@ def get_json_solution_attributes(request, solution_id):
         "description": solution.components,
     }
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 @login_required
@@ -2791,7 +2792,7 @@ def get_json_filter_attributes(request, filter_id):
         "description": filter_type.description,
     }
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 @login_required
@@ -2801,7 +2802,7 @@ def get_localization_system_by_electrode_net(request, equipment_id):
         set_of_electrode_net_system__eeg_electrode_net_id=equipment_id
     )
     json_equipment = serializers.serialize("json", list_of_localization_system)
-    return HttpResponse(json_equipment, content_type="application/json")
+    return HttpResponse(json_equipment, JsonResponse())
 
 
 @login_required
@@ -2816,7 +2817,7 @@ def get_equipment_by_manufacturer_and_localization_system(request, manufacturer_
     if manufacturer_id != "0":
         equipment = equipment.filter(manufacturer_id=manufacturer_id)
     json_equipment = serializers.serialize("json", equipment)
-    return HttpResponse(json_equipment, content_type="application/json")
+    return HttpResponse(json_equipment, JsonResponse())
 
 
 @login_required
@@ -5734,7 +5735,7 @@ def subjects(request, group_id, template_name="experiment/subjects.html"):
             else:
                 messages.error(
                     request,
-                    _("It was not possible to delete participant, " "because there are answers or eeg data associated"),
+                    _("It was not possible to delete participant, because there are answers or eeg data associated"),
                 )
 
             redirect_url = reverse("subjects", args=(group_id,))
@@ -7541,7 +7542,7 @@ def eeg_data_get_process_requisition_status(request, process_requisition):
         del request.session["process_requisition_status" + str(process_requisition)]
         del request.session["process_requisition_message" + str(process_requisition)]
     response_data = {"status": status, "message": message}
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 def update_process_requisition(request, process_requisition, status, message):
@@ -8423,7 +8424,7 @@ def tms_data_edit(request, tms_data_id, tab):
             if tab == "2":
                 hotspot_form = HotSpotForm(request.POST or None, request.FILES)
 
-                if hotspot_form.is_valid() and "localization_system_selection":
+                if hotspot_form.is_valid():
                     if hotspot_form.has_changed():
                         localization_system_val = request.POST["localization_system_selection"].split(",")[0]
                         localization_system = TMSLocalizationSystem.objects.get(pk=localization_system_val)
@@ -9509,7 +9510,7 @@ def get_pulse_by_tms_setting(request, tms_setting_id):
         "name": stimulus_name,
     }
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 @login_required
@@ -9529,7 +9530,7 @@ def tms_data_position_setting_register(request, tms_data_id, template_name="expe
 
     if request.method == "POST":
         if request.POST["action"] == "save":
-            if hotspot_form.is_valid() and "localization_system_selection":
+            if hotspot_form.is_valid():
                 localization_system_val = request.POST["localization_system_selection"]
                 localization_system = TMSLocalizationSystem.objects.get(pk=localization_system_val.split(",")[0])
 
@@ -10807,7 +10808,7 @@ def get_cap_size_list_from_eeg_setting(request, eeg_setting_id):
         if EEGElectrodeCap.objects.filter(id=eeg_electrode_net_id):
             list_of_cap_size = EEGCapSize.objects.filter(eeg_electrode_cap_id=eeg_electrode_net_id)
     json_cap_size = serializers.serialize("json", list_of_cap_size)
-    return HttpResponse(json_cap_size, content_type="application/json")
+    return HttpResponse(json_cap_size, JsonResponse())
 
 
 @login_required
@@ -10824,7 +10825,7 @@ def set_worked_positions(request):
             "new": 128,
         }
     )
-    return HttpResponse(json.dumps(json_response), content_type="application/json")
+    return HttpResponse(json.dumps(json_response), JsonResponse())
 
 
 @login_required
@@ -14071,7 +14072,7 @@ def get_json_coilmodel_attributes(request: HttpRequest, coilmodel_id: int) -> Ht
 
     response_data = {"description": coil_model.description}
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 @login_required
@@ -14098,7 +14099,7 @@ def get_anatomical_description_by_placement(request, emg_electrode_type, emg_ele
     if emg_electrode_type == "needle":
         anatomical_description = EMGNeedlePlacement.objects.get(pk=emg_electrode_placement_id)
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 @login_required
@@ -14109,7 +14110,7 @@ def get_json_muscle_side_by_electrode_placement(request, emg_electrode_placement
     )
 
     json_muscle_side = serializers.serialize("json", muscle_side_list)
-    return HttpResponse(json_muscle_side, content_type="application/json")
+    return HttpResponse(json_muscle_side, JsonResponse())
 
 
 @login_required
@@ -14121,7 +14122,7 @@ def get_json_electrode_model(request, electrode_id):
         "description": electrode_model.description,
     }
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(response_data), JsonResponse())
 
 
 @login_required
@@ -14130,7 +14131,7 @@ def get_json_electrode_by_type(request, electrode_type):
     electrode_list = ElectrodeModel.objects.filter(electrode_type=electrode_type, tags__name="EMG")
 
     json_electrode_list = serializers.serialize("json", electrode_list)
-    return HttpResponse(json_electrode_list, content_type="application/json")
+    return HttpResponse(json_electrode_list, JsonResponse())
 
 
 @login_required
@@ -14177,7 +14178,7 @@ def get_electrode_placement_by_type(request, electrode_type):
                 }
             )
 
-    return HttpResponse(json.dumps(placements), content_type="application/json")
+    return HttpResponse(json.dumps(placements), JsonResponse())
 
 
 @login_required

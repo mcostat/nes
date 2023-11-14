@@ -466,7 +466,7 @@ class EEGElectrodePosition(models.Model):
                 .first()
             )
             self.channel_default_index = top.channel_default_index + 1 if top else 1
-        super(EEGElectrodePosition, self).save()
+        super().save()
 
 
 class EEGElectrodeNetSystem(models.Model):
@@ -733,7 +733,7 @@ class EMGElectrodePlacement(models.Model):
 
     def delete(self, *args, **kwargs) -> Any:
         self.photo.delete()
-        super(EMGElectrodePlacement, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
 
 class EMGSurfacePlacement(EMGElectrodePlacement):
@@ -879,7 +879,7 @@ class EMGAnalogFilterSetting(models.Model):
     order = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGAnalogFilterSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_electrode_setting.emg_electrode_setting.emg_setting.experiment.save()
 
 
@@ -895,7 +895,7 @@ class EMGElectrodePlacementSetting(models.Model):
     muscle_side = models.ForeignKey(MuscleSide, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGElectrodePlacementSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_electrode_setting.emg_setting.experiment.save()
 
 

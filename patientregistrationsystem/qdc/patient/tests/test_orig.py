@@ -26,8 +26,6 @@ from django.test import Client, TestCase, override_settings
 from django.test.client import RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from faker import Factory
-
 from experiment.models import (
     Block,
     ComponentConfiguration,
@@ -38,6 +36,7 @@ from experiment.models import (
 )
 from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
 from experiment.models import ResearchProject, Subject, SubjectOfGroup
+from faker import Factory
 from patient.management.commands.import_icd import import_classification_of_diseases
 from patient.models import (
     AlcoholFrequency,
@@ -262,40 +261,40 @@ class CpfValidationTest(TestCase):
     def test_good_values(self):
         """testa os valores validos"""
         for cpf in self.good_values:
-            result = CPF(cpf).isValid()
+            result = CPF(cpf).is_valid()
             self.assertEqual(result, True)
 
     def test_good_only_numbers_values(self):
         """testa os valores validos para somente numeros"""
         for cpf in self.good_only_numbers_values:
-            result = CPF(cpf).isValid()
+            result = CPF(cpf).is_valid()
             self.assertEqual(result, True)
 
     def test_bad_values(self):
         """testa os valores invalidos"""
         for cpf in self.bad_values:
-            result = CPF(cpf).isValid()
+            result = CPF(cpf).is_valid()
             self.assertEqual(result, False)
 
     def test_bad_only_numbers_values(self):
         """testa os valores invalidos para somente numeros"""
         for cpf in self.bad_only_numbers_values:
-            result = CPF(cpf).isValid()
+            result = CPF(cpf).is_valid()
             self.assertEqual(result, False)
 
     def test_empty_value(self):
         """testa cpf vazio"""
-        result = CPF("").isValid()
+        result = CPF("").is_valid()
         self.assertEqual(result, False)
 
     def test_alpha_value(self):
         """testa cpf com letras"""
-        result = CPF("111.ABC").isValid()
+        result = CPF("111.ABC").is_valid()
         self.assertEqual(result, False)
 
     def test_special_character_value(self):
         """testa cpf com letras"""
-        result = CPF('!@#$%&*()-_=+[]|"?><;:').isValid()
+        result = CPF('!@#$%&*()-_=+[]|"?><;:').is_valid()
         self.assertEqual(result, False)
 
     def test_long_string_value(self):
@@ -303,13 +302,13 @@ class CpfValidationTest(TestCase):
         result = CPF(
             "1234567890123456789012345678901234567890123456789012\
             34567890123456789012345678901234567890123456789012345678901234567890"
-        ).isValid()
+        ).is_valid()
         self.assertEqual(result, False)
 
     def test_invalid_values(self):
         """testa os valores invalidos por conter somente digitos repetidos"""
         for cpf in self.invalid_values:
-            result = CPF(cpf).isValid()
+            result = CPF(cpf).is_valid()
             self.assertEqual(result, False)
 
 

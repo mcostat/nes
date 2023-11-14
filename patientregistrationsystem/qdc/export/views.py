@@ -18,7 +18,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as ug_
 from django.utils.translation import gettext_lazy as _
-
 from experiment.models import (
     AdditionalData,
     Block,
@@ -1594,7 +1593,7 @@ def select_experiments_by_study(request, study_id):
 
     json_experiment_list = serializers.serialize("json", experiment_list)
 
-    return HttpResponse(json_experiment_list, content_type="application/json")
+    return HttpResponse(json_experiment_list, JsonResponse())
 
 
 def select_groups_by_experiment(request, experiment_id):
@@ -1602,4 +1601,4 @@ def select_groups_by_experiment(request, experiment_id):
     group_list = Group.objects.filter(experiment__in=experiment)
     json_group_list = serializers.serialize("json", group_list)
 
-    return HttpResponse(json_group_list, content_type="application/json")
+    return HttpResponse(json_group_list, JsonResponse())

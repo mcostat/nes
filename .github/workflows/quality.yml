@@ -84,6 +84,8 @@ jobs:
           sh ../../scripts/setup_nes_test.sh
 
       - name: Check Djando deploy
+        env:
+          DJANGO_SETTINGS_MODULE: qdc.settings.dev
         run: |
           python -u manage.py check --deploy
 
