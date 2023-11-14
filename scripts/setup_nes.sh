@@ -33,7 +33,7 @@ except:
     python3 -u manage.py loaddata load_eeg_initial_data.json || true
     echo "	INFO create cachetable"
     python3 -u manage.py createcachetable || true
-    echo "	INFO: create_super_ser.py"
+    echo "	INFO: create_super_user.py"
     python3 -u manage.py shell < /tmp/create_superuser.py || true
     echo "	INFO: import cid10"
     python3 -u manage.py import_icd_cid --file icd10cid10v2017.csv || true

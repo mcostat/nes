@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import csv
 import json
 import random
@@ -277,8 +276,8 @@ class LogMessages:
             smart_str(param1),
             smart_str(param2),
         )
-        with open(self.file_name.encode("utf-8"), "a", encoding="UTF-8") as f:
-            file_log = File(f)
+        with open(self.file_name.encode("utf-8"), "a", encoding="UTF-8") as file:
+            file_log = File(file)
             file_log.write(text_message)
 
         file_log.close()
@@ -1053,12 +1052,12 @@ class ExportExecution:
                             for media_collection_data in media_collection_data_list:
                                 subject_code = media_collection_data.subject_of_group.subject.patient.code
                                 media_collection_data_list = []
-                                for media in media_collection_data.media_collection_files.all():
+                                for media_data in media_collection_data.media_collection_files.all():
                                     media_collection_data_list.append(
                                         {
                                             "media_filename": path.join(
                                                 settings.MEDIA_ROOT,
-                                                generic_data.file.name,
+                                                media_data.file.name,
                                             )
                                         }
                                     )
@@ -1456,7 +1455,7 @@ class ExportExecution:
                             },
                         }
                     else:
-                        datapackage_json: str = ""
+                        datapackage_json = {}
                     self.files_to_zip_list.append([complete_filename, export_directory, datapackage_json])
 
             # Questionnaire metadata
@@ -1730,7 +1729,7 @@ class ExportExecution:
             self.get_input_data("experiment_data_directory"),
         )
 
-        for group_id in self.per_group_data:
+        for group_id in self.per_group_data.items():
             group_title = self.per_group_data[group_id]["group"]["title"]
             directory_group_name = "Group_" + group_title
 
@@ -1833,7 +1832,7 @@ class ExportExecution:
 
         filesformat_type = self.get_input_data("filesformat_type")
 
-        for group_id in self.per_group_data:
+        for group_id in self.per_group_data.items():
             if "questionnaires_per_group" in self.per_group_data[group_id]:
                 questionnaire_list = self.per_group_data[group_id]["questionnaires_per_group"]
                 for questionnaire_id in questionnaire_list:
@@ -1850,10 +1849,7 @@ class ExportExecution:
 
                     prefix_filename_fields = questionnaire_data["prefix_filename_fields"]
                     # Ex. Q123_aaa
-                    directory_questionnaire_name = "%s_%s" % (
-                        str(questionnaire_code),
-                        questionnaire_title,
-                    )
+                    directory_questionnaire_name = f"{str(questionnaire_code)}_{questionnaire_title}"
                     if per_experiment_plugin:
                         randomforests = RandomForests.objects.first()
                         if questionnaire_id == randomforests.admission_assessment.lime_survey_id:
@@ -3669,12 +3665,12 @@ class ExportExecution:
             question_cleared = ExportExecution._get_parent_question(question_field)
             question = next(item for item in questions if item["title"] == question_cleared)
             title = question_header_questionnaire if heading_type != "code" else question_field
-            type = QUESTION_TYPES[question["type"]][1]
-            format = QUESTION_TYPES[question["type"]][2]
+            q_type = QUESTION_TYPES[question["type"]][1]
+            q_format = QUESTION_TYPES[question["type"]][2]
             # i + 2: currently in export, question headers are inserted between
             # [participant_code, age] and the rest of participant fields
             # when those exists
-            fields.insert(i + 2, {"name": title, "title": title, "type": type, "format": format})
+            fields.insert(i + 2, {"name": title, "title": title, "type": q_type, "format": q_format})
 
         return fields
 
@@ -3865,7 +3861,7 @@ class ExportExecution:
         )
 
         # Process of filename for description of each group
-        for group_id in self.per_group_data:
+        for group_id in self.per_group_data.items():
             group = get_object_or_404(Group, pk=group_id)
             if group.experimental_protocol:
                 tree = get_block_tree(group.experimental_protocol, language_code)
@@ -4009,7 +4005,7 @@ class ExportExecution:
                                     ),
                                     # TODO (NES-987): implement get_mediatype(extension) method
                                     "format": extension,
-                                    "mediatype": "application/%s" % extension,
+                                    "mediatype": f"application/{extension}",
                                 },
                             ]
                         )
@@ -4045,7 +4041,7 @@ class ExportExecution:
                                     ),
                                     # TODO (NES-987): implement get_mediatype(extension) method
                                     "format": extension,
-                                    "mediatype": "application/%s" % extension,
+                                    "mediatype": f"application/{extension}",
                                 },
                             ]
                         )
@@ -4080,7 +4076,7 @@ class ExportExecution:
                                     ),
                                     # TODO (NES-987): implement get_mediatype(extension) method
                                     "format": extension,
-                                    "mediatype": "application/%s" % extension,
+                                    "mediatype": f"application/{extension}",
                                 },
                             ]
                         )
@@ -4161,10 +4157,10 @@ class ExportExecution:
 
                         complete_additional_data_filename = path.join(path_additional_data, filename)
 
-                        with open(path_additional_file, "rb") as f:
-                            data = f.read()
-                        with open(complete_additional_data_filename, "wb") as f:
-                            f.write(data)
+                        with open(path_additional_file, "rb") as f1:
+                            data = f1.read()
+                        with open(complete_additional_data_filename, "wb") as f2:
+                            f2.write(data)
 
                         self.files_to_zip_list.append(
                             [

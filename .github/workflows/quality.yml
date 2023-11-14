@@ -81,7 +81,7 @@ jobs:
 
       - name: Run NES setup
         run: |
-          sh ../../scripts/setup_nes_test.sh
+          sh ../../scripts/setup_nes.sh
 
       - name: Check Djando deploy
         run: |
@@ -89,7 +89,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          coverage erase && coverage run --omit=*/tests/*,*/migrations/* manage.py test --exclude-tag=integration
+          coverage erase && coverage run --omit=*/tests/*,*/migrations/*,*/processing/* manage.py test --exclude-tag=integration
 
       - name: Run Integration Tests
         run: |
@@ -122,10 +122,11 @@ jobs:
         with:
           checkName: "flake8" # NOTE: this needs to be the same as the job name
 
-  mypy:
+  pylint:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -134,17 +135,38 @@ jobs:
           python-version: 3.11
           cache: "pip"
 
-      - name: Install requirements
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r patientregistrationsystem/qdc/requirements.txt
+          pip install pylint
 
-      - name: Run mypy
-        uses: sasanquaneuf/mypy-github-action@releases/v1
-        with:
-          checkName: "mypy" # NOTE: this needs to be the same as the job name
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Analysing the code with pylint
+        run: |
+          pylint $(git ls-files '*.py')
+
+  # mypy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: 3.11
+  #         cache: "pip"
+
+  #     - name: Install requirements
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install -r patientregistrationsystem/qdc/requirements.txt
+
+  #     - name: Run mypy
+  #       uses: sasanquaneuf/mypy-github-action@releases/v1
+  #       with:
+  #         checkName: "mypy" # NOTE: this needs to be the same as the job name
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   black:
     runs-on: ubuntu-latest

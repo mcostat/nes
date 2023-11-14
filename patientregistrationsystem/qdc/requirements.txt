@@ -57,4 +57,5 @@ django-stubs-ext
 flake8
 flake8-django
 pylint
+pylint-django
 djlint

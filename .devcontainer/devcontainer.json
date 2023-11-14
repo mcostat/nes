@@ -39,6 +39,7 @@
 				"batisteo.vscode-django",
 				"VisualStudioExptTeam.vscodeintellicode",
 				"VisualStudioExptTeam.intellicode-api-usage-examples",
+				"VisualStudioExptTeam.vscodeintellicode-completions",
 				"ms-azuretools.vscode-docker",
 				"ms-python.python",
 				"ms-python.black-formatter",
@@ -47,16 +48,14 @@
 				"ms-python.pylint",
 				"ms-python.mypy-type-checker",
 				"donjayamanne.python-extension-pack",
-				"mrmlnc.vscode-apache",
 				"shakram02.bash-beautify",
 				"bibhasdn.django-html",
-				"matangover.mypy",
-				"VisualStudioExptTeam.vscodeintellicode-completions",
 				"monosans.djlint",
 				"github.vscode-github-actions",
 				"esbenp.prettier-vscode",
-				"SonarSource.sonarlint-vscode",
-				"tamasfe.even-better-toml"
+				"tamasfe.even-better-toml",
+				"ms-python.flake8",
+				"KevinRose.vsc-python-indent"
 			]
 		}
 	}

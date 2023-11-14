@@ -24,7 +24,7 @@
     "python.analysis.packageIndexDepths": [
         {
             "name": "django",
-            "depth": 10,
+            "depth": 2,
             "includeAllSymbols": true
         }
     ],
@@ -34,7 +34,8 @@
         "--disable=line-too-long",
         "--load-plugins=pylint_django",
         "--load-plugins=pylint_django.checkers.migrations",
-        "--django-settings-module=qdc.settings.dev"
+        // "--django-settings-module=patientregistrationsystem.qdc.qdc.settings.dev",
+        // "--disable=django-not-configured"
     ],
     "python.analysis.include": [],
     "python.analysis.exclude": [

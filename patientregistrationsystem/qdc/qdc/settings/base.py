@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Django settings for qdc project.
 
@@ -92,7 +91,7 @@ INSTALLED_APPS: list[str] = [
     "jsonrpclib",
     "solo",
     "fixture_magic",
-    "maintenance_mode",
+    # "maintenance_mode",
     "rosetta",
     "axes",
     "django_extensions",
@@ -128,13 +127,13 @@ MIDDLEWARE: list[str] = [
     # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
-    "maintenance_mode.middleware.MaintenanceModeMiddleware",
+    # "maintenance_mode.middleware.MaintenanceModeMiddleware",
     "axes.middleware.AxesMiddleware",
     "qdc.middleware.PasswordChangeMiddleware",
 ]
 
 CONTEXT_PROCESSORS = {
-    "maintenance_mode.context_processors.maintenance_mode",
+    # "maintenance_mode.context_processors.maintenance_mode",
 }
 
 TEMPLATES = [
@@ -198,8 +197,6 @@ WSGI_APPLICATION = "qdc.wsgi.application"
 # AUTH_USER_MODEL = 'quiz.UserProfile'
 # AUTH_PROFILE_MODULE = 'quiz.UserProfile'
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = "pt-br"
 
@@ -350,5 +347,6 @@ SERVER_EMAIL = EMAIL_HOST_USER
 
 LOGO_INSTITUTION = os.getenv("NES_PROJECT_PATH", "") + "/logo-institution.png"
 
+PROJECT_REPO = "https://github.com/mcostat/nes.git"
 
 VERSION = "2.0.0"
