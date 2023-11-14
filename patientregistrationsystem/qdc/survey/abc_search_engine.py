@@ -335,7 +335,7 @@ class ABCSearchEngine(ABC):
                     heading_type,
                     response_type,
                 )
-            except (AttributeError, TypeError) as error:
+            except (AttributeError, TypeError):
                 responses = self.server.export_responses(
                     self.session_key,
                     sid,
@@ -410,7 +410,7 @@ class ABCSearchEngine(ABC):
                     heading_type,
                     "short",
                 )
-            except (AttributeError, TypeError) as error:
+            except (AttributeError, TypeError):
                 responses = self.server.export_responses(
                     self.session_key,
                     sid,
@@ -483,7 +483,7 @@ class ABCSearchEngine(ABC):
     def list_groups(self, sid):
         """
         :param sid: survey ID
-        :return: on success, list of ids and info of groups belonging to survey, else, None
+        :return: on success, list of ids and info of groups belonging to survey, else, []
         """
         groups = self.server.list_groups(self.session_key, sid)
 
@@ -538,11 +538,10 @@ class ABCSearchEngine(ABC):
     def find_tokens_by_questionnaire(self, sid):
         """
         :param sid:
-        :return: list of tokens | dict with error status
+        :return: list of tokens | dict with error status, else None
         """
         tokens = self.server.list_participants(self.session_key, sid, 0, 99999999)
 
-        # If some error occurs RPC returns a dict, so return None
         return tokens if isinstance(tokens, list) else None
 
     def add_group(self, sid, title, description):
@@ -608,104 +607,104 @@ class Questionnaires(ABCSearchEngine):
     )
 
     def find_all_questionnaires(self):
-        return super(Questionnaires, self).find_all_questionnaires()
+        return super().find_all_questionnaires()
 
     def find_all_active_questionnaires(self):
-        return super(Questionnaires, self).find_all_active_questionnaires()
+        return super().find_all_active_questionnaires()
 
     def find_questionnaire_by_id(self, str_id):
-        return super(Questionnaires, self).find_questionnaire_by_id(str_id)
+        return super().find_questionnaire_by_id(str_id)
 
     def add_participant(self, str_id):
-        return super(Questionnaires, self).add_participant(str_id)
+        return super().add_participant(str_id)
 
     def delete_participants(self, survey_id, tokens_ids):
-        return super(Questionnaires, self).delete_participants(survey_id, tokens_ids)
+        return super().delete_participants(survey_id, tokens_ids)
 
     def get_survey_properties(self, sid, prop):
-        return super(Questionnaires, self).get_survey_properties(sid, prop)
+        return super().get_survey_properties(sid, prop)
 
     def get_survey_languages(self, sid):
-        return super(Questionnaires, self).get_survey_languages(sid)
+        return super().get_survey_languages(sid)
 
     def get_participant_properties(self, survey_id, token_id, prop=None):
-        return super(Questionnaires, self).get_participant_properties(survey_id, token_id, prop)
+        return super().get_participant_properties(survey_id, token_id, prop)
 
     def get_survey_title(self, sid, language=None):
-        return super(Questionnaires, self).get_survey_title(sid, language)
+        return super().get_survey_title(sid, language)
 
     def survey_has_token_table(self, sid):
-        return super(Questionnaires, self).survey_has_token_table(sid)
+        return super().survey_has_token_table(sid)
 
     def add_survey(self, sid, title, language, survey_format):
-        return super(Questionnaires, self).add_survey(sid, title, language, survey_format)
+        return super().add_survey(sid, title, language, survey_format)
 
     def delete_survey(self, sid):
-        return super(Questionnaires, self).delete_survey(sid)
+        return super().delete_survey(sid)
 
     def activate_survey(self, sid):
-        return super(Questionnaires, self).activate_survey(sid)
+        return super().activate_survey(sid)
 
     def activate_tokens(self, sid):
-        return super(Questionnaires, self).activate_tokens(sid)
+        return super().activate_tokens(sid)
 
     def get_responses_by_token(self, sid, token, language=None, doctype="csv", fields=[]):
-        return super(Questionnaires, self).get_responses_by_token(sid, token, language, doctype, fields)
+        return super().get_responses_by_token(sid, token, language, doctype, fields)
 
     def get_responses(self, sid, language, response_type="short", fields=None, heading_type="code"):
-        return super(Questionnaires, self).get_responses(sid, language, response_type, fields, heading_type)
+        return super().get_responses(sid, language, response_type, fields, heading_type)
 
     def get_header_response(self, sid, language, token=1, heading_type="code"):
-        return super(Questionnaires, self).get_header_response(sid, language, token, heading_type)
+        return super().get_header_response(sid, language, token, heading_type)
 
     def get_summary(self, sid, stat_name):
-        return super(Questionnaires, self).get_summary(sid, stat_name)
+        return super().get_summary(sid, stat_name)
 
     def list_questions(self, sid, gid):
-        return super(Questionnaires, self).list_questions(sid, gid)
+        return super().list_questions(sid, gid)
 
     def list_questions_ids(self, sid, gid):
-        return super(Questionnaires, self).list_questions_ids(sid, gid)
+        return super().list_questions_ids(sid, gid)
 
     def get_question_properties(self, question_id, language):
-        return super(Questionnaires, self).get_question_properties(question_id, language)
+        return super().get_question_properties(question_id, language)
 
     # TODO (NES-956): see when this was created
     def set_question_properties(self, sid, data):
-        return super(Questionnaires, self).set_question_properties(sid, data)
+        return super().set_question_properties(sid, data)
 
     def list_groups(self, sid):
-        return super(Questionnaires, self).list_groups(sid)
+        return super().list_groups(sid)
 
     def get_group_properties(self, gid):
-        return super(Questionnaires, self).get_group_properties(gid)
+        return super().get_group_properties(gid)
 
     def set_group_properties(self, sid, data):
-        return super(Questionnaires, self).set_group_properties(sid, data)
+        return super().set_group_properties(sid, data)
 
     def insert_questions(self, sid, questions_data, format_import_file):
-        return super(Questionnaires, self).insert_questions(sid, questions_data, format_import_file)
+        return super().insert_questions(sid, questions_data, format_import_file)
 
     def find_tokens_by_questionnaire(self, sid):
-        return super(Questionnaires, self).find_tokens_by_questionnaire(sid)
+        return super().find_tokens_by_questionnaire(sid)
 
     def add_group(self, sid, title, description=None):
-        return super(Questionnaires, self).add_group(sid, title, description)
+        return super().add_group(sid, title, description)
 
     def add_response(self, sid, response_data):
-        return super(Questionnaires, self).add_response(sid, response_data)
+        return super().add_response(sid, response_data)
 
     def set_participant_properties(self, sid, tid, properties_dict):
-        return super(Questionnaires, self).set_participant_properties(sid, tid, properties_dict)
+        return super().set_participant_properties(sid, tid, properties_dict)
 
     def import_survey(self, base64_encoded_lsa_file):
-        return super(Questionnaires, self).import_survey(base64_encoded_lsa_file)
+        return super().import_survey(base64_encoded_lsa_file)
 
     def export_survey(self, sid):
-        return super(Questionnaires, self).export_survey(sid)
+        return super().export_survey(sid)
 
     def delete_responses(self, sid, responses):
-        return super(Questionnaires, self).delete_responses(sid, responses)
+        return super().delete_responses(sid, responses)
 
     def update_response(self, sid, response_data):
-        return super(Questionnaires, self).update_response(sid, response_data)
+        return super().update_response(sid, response_data)

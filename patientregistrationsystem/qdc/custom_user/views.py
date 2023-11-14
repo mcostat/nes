@@ -174,7 +174,7 @@ def user_update(
                     if "password_flag" in request.POST:
                         if request.POST["password"]:
                             user = get_object_or_404(get_user_model(), id=user_id)
-                            profile, _ = UserProfile.objects.get_or_create(user=user)
+                            profile, created = UserProfile.objects.get_or_create(user=user)
                             profile.force_password_change = True
                             profile.save()
 
@@ -194,12 +194,13 @@ def user_update(
                             messages.error(request, _("E-mail already registered"))
                             redirect_url = reverse("user_view", args=(user_id,))
                             return HttpResponseRedirect(redirect_url)
-                        else:
-                            researcher_form.save()
-                            profile_form.save()
-                            messages.success(request, _("Researcher updated successfully."))
-                            redirect_url = reverse("user_view", args=(user_id,))
-                            return HttpResponseRedirect(redirect_url)
+
+                        researcher_form.save()
+                        profile_form.save()
+                        messages.success(request, _("Researcher updated successfully."))
+                        redirect_url = reverse("user_view", args=(user_id,))
+                        return HttpResponseRedirect(redirect_url)
+
                     else:
                         messages.info(request, _("There is no changes to save."))
                         redirect_url = reverse("user_view", args=(user_id,))

@@ -158,7 +158,7 @@ def survey_create(request, template_name="survey/survey_register.html"):
     if request.method == "POST":
         if request.POST["action"] == "save" and survey_form.is_valid():
             survey_added = survey_form.save(commit=False)
-            _, created = Survey.objects.get_or_create(
+            survey, created = Survey.objects.get_or_create(
                 lime_survey_id=request.POST["questionnaire_selected"],
                 is_initial_evaluation=survey_added.is_initial_evaluation,
             )
@@ -811,7 +811,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                     and properties["attributes"]["hidden"] == "1",
                                 }
                             )
-                            for _, value in sorted(properties["subquestions"].items()):
+                            for key, value in sorted(properties["subquestions"].items()):
                                 question_properties.append(
                                     {
                                         "gid": group["id"]["gid"],

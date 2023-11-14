@@ -1,6 +1,8 @@
 import os
 import sys
 
+from django.core.wsgi import get_wsgi_application
+
 paths = [
     os.getenv("NES_DIR", "/usr/local/nes"),
     os.getenv("NES_DIR", "/usr/local/nes") + "/patientregistrationsystem/qdc",
@@ -14,7 +16,5 @@ for path in paths:
         sys.path.append(path)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "qdc.settings.prod")
-
-from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()

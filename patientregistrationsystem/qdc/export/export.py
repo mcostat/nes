@@ -13,7 +13,14 @@ from sys import modules
 from django.apps import apps
 from django.conf import settings
 from django.core.files import File
-from django.db.models import BooleanField, CharField, DateField, FloatField, TextField
+from django.db.models import (
+    BooleanField,
+    CharField,
+    DateField,
+    FloatField,
+    QuerySet,
+    TextField,
+)
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_str
@@ -150,15 +157,15 @@ TMS_DEFAULT_SETTING_FILENAME = "tms_default_setting.json"
 CONTEXT_TREE_DEFAULT = "context_tree_default.json"
 
 
-def is_number(string: str) -> bool:
+def is_number(value: str) -> bool:
     try:
-        float(string)
+        float(value)
         return True
     except ValueError:
         return False
 
 
-def to_number(value) -> int:
+def to_number(value: str) -> int:
     return int(float(value))
 
 
@@ -423,7 +430,7 @@ class ExportExecution:
         if code not in self.participants_per_experiment_questionnaire:
             self.participants_per_experiment_questionnaire[code] = []
 
-        questionnaire_response = QuestionnaireResponse.objects.filter(token_id=token_id)
+        questionnaire_response: QuerySet = QuestionnaireResponse.objects.filter(token_id=token_id)
         if questionnaire_response:
             patient_id = QuestionnaireResponse.objects.filter(token_id=token_id).values("patient_id")[0]["patient_id"]
             if patient_id not in self.participants_per_entrance_questionnaire[code]:
@@ -1277,10 +1284,10 @@ class ExportExecution:
         export_fields_list.append(export_row_list)
 
         # Including the responses
-        for fields in fields_description[1 : fields_description.__len__()]:
+        for fields in fields_description[1 : len(fields_description)]:
             participation_code = fields[len(fields) - 1]
             export_row_list = fields[0 : len(fields) - 1]
-            for participant_fields in export_participant_row[1 : export_participant_row.__len__()]:
+            for participant_fields in export_participant_row[1 : len(export_participant_row)]:
                 if participation_code == participant_fields[len(participant_fields) - 1]:
                     for field in participant_fields:
                         export_row_list.append(field)

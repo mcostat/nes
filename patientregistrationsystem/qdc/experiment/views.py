@@ -12,7 +12,6 @@ from datetime import date, datetime, timedelta
 from functools import partial
 from io import StringIO
 from operator import itemgetter
-from os import path
 from typing import Any
 from uuid import uuid4
 
@@ -24,8 +23,8 @@ from dateutil.relativedelta import relativedelta
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
@@ -34,6 +33,7 @@ from django.core.files.base import ContentFile
 from django.core.mail import send_mail
 from django.db.models import Min, Q
 from django.db.models.deletion import ProtectedError
+from django.db.models.query import QuerySet
 from django.http import (
     HttpRequest,
     HttpResponse,
@@ -557,7 +557,7 @@ def research_project_update(
 @login_required
 @permission_required("experiment.view_researchproject")
 def keyword_search_ajax(request: HttpRequest) -> HttpResponse:
-    keywords_name_list = []
+    keywords_name_list = QuerySet()
     keywords_list_filtered = None
     search_text = None
 
@@ -955,7 +955,10 @@ def collaborator_create(request, experiment_id, template_name="experiment/collab
     collaborators_added_ids = collaborators_added.values_list("researcher_id", flat=True)
 
     collaborators = (
-        User.objects.filter(is_active=True).exclude(pk__in=collaborators_added_ids).order_by("first_name", "last_name")
+        get_user_model()
+        .objects.filter(is_active=True)
+        .exclude(pk__in=collaborators_added_ids)
+        .order_by("first_name", "last_name")
     )
 
     if request.method == "POST":
@@ -1006,9 +1009,9 @@ def experiment_export(request, experiment_id):
     if err_code_experiment:
         messages.warning(request, err_message_experiment)
 
-    with open(path.join(export.temp_dir, export.FILE_NAME_ZIP), "rb") as file:
+    with open(os.path.join(export.temp_dir, export.FILE_NAME_ZIP), "rb") as file:
         response = HttpResponse(file, content_type="application/zip")
-        response["Content-Length"] = path.getsize(file.name)
+        response["Content-Length"] = os.path.getsize(file.name)
         response["Content-Disposition"] = "attachment; filename=" + smart_str("experiment.zip")
 
         return response
@@ -1505,7 +1508,7 @@ def send_all_experiments_to_portal() -> None:
                             }
 
                             if isinstance(responses_string, bytes):
-                                reader = csv.reader(StringIO(responses_string.decode()), DELIMITER=",")
+                                reader = csv.reader(StringIO(responses_string.decode()), delimiter=",")
                                 responses_list = []
                                 for row in reader:
                                     responses_list.append(row)
@@ -7223,9 +7226,9 @@ def get_sensors_position(eeg_data):
                     title="Sensor positions",
                     ch_groups="position",
                 )
-                fig.savefig(path.join(path_complete, file_name))
+                fig.savefig(os.path.join(path_complete, file_name))
 
-                file_path = path.join(settings.MEDIA_ROOT, "temp", file_name)
+                file_path = os.path.join(settings.MEDIA_ROOT, "temp", file_name)
 
     return file_path
 
@@ -7296,8 +7299,8 @@ def eeg_data_view(request, eeg_data_id, tab, template_name="experiment/subject_e
     # Geração da imagem de localização dos electrodos (NES v1.5)
     sensors_positions_filepath = get_sensors_position(eeg_data)
     if sensors_positions_filepath:
-        sensors_positions_relativepath = path.join(
-            settings.MEDIA_URL, "temp", path.basename(sensors_positions_filepath)
+        sensors_positions_relativepath = os.path.join(
+            settings.MEDIA_URL, "temp", os.path.basename(sensors_positions_filepath)
         )
     else:
         sensors_positions_relativepath = None
@@ -7584,7 +7587,7 @@ def eeg_file_export_nwb(request, eeg_file_id, some_number, process_requisition):
     errors, path_complete = create_directory(settings.MEDIA_ROOT, "export_nwb")
     errors, path_complete = create_directory(path_complete, str(request.user.id))
     file_name = "EEG_" + eeg_file.eeg_data.subject_of_group.subject.patient.code + "_" + str(some_number) + ".nwb"
-    nwb_file_name = path.join(path_complete, file_name)
+    nwb_file_name = os.path.join(path_complete, file_name)
 
     nwb_file_name = create_nwb_file(eeg_file.eeg_data, eeg_reading, process_requisition, request, nwb_file_name)
 
@@ -8932,7 +8935,7 @@ def load_group_goalkeeper_game_data(request, group_id):
                         game = game_and_phase.game.code
                         phase = game_and_phase.phase
 
-                        if phase == None:
+                        if phase is None:
                             phase = 0
 
                     # Create the folder to temporarily store the csv files to be saved as participant data collection
@@ -10293,11 +10296,11 @@ def get_experimental_protocol_image(experimental_protocol, tree, url=False):
     errors, path_complete = create_directory(settings.MEDIA_ROOT, "temp")
 
     try:
-        graph.write_png(path.join(path_complete, file_name))
+        graph.write_png(os.path.join(path_complete, file_name))
     except:
         return None
 
-    return path.join(settings.MEDIA_URL if url else settings.MEDIA_ROOT, "temp", file_name)
+    return os.path.join(settings.MEDIA_URL if url else settings.MEDIA_ROOT, "temp", file_name)
 
 
 def get_description_from_experimental_protocol_tree(component, component_configuration_attributes=[]):

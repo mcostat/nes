@@ -45,7 +45,7 @@
                     {% endif %}
 
                     {% for url_and_name in list_of_breadcrumbs %}
-                        {% if url_and_name != list_of_breadcrumbs|last or can_reuse or reusing or updating and component_configuration == None %}
+                        {% if url_and_name != list_of_breadcrumbs|last or can_reuse or reusing or updating and component_configuration is None %}
                             <li class="breadcrumb-item">
                                 <a href="{{ url_and_name.url }}">{{ url_and_name.name }}</a>
                             </li>
