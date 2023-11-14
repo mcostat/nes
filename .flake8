@@ -1,13 +1,16 @@
 [flake8]
 
 extend-ignore =  
+        E203,
         C901,
         F841,
         E501,
         F405,
         F403,
-        E722 
-
+        E722,
+        DJ01,
+        DJ08,
+        
 exclude = 
     .git,
     __pycache__,
