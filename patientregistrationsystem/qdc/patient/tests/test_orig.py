@@ -2557,7 +2557,6 @@ A000,Cholera due to Vibrio cholerae 01 biovar cholerae,Cólera devida a Vibrio c
         self.assertIsNone(AlcoholFrequency.objects.first().name_en)
 
         fixtures_formatted_data = translate_fixtures_into_english(filename)
-        # print(fixtures_formatted_data)
         update_translated_data(fixtures_formatted_data)
 
         self.assertIsNotNone(AlcoholFrequency.objects.first().name_en)
