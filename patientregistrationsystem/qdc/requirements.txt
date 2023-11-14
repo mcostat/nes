@@ -51,8 +51,10 @@ django-coverage-plugin
 
 # Development
 types-python-dateutil
+mypy
 django-stubs[compatible-mypy]
 django-stubs-ext 
-mypy
+flake8
+flake8-django
 pylint
 djlint

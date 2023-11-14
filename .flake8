@@ -1,16 +1,20 @@
 [flake8]
-extend-ignore = 
-        E203, 
+
+extend-ignore =  
         C901,
         F841,
         E501,
         F405,
-        
+        F403,
+        E722 
+
 exclude = 
     .git,
     __pycache__,
     docs,
     migrations,
-    tests,
+    tests
+
 max-complexity = 10
+
 max-line-length = 120
