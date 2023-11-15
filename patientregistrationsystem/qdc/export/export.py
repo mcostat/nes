@@ -1671,7 +1671,7 @@ class ExportExecution:
                 )
 
                 (
-                    error,
+                    _error,
                     questionnaire_fields,
                 ) = self.questionnaire_utils.create_questionnaire_explanation_fields(
                     questionnaire_id,
@@ -1975,7 +1975,7 @@ class ExportExecution:
                                         filesformat_type,
                                     )
                                     # TODO (NES-991): treat possible error
-                                    error, questions = QuestionnaireUtils.get_questions(
+                                    _error, questions = QuestionnaireUtils.get_questions(
                                         questionnaire_lime_survey,
                                         questionnaire_id,
                                         language,
@@ -2341,7 +2341,7 @@ class ExportExecution:
                                         answer_list["header_questionnaire"].append(question["header"])
                                     # TODO (NES-991): treat error!
                                     # TODO (NES-991): QuestionnaireUtils already in self.questionnaire_utils
-                                    error, questions = QuestionnaireUtils.get_questions(
+                                    _error, questions = QuestionnaireUtils.get_questions(
                                         questionnaire_lime_survey,
                                         questionnaire_id,
                                         language,
@@ -2390,13 +2390,13 @@ class ExportExecution:
                 participant_name = prefix_filename_participant + str(participant_code)
                 participant_data_directory = self.per_group_data[group_id]["group"]["participant_data_directory"]
                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
-                path_per_participant = path.join(participant_data_directory, participant_name)
+                path_per_participant = validate_path(participant_data_directory, participant_name)
 
                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                 participant_data_export_directory = self.per_group_data[group_id]["group"][
                     "participant_data_export_directory"
                 ]
-                participant_export_directory = path.join(participant_data_export_directory, participant_name)
+                participant_export_directory = validate_path(participant_data_export_directory, participant_name)
                 if "token_list" in participant_list[participant_code] and self.get_input_data("export_per_participant"):
                     # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                     if not path.exists(path_per_participant):
@@ -2529,7 +2529,7 @@ class ExportExecution:
                     for eeg_data in eeg_data_list:
                         if eeg_data["eeg_file_list"]:
                             directory_step_name = eeg_data["directory_step_name"]
-                            path_per_eeg_participant = path.join(path_per_participant, directory_step_name)
+                            path_per_eeg_participant = validate_path(path_per_participant, directory_step_name)
                             if not path.exists(path_per_eeg_participant):
                                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123/Step_X_a
                                 error_msg, path_per_eeg_participant = create_directory(
@@ -2543,7 +2543,7 @@ class ExportExecution:
 
                             # To create EEGData directory
                             directory_data_name = eeg_data["eeg_data_directory_name"]
-                            path_per_eeg_data = path.join(path_per_eeg_participant, directory_data_name)
+                            path_per_eeg_data = validate_path(path_per_eeg_participant, directory_data_name)
                             if not path.exists(path_per_eeg_data):
                                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                                 # /Step_X_aaa/EEGDATA_#
@@ -2555,14 +2555,14 @@ class ExportExecution:
 
                             # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123/Step_X_a
                             # /EEGData_#
-                            export_eeg_data_directory = path.join(export_eeg_step_directory, directory_data_name)
+                            export_eeg_data_directory = validate_path(export_eeg_step_directory, directory_data_name)
 
                             eeg_setting_description = get_eeg_setting_description(eeg_data["setting_id"])
 
                             if eeg_setting_description:
                                 filename, extension = EEG_SETTING_FILENAME.split(".")
                                 # Path ex. data/Experiment_data/Group_xxxx/eeg_setting_description.json
-                                complete_setting_filename = path.join(path_per_eeg_data, EEG_SETTING_FILENAME)
+                                complete_setting_filename = validate_path(path_per_eeg_data, EEG_SETTING_FILENAME)
                                 self.files_to_zip_list.append(
                                     [
                                         complete_setting_filename,
@@ -2747,7 +2747,7 @@ class ExportExecution:
                             for emg_file in emg_data["emg_file_list"]:
                                 path_emg_data_file = emg_file.file.name
                                 emg_data_filename = path.basename(path_emg_data_file)
-                                complete_emg_data_filename = path.join(path_per_emg_data, emg_data_filename)
+                                complete_emg_data_filename = validate_path(path_per_emg_data, emg_data_filename)
 
                                 # For datapackage resources
                                 unique_name = slugify(emg_data_filename)
@@ -2778,7 +2778,7 @@ class ExportExecution:
                             if emg_setting_description:
                                 filename, extension = EMG_SETTING_FILENAME.split(".")
                                 # Path ex. data/Experiment_data/Group_xxxx/emg_setting_description.txt
-                                complete_setting_filename = path.join(path_per_emg_data, EMG_SETTING_FILENAME)
+                                complete_setting_filename = validate_path(path_per_emg_data, EMG_SETTING_FILENAME)
                                 self.files_to_zip_list.append(
                                     [
                                         complete_setting_filename,
@@ -2819,7 +2819,7 @@ class ExportExecution:
                         tms_data_description = get_tms_data_description(tms_data["tms_data_id"])
                         if tms_data_description:
                             directory_step_name = tms_data["directory_step_name"]
-                            path_per_tms_participant = path.join(path_per_participant, directory_step_name)
+                            path_per_tms_participant = validate_path(path_per_participant, directory_step_name)
                             if not path.exists(path_per_tms_participant):
                                 # path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                                 # /Step_X_aaa
@@ -2834,7 +2834,7 @@ class ExportExecution:
 
                             filename, extension = TMS_DATA_FILENAME.split(".")
                             # Path ex. data/Experiment_data/Group_xxxx/tms_data_description.txt
-                            complete_data_filename = path.join(path_per_tms_participant, TMS_DATA_FILENAME)
+                            complete_data_filename = validate_path(path_per_tms_participant, TMS_DATA_FILENAME)
                             self.files_to_zip_list.append(
                                 [
                                     complete_data_filename,
@@ -2865,8 +2865,8 @@ class ExportExecution:
                                 hotspot_image = tms_data.hotspot.hot_spot_map.name
                                 if hotspot_image:
                                     filename, extension = HOTSPOT_MAP.split(".")
-                                    complete_hotspot_filename = path.join(path_per_tms_participant, HOTSPOT_MAP)
-                                    path_hot_spot_image = path.join(settings.MEDIA_ROOT, hotspot_image)
+                                    complete_hotspot_filename = validate_path(path_per_tms_participant, HOTSPOT_MAP)
+                                    path_hot_spot_image = validate_path(settings.MEDIA_ROOT, hotspot_image)
                                     with open(path_hot_spot_image, "rb") as f:
                                         data = f.read()
                                     with open(
@@ -2913,7 +2913,7 @@ class ExportExecution:
                     for goalkeeper_game_data in goalkeeper_game_data_list:
                         if goalkeeper_game_data["digital_game_file_list"]:
                             directory_step_name = goalkeeper_game_data["directory_step_name"]
-                            path_goalkeeper_game_data = path.join(path_per_participant, directory_step_name)
+                            path_goalkeeper_game_data = validate_path(path_per_participant, directory_step_name)
                             if not path.exists(path_goalkeeper_game_data):
                                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                                 # /Step_X_COMPONENT_TYPE
@@ -2925,14 +2925,14 @@ class ExportExecution:
 
                                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                                 # /Step_X_COMPONENT_TYPE
-                                export_goalkeeper_game_directory = path.join(
+                                export_goalkeeper_game_directory = validate_path(
                                     participant_export_directory, directory_step_name
                                 )
 
                                 # To create Game_digital_dataData directory
                                 directory_data_name = goalkeeper_game_data["digital_game_data_directory"]
 
-                                path_per_goalkeeper_game_data = path.join(
+                                path_per_goalkeeper_game_data = validate_path(
                                     path_goalkeeper_game_data, directory_data_name
                                 )
                                 if not path.exists(path_per_goalkeeper_game_data):
@@ -3088,10 +3088,10 @@ class ExportExecution:
                             with open(
                                 path_generic_data_collection_file,
                                 "rb",
-                            ) as f:
-                                data = f.read()
-                            with open(complete_generic_data_filename, "wb") as f:
-                                f.write(data)
+                            ) as file1:
+                                data = file1.read()
+                            with open(complete_generic_data_filename, "wb") as file2:
+                                file2.write(data)
                             self.files_to_zip_list.append(
                                 [
                                     complete_generic_data_filename,
@@ -3112,7 +3112,7 @@ class ExportExecution:
                     ]["media_collection_data_list"]
                     for media_collection_data in media_collection_data_list:
                         directory_step_name = media_collection_data["directory_step_name"]
-                        path_media_collection_data = path.join(path_per_participant, directory_step_name)
+                        path_media_collection_data = validate_path(path_per_participant, directory_step_name)
                         if not path.exists(path_media_collection_data):
                             (
                                 error_msg,
@@ -3174,7 +3174,7 @@ class ExportExecution:
 
                     for additional_data in additional_data_list:
                         directory_step_name = additional_data["directory_step_name"]
-                        path_additional_data = path.join(path_per_participant, directory_step_name)
+                        path_additional_data = validate_path(path_per_participant, directory_step_name)
                         if not path.exists(path_additional_data):
                             # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                             # /Step_X_COMPONENT_TYPE
@@ -3213,7 +3213,7 @@ class ExportExecution:
 
                             # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123/
                             # Step_X_COMPONENT_TYPE/file_name.format_type
-                            complete_additional_data_filename = path.join(path_per_additional_data, filename)
+                            complete_additional_data_filename = validate_path(path_per_additional_data, filename)
                             with open(path_additional_data_file, "rb") as f:
                                 data = f.read()
                             with open(
@@ -3662,7 +3662,7 @@ class ExportExecution:
                 }
             )
         for i in range(len(question_fields["fields"])):
-            question_field, question_header, question_header_questionnaire = (
+            question_field, _question_header, question_header_questionnaire = (
                 question_fields["fields"][i],
                 question_fields["header"][i],
                 question_fields["header_questionnaire"][i],
@@ -4139,7 +4139,7 @@ class ExportExecution:
                             "AdditionalData",
                         )
                         if not path.exists(path_additional_data):
-                            error_msg, directory_additional_data = create_directory(
+                            error_msg, _directory_additional_data = create_directory(
                                 group_file_directory,
                                 path.join(
                                     "Experimental_protocol",
@@ -4196,7 +4196,7 @@ class ExportExecution:
                                 stimulus_data["directory_step_name"],
                             )
                             if not path.exists(path_stimulus_data):
-                                error_msg, directory_stimulus_data = create_directory(
+                                error_msg, _directory_stimulus_data = create_directory(
                                     group_file_directory,
                                     stimulus_data["directory_step_name"],
                                 )
@@ -4332,7 +4332,7 @@ class ExportExecution:
                         # Multiple choice answers need replacement
                         # TODO (NES-991): make a test for getting multiple choice questions
                         (
-                            error,
+                            _error,
                             multiple_choice_questions,
                         ) = QuestionnaireUtils.get_questions(
                             questionnaire_lime_survey,
@@ -4351,7 +4351,7 @@ class ExportExecution:
                             # Multiple choice answers need replacement
                             # TODO (NES-991): make a test for getting multiple choice questions
                             (
-                                error,
+                                _error,
                                 multiple_choice_questions,
                             ) = QuestionnaireUtils.get_questions(questionnaire_lime_survey, questionnaire_id, language)
                             replace_multiple_choice_question_answers(fill_list2, multiple_choice_questions)
@@ -4545,7 +4545,7 @@ class ExportExecution:
             for row in self.get_input_data("participants"):
                 (
                     headers_participant_data,
-                    fields_participant_data,
+                    _fields_participant_data,
                 ) = self.get_headers_and_fields(row["output_list"])
 
             header = self.questionnaire_utils.get_header_experiment_questionnaire(questionnaire_id)
@@ -4705,7 +4705,7 @@ class ExportExecution:
 
 def handling_values(dictionary_object):
     result = {}
-    for key, value in dictionary_object.items():
+    for key, _value in dictionary_object.items():
         if dictionary_object[key] is None:
             result[key] = ""
         elif isinstance(dictionary_object[key], bool):
