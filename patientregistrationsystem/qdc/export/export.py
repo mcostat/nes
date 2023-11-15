@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 import random
 import re
 import string
@@ -2996,7 +2997,7 @@ class ExportExecution:
                                     )
                                     export_filename = file_name_digital + "." + file_extension
 
-                                    complete_digital_filename = validate_pathpath(
+                                    complete_digital_filename = validate_path(
                                         goalkeeper_game_directory, export_filename
                                     )
 
@@ -3067,9 +3068,9 @@ class ExportExecution:
                         for generic_data_file in generic_data_collection_data["generic_data_collection_file_list"]:
                             path_generic_data_collection_file = path.join(
                                 settings.MEDIA_ROOT, generic_data_file.file.name
-                            )_filename = validate_path
+                            )
                             filename = path.basename(path_generic_data_collection_file)
-                            complete_generic_data_filename = validate_path(path_per_generic_data, filename)
+                            complete_generic_data_filename = path.join(path_per_generic_data, filename)
 
                             # For datapackage resources
                             unique_name = slugify(filename)
@@ -3131,9 +3132,9 @@ class ExportExecution:
                                 return error_msg
                         export_media_directory = path.join(export_media_directory, directory_data_name)
                         for media_file in media_collection_data["media_collection_file_list"]:
-                            path_media_col_filename = validate_pathoin(settings.MEDIA_ROOT, media_file.file.name)
+                            path_media_collection_file = path.join(settings.MEDIA_ROOT, media_file.file.name)
                             filename = path.basename(path_media_collection_file)
-                            complete_media_filename = validate_path(path_per_media, filename)
+                            complete_media_filename = path.join(path_per_media, filename)
 
                             # For datapackage resources
                             unique_name = slugify(filename)
@@ -3230,8 +3231,7 @@ class ExportExecution:
                                         "name": unique_name,
                                         "title": unique_name,
                                         "path": path.join(export_additional_data_directory, filename),
-                                        "description": "Data Collection (additional file, format: %s)"
-                                        % file_format_nes_code,
+                                        "description": f"Data Collection (additional file, format: {file_format_nes_code})",
                                     },
                                 ]
                             )
@@ -3926,7 +3926,7 @@ class ExportExecution:
                 # Save protocol image
                 experimental_protocol_image = get_experimental_protocol_image(group.experimental_protocol, tree)
                 if experimental_protocol_image:
-                    complete_protocol_image_filename = validate_path(
+                    complete_protocol_image_filename = path.join(
                         directory_experimental_protocol, PROTOCOL_IMAGE_FILENAME
                     )
                     image_protocol = experimental_protocol_image
@@ -4104,10 +4104,10 @@ class ExportExecution:
                     if context_tree.setting_file.name:
                         file_path = context_tree.setting_file.name
                         filename = path.basename(file_path)
-                        context_tree_filename = validate_path(settings.MEDIA_ROOT, file_path)
+                        context_tree_filename = path.join(settings.MEDIA_ROOT, file_path)
                         unique_name = slugify(filename)
                         # TODO (NES-987): change context_tree.setting_file.name.split('/')[-1]
-                        complete_context_tree_filename = validate_path(directory_experimental_protocol, filename)
+                        complete_context_tree_filename = path.join(directory_experimental_protocol, filename)
                         with open(path.join(context_tree_filename), "rb") as f:
                             data = f.read()
                         with open(complete_context_tree_filename, "wb") as f:
@@ -4134,7 +4134,7 @@ class ExportExecution:
 
                         step_name = additionalfile.component.component_type.upper()
 
-                        path_additional_data = validate_path(
+                        path_additional_data = os.path.join(
                             group_file_directory,
                             "Experimental_protocol",
                             "Step_" + step_number + "_" + step_name,
