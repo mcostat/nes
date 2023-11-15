@@ -21,10 +21,11 @@ from export.models import Export
 from export.views import PATIENT_FIELDS, export_create, get_questionnaire_fields
 from patient.models import QuestionnaireResponse as IndependentResponse
 from plugin.models import RandomForests
+from qdc.utils import validate_path
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 
-LIMESURVEY_ERROR_MSG: str = _(
+LIMESURVEY_ERROR_MSG = _(
     "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
     "If problem persists please contact System Administrator."
 )
@@ -170,7 +171,7 @@ def build_zip_file(
     export_dir = path.join(settings.MEDIA_ROOT, "export", str(request.user.id), str(export.id))
     pathlib.Path(export_dir).mkdir(parents=True, exist_ok=True)
     # os.makedirs(export_dir)
-    input_filename = path.join(export_dir, "json_export.json")
+    input_filename = validate_path(export_dir, "json_export.json")
     build_complete_export_structure(
         True,
         True,

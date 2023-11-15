@@ -240,9 +240,7 @@ def create_directory(basedir, path_to_create):
     if not path.exists(basedir.encode("utf-8")):
         return _("Base path does not exist"), ""
 
-    complete_path: str = path.normpath(path.join(basedir, path_to_create))
-    if not complete_path.startswith(basedir):
-        raise ValueError("Invalid path")
+    complete_path: str = validate_path(basedir, path_to_create)
 
     if not path.exists(complete_path.encode("utf-8")):
         makedirs(complete_path.encode("utf-8"))
@@ -1416,7 +1414,7 @@ class ExportExecution:
                             pass
 
                     # Path ex. data/Per_questionnaire/Q123_aaa/Responses_Q123.csv
-                    complete_filename = path.join(export_path, export_filename + "." + filesformat_type)
+                    complete_filename = validate_path(export_path, export_filename + "." + filesformat_type)
                     save_to_csv(complete_filename, result, filesformat_type)
 
                     # TODO (NES-911): extends conditional to the other parts
@@ -1491,7 +1489,7 @@ class ExportExecution:
                     filesformat_type,
                 )
 
-                complete_filename = path.join(export_metadata_path, export_filename)
+                complete_filename = validate_path(export_metadata_path, export_filename)
 
                 # At this point of the championship, fix it right here
                 self._temp_method_to_remove_undesirable_line(questionnaire_fields)
@@ -1528,7 +1526,7 @@ class ExportExecution:
     def process_per_entrance_questionnaire(self, heading_type):
         filesformat_type = self.get_input_data("filesformat_type")
 
-        path_participant_data = path.join(
+        path_participant_data = validate_path(
             self.get_export_directory(),
             self.get_input_data("participant_data_directory"),
         )
@@ -1632,7 +1630,7 @@ class ExportExecution:
                         language,
                     )
                     # /data/Participant_data/Per_questionnaire/Q123_aaa/Responses_Q123.csv
-                    complete_filename = path.join(export_path, export_filename + "." + filesformat_type)
+                    complete_filename = validate_path(export_path, export_filename + "." + filesformat_type)
                     save_to_csv(complete_filename, fields_description, filesformat_type)
 
                     self.files_to_zip_list.append(
@@ -1686,7 +1684,7 @@ class ExportExecution:
                     language,
                 )
                 # Path ex. data/Participant_data/Questionnaire_metadata/Q123_aaa/Fields_Q123.csv'
-                complete_filename = path.join(export_metadata_path, export_filename + "." + filesformat_type)
+                complete_filename = validate_path(export_metadata_path, export_filename + "." + filesformat_type)
 
                 # At this point of the championship, fix it right here
                 self._temp_method_to_remove_undesirable_line(questionnaire_fields)
@@ -1756,7 +1754,7 @@ class ExportExecution:
                 if error_msg != "":
                     return error_msg
                 # path ex. data/Experiment_data/Group_xxx/Per_questionnaire/
-                export_directory_questionnaire_data = path.join(
+                export_directory_questionnaire_data = validate_path(
                     export_directory_group,
                     self.get_input_data("per_questionnaire_directory"),
                 )
@@ -1926,7 +1924,7 @@ class ExportExecution:
                                     pass
                             # data/Experiment_data/Group_xxx/Per_questionnaire/Step_x_QUESTIONNAIRE/
                             # Q123_<questionnaire_title>_<lang>.csv
-                            complete_filename = path.join(
+                            complete_filename = validate_path(
                                 complete_export_path,
                                 export_filename + "." + filesformat_type,
                             )
@@ -2014,7 +2012,7 @@ class ExportExecution:
                     fields = self.questionnaire_utils.get_questionnaire_experiment_fields(questionnaire_id)
                     for language in questionnaire_language["language_list"]:
                         (
-                            error,
+                            _error,
                             questionnaire_fields,
                         ) = self.questionnaire_utils.create_questionnaire_explanation_fields(
                             str(questionnaire_id),
@@ -2048,7 +2046,7 @@ class ExportExecution:
                                     filesformat_type,
                                 )
 
-                        complete_filename = path.join(complete_export_metadata_path, export_filename)
+                        complete_filename = validate_path(complete_export_metadata_path, export_filename)
                         save_to_csv(complete_filename, questionnaire_fields, filesformat_type)
 
                         self.files_to_zip_list.append(
@@ -2170,7 +2168,7 @@ class ExportExecution:
                                 # TODO: error
                                 pass
                         # Path ex. data/Per_participant/Participant_P123/QCode_Title/Responses_Q123_aaa.csv
-                        complete_filename = path.join(
+                        complete_filename = validate_path(
                             path_per_questionnaire,
                             export_filename + "." + filesformat_type,
                         )
@@ -2195,7 +2193,7 @@ class ExportExecution:
                             answer_list["header_questionnaire"].append(question["header"])
                         # TODO (NES-991): treat error!
                         # TODO (NES-991): QuestionnaireUtils already in self.questionnaire_utils
-                        error, questions = QuestionnaireUtils.get_questions(
+                        _error, questions = QuestionnaireUtils.get_questions(
                             questionnaire_lime_survey, questionnaire_id, language
                         )
                         datapackage_json = {
@@ -2244,7 +2242,7 @@ class ExportExecution:
 
         prefix_filename_participant = "Participant_"
         # Path ex. data/Participant_data/Per_participant/
-        export_participant_data = path.join(
+        export_participant_data = validate_path(
             self.get_input_data("base_directory"),
             self.get_input_data("participant_data_directory"),
         )
@@ -2303,7 +2301,7 @@ class ExportExecution:
                                         language,
                                     )
                                     # Path ex. data/Participant_data/Per_participant/Q123_title
-                                    complete_filename = path.join(
+                                    complete_filename = validate_path(
                                         questionnaire_path_directory,
                                         export_filename + "." + filesformat_type,
                                     )
@@ -2454,7 +2452,7 @@ class ExportExecution:
                                 response_english_plugin_done = True
 
                             # Path ex. data/Experiment_data/Group_xxx/Per_participant/Participant_P123/Step_X_aaa
-                            complete_filename = path.join(
+                            complete_filename = validate_path(
                                 directory_step_participant,
                                 export_filename + "." + filesformat_type,
                             )
@@ -2594,7 +2592,7 @@ class ExportExecution:
                             sensors_positions_image = eeg_data["sensor_filename"]
                             if sensors_positions_image:
                                 sensor_position_filename = "sensor_position.png"
-                                complete_sensor_position_filename = path.join(
+                                complete_sensor_position_filename = validate_path(
                                     path_per_eeg_data, sensor_position_filename
                                 )
 
@@ -2625,7 +2623,7 @@ class ExportExecution:
                             for eeg_file in eeg_data["eeg_file_list"]:
                                 path_eeg_data_file = str(eeg_file.file.file)
                                 eeg_data_filename = path.basename(path_eeg_data_file)
-                                complete_eeg_data_filename = path.join(path_per_eeg_data, eeg_data_filename)
+                                complete_eeg_data_filename = validate_path(path_per_eeg_data, eeg_data_filename)
 
                                 # For datapackage resources
                                 unique_name = slugify(eeg_data_filename)
@@ -2706,7 +2704,7 @@ class ExportExecution:
                     for emg_data in emg_data_list:
                         if emg_data["emg_file_list"]:
                             directory_step_name = emg_data["directory_step_name"]
-                            path_per_emg_participant = path.join(path_per_participant, directory_step_name)
+                            path_per_emg_participant = validate_path(path_per_participant, directory_step_name)
                             if not path.exists(path_per_emg_participant):
                                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                                 # /Step_X_aaa
@@ -2721,7 +2719,7 @@ class ExportExecution:
 
                             # To create EMGData directory
                             directory_data_name = emg_data["emg_data_directory_name"]
-                            path_per_emg_data = path.join(path_per_emg_participant, directory_data_name)
+                            path_per_emg_data = validate_path(path_per_emg_participant, directory_data_name)
                             if not path.exists(path_per_emg_data):
                                 # Path ex. data/Experiment_data/Group_XXX/Per_participant/Participant_123
                                 # /Step_X_aaa/EMGDATA_#
@@ -2964,7 +2962,7 @@ class ExportExecution:
 
                                     # Path ex. data/Experiment_data/Group_XXX/Per_participant
                                     #  /Participant_123/Step_X_COMPONENT_TYPE/file_name.format_type
-                                    complete_goalkeeper_game_filename = path.join(
+                                    complete_goalkeeper_game_filename = validate_path(
                                         path_per_goalkeeper_game_data, filename
                                     )
 
@@ -2998,7 +2996,9 @@ class ExportExecution:
                                     )
                                     export_filename = file_name_digital + "." + file_extension
 
-                                    complete_digital_filename = path.join(goalkeeper_game_directory, export_filename)
+                                    complete_digital_filename = validate_pathpath(
+                                        goalkeeper_game_directory, export_filename
+                                    )
 
                                     with open(
                                         complete_goalkeeper_game_filename,
@@ -3046,7 +3046,7 @@ class ExportExecution:
                     ]["generic_data_collection_data_list"]
                     for generic_data_collection_data in generic_data_collection_data_list:
                         directory_step_name = generic_data_collection_data["directory_step_name"]
-                        path_generic_data_collection_data = path.join(path_per_participant, directory_step_name)
+                        path_generic_data_collection_data = validate_path(path_per_participant, directory_step_name)
                         if not path.exists(path_generic_data_collection_data):
                             (
                                 error_msg,
@@ -3056,7 +3056,7 @@ class ExportExecution:
                                 return error_msg
                         export_generic_data_directory = path.join(participant_export_directory, directory_step_name)
                         directory_data_name = generic_data_collection_data["generic_data_collection_directory"]
-                        path_per_generic_data = path.join(path_generic_data_collection_data, directory_data_name)
+                        path_per_generic_data = validate_path(path_generic_data_collection_data, directory_data_name)
                         if not path.exists(path_per_generic_data):
                             error_msg, path_per_generic_data = create_directory(
                                 path_generic_data_collection_data, directory_data_name
@@ -3067,9 +3067,9 @@ class ExportExecution:
                         for generic_data_file in generic_data_collection_data["generic_data_collection_file_list"]:
                             path_generic_data_collection_file = path.join(
                                 settings.MEDIA_ROOT, generic_data_file.file.name
-                            )
+                            )_filename = validate_path
                             filename = path.basename(path_generic_data_collection_file)
-                            complete_generic_data_filename = path.join(path_per_generic_data, filename)
+                            complete_generic_data_filename = validate_path(path_per_generic_data, filename)
 
                             # For datapackage resources
                             unique_name = slugify(filename)
@@ -3131,9 +3131,9 @@ class ExportExecution:
                                 return error_msg
                         export_media_directory = path.join(export_media_directory, directory_data_name)
                         for media_file in media_collection_data["media_collection_file_list"]:
-                            path_media_collection_file = path.join(settings.MEDIA_ROOT, media_file.file.name)
+                            path_media_col_filename = validate_pathoin(settings.MEDIA_ROOT, media_file.file.name)
                             filename = path.basename(path_media_collection_file)
-                            complete_media_filename = path.join(path_per_media, filename)
+                            complete_media_filename = validate_path(path_per_media, filename)
 
                             # For datapackage resources
                             unique_name = slugify(filename)
@@ -3192,7 +3192,7 @@ class ExportExecution:
 
                         # To create AdditionalData directory
                         directory_data_name = additional_data["additional_data_directory"]
-                        path_per_additional_data = path.join(path_additional_data, directory_data_name)
+                        path_per_additional_data = validate_path(path_additional_data, directory_data_name)
                         if not path.exists(path_per_additional_data):
                             error_msg, path_per_additional_data = create_directory(
                                 path_additional_data, directory_data_name
@@ -3436,7 +3436,7 @@ class ExportExecution:
             file_extension,
         )
 
-        complete_filename = path.join(base_export_directory, export_filename)
+        complete_filename = validate_path(base_export_directory, export_filename)
 
         export_rows_participants = self.get_input_data("participants")["data_list"]
         participants_headers, participants_field_types = self._set_participants_fields()
@@ -3484,7 +3484,7 @@ class ExportExecution:
             # TODO (NES-987): refactor this as in other places
             file_extension = "tsv" if "tsv" in self.get_input_data("filesformat_type") else "csv"
             export_filename = ("%s." + file_extension) % self.get_input_data("diagnosis")["output_filename"]
-            complete_filename = path.join(base_export_directory, export_filename)
+            complete_filename = validate_path(base_export_directory, export_filename)
 
             diagnosis_field_types = self._set_diagnosis_fields()
 
@@ -3832,7 +3832,7 @@ class ExportExecution:
         )
 
         # User/.../qdc/media/.../data/Experiment_data/Experiment.csv
-        complete_filename_experiment_resume = path.join(experiment_resume_directory, filename_experiment_resume)
+        complete_filename_experiment_resume = validate_path(experiment_resume_directory, filename_experiment_resume)
 
         experiment_description_fields: list[list] = []
         experiment_description_fields.insert(0, experiment_summary_header)
@@ -3926,7 +3926,7 @@ class ExportExecution:
                 # Save protocol image
                 experimental_protocol_image = get_experimental_protocol_image(group.experimental_protocol, tree)
                 if experimental_protocol_image:
-                    complete_protocol_image_filename = path.join(
+                    complete_protocol_image_filename = validate_path(
                         directory_experimental_protocol, PROTOCOL_IMAGE_FILENAME
                     )
                     image_protocol = experimental_protocol_image
@@ -3960,7 +3960,7 @@ class ExportExecution:
 
                     if eeg_default_setting_description:
                         filename, extension = EEG_DEFAULT_SETTING_FILENAME.split(".")
-                        complete_filename_eeg_setting = path.join(
+                        complete_filename_eeg_setting = validate_path(
                             directory_experimental_protocol,
                             EEG_DEFAULT_SETTING_FILENAME,
                         )
@@ -3996,7 +3996,9 @@ class ExportExecution:
                     )
                     if emg_default_setting_description:
                         filename, extension = EMG_DEFAULT_SETTING.split(".")
-                        complete_filename_emg_setting = path.join(directory_experimental_protocol, EMG_DEFAULT_SETTING)
+                        complete_filename_emg_setting = validate_path(
+                            directory_experimental_protocol, EMG_DEFAULT_SETTING
+                        )
                         self.files_to_zip_list.append(
                             [
                                 complete_filename_emg_setting,
@@ -4029,7 +4031,7 @@ class ExportExecution:
                     )
                     if tms_default_setting_description:
                         filename, extension = TMS_DEFAULT_SETTING_FILENAME.split(".")
-                        complete_filename_tms_setting = path.join(
+                        complete_filename_tms_setting = validate_path(
                             directory_experimental_protocol,
                             TMS_DEFAULT_SETTING_FILENAME,
                         )
@@ -4065,7 +4067,7 @@ class ExportExecution:
                     )
                     if context_tree_default_description:
                         filename, extension = CONTEXT_TREE_DEFAULT.split(".")
-                        complete_filename_context_tree = path.join(
+                        complete_filename_context_tree = validate_path(
                             directory_experimental_protocol, CONTEXT_TREE_DEFAULT
                         )
                         self.files_to_zip_list.append(
@@ -4102,10 +4104,10 @@ class ExportExecution:
                     if context_tree.setting_file.name:
                         file_path = context_tree.setting_file.name
                         filename = path.basename(file_path)
-                        context_tree_filename = path.join(settings.MEDIA_ROOT, file_path)
+                        context_tree_filename = validate_path(settings.MEDIA_ROOT, file_path)
                         unique_name = slugify(filename)
                         # TODO (NES-987): change context_tree.setting_file.name.split('/')[-1]
-                        complete_context_tree_filename = path.join(directory_experimental_protocol, filename)
+                        complete_context_tree_filename = validate_path(directory_experimental_protocol, filename)
                         with open(path.join(context_tree_filename), "rb") as f:
                             data = f.read()
                         with open(complete_context_tree_filename, "wb") as f:
@@ -4132,7 +4134,7 @@ class ExportExecution:
 
                         step_name = additionalfile.component.component_type.upper()
 
-                        path_additional_data = path.join(
+                        path_additional_data = validate_path(
                             group_file_directory,
                             "Experimental_protocol",
                             "Step_" + step_number + "_" + step_name,
@@ -4191,7 +4193,7 @@ class ExportExecution:
                     for stimulus_data in stimulus_data_list:
                         if stimulus_data["stimulus_file"]:
                             # Path ex. data/Experiment_data/Group_xxxx/Step_X_STIMULUS
-                            path_stimulus_data = path.join(
+                            path_stimulus_data = validate_path(
                                 group_file_directory,
                                 stimulus_data["directory_step_name"],
                             )
@@ -4459,7 +4461,7 @@ class ExportExecution:
         available = limesurvey_available(questionnaire_lime_survey)
 
         (
-            headers,
+            _headers,
             fields,
         ) = self.questionnaire_utils.set_questionnaire_experiment_header_and_fields(questionnaire_id, questionnaire)
 

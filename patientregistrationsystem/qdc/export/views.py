@@ -40,6 +40,7 @@ from export.export import ExportExecution, create_directory
 from export.export_utils import can_export_nwb, create_list_of_trees
 from export.input_export import build_complete_export_structure
 from patient.models import ClassificationOfDiseases, Patient, QuestionnaireResponse
+from qdc.utils import validate_path
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 from survey.survey_utils import QuestionnaireUtils
@@ -484,7 +485,7 @@ def export_create(
         if export.files_to_zip_list:
             # export.zip file
             export_filename = export.get_input_data("export_filename")
-            export_complete_filename = path.join(base_directory_name, export_filename)
+            export_complete_filename = validate_path(base_directory_name, export_filename)
 
             with ZipFile(export_complete_filename, "w") as zip_file:
                 for (
@@ -660,7 +661,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
                 )
 
                 # copy data to media/export/<user_id>/<export_id>/
-                input_filename = path.join(settings.MEDIA_ROOT, input_export_file)
+                input_filename = validate_path(settings.MEDIA_ROOT, input_export_file)
 
                 create_directory(settings.MEDIA_ROOT, path.split(input_export_file)[0])
 
@@ -718,7 +719,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
     # Experiments export
     if "group_selected_list" in request.session:
         group_list = request.session["group_selected_list"]
-        component_list = []
+        component_list = {}
         for group_id in group_list:
             group = get_object_or_404(Group, pk=group_id)
             if group.experimental_protocol is not None:
@@ -809,7 +810,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
             )
 
             if len(selected_ev_quest) > 0:
-                questionnaire_ids, field_id = zip(*selected_ev_quest)
+                questionnaire_ids, _field_id = zip(*selected_ev_quest)
             else:
                 questionnaire_ids = ()
 
@@ -828,7 +829,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
         index = 0
     if "group_selected_list" in request.session and questionnaires_experiment_list_final:
         if len(selected_ev_quest_experiments) > 0:
-            questionnaire_ids, field_id = zip(*selected_ev_quest_experiments)
+            questionnaire_ids, _field_id = zip(*selected_ev_quest_experiments)
         else:
             questionnaire_ids = ()
 
@@ -1508,9 +1509,9 @@ def list_data_configuration_tree(eeg_configuration_id, list_of_path):
             parent = item.parent_id
             data_configuration_tree_id = item.id
             while parent:
-                path = DataConfigurationTree.objects.get(id=parent)
-                list_of_path_in_db.insert(0, path.component_configuration_id)
-                parent = path.parent_id
+                data_path = DataConfigurationTree.objects.get(id=parent)
+                list_of_path_in_db.insert(0, data_path.component_configuration_id)
+                parent = data_path.parent_id
 
             if list_of_path_in_db == list_of_path:
                 break
