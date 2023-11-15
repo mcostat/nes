@@ -26,11 +26,6 @@ RATINGS_CHOICE = ((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +")))
 
 
 class PatientForm(ModelForm):
-    def __init__(self, data=None, *args, **kwargs):
-        super().__init__(data, *args, **kwargs)
-        self.fields["zipcode"].widget.attrs["onBlur"] = "pesquisacep(this.value);"
-        self.fields["country"].initial = "BR"
-
     anonymous = forms.BooleanField(
         required=False,
         initial=False,
@@ -41,6 +36,11 @@ class PatientForm(ModelForm):
             }
         ),
     )
+
+    def __init__(self, data=None, *args, **kwargs):
+        super().__init__(data, *args, **kwargs)
+        self.fields["zipcode"].widget.attrs["onBlur"] = "pesquisacep(this.value);"
+        self.fields["country"].initial = "BR"
 
     class Meta:
         model = Patient

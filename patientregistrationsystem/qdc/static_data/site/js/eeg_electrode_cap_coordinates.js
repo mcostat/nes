@@ -16,7 +16,7 @@ function init() {
   var canvas = document.getElementById("electrodeMapCanvas");
   var ctx = canvas.getContext("2d");
   var eeg_positions = document.getElementById("eeg_electrode_position");
-  positions = Function(eeg_positions.value);
+  positions = JSON.parse(eeg_positions.value);
   used_positions_counter = positions.length;
   var localization_system = document.getElementById("localization_system_id");
   localization_system_id = localization_system.value;
@@ -54,9 +54,7 @@ function addSetted() {
       y = parseInt(position.y);
       used = position.used;
 
-      var posTable = document
-        .getElementById("cap_positions")
-        .getElementsByTagName("tbody")[0];
+      var posTable = document.getElementById("cap_positions").getElementsByTagName("tbody")[0];
 
       var row = posTable.insertRow(posTable.rows.length);
       var cell1 = row.insertCell(0);
@@ -122,11 +120,7 @@ function update(positionId) {
     var canvas = document.getElementById("electrodeMapCanvas");
     var context = canvas.getContext("2d");
 
-    alert(
-      gettext(
-        "Please click on a new position on the image to update this point"
-      )
-    );
+    alert(gettext("Please click on a new position on the image to update this point"));
     for (var i in positions) {
       var position = positions[i];
       if (position.id == positionId) {
@@ -205,9 +199,7 @@ function addRow(index) {
   x = parseInt(position.x);
   y = parseInt(position.y);
 
-  var posTable = document
-    .getElementById("cap_positions")
-    .getElementsByTagName("tbody")[0];
+  var posTable = document.getElementById("cap_positions").getElementsByTagName("tbody")[0];
 
   var row = posTable.insertRow(posTable.rows.length);
   var cell1 = row.insertCell(0);
@@ -287,11 +279,7 @@ function validPosition(new_x, new_y) {
       valid = true;
       if (!position.delete) {
         if (position.used) {
-          alert(
-            gettext(
-              "This coodinates can't be modified because is being used by some EEG layout setting! "
-            )
-          );
+          alert(gettext("This coodinates can't be modified because is being used by some EEG layout setting! "));
         } else {
           btn = document.getElementById(position.id);
           position.delete = true;
@@ -300,15 +288,8 @@ function validPosition(new_x, new_y) {
         }
       } else {
         alert(gettext("Updating point ") + position.position);
-        if (
-          confirm(
-            gettext("Confirms the coordinates? x - y: ") + x + " - " + y
-          ) == true
-        ) {
-          var name = prompt(
-            gettext("Please enter the name of the point"),
-            position.position
-          );
+        if (confirm(gettext("Confirms the coordinates? x - y: ") + x + " - " + y) == true) {
+          var name = prompt(gettext("Please enter the name of the point"), position.position);
           if (name != null) {
             // chkbox = document.getElementById(position.id);
             // chkbox.checked = true;
@@ -349,14 +330,8 @@ function getPosition(event) {
   if (can_update) {
     alert(gettext("Updating point ") + point_update_name);
     can_update = false;
-    if (
-      confirm(gettext("Confirms the coordinates? x - y: ") + x + " - " + y) ==
-      true
-    ) {
-      var name = prompt(
-        gettext("Please enter the name of the point"),
-        point_update_name
-      );
+    if (confirm(gettext("Confirms the coordinates? x - y: ") + x + " - " + y) == true) {
+      var name = prompt(gettext("Please enter the name of the point"), point_update_name);
       if (name != null) {
         for (var i in positions) {
           var position = positions[i];
@@ -374,10 +349,7 @@ function getPosition(event) {
     refresh_Screen();
   } else {
     if (!can_update) {
-      if (
-        confirm(gettext("Confirms the coordinates? x - y: ") + x + " - " + y) ==
-        true
-      ) {
+      if (confirm(gettext("Confirms the coordinates? x - y: ") + x + " - " + y) == true) {
         var id = positions.length + 1;
         var name = prompt(gettext("Please enter the name this point"), id);
         if (name != null) {
@@ -409,10 +381,7 @@ function getPosition(event) {
 
 // função que envia a lista de posições ao servidor para ser atualizadas no banco de dados
 async function sendPositions() {
-  const url =
-    "/experiment/eeg_electrode_localization_system/get_positions/" +
-    localization_system_id +
-    "?positions=";
+  const url = "/experiment/eeg_electrode_localization_system/get_positions/" + localization_system_id + "?positions=";
 
   fetch(url.concat(JSON.stringify(positions)))
     .then((response) => {

@@ -11,7 +11,7 @@ function init() {
   if (canvas) var ctx = canvas.getContext("2d");
 
   var eeg_positions = document.getElementById("eeg_electrode_position");
-  if (eeg_positions) positions = Function(eeg_positions.value);
+  if (eeg_positions) positions = JSON.parse(eeg_positions.value);
 
   var imageObj = new Image();
 
@@ -23,9 +23,7 @@ function init() {
   if (map_file) imageObj.src = map_file.value;
 
   var editing = document.getElementById("image_status");
-  if (editing)
-    if (editing.value == "True")
-      canvas.addEventListener("mousedown", getPosition, false);
+  if (editing) if (editing.value == "True") canvas.addEventListener("mousedown", getPosition, false);
 }
 
 function pintar() {

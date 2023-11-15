@@ -4,7 +4,7 @@
 
 window.onload = function () {
   var eeg_positions = document.getElementById("eeg_electrode_position");
-  var positions = Function(eeg_positions.value);
+  var positions = JSON.parse(eeg_positions.value);
 
   used();
   pintar(positions);
@@ -32,7 +32,7 @@ function used() {
 
   var used_positions_counter = 0;
 
-  positions = Function(eeg_positions.value);
+  positions = JSON.parse(eeg_positions.value);
 
   for (var i in positions) {
     var position = positions[i];

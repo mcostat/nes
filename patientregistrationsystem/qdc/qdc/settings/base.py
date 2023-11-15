@@ -57,7 +57,7 @@ CSP_IMG_SRC = ["'self'", "data:"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'"]
 CSP_BASE_URI = "'none'"
-CSP_INCLUDE_NONCE_IN = ["script-src"]
+# CSP_INCLUDE_NONCE_IN = ["script-src"]
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = False
@@ -91,7 +91,7 @@ INSTALLED_APPS: list[str] = [
     "jsonrpclib",
     "solo",
     "fixture_magic",
-    # "maintenance_mode",
+    "maintenance_mode",
     "rosetta",
     "axes",
     "django_extensions",
@@ -127,13 +127,13 @@ MIDDLEWARE: list[str] = [
     # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
-    # "maintenance_mode.middleware.MaintenanceModeMiddleware",
+    "maintenance_mode.middleware.MaintenanceModeMiddleware",
     "axes.middleware.AxesMiddleware",
     "qdc.middleware.PasswordChangeMiddleware",
 ]
 
 CONTEXT_PROCESSORS = {
-    # "maintenance_mode.context_processors.maintenance_mode",
+    "maintenance_mode.context_processors.maintenance_mode",
 }
 
 TEMPLATES = [
