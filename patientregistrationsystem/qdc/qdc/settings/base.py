@@ -211,13 +211,13 @@ LANGUAGES = (
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, "locale"),
+    os.path.join(BASE_DIR, "qdc/locale"),
     os.path.join(BASE_DIR, "patient/locale"),
     os.path.join(BASE_DIR, "experiment/locale"),
     os.path.join(BASE_DIR, "survey/locale"),
     os.path.join(BASE_DIR, "custom_user/locale"),
     os.path.join(BASE_DIR, "export/locale"),
     os.path.join(BASE_DIR, "processing/locale"),
-    os.path.join(BASE_DIR, "qdc/locale"),
     os.path.join(BASE_DIR, "static_data/locale"),
 )
 

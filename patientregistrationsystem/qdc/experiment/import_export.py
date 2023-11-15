@@ -10,6 +10,7 @@ from functools import reduce
 from json import JSONDecodeError
 from operator import or_
 from os import path
+from typing import Any
 
 import networkx as nx
 from django.apps import apps
@@ -309,8 +310,8 @@ class ImportExperiment:
         self.file_path = file_path
         self.temp_dir = tempfile.mkdtemp()
         self.data: list[dict] = []
-        self.last_objects_before_import = {}
-        self.new_objects = {}
+        self.last_objects_before_import: dict[str, Any] = {}
+        self.new_objects: dict[str, Any] = {}
         self.limesurvey_relations = {}
 
     def __del__(self) -> None:

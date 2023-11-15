@@ -1593,7 +1593,7 @@ def select_experiments_by_study(request, study_id):
 
     json_experiment_list = serializers.serialize("json", experiment_list)
 
-    return HttpResponse(json_experiment_list, content_type=JsonResponse())
+    return HttpResponse(json_experiment_list, content_type=JsonResponse)
 
 
 def select_groups_by_experiment(request, experiment_id):
@@ -1601,4 +1601,4 @@ def select_groups_by_experiment(request, experiment_id):
     group_list = Group.objects.filter(experiment__in=experiment)
     json_group_list = serializers.serialize("json", group_list)
 
-    return HttpResponse(json_group_list, content_type=JsonResponse())
+    return HttpResponse(json_group_list, content_type=JsonResponse)

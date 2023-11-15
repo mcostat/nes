@@ -89,7 +89,7 @@ def index(request: HttpRequest, template_name: str = "processing/file_selection.
 
 @login_required
 def select_files(request: HttpRequest, template_name: str = "processing/file_selection.html") -> HttpResponse:
-    return None
+    return HttpResponse()
 
 
 def get_avaliable_projects() -> list[Experiment]:

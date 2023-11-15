@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 import datetime
 from os import path
-from typing import Any, LiteralString
+from typing import Any
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -33,7 +33,7 @@ IMPEDANCE_UNIT = (
 )
 
 
-def validate_date_questionnaire_response(value):
+def validate_date_questionnaire_response(value) -> None:
     if value > datetime.date.today():
         raise ValidationError(_("Date cannot be greater than today's date."))
 
@@ -44,14 +44,14 @@ class StimulusType(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Keyword(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class ResearchProject(models.Model):
@@ -60,10 +60,10 @@ class ResearchProject(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     keywords = models.ManyToManyField(Keyword)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.title
+        return str(self.title)
 
     class Meta:
         permissions = (
@@ -76,8 +76,8 @@ class ResearchProject(models.Model):
         )
 
 
-def get_experiment_dir(instance, filename):
-    return "experiment_files/%s/%s" % (instance.id, filename)
+def get_experiment_dir(instance, filename: str) -> str:
+    return f"experiment_files/{instance.id}/{filename}"
 
 
 class Experiment(models.Model):
@@ -104,7 +104,7 @@ class Experiment(models.Model):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.title
+        return str(self.title)
 
     def save(self, *args, **kwargs) -> None:
         if self.pk is None:
@@ -114,7 +114,7 @@ class Experiment(models.Model):
             self.ethics_committee_project_file = saved_file
             kwargs.pop("force_insert", None)
 
-        super(Experiment, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     # @property
     # def _history_user(self):
@@ -127,7 +127,7 @@ class Experiment(models.Model):
 
 class ExperimentResearcher(models.Model):
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="researchers")
-    researcher = models.ForeignKey(User, on_delete=models.CASCADE)
+    researcher = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     channel_index = models.IntegerField(null=True)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None) -> None:
@@ -138,11 +138,11 @@ class ExperimentResearcher(models.Model):
             else:
                 self.channel_index = 1
 
-        super(ExperimentResearcher, self).save()
+        super().save()
 
 
 def get_publication_dir(instance, filename: str) -> str:
-    return "publication_files/%s/%s" % (instance.id, filename)
+    return f"publication_files/{instance.id}/{filename}"
 
 
 class PublicationType(models.Model):
@@ -151,7 +151,7 @@ class PublicationType(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Publication(models.Model):
@@ -168,14 +168,14 @@ class Manufacturer(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Tag(models.Model):  # type: ignore [django-manager-missing]
     name = models.CharField(max_length=50, null=False, blank=False)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Equipment(models.Model):
@@ -197,7 +197,7 @@ class Equipment(models.Model):
     tags = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:
-        return self.identification
+        return str(self.identification)
 
     class Meta:
         verbose_name = _("Equipment")
@@ -212,7 +212,7 @@ class AmplifierDetectionType(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class TetheringSystem(models.Model):
@@ -221,7 +221,7 @@ class TetheringSystem(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Amplifier(Equipment):
@@ -253,7 +253,7 @@ class FilterType(models.Model):
     tags = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Material(models.Model):
@@ -261,7 +261,7 @@ class Material(models.Model):
     description = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class ElectrodeConfiguration(models.Model):
@@ -270,7 +270,7 @@ class ElectrodeConfiguration(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class ElectrodeModel(models.Model):
@@ -302,7 +302,7 @@ class ElectrodeModel(models.Model):
     electrode_type = models.CharField(max_length=50, choices=ELECTRODE_TYPES)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class MeasureSystem(models.Model):  # type: ignore [django-manager-missing]
@@ -311,7 +311,7 @@ class MeasureSystem(models.Model):  # type: ignore [django-manager-missing]
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class MeasureUnit(models.Model):
@@ -319,7 +319,7 @@ class MeasureUnit(models.Model):
     measure_system = models.ForeignKey(MeasureSystem, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class ElectrodeShape(models.Model):
@@ -329,7 +329,7 @@ class ElectrodeShape(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class SurfaceElectrode(ElectrodeModel):
@@ -346,7 +346,7 @@ class SurfaceElectrode(ElectrodeModel):
     electrode_shape = models.ForeignKey(ElectrodeShape, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(ElectrodeModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class ElectrodeSurfaceMeasure(models.Model):
@@ -365,7 +365,7 @@ class IntramuscularElectrode(ElectrodeModel):
     length_of_exposed_tip = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(ElectrodeModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class NeedleElectrode(ElectrodeModel):
@@ -383,14 +383,14 @@ class NeedleElectrode(ElectrodeModel):
     )
 
     def save(self, *args, **kwargs) -> None:
-        super(ElectrodeModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class EEGElectrodeNet(Equipment):
     electrode_model_default = models.ForeignKey(ElectrodeModel, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.identification
+        return str(self.identification)
 
 
 class EEGElectrodeCap(EEGElectrodeNet):
@@ -403,11 +403,11 @@ class EEGCapSize(models.Model):
     electrode_adjacent_distance = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def __str__(self) -> str:
-        return self.size
+        return str(self.size)
 
 
-def get_eeg_electrode_system_dir(instance, filename):
-    return "eeg_electrode_system_files/%s/%s" % (instance.id, filename)
+def get_eeg_electrode_system_dir(instance, filename: str) -> str:
+    return f"eeg_electrode_system_files/{instance.id}/{filename}"
 
 
 class EEGElectrodeLocalizationSystem(models.Model):
@@ -416,21 +416,21 @@ class EEGElectrodeLocalizationSystem(models.Model):
     map_image_file = models.ImageField(upload_to=get_eeg_electrode_system_dir, null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def delete(self, *args, **kwargs):
         self.map_image_file.delete()
-        super(EEGElectrodeLocalizationSystem, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs) -> None:
         if self.pk is None:
             saved_file = self.map_image_file
             self.map_image_file = None
-            super(EEGElectrodeLocalizationSystem, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             self.map_image_file = saved_file
             kwargs.pop("force_insert", None)
 
-        super(EEGElectrodeLocalizationSystem, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class EEGElectrodePosition(models.Model):
@@ -488,7 +488,7 @@ class CoilShape(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class CoilModel(models.Model):
@@ -503,7 +503,7 @@ class CoilModel(models.Model):
     coil_design = models.CharField(null=True, blank=True, max_length=50, choices=COIL_DESIGN_OPTIONS)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class TMSDevice(Equipment):
@@ -515,12 +515,12 @@ class TMSDevice(Equipment):
     pulse_type = models.CharField(null=True, blank=True, max_length=50, choices=PULSE_TYPES)
 
     def __str__(self) -> str:
-        return self.identification
+        return str(self.identification)
 
 
 class StimuliEq(Equipment):
     def __str__(self) -> str:
-        return self.identification
+        return str(self.identification)
 
 
 class StimuliEqSetting(models.Model):
@@ -536,7 +536,7 @@ class StimuliEqSetting(models.Model):
         return str(self.name + ":" + self.stimuli_eq.identification)
 
     def save(self, *args, **kwargs) -> None:
-        super(StimuliEqSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.experiment.save()
 
 
@@ -547,10 +547,10 @@ class EEGSetting(models.Model):
     copied_from = models.ForeignKey("self", on_delete=models.CASCADE, null=True, related_name="children")
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs) -> None:
-        super(EEGSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.experiment.save()
 
 
@@ -567,7 +567,7 @@ class EEGAmplifierSetting(models.Model):
     number_of_channels_used = models.IntegerField(null=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EEGAmplifierSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.eeg_setting.experiment.save()
 
 
@@ -581,7 +581,7 @@ class EEGSolutionSetting(models.Model):
     eeg_solution = models.ForeignKey(EEGSolution, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(EEGSolutionSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.eeg_setting.experiment.save()
 
 
@@ -602,7 +602,7 @@ class EEGFilterSetting(models.Model):
     order = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EEGFilterSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.eeg_setting.experiment.save()
 
 
@@ -616,7 +616,7 @@ class EEGElectrodeLayoutSetting(models.Model):
     eeg_electrode_net_system = models.ForeignKey(EEGElectrodeNetSystem, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(EEGElectrodeLayoutSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.eeg_setting.experiment.save()
 
 
@@ -638,7 +638,7 @@ class EEGElectrodePositionSetting(models.Model):
         )
 
     def save(self, *args, **kwargs) -> None:
-        super(EEGElectrodePositionSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.eeg_electrode_layout_setting.eeg_setting.experiment.save()
 
 
@@ -648,7 +648,7 @@ class Software(models.Model):
     description = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class SoftwareVersion(models.Model):
@@ -670,14 +670,14 @@ class StandardizationSystem(models.Model):
     description = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Muscle(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class MuscleSubdivision(models.Model):
@@ -688,7 +688,7 @@ class MuscleSubdivision(models.Model):
     anatomy_function = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.muscle.name + " - " + self.name
+        return f"{self.muscle.name} - {self.name}"
 
 
 class MuscleSide(models.Model):
@@ -696,11 +696,11 @@ class MuscleSide(models.Model):
     muscle = models.ForeignKey(Muscle, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
-def get_emg_placement_dir(instance, filename) -> str:
-    return "emg_placement_files/%s/%s" % (instance.standardization_system.id, filename)
+def get_emg_placement_dir(instance, filename: str) -> str:
+    return f"emg_placement_files/{instance.standardization_system.id}/{filename}"
 
 
 class EMGElectrodePlacement(models.Model):
@@ -732,7 +732,8 @@ class EMGElectrodePlacement(models.Model):
         )
 
     def delete(self, *args, **kwargs) -> Any:
-        self.photo.delete()
+        # TODO: delete the file? InputField doens not have .delete() method
+        # self.photo.delete()
         super().delete(*args, **kwargs)
 
 
@@ -761,10 +762,10 @@ class EMGSetting(models.Model):
     acquisition_software_version = models.ForeignKey(SoftwareVersion, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.experiment.save()
 
 
@@ -785,7 +786,7 @@ class EMGDigitalFilterSetting(models.Model):
     order = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGDigitalFilterSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_setting.experiment.save()
 
 
@@ -800,7 +801,7 @@ class EMGADConverterSetting(models.Model):
     sampling_rate = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGADConverterSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_setting.experiment.save()
 
 
@@ -809,7 +810,7 @@ class EMGElectrodeSetting(models.Model):
     electrode = models.ForeignKey(ElectrodeModel, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGElectrodeSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_setting.experiment.save()
 
 
@@ -859,7 +860,7 @@ class EMGAmplifierSetting(models.Model):
     gain = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGAmplifierSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_electrode_setting.emg_setting.experiment.save()
 
 
@@ -906,10 +907,10 @@ class TMSSetting(models.Model):
     copied_from = models.ForeignKey("self", on_delete=models.CASCADE, null=True, related_name="children")
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs) -> None:
-        super(TMSSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.experiment.save()
 
 
@@ -930,12 +931,12 @@ class TMSDeviceSetting(models.Model):
     coil_model = models.ForeignKey(CoilModel, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(TMSDeviceSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.tms_setting.experiment.save()
 
 
-def get_tms_brain_area_dir(instance, filename):
-    return "tms_brain_area_files/%s/%s" % (instance.id, filename)
+def get_tms_brain_area_dir(instance, filename: str) -> str:
+    return f"tms_brain_area_files/{instance.id}/{filename}"
 
 
 class BrainAreaSystem(models.Model):
@@ -943,7 +944,7 @@ class BrainAreaSystem(models.Model):
     description = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class BrainAreaSystemPerspective(models.Model):
@@ -951,8 +952,8 @@ class BrainAreaSystemPerspective(models.Model):
     brain_area_system = models.ForeignKey(BrainAreaSystem, on_delete=models.CASCADE)
 
 
-def get_tms_localization_system_dir(instance, filename):
-    return "tms_localization_system_files/%s/%s" % (instance.id, filename)
+def get_tms_localization_system_dir(instance, filename: str) -> str:
+    return f"tms_localization_system_files/{instance.id}/{filename}"
 
 
 class BrainArea(models.Model):
@@ -961,7 +962,7 @@ class BrainArea(models.Model):
     brain_area_system = models.ForeignKey(BrainAreaSystem, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class TMSLocalizationSystem(models.Model):
@@ -971,7 +972,7 @@ class TMSLocalizationSystem(models.Model):
     brain_area = models.ForeignKey(BrainArea, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def delete(self, *args, **kwargs):
         self.tms_localization_system_image.delete()
@@ -992,14 +993,14 @@ class CoilOrientation(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class DirectionOfTheInducedCurrent(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Component(models.Model):
@@ -1040,12 +1041,12 @@ class Component(models.Model):
     component_type = models.CharField(max_length=30, choices=COMPONENT_TYPES)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.experiment.save()
 
 
-def get_step_file_dir(instance, filename) -> LiteralString:
-    return "step/%s/%s" % (instance.component.id, filename)
+def get_step_file_dir(instance, filename: str) -> str:
+    return f"step/{instance.component.id}/{filename}"
 
 
 class ComponentAdditionalFile(models.Model):
@@ -1055,28 +1056,28 @@ class ComponentAdditionalFile(models.Model):
 
 class Task(Component):
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class TaskForTheExperimenter(Component):
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Instruction(Component):
     text = models.TextField(null=False, blank=False)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Pause(Component):
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
-def get_stimulus_media_file_dir(instance, filename) -> LiteralString:
-    return "stimulus_step/%s/%s" % (instance.id, filename)
+def get_stimulus_media_file_dir(instance, filename: str) -> str:
+    return f"stimulus_step/{instance.id}/{filename}"
 
 
 class Stimulus(Component):
@@ -1086,14 +1087,14 @@ class Stimulus(Component):
     stimuli_setting = models.ForeignKey(StimuliEqSetting, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Questionnaire(Component):
     survey = models.ForeignKey(Survey, null=False, blank=False, on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Block(Component):
@@ -1104,28 +1105,28 @@ class Block(Component):
     type = models.CharField(null=False, max_length=20, choices=BLOCK_TYPES)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class EEG(Component):
     eeg_setting = models.ForeignKey(EEGSetting, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class EMG(Component):
     emg_setting = models.ForeignKey(EMGSetting, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class TMS(Component):
     tms_setting = models.ForeignKey(TMSSetting, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class InformationType(models.Model):
@@ -1135,7 +1136,7 @@ class InformationType(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class InformationTypeMedia(models.Model):
@@ -1145,25 +1146,25 @@ class InformationTypeMedia(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class GenericDataCollection(Component):
     information_type = models.ForeignKey(InformationType, on_delete=models.CASCADE, null=False, blank=False)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class MediaCollection(Component):
     information_type_media = models.ForeignKey(InformationTypeMedia, on_delete=models.CASCADE, null=False, blank=False)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
-def get_context_tree_dir(instance, filename):
-    return "context_tree/%s/%s" % (instance.id, filename)
+def get_context_tree_dir(instance, filename: str) -> str:
+    return f"context_tree/{instance.id}/{filename}"
 
 
 class ContextTree(models.Model):
@@ -1174,7 +1175,7 @@ class ContextTree(models.Model):
     setting_file = models.FileField(upload_to=get_context_tree_dir, null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def delete(self, *args, **kwargs):
         self.setting_file.delete()
@@ -1198,7 +1199,7 @@ class DigitalGamePhase(Component):
     context_tree = models.ForeignKey(ContextTree, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs) -> None:
-        super(Component, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class ComponentConfiguration(models.Model):
@@ -1263,25 +1264,15 @@ class Group(models.Model):
         self.experiment.save()
 
 
-def get_dir(instance, filename):
-    return "consent_forms/%s/%s/%s/%s" % (
-        instance.group.experiment.id,
-        instance.group.id,
-        instance.subject.id,
-        filename,
-    )
+def get_dir(instance, filename: str) -> str:
+    return f"consent_forms/{instance.group.experiment.id}/{instance.group.id}/{instance.subject.id}/{filename}"
 
 
-def get_eeg_dir(instance, filename):
-    return "eeg_data_files/%s/%s/%s/%s" % (
-        instance.group.experiment.id,
-        instance.group.id,
-        instance.subject.id,
-        filename,
-    )
+def get_eeg_dir(instance, filename: str) -> str:
+    return f"eeg_data_files/{instance.group.experiment.id}/{ instance.group.id}/{instance.subject.id}/{filename}"
 
 
-def get_data_file_dir(instance, filename):
+def get_data_file_dir(instance, filename: str) -> str:
     directory = "data_files"
 
     if isinstance(instance, EEGFile):
@@ -1455,7 +1446,9 @@ class DataCollection(models.Model):
 
 class QuestionnaireResponse(DataCollection):
     token_id = models.IntegerField(null=False)
-    questionnaire_responsible = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="+")
+    questionnaire_responsible = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, null=False, related_name="+"
+    )
 
     is_completed = models.CharField(max_length=50, default="")
 
@@ -1491,7 +1484,7 @@ class FileFormat(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class SourceCodeFileFormat(models.Model):
@@ -1505,7 +1498,7 @@ class SourceCodeFileFormat(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class DataFile(models.Model):
@@ -1533,7 +1526,7 @@ class SourceCode(models.Model):
     copied_from = models.ForeignKey("self", on_delete=models.CASCADE, null=True, related_name="children")
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs) -> None:
         super(SourceCode, self).save(*args, **kwargs)
@@ -1552,7 +1545,7 @@ class StimuliData(DataFile, DataCollection):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
 
 class EEGData(DataFile, DataCollection):
@@ -1560,11 +1553,11 @@ class EEGData(DataFile, DataCollection):
     eeg_setting_reason_for_change = models.TextField(null=True, blank=True, default="")
     eeg_cap_size = models.ForeignKey(EEGCapSize, on_delete=models.CASCADE, null=True, blank=True)
 
-    # changed_by = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    # changed_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
     # @property
     # def _history_user(self) -> models.ForeignKey:
@@ -1596,7 +1589,7 @@ class TMSData(DataCollection):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
     # @property
     # def _history_user(self):
@@ -1618,7 +1611,7 @@ class HotSpot(models.Model):
     )
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class AdditionalData(DataFile, DataCollection):
@@ -1626,7 +1619,7 @@ class AdditionalData(DataFile, DataCollection):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
     # @property
     # def _history_user(self):
@@ -1645,7 +1638,7 @@ class EMGData(DataFile, DataCollection):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
     # @property
     # def _history_user(self):
@@ -1663,7 +1656,7 @@ class DigitalGamePhaseData(DataFile, DataCollection):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
     # @property
     # def _history_user(self):
@@ -1678,7 +1671,7 @@ class GenericDataCollectionData(DataFile, DataCollection):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
     # @property
     # def _history_user(self):
@@ -1693,7 +1686,7 @@ class MediaCollectionData(DataFile, DataCollection):
     history = HistoricalRecords()
 
     def __str__(self) -> str:
-        return self.description
+        return str(self.description)
 
     # @property
     # def _history_user(self):
@@ -1756,7 +1749,7 @@ class EEGElectrodePositionCollectionStatus(models.Model):
         unique_together = ("eeg_data", "channel_index")
 
     def __str__(self) -> str:
-        return self.eeg_electrode_position_setting.eeg_electrode_position.name
+        return str(self.eeg_electrode_position_setting.eeg_electrode_position.name)
 
 
 class GoalkeeperGame(models.Model):
@@ -1764,7 +1757,7 @@ class GoalkeeperGame(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class GoalkeeperPhase(models.Model):
@@ -1780,9 +1773,9 @@ class GoalkeeperPhase(models.Model):
 
     def __str__(self) -> str:
         if self.phase:
-            return _("{game} - phase {phase}").format(game=self.game.name, phase=self.phase)
-        else:
-            return self.game.name
+            return _("%(game) - phase %(phase)") % {"game": self.game.name, "phase": self.phase}
+
+        return self.game.name
 
 
 class GoalkeeperGameLog(models.Model):
@@ -1853,7 +1846,7 @@ class ScheduleOfSending(models.Model):
     )
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="schedule_of_sending")
     schedule_datetime = models.DateTimeField(auto_now_add=True)
-    responsible = models.ForeignKey(User, on_delete=models.CASCADE)
+    responsible = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=SCHEDULE_STATUS_OPTIONS)
     sending_datetime = models.DateTimeField(null=True)
     reason_for_resending = models.CharField(null=True, max_length=500)

@@ -7,7 +7,7 @@ from typing import Any
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -24,13 +24,13 @@ from plugin.models import RandomForests
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 
-LIMESURVEY_ERROR_MSG = _(
+LIMESURVEY_ERROR_MSG: str = _(
     "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
     "If problem persists please contact System Administrator."
 )
 
 
-def participants_dict(survey):
+def participants_dict(survey: Survey) -> dict[int, dict[str, Any]]:
     """
     Function to check who answered a questionnaire
     :param survey: Which questionnaire will be checked
@@ -60,7 +60,7 @@ def update_patient_attributes(participants):
     return participants
 
 
-def has_questionnaire(components, survey):
+def has_questionnaire(components, survey: Survey) -> bool:
     for component in components["list_of_component_configuration"]:
         if component["component"]["component_type"] == "block":
             if has_questionnaire(component["component"], survey):
@@ -73,7 +73,7 @@ def has_questionnaire(components, survey):
     return False
 
 
-def build_questionnaires_list(language_code: str, groups=None) -> tuple[int, list[list]]:
+def build_questionnaires_list(language_code: str, groups=None) -> tuple[int, list[dict[str, Any]]]:
     """Build questionnaires list that will be used in export method to build
     export structure
     :param language_code: str - questionnaire language code
@@ -144,7 +144,7 @@ def build_zip_file(
     participants_headers,
     questionnaires,
     per_experiment=True,
-):
+) -> tuple[int, Any]:
     """Define components to use as the component list argument of
     build_complete_export_structure export method
     :param request: Request object
@@ -199,7 +199,7 @@ def build_zip_file(
     return 0, result
 
 
-def select_participants(request, experiment_id: int):
+def select_participants(request: HttpRequest, experiment_id: int) -> HttpResponse:
     participants = []
     random_forests = RandomForests.objects.get()
     admission = Survey.objects.get(pk=random_forests.admission_assessment.pk)
@@ -228,11 +228,11 @@ def select_participants(request, experiment_id: int):
     else:
         json_participants = json.dumps({})
 
-    return HttpResponse(json_participants, content_type=JsonResponse())
+    return HttpResponse(json_participants, content_type=JsonResponse)
 
 
 @login_required
-def send_to_plugin(request, template_name: str = "plugin/send_to_plugin.html"):
+def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_plugin.html"):
     if request.method == "POST":
         if request.POST.get("per_experiment"):
             # TODO (NES-995): change name for subjects_of_groups_selected
