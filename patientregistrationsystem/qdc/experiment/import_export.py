@@ -396,7 +396,7 @@ class ImportExperiment:
 
     def _verify_keywords(self) -> None:
         indexes = [index for (index, dict_) in enumerate(self.data) if dict_["model"] == "experiment.keyword"]
-        next_keyword_id: int = Keyword.objects[-1].id + 1 if Keyword.objects.count() > 0 else 1
+        next_keyword_id: int = Keyword.objects.last().id + 1 if Keyword.objects.count() > 0 else 1
         indexes_of_keywords_already_updated = []
         for i in indexes:
             # Get the keyword and check on database if the keyword already exists.

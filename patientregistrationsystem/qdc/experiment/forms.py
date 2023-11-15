@@ -1,7 +1,7 @@
 # coding=utf-8
 from typing import Any
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.forms import (
     CheckboxInput,
     ClearableFileInput,
@@ -523,7 +523,7 @@ class UserFullnameChoiceField(ModelChoiceField):
 
 class ResearchProjectOwnerForm(ModelForm):
     owner = UserFullnameChoiceField(
-        queryset=User.objects.all(),
+        queryset=get_user_model().objects.all(),
         widget=Select(attrs={"class": "form-select", "required": ""}),
     )
 
@@ -1723,7 +1723,7 @@ class EMGDataForm(ModelForm):
         if initial and "experiment" in initial:
             self.fields["emg_setting"].queryset = EMGSetting.objects.filter(experiment=initial["experiment"])
         if initial and "emg_setting" in initial:
-            emg_setting = get_object_or_404(EMGSetting, pk=initial["emg_setting"])
+            self.emg_setting = get_object_or_404(EMGSetting, pk=initial["emg_setting"])
 
 
 class AdditionalDataForm(ModelForm):
@@ -2237,7 +2237,7 @@ class TMSDataForm(ModelForm):
         if initial and "experiment" in initial:
             self.fields["tms_setting"].queryset = TMSSetting.objects.filter(experiment=initial["experiment"])
         if initial and "tms_setting" in initial:
-            tms_setting = get_object_or_404(TMSSetting, pk=initial["tms_setting"])
+            self.tms_setting = get_object_or_404(TMSSetting, pk=initial["tms_setting"])
             self.fields["coil_orientation"].queryset = CoilOrientation.objects.all()
             self.fields["direction_of_induced_current"].queryset = DirectionOfTheInducedCurrent.objects.all()
 

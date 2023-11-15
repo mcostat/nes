@@ -1287,7 +1287,7 @@ def send_experiment_researcher_to_portal(researcher: ExperimentResearcher):
         return None
 
     if researcher.channel_index:
-        citation_order = researcher.channel_index
+        citation_order = str(researcher.channel_index)
 
     rest = RestApiClient()
 

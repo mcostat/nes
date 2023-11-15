@@ -197,7 +197,7 @@ class AgeIntervalForm(Form):
 
     def clean(self) -> dict[str, Any]:
         cleaned_data = super().clean()
-        assert cleaned_data
+        assert cleaned_data is not None
         min_age = cleaned_data.get("min_age")
         max_age = cleaned_data.get("max_age")
 

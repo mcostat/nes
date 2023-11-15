@@ -57,7 +57,7 @@ CSP_IMG_SRC = ["'self'", "data:"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'"]
 CSP_BASE_URI = "'none'"
-# CSP_INCLUDE_NONCE_IN = ["script-src"]
+# CSP_INCLUDE_NONCE_IN = ["script-src"] #TODO enable this as soon as posible
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = False
