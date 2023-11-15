@@ -144,7 +144,7 @@ jobs:
 
       - name: Analysing the code with pylint
         run: |
-          pylint --fail-under=9.0 --fail-on=E --recursive=y .
+          pylint --fail-under=9.5 --fail-on=E --recursive=y .
 
   # mypy:
   #   runs-on: ubuntu-latest

@@ -87,6 +87,7 @@ from patient.models import (
     SocialHistoryData,
 )
 from plugin.models import RandomForests
+from qdc.utils import validate_path
 from survey.abc_search_engine import Questionnaires
 from survey.survey_utils import (
     HEADER_EXPLANATION_FIELDS,
@@ -4157,14 +4158,14 @@ class ExportExecution:
                         )
                         filename = path.basename(additionalfile.file.name)
                         unique_name = slugify(filename)
-                        path_additional_file = path.join(settings.MEDIA_ROOT, additionalfile.file.name)
+                        path_additional_file = validate_path(settings.MEDIA_ROOT, additionalfile.file.name)
 
-                        complete_additional_data_filename = path.join(path_additional_data, filename)
+                        complete_additional_data_filename = validate_path(path_additional_data, filename)
 
-                        with open(path_additional_file, "rb") as f1:
-                            data = f1.read()
-                        with open(complete_additional_data_filename, "wb") as f2:
-                            f2.write(data)
+                        with open(path_additional_file, "rb") as file1:
+                            data = file1.read()
+                        with open(complete_additional_data_filename, "wb") as files2:
+                            files2.write(data)
 
                         self.files_to_zip_list.append(
                             [
@@ -4203,17 +4204,17 @@ class ExportExecution:
                                     return error_msg
 
                             # Path ex. data/Experiment_data/Group_xxxx/Step_X_STIMULUS
-                            export_directory_stimulus_data = path.join(
+                            export_directory_stimulus_data = validate_path(
                                 export_group_directory,
                                 stimulus_data["directory_step_name"],
                             )
                             if stimulus_data["stimulus_file"].media_file.name:
-                                path_stimulus_filename = path.join(
+                                path_stimulus_filename = validate_path(
                                     settings.MEDIA_ROOT,
                                     stimulus_data["stimulus_file"].media_file.name,
                                 )
                                 stimulus_filename = path.basename(path_stimulus_filename)
-                                complete_stimulus_data_filename = path.join(path_stimulus_data, stimulus_filename)
+                                complete_stimulus_data_filename = validate_path(path_stimulus_data, stimulus_filename)
 
                                 # For datapackage resources
                                 unique_name = slugify(stimulus_filename)

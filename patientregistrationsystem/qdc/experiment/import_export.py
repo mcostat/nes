@@ -48,6 +48,7 @@ from experiment.models import (
     Subject,
 )
 from patient.models import ClassificationOfDiseases, Patient
+from qdc.utils import validate_path
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 from survey.survey_utils import QuestionnaireUtils
@@ -222,7 +223,7 @@ class ExportExperiment:
                     "please contact the system administator"
                 )
             decoded_archive = b64decode(result)
-            lsa_archive_path = os.path.join(self.temp_dir, str(survey.lime_survey_id) + ".lsa")
+            lsa_archive_path = validate_path(self.temp_dir, str(survey.lime_survey_id) + ".lsa")
 
             with open(lsa_archive_path, "wb") as lsa_archive:
                 lsa_archive.write(decoded_archive)

@@ -665,7 +665,7 @@ class ExamFile(models.Model):
     exam = models.ForeignKey(ComplementaryExam, on_delete=models.CASCADE, null=False)
     content = models.FileField(upload_to=get_user_dir, null=False)
 
-    def delete(self, *args, **kwargs) -> None:
+    def delete(self, *args, **kwargs):
         # TODO: should we delete the exam file??Even if we should, FileField doesnt have .delete() method
         # self.content.delete()
         super().delete(*args, **kwargs)
