@@ -279,10 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var cpf_value = $("#id_cpf").val().trim();
     var anonymous = $("#id_anonymous");
 
-    if (
-      anonymous.is(":checked") &&
-      (date_birth_value.length == 0 || gender_value.length == 0)
-    ) {
+    if (anonymous.is(":checked") && (date_birth_value.length == 0 || gender_value.length == 0)) {
       showErrorMessageTemporary(gettext("Obligatory fields must be filled."));
       jumpToElement("id_date_birth");
       if (date_birth_value.length == 0) {
@@ -292,9 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else if (
       !anonymous.is(":checked") &&
-      (name_value.length == 0 ||
-        date_birth_value.length == 0 ||
-        gender_value.length == 0)
+      (name_value.length == 0 || date_birth_value.length == 0 || gender_value.length == 0)
     ) {
       showErrorMessageTemporary(gettext("Obligatory fields must be filled."));
       jumpToElement("id_name");
@@ -309,9 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
       var email_value = $("#id_email").val().trim();
 
       if (email_value.length != 0 && !validateEmail(email_value)) {
-        showErrorMessageTemporary(
-          gettext("Please fill the fields correctly. E-mail is invalid")
-        );
+        showErrorMessageTemporary(gettext("Please fill the fields correctly. E-mail is invalid"));
       } else {
         if (!anonymous.is(":checked") && cpf_value.length == 0) {
           $("#modalNoCPF").modal("show");

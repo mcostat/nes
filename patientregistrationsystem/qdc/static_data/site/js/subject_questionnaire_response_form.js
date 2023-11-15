@@ -5,9 +5,7 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-  let show_unanswered_checkbox = document.getElementById(
-    "id_show_unanswered_checkbox"
-  );
+  let show_unanswered_checkbox = document.getElementById("id_show_unanswered_checkbox");
   let no_response_elements = document.getElementsByClassName("no-response");
 
   // hide all questions with no-response

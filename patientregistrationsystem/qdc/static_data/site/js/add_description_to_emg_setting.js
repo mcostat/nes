@@ -18,20 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
       manufacturer_id = "0";
     }
 
-    var url =
-      "/experiment/equipment/get_equipment_by_manufacturer/amplifier/" +
-      manufacturer_id;
+    var url = "/experiment/equipment/get_equipment_by_manufacturer/amplifier/" + manufacturer_id;
 
     fetch(url)
       .then((all_equipment) => {
         var options = '<option value="" selected="selected">---------</option>';
         for (var i = 0; i < all_equipment.length; i++) {
           options +=
-            '<option value="' +
-            all_equipment[i].pk +
-            '">' +
-            all_equipment[i].fields["identification"] +
-            "</option>";
+            '<option value="' + all_equipment[i].pk + '">' + all_equipment[i].fields["identification"] + "</option>";
         }
 
         select_preamplifier.html(options);
@@ -154,10 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var electrodo_id = $(this).val();
     var description_field = $("#id_description");
 
-    var url =
-      "/experiment/emg_setting/get_electrode_model/" +
-      electrodo_id +
-      "/attributes";
+    var url = "/experiment/emg_setting/get_electrode_model/" + electrodo_id + "/attributes";
 
     if (electrodo_id == "") {
       description_field.prop("value", "");

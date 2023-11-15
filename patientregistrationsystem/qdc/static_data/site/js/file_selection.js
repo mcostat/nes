@@ -24,12 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var options = '<option value="" selected="selected">---------</option>';
     for (var i = 0; i < experiments_list.length; i++) {
-      options +=
-        '<option value="' +
-        experiments_list[i].pk +
-        '">' +
-        experiments_list[i].fields["title"] +
-        "</option>";
+      options += '<option value="' + experiments_list[i].pk + '">' + experiments_list[i].fields["title"] + "</option>";
     }
     select_experiments.html(options);
     select_experiments.trigger("change");
@@ -62,12 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var options = "";
     for (var i = 0; i < group_list.length; i++) {
-      options +=
-        '<option value="' +
-        group_list[i].pk +
-        '">' +
-        group_list[i].fields["title"] +
-        "</option>";
+      options += '<option value="' + group_list[i].pk + '">' + group_list[i].fields["title"] + "</option>";
     }
 
     select_groups.html(options);

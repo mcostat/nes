@@ -26,14 +26,12 @@ function handle_processing() {
 }
 
 async function check_requisition() {
-  const url =
-    "/experiment/eeg_data/get_process_requisition_status/" + requisition_id;
+  const url = "/experiment/eeg_data/get_process_requisition_status/" + requisition_id;
 
   const response_fetch = await fetch(url);
   const response = await response_fetch.json();
 
-  document.getElementById("label_process_requisition_status").innerHTML =
-    response["message"];
+  document.getElementById("label_process_requisition_status").innerHTML = response["message"];
   if (response["status"] == "finished") {
     $("#pleaseWaitDialog").modal("hide");
     document.getElementById("label_process_requisition_status").innerHTML = "";

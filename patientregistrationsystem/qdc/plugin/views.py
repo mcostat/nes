@@ -73,14 +73,14 @@ def has_questionnaire(components, survey):
     return False
 
 
-def build_questionnaires_list(language_code, groups=None):
+def build_questionnaires_list(language_code: str, groups=None) -> tuple[int, list[list]]:
     """Build questionnaires list that will be used in export method to build
     export structure
     :param language_code: str - questionnaire language code
     :return: list - questionnaires
     """
     random_forests: RandomForests = get_object_or_404(RandomForests)
-    surveys = [
+    surveys: list[int] = [
         random_forests.admission_assessment.lime_survey_id,
         random_forests.surgical_evaluation.lime_survey_id,
         random_forests.followup_assessment.lime_survey_id,
@@ -92,7 +92,7 @@ def build_questionnaires_list(language_code, groups=None):
     # structure questionnaires list argument)
     for i, questionnaire in enumerate(questionnaires):
         questionnaire["index"] = str(i)
-    questionnaires = [
+    questionnaires: list[list] = [
         [
             dict0["index"],
             dict0["sid"],
@@ -110,7 +110,7 @@ def build_questionnaires_list(language_code, groups=None):
         for questionnaire in questionnaires:
             del questionnaire[0]
 
-        new_questionnaires = []
+        new_questionnaires: list[list] = []
         admission_survey = questionnaires[0]
         surgical_survey = questionnaires[1]
         followup_assessment = questionnaires[2]
@@ -228,11 +228,11 @@ def select_participants(request, experiment_id: int):
     else:
         json_participants = json.dumps({})
 
-    return HttpResponse(json_participants, JsonResponse())
+    return HttpResponse(json_participants, content_type=JsonResponse())
 
 
 @login_required
-def send_to_plugin(request, template_name="plugin/send_to_plugin.html"):
+def send_to_plugin(request, template_name: str = "plugin/send_to_plugin.html"):
     if request.method == "POST":
         if request.POST.get("per_experiment"):
             # TODO (NES-995): change name for subjects_of_groups_selected

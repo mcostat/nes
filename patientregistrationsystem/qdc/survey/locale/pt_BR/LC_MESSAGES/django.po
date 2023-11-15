@@ -65,7 +65,7 @@ msgstr "Visualizar"
 
 #: survey/templates/survey/survey_list.html:58
 #: survey/templates/survey/survey_register.html:78
-msgid "Obs.: NES doesn't retrieve 'file upload' questions from LimeSurvey."
+msgid "Obs.: NES doesn't retrieve file upload questions from LimeSurvey."
 msgstr ""
 "O NES não importa arquivos carregados pelo Limesurvey através de questões do "
 "tipo 'Envio de arquivo'"

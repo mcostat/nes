@@ -23,9 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //Search for patient in search mode
   $("#nameKey").on("keyup", function (e) {
-    e.target.value !== ""
-      ? searchRequest(e.target.value)
-      : searchRequest(defaultQuery);
+    e.target.value !== "" ? searchRequest(e.target.value) : searchRequest(defaultQuery);
   });
 
   function searchRequest(query) {

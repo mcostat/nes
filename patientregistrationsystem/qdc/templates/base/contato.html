@@ -21,10 +21,12 @@
 
     <div class="tab-pane fade show active" id="mainMenuContactTab">
         <div class=" p-3 bg-body rounded shadow-sm">
-            <h1>{% trans "Neuroscience Experiments System - NES" %}</h1>
+            <h1>
+                {% trans "Neuroscience Experiments System - NES" %}
+            </h1>
             <br>
             <h3>
-                {% trans "Welcome to NES! If you need help you can check the <a href='https://nes.readthedocs.io/en/latest/userguide/userguide.html'>user guide here</a>. <br>Please report any bug to the admin." %}
+                {% trans 'Welcome to NES! If you need help you can check the <a href="https://nes.readthedocs.io/en/latest/userguide/userguide.html">user guide here</a>. <br>Please report any bug to the admin.' %}
             </h3>
             <div class="container">
                 {% if institution_config.code %}
@@ -93,9 +95,9 @@
                     <div class="col-xs-5 col-md-4 col-lg-3 p-1 thumb">
                         <a class="thumbnail" href="{{ institution_config.url }}">
                             {% if institution_config.logo %}
-                                <img class="img-fluid" src="/media/{{ institution_config.logo }}" alt="Logo do {{ institution_config.name }}" width="200" height="100"/>
+                                <img class="img-fluid" src="/media/{{ institution_config.logo }}" alt="Logo do {{ institution_config.name }}" width="200" height="100" />
                             {% else %}
-                                <img class="img-fluid" src="{{ STATIC_URL }}/imgs/{{ logo_institution }}" alt="Logo do {{ institution_config.name }}" width="200" height="100"/>
+                                <img class="img-fluid" src="{{ STATIC_URL }}/imgs/{{ logo_institution }}" alt="Logo do {{ institution_config.name }}" width="200" height="100" />
                             {% endif %}
                         </a>
                     </div>

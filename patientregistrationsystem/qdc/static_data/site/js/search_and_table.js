@@ -18,12 +18,7 @@ function searchSuccessPatient(data, textStatus, jqXHR) {
   dataResults = data
     .split(/<li>/)
     .map(
-      (row) =>
-        (row =
-          "" +
-          row
-            .replace("<a", '<a class="list-group-item list-group-item-action"')
-            .replace("</li>", ""))
+      (row) => (row = "" + row.replace("<a", '<a class="list-group-item list-group-item-action"').replace("</li>", ""))
     );
   dataResults.shift();
   totalPages = Math.ceil(dataResults.length / RESULTS_PER_PAGE);

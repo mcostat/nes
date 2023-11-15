@@ -5,10 +5,7 @@
 
 function show_modal_remove(patient_id, diagnosis_id) {
   var modal_remove = document.getElementById("removeDiagnosis");
-  modal_remove.setAttribute(
-    "href",
-    "/patient/diagnosis/delete/" + patient_id + "/" + diagnosis_id
-  );
+  modal_remove.setAttribute("href", "/patient/diagnosis/delete/" + patient_id + "/" + diagnosis_id);
   $("#modalRemove").modal("show");
 }
 function show_modal_detail(diagnosis_id) {
@@ -25,10 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch_post(
       "/patient/medical_record/cid-10/",
       {
-        search_text:
-          $("#id_whichComplementaryExam").val().length >= 3
-            ? $("#id_whichComplementaryExam").val()
-            : "",
+        search_text: $("#id_whichComplementaryExam").val().length >= 3 ? $("#id_whichComplementaryExam").val() : "",
         csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
         patient_id: $("#patient_id").val(),
         medical_record: $("#medical_record_id").val(),

@@ -5,9 +5,7 @@
 window.onload = function () {
   var select_localization_system = $("#id_localization_system_selection");
   var div_localization_system_image = $("#div-localization_system_image");
-  var tms_position_localization_system_id = $(
-    "#tms_position_localization_system_id"
-  );
+  var tms_position_localization_system_id = $("#tms_position_localization_system_id");
   var localization_system_selected_id = $("#localization_system_selected_id");
   var localization_system_selected = localization_system_selected_id.val();
   var editing_id = $("#editing_id");
@@ -39,8 +37,7 @@ window.onload = function () {
       };
       imageObj.src = localization_system_selected_id.val();
       map_file = imageObj.src;
-      if (editing_id.val() == "True")
-        canvas.addEventListener("mousedown", getPosition, false);
+      if (editing_id.val() == "True") canvas.addEventListener("mousedown", getPosition, false);
     }
   }
 
@@ -130,10 +127,7 @@ function getPosition(event) {
   x = parseInt(coords.x);
   y = parseInt(coords.y);
 
-  if (
-    confirm(gettext("Confirms the coordinates? x - y: ") + x + " - " + y) ==
-    true
-  ) {
+  if (confirm(gettext("Confirms the coordinates? x - y: ") + x + " - " + y) == true) {
     var name = prompt(gettext("Please enter the name of the position"));
     if (name != null) {
       hotspot_x.value = x;

@@ -36,10 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     description_field.prop("disabled", true);
     description_field.prop("required", false);
 
-    var url =
-      "/experiment/emg_setting/get_electrode_model/" +
-      electrode_id +
-      "/attributes";
+    var url = "/experiment/emg_setting/get_electrode_model/" + electrode_id + "/attributes";
 
     if (electrode_id == "") {
       description_field.prop("value", "");
@@ -73,11 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var options = '<option value="" selected="selected">---------</option>';
     for (var i = 0; i < electrode_type_list.length; i++) {
       options +=
-        '<option value="' +
-        electrode_type_list[i].pk +
-        '">' +
-        electrode_type_list[i].fields["name"] +
-        "</option>";
+        '<option value="' + electrode_type_list[i].pk + '">' + electrode_type_list[i].fields["name"] + "</option>";
     }
     select_electrode.html(options);
 
@@ -90,14 +83,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //     //select_electrode.on("change");
     // });
 
-    var url =
-      "/experiment/emg_setting/get_electrode_placement_by_type/" +
-      electrode_type;
+    var url = "/experiment/emg_setting/get_electrode_placement_by_type/" + electrode_type;
     var response = await fetch(url);
     const electrode_placement_list = await response.json();
 
-    var options_placement =
-      '<option value="" selected="selected">---------</option>';
+    var options_placement = '<option value="" selected="selected">---------</option>';
     for (var i = 0; i < electrode_placement_list.length; i++) {
       options_placement +=
         '<option value="' +
@@ -125,15 +115,11 @@ async function muscle_side_select_refresh() {
   var select_muscle_side = $("select#id_muscle_side");
 
   if (emg_electrode_placement_id == "") {
-    select_muscle_side.html(
-      '<option value="" selected="selected">---------</option>'
-    );
+    select_muscle_side.html('<option value="" selected="selected">---------</option>');
     muscle_side_show_field(false);
     surface_show_field(false);
   } else {
-    const url =
-      "/experiment/emg_setting/get_muscle_side_by_electrode_placement/" +
-      emg_electrode_placement_id;
+    const url = "/experiment/emg_setting/get_muscle_side_by_electrode_placement/" + emg_electrode_placement_id;
     const response = await fetch(url);
     const data_placement = await response.json();
 
@@ -239,24 +225,16 @@ async function surface_show_field(show) {
   if (show) {
     const emg_electrode_placement_id = $("#id_emg_electrode_placement").val();
     const url =
-      "/experiment/emg_setting/get_description_by_placement/" +
-      emg_electrode_type +
-      "/" +
-      emg_electrode_placement_id;
+      "/experiment/emg_setting/get_description_by_placement/" + emg_electrode_type + "/" + emg_electrode_placement_id;
     if (emg_electrode_type == "surface") {
       const response = await fetch(url);
       var data_placement = await response.json();
 
-      document.getElementById("id_start_posture").value =
-        data_placement.start_posture;
-      document.getElementById("id_orientation").value =
-        data_placement.orientation;
-      document.getElementById("id_fixation_on_the_skin").value =
-        data_placement.fixation_on_the_skin;
-      document.getElementById("id_reference_electrode").value =
-        data_placement.reference_electrode;
-      document.getElementById("id_clinical_test").value =
-        data_placement.clinical_test;
+      document.getElementById("id_start_posture").value = data_placement.start_posture;
+      document.getElementById("id_orientation").value = data_placement.orientation;
+      document.getElementById("id_fixation_on_the_skin").value = data_placement.fixation_on_the_skin;
+      document.getElementById("id_reference_electrode").value = data_placement.reference_electrode;
+      document.getElementById("id_clinical_test").value = data_placement.clinical_test;
 
       // $.getJSON(url, function (data_placement) {
       //     document.getElementById("id_start_posture").value = data_placement.start_posture;
@@ -281,10 +259,8 @@ async function surface_show_field(show) {
       const response = await fetch(url);
       var data_placement = await response.json();
 
-      document.getElementById("id_method_of_insertion").value =
-        data_placement.method_of_insertion;
-      document.getElementById("id_depth_of_insertion").value =
-        data_placement.depth_of_insertion;
+      document.getElementById("id_method_of_insertion").value = data_placement.method_of_insertion;
+      document.getElementById("id_depth_of_insertion").value = data_placement.depth_of_insertion;
 
       // $.getJSON(url, function (data_placement) {
       //     document.getElementById("id_method_of_insertion").value = data_placement.method_of_insertion;

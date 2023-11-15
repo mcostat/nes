@@ -40,9 +40,7 @@ ready(function () {
         try {
           console.log(query);
           // Fetch Data from external Source
-          const source = await fetch(
-            "/experiment/group_diseases/cid-10/?term=" + query
-          );
+          const source = await fetch("/experiment/group_diseases/cid-10/?term=" + query);
           // Data should be an array of `Objects` or `Strings`
           const data = await source.json();
           console.log(data);

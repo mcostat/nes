@@ -24,11 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#profiles").collapse({ toggle: false });
 
   if (operation.val() == "viewing") {
-    if (
-      typeof user_name_field.val() == "undefined" ||
-      user_name_field.val() == null ||
-      user_name_field.val() == ""
-    ) {
+    if (typeof user_name_field.val() == "undefined" || user_name_field.val() == null || user_name_field.val() == "") {
       user_name_div.collapse({ toggle: false });
       user_name_div.collapse("hide");
       $("#profiles").collapse("hide");

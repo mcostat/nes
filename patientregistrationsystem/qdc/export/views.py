@@ -519,7 +519,7 @@ def export_create(
 
 
 @login_required
-def export_view(request, template_name="export/export_data.html"):
+def export_view(request, template_name: str = "export/export_data.html"):
     export_form = ExportForm(
         request.POST or None,
         initial={
@@ -1295,7 +1295,7 @@ def export_main(request):
 
 
 @login_required
-def export_menu(request, template_name="export/export_menu.html"):
+def export_menu(request, template_name: str = "export/export_menu.html"):
     export_type_list = [
         {
             "item": _("Per participant"),
@@ -1317,7 +1317,7 @@ def export_menu(request, template_name="export/export_menu.html"):
 
 
 @login_required
-def experiment_selection(request, template_name="export/experiment_selection.html"):
+def experiment_selection(request, template_name: str = "export/experiment_selection.html"):
     research_projects = ResearchProject.objects.order_by("start_date")
     experiment_list = Experiment.objects.all()
     group_list = None
@@ -1593,7 +1593,7 @@ def select_experiments_by_study(request, study_id):
 
     json_experiment_list = serializers.serialize("json", experiment_list)
 
-    return HttpResponse(json_experiment_list, JsonResponse())
+    return HttpResponse(json_experiment_list, content_type=JsonResponse())
 
 
 def select_groups_by_experiment(request, experiment_id):
@@ -1601,4 +1601,4 @@ def select_groups_by_experiment(request, experiment_id):
     group_list = Group.objects.filter(experiment__in=experiment)
     json_group_list = serializers.serialize("json", group_list)
 
-    return HttpResponse(json_group_list, JsonResponse())
+    return HttpResponse(json_group_list, content_type=JsonResponse())

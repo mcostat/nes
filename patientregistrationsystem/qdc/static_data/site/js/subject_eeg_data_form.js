@@ -26,21 +26,14 @@ async function change_cap_size_according_eeg_setting() {
   if (eeg_setting_id == "") {
     eeg_setting_id = "0";
   }
-  const url =
-    "/experiment/equipment/get_cap_size_list_from_eeg_setting/" +
-    eeg_setting_id;
+  const url = "/experiment/equipment/get_cap_size_list_from_eeg_setting/" + eeg_setting_id;
 
   const response_fetch = await fetch(url);
   const all_eeg_cap_size = await response_fetch.json();
 
   var options = '<option value="" selected="selected">---------</option>';
   for (var i = 0; i < all_eeg_cap_size.length; i++) {
-    options +=
-      '<option value="' +
-      all_eeg_cap_size[i].pk +
-      '">' +
-      all_eeg_cap_size[i].fields["size"] +
-      "</option>";
+    options += '<option value="' + all_eeg_cap_size[i].pk + '">' + all_eeg_cap_size[i].fields["size"] + "</option>";
   }
   eeg_cap_size_field.html(options);
 

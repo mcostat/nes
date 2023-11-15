@@ -813,7 +813,7 @@ def medical_record_view(
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def medical_record_update(request, patient_id, record_id, template_name="patient/medical_record.html"):
+def medical_record_update(request, patient_id, record_id, template_name: str = "patient/medical_record.html"):
     status = ""
     if "status" in request.GET:
         status = request.GET["status"]
@@ -975,7 +975,7 @@ def diagnosis_delete(request, patient_id, diagnosis_id):
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def exam_create(request, patient_id, record_id, diagnosis_id, template_name="patient/exams.html"):
+def exam_create(request, patient_id, record_id, diagnosis_id, template_name: str = "patient/exams.html"):
     form = ComplementaryExamForm(request.POST or None)
 
     status = ""

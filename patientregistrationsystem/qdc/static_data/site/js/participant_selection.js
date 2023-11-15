@@ -325,8 +325,7 @@ function add_location(location) {
   //remove um item ds lista de resultados
   var ul_search_locations = document.getElementById("search-results-locations");
   var ul_location_list = document.getElementById("ul-location-list");
-  if (ul_location_list != null)
-    ul_search_locations.removeChild(ul_location_list);
+  if (ul_location_list != null) ul_search_locations.removeChild(ul_location_list);
 
   //limpa o campo de entrada para a busca por cidade
   var input_location = document.getElementById("get_location");
@@ -380,8 +379,7 @@ function add_disease(id, disease) {
   //remove um item da lista de resultados
   var ul_search_diagnosis = document.getElementById("search-results-diagnosis");
   var ul_diagnosis_list = document.getElementById("ul-diagnosis-list");
-  if (ul_diagnosis_list != null)
-    ul_search_diagnosis.removeChild(ul_diagnosis_list);
+  if (ul_diagnosis_list != null) ul_search_diagnosis.removeChild(ul_diagnosis_list);
 
   //checkbox
   var checknode = document.createElement("input");
@@ -413,8 +411,7 @@ function add_disease(id, disease) {
 
   //limpa o campo de entrada para a busca por diagnostico
   var input_diagnosis = document.getElementById("get_diagnosis");
-  if (input_diagnosis == null)
-    input_diagnosis = document.getElementById("get_diseases");
+  if (input_diagnosis == null) input_diagnosis = document.getElementById("get_diseases");
   input_diagnosis.value = "";
   input_diagnosis.placeholder = "";
 

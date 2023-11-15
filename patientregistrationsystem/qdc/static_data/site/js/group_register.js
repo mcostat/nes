@@ -17,13 +17,7 @@ function disable_remove_button() {
 
 function show_modal_remove(group_id, classification_of_diseases_id) {
   var modal_remove = document.getElementById("removeClassificationOfDiseases");
-  modal_remove.setAttribute(
-    "href",
-    "/experiment/diagnosis/delete/" +
-      group_id +
-      "/" +
-      classification_of_diseases_id
-  );
+  modal_remove.setAttribute("href", "/experiment/diagnosis/delete/" + group_id + "/" + classification_of_diseases_id);
   $("#modalRemoveClassificationOfDiseases").modal("show");
 }
 

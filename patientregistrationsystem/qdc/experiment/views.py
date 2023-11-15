@@ -337,7 +337,7 @@ def research_project_list(
 
 @login_required
 @permission_required("experiment.add_researchproject")
-def research_project_create(request, template_name="experiment/research_project_register.html"):
+def research_project_create(request, template_name: str = "experiment/research_project_register.html"):
     research_project_form = ResearchProjectForm(request.POST or None)
     research_project_owner_form = ResearchProjectOwnerForm(request.POST or None, initial={"owner": request.user})
 
@@ -654,7 +654,7 @@ def publication_list(request: HttpRequest, template_name: str = "experiment/publ
 
 @login_required
 @permission_required("experiment.add_researchproject")
-def publication_create(request, template_name="experiment/publication_register.html"):
+def publication_create(request, template_name: str = "experiment/publication_register.html"):
     publication_form = PublicationForm(request.POST or None)
 
     if request.method == "POST":
@@ -679,7 +679,7 @@ def publication_create(request, template_name="experiment/publication_register.h
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def publication_view(request, publication_id, template_name="experiment/publication_register.html"):
+def publication_view(request, publication_id, template_name: str = "experiment/publication_register.html"):
     publication: Publication = get_object_or_404(Publication, pk=publication_id)
 
     publication_form = PublicationForm(request.POST or None, instance=publication)
@@ -712,7 +712,7 @@ def publication_view(request, publication_id, template_name="experiment/publicat
 
 @login_required
 @permission_required("experiment.change_researchproject")
-def publication_update(request, publication_id, template_name="experiment/publication_register.html"):
+def publication_update(request, publication_id, template_name: str = "experiment/publication_register.html"):
     publication = get_object_or_404(Publication, pk=publication_id)
 
     publication_form = PublicationForm(request.POST or None, instance=publication)
@@ -739,7 +739,9 @@ def publication_update(request, publication_id, template_name="experiment/public
 
 
 @login_required
-def publication_add_experiment(request, publication_id, template_name="experiment/publication_add_experiment.html"):
+def publication_add_experiment(
+    request, publication_id, template_name: str = "experiment/publication_add_experiment.html"
+):
     publication = get_object_or_404(Publication, pk=publication_id)
     research_projects = ResearchProject.objects.all().order_by("title")
     experiments = Experiment.objects.all().order_by("title")
@@ -777,12 +779,12 @@ def get_experiments_by_research_project(request, research_project_id):
 
     json_experiment_list = serializers.serialize("json", list_of_experiments)
 
-    return HttpResponse(json_experiment_list, JsonResponse())
+    return HttpResponse(json_experiment_list, content_type=JsonResponse())
 
 
 @login_required
 @permission_required("experiment.add_experiment")
-def experiment_create(request, research_project_id, template_name="experiment/experiment_register.html"):
+def experiment_create(request, research_project_id, template_name: str = "experiment/experiment_register.html"):
     research_project = get_object_or_404(ResearchProject, pk=research_project_id)
 
     check_can_change(request.user, research_project)
@@ -816,7 +818,7 @@ def experiment_create(request, research_project_id, template_name="experiment/ex
 
 @login_required
 @permission_required("experiment.change_experiment")
-def experiment_view(request, experiment_id, template_name="experiment/experiment_register.html"):
+def experiment_view(request, experiment_id, template_name: str = "experiment/experiment_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
     group_list = Group.objects.filter(experiment=experiment).order_by("title")
     stimuli_eq_setting_list = StimuliEqSetting.objects.filter(experiment=experiment).order_by("name")
@@ -914,7 +916,7 @@ def experiment_view(request, experiment_id, template_name="experiment/experiment
 
 @login_required
 @permission_required("experiment.change_experiment")
-def experiment_update(request, experiment_id, template_name="experiment/experiment_register.html"):
+def experiment_update(request, experiment_id, template_name: str = "experiment/experiment_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
     check_can_change(request.user, experiment.research_project)
     group_list = Group.objects.filter(experiment=experiment)
@@ -949,7 +951,7 @@ def experiment_update(request, experiment_id, template_name="experiment/experime
 
 @login_required
 @permission_required("experiment.add_experiment")
-def collaborator_create(request, experiment_id, template_name="experiment/collaborator_register.html"):
+def collaborator_create(request, experiment_id, template_name: str = "experiment/collaborator_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     collaborators_added = ExperimentResearcher.objects.filter(experiment_id=experiment_id)
@@ -1027,7 +1029,7 @@ def handle_uploaded_file(file) -> str:
 
 @login_required
 # @permission_required('experiment.import_experiment')  # TODO: add permissons
-def experiment_import(request, template_name="experiment/experiment_import.html", research_project_id=None):
+def experiment_import(request, template_name: str = "experiment/experiment_import.html", research_project_id=None):
     if request.method == "GET":
         return render(request, template_name, context={"research_project_id": research_project_id})
 
@@ -1251,7 +1253,7 @@ def experiment_schedule_of_sending(
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def schedule_of_sending_list(request, template_name="experiment/schedule_of_sending_list.html"):
+def schedule_of_sending_list(request, template_name: str = "experiment/schedule_of_sending_list.html"):
     if request.method == "POST":
         if request.POST["action"] == "send-to-portal":
             send_all_experiments_to_portal()
@@ -1639,7 +1641,7 @@ def send_all_experiments_to_portal() -> None:
 
 @login_required
 @permission_required("experiment.add_subject")
-def group_create(request, experiment_id, template_name="experiment/group_register.html"):
+def group_create(request, experiment_id, template_name: str = "experiment/group_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     check_can_change(request.user, experiment.research_project)
@@ -1732,7 +1734,7 @@ def recursively_create_list_of_questionnaires_and_statistics(
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def group_view(request, group_id, template_name="experiment/group_register.html"):
+def group_view(request, group_id, template_name: str = "experiment/group_register.html"):
     group = get_object_or_404(Group, pk=group_id)
 
     experiment = group.experiment
@@ -1832,7 +1834,7 @@ def group_has_data_collection(group_id):
 
 @login_required
 @permission_required("experiment.change_experiment")
-def group_update(request, group_id, template_name="experiment/group_register.html"):
+def group_update(request, group_id, template_name: str = "experiment/group_register.html"):
     group = get_object_or_404(Group, pk=group_id)
 
     check_can_change(request.user, group.experiment.research_project)
@@ -1874,7 +1876,7 @@ def group_update(request, group_id, template_name="experiment/group_register.htm
 
 @login_required
 @permission_required("experiment.add_subject")
-def source_code_create(request, experiment_id, template_name="experiment/source_code_register.html"):
+def source_code_create(request, experiment_id, template_name: str = "experiment/source_code_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     check_can_change(request.user, experiment.research_project)
@@ -1909,7 +1911,7 @@ def source_code_create(request, experiment_id, template_name="experiment/source_
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def source_code_view(request, source_code_id, template_name="experiment/source_code_register.html"):
+def source_code_view(request, source_code_id, template_name: str = "experiment/source_code_register.html"):
     source_code = get_object_or_404(SourceCode, pk=source_code_id)
     source_code_form = SourceCodeForm(request.POST or None, instance=source_code)
 
@@ -1979,7 +1981,7 @@ def source_code_view(request, source_code_id, template_name="experiment/source_c
 
 @login_required
 @permission_required("experiment.change_experiment")
-def source_code_update(request, source_code_id, template_name="experiment/source_code_register.html"):
+def source_code_update(request, source_code_id, template_name: str = "experiment/source_code_register.html"):
     source_code = get_object_or_404(SourceCode, pk=source_code_id)
 
     check_can_change(request.user, source_code.experiment.research_project)
@@ -2119,7 +2121,7 @@ def stimuli_eq_setting_update(
 
 @login_required
 @permission_required("experiment.add_subject")
-def eeg_setting_create(request, experiment_id, template_name="experiment/eeg_setting_register.html"):
+def eeg_setting_create(request, experiment_id, template_name: str = "experiment/eeg_setting_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     check_can_change(request.user, experiment.research_project)
@@ -2150,7 +2152,7 @@ def eeg_setting_create(request, experiment_id, template_name="experiment/eeg_set
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def eeg_setting_view(request, eeg_setting_id, template_name="experiment/eeg_setting_register.html"):
+def eeg_setting_view(request, eeg_setting_id, template_name: str = "experiment/eeg_setting_register.html"):
     eeg_setting = get_object_or_404(EEGSetting, pk=eeg_setting_id)
     eeg_setting_form = EEGSettingForm(request.POST or None, instance=eeg_setting)
 
@@ -2212,7 +2214,7 @@ def eeg_setting_view(request, eeg_setting_id, template_name="experiment/eeg_sett
 
 @login_required
 @permission_required("experiment.change_experiment")
-def eeg_setting_update(request, eeg_setting_id, template_name="experiment/eeg_setting_register.html"):
+def eeg_setting_update(request, eeg_setting_id, template_name: str = "experiment/eeg_setting_register.html"):
     eeg_setting = get_object_or_404(EEGSetting, pk=eeg_setting_id)
 
     check_can_change(request.user, eeg_setting.experiment.research_project)
@@ -2751,7 +2753,7 @@ def get_json_equipment_by_manufacturer(request, equipment_type, manufacturer_id)
     if manufacturer_id != "0":
         equipment = equipment.filter(manufacturer_id=manufacturer_id)
     json_equipment = serializers.serialize("json", equipment)
-    return HttpResponse(json_equipment, JsonResponse())
+    return HttpResponse(json_equipment, content_type=JsonResponse())
 
 
 @login_required
@@ -2768,7 +2770,7 @@ def get_json_equipment_attributes(request, equipment_id):
         response_data["gain"] = equipment.gain
         response_data["number_of_channels"] = equipment.number_of_channels
 
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 @login_required
@@ -2780,7 +2782,7 @@ def get_json_solution_attributes(request, solution_id):
         "description": solution.components,
     }
 
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 @login_required
@@ -2792,7 +2794,7 @@ def get_json_filter_attributes(request, filter_id):
         "description": filter_type.description,
     }
 
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 @login_required
@@ -2802,7 +2804,7 @@ def get_localization_system_by_electrode_net(request, equipment_id):
         set_of_electrode_net_system__eeg_electrode_net_id=equipment_id
     )
     json_equipment = serializers.serialize("json", list_of_localization_system)
-    return HttpResponse(json_equipment, JsonResponse())
+    return HttpResponse(json_equipment, content_type=JsonResponse())
 
 
 @login_required
@@ -2817,7 +2819,7 @@ def get_equipment_by_manufacturer_and_localization_system(request, manufacturer_
     if manufacturer_id != "0":
         equipment = equipment.filter(manufacturer_id=manufacturer_id)
     json_equipment = serializers.serialize("json", equipment)
-    return HttpResponse(json_equipment, JsonResponse())
+    return HttpResponse(json_equipment, content_type=JsonResponse())
 
 
 @login_required
@@ -3022,13 +3024,13 @@ def eeg_electrode_position_setting_change_the_order(request, eeg_electrode_posit
 
 @login_required
 @permission_required("experiment.register_equipment")
-def manufacturer_list(request, template_name="experiment/manufacturer_list.html"):
+def manufacturer_list(request, template_name: str = "experiment/manufacturer_list.html"):
     return render(request, template_name, {"equipments": Manufacturer.objects.order_by("name")})
 
 
 @login_required
 @permission_required("experiment.register_equipment")
-def manufacturer_create(request, template_name="experiment/manufacturer_register.html"):
+def manufacturer_create(request, template_name: str = "experiment/manufacturer_register.html"):
     manufacturer_form = ManufacturerRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -3053,7 +3055,7 @@ def manufacturer_create(request, template_name="experiment/manufacturer_register
 
 @login_required
 @permission_required("experiment.register_equipment")
-def manufacturer_update(request, manufacturer_id, template_name="experiment/manufacturer_register.html"):
+def manufacturer_update(request, manufacturer_id, template_name: str = "experiment/manufacturer_register.html"):
     manufacturer = get_object_or_404(Manufacturer, pk=manufacturer_id)
 
     manufacturer_form = ManufacturerRegisterForm(request.POST or None, instance=manufacturer)
@@ -3081,7 +3083,7 @@ def manufacturer_update(request, manufacturer_id, template_name="experiment/manu
 
 @login_required
 @permission_required("experiment.register_equipment")
-def manufacturer_view(request, manufacturer_id, template_name="experiment/manufacturer_register.html"):
+def manufacturer_view(request, manufacturer_id, template_name: str = "experiment/manufacturer_register.html"):
     manufacturer = get_object_or_404(Manufacturer, pk=manufacturer_id)
 
     manufacturer_form = ManufacturerRegisterForm(request.POST or None, instance=manufacturer)
@@ -3178,7 +3180,7 @@ def set_all_tags():
 
 @login_required
 @permission_required("experiment.register_equipment")
-def amplifier_list(request, template_name="experiment/amplifier_list.html"):
+def amplifier_list(request, template_name: str = "experiment/amplifier_list.html"):
     return render(
         request,
         template_name,
@@ -3188,7 +3190,7 @@ def amplifier_list(request, template_name="experiment/amplifier_list.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def amplifier_create(request, template_name="experiment/amplifier_register.html"):
+def amplifier_create(request, template_name: str = "experiment/amplifier_register.html"):
     amplifier_form = AmplifierRegisterForm(request.POST or None, initial={"equipment_type": "amplifier"})
 
     tags = set_all_tags()
@@ -3228,7 +3230,7 @@ def amplifier_create(request, template_name="experiment/amplifier_register.html"
 
 @login_required
 @permission_required("experiment.register_equipment")
-def amplifier_update(request, amplifier_id, template_name="experiment/amplifier_register.html"):
+def amplifier_update(request, amplifier_id, template_name: str = "experiment/amplifier_register.html"):
     amplifier = get_object_or_404(Amplifier, pk=amplifier_id)
 
     amplifier_form = AmplifierRegisterForm(request.POST or None, instance=amplifier)
@@ -3262,7 +3264,7 @@ def amplifier_update(request, amplifier_id, template_name="experiment/amplifier_
 
 @login_required
 @permission_required("experiment.register_equipment")
-def amplifier_view(request, amplifier_id, template_name="experiment/amplifier_register.html"):
+def amplifier_view(request, amplifier_id, template_name: str = "experiment/amplifier_register.html"):
     amplifier = get_object_or_404(Amplifier, pk=amplifier_id)
 
     amplifier_form = AmplifierRegisterForm(request.POST or None, instance=amplifier)
@@ -3295,7 +3297,7 @@ def amplifier_view(request, amplifier_id, template_name="experiment/amplifier_re
 
 @login_required
 @permission_required("experiment.register_equipment")
-def eegsolution_list(request, template_name="experiment/eegsolution_list.html"):
+def eegsolution_list(request, template_name: str = "experiment/eegsolution_list.html"):
     return render(
         request,
         template_name,
@@ -3305,7 +3307,7 @@ def eegsolution_list(request, template_name="experiment/eegsolution_list.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def eegsolution_create(request, template_name="experiment/eegsolution_register.html"):
+def eegsolution_create(request, template_name: str = "experiment/eegsolution_register.html"):
     eegsolution_form = EEGSolutionRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -3331,7 +3333,7 @@ def eegsolution_create(request, template_name="experiment/eegsolution_register.h
 
 @login_required
 @permission_required("experiment.register_equipment")
-def eegsolution_update(request, eegsolution_id, template_name="experiment/eegsolution_register.html"):
+def eegsolution_update(request, eegsolution_id, template_name: str = "experiment/eegsolution_register.html"):
     eegsolution = get_object_or_404(EEGSolution, pk=eegsolution_id)
     eegsolution.equipment_type = "eeg_solution"
 
@@ -3360,7 +3362,7 @@ def eegsolution_update(request, eegsolution_id, template_name="experiment/eegsol
 
 @login_required
 @permission_required("experiment.register_equipment")
-def eegsolution_view(request, eegsolution_id, template_name="experiment/eegsolution_register.html"):
+def eegsolution_view(request, eegsolution_id, template_name: str = "experiment/eegsolution_register.html"):
     eegsolution = get_object_or_404(EEGSolution, pk=eegsolution_id)
 
     eegsolution_form = EEGSolutionRegisterForm(request.POST or None, instance=eegsolution)
@@ -3390,7 +3392,7 @@ def eegsolution_view(request, eegsolution_id, template_name="experiment/eegsolut
 
 @login_required
 @permission_required("experiment.register_equipment")
-def filtertype_list(request, template_name="experiment/filtertype_list.html"):
+def filtertype_list(request, template_name: str = "experiment/filtertype_list.html"):
     return render(
         request,
         template_name,
@@ -3400,7 +3402,7 @@ def filtertype_list(request, template_name="experiment/filtertype_list.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def filtertype_create(request, template_name="experiment/filtertype_register.html"):
+def filtertype_create(request, template_name: str = "experiment/filtertype_register.html"):
     filtertype_form = FilterTypeRegisterForm(request.POST or None)
 
     tags = set_all_tags()
@@ -3438,7 +3440,7 @@ def filtertype_create(request, template_name="experiment/filtertype_register.htm
 
 @login_required
 @permission_required("experiment.register_equipment")
-def filtertype_update(request, filtertype_id, template_name="experiment/filtertype_register.html"):
+def filtertype_update(request, filtertype_id, template_name: str = "experiment/filtertype_register.html"):
     filtertype = get_object_or_404(FilterType, pk=filtertype_id)
 
     filtertype_form = FilterTypeRegisterForm(request.POST or None, instance=filtertype)
@@ -3472,7 +3474,7 @@ def filtertype_update(request, filtertype_id, template_name="experiment/filterty
 
 @login_required
 @permission_required("experiment.register_equipment")
-def filtertype_view(request, filtertype_id, template_name="experiment/filtertype_register.html"):
+def filtertype_view(request, filtertype_id, template_name: str = "experiment/filtertype_register.html"):
     filtertype = get_object_or_404(FilterType, pk=filtertype_id)
 
     filtertype_form = FilterTypeRegisterForm(request.POST or None, instance=filtertype)
@@ -3505,7 +3507,7 @@ def filtertype_view(request, filtertype_id, template_name="experiment/filtertype
 
 @login_required
 @permission_required("experiment.register_equipment")
-def standardization_system_list(request, template_name="experiment/standardization_system_list.html"):
+def standardization_system_list(request, template_name: str = "experiment/standardization_system_list.html"):
     return render(
         request,
         template_name,
@@ -3515,7 +3517,7 @@ def standardization_system_list(request, template_name="experiment/standardizati
 
 @login_required
 @permission_required("experiment.register_equipment")
-def standardization_system_create(request, template_name="experiment/standardization_system_register.html"):
+def standardization_system_create(request, template_name: str = "experiment/standardization_system_register.html"):
     standardization_system_form = StandardizationSystemRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -3783,13 +3785,13 @@ def standardization_system_view(
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_list(request, template_name="experiment/muscle_list.html"):
+def muscle_list(request, template_name: str = "experiment/muscle_list.html"):
     return render(request, template_name, {"equipments": Muscle.objects.all().order_by("name")})
 
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_create(request, template_name="experiment/muscle_register.html"):
+def muscle_create(request, template_name: str = "experiment/muscle_register.html"):
     muscle_form = MuscleRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -3815,7 +3817,7 @@ def muscle_create(request, template_name="experiment/muscle_register.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_update(request, muscle_id, template_name="experiment/muscle_register.html"):
+def muscle_update(request, muscle_id, template_name: str = "experiment/muscle_register.html"):
     muscle = get_object_or_404(Muscle, pk=muscle_id)
 
     muscle_form = MuscleRegisterForm(request.POST or None, instance=muscle)
@@ -3839,7 +3841,7 @@ def muscle_update(request, muscle_id, template_name="experiment/muscle_register.
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_view(request, muscle_id, template_name="experiment/muscle_register.html"):
+def muscle_view(request, muscle_id, template_name: str = "experiment/muscle_register.html"):
     muscle = get_object_or_404(Muscle, pk=muscle_id)
     musclesubdivisions = muscle.musclesubdivision_set.all()
     musclesides = muscle.muscleside_set.all()
@@ -3873,7 +3875,7 @@ def muscle_view(request, muscle_id, template_name="experiment/muscle_register.ht
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_subdivision_create(request, muscle_id, template_name="experiment/muscle_subdivision_register.html"):
+def muscle_subdivision_create(request, muscle_id, template_name: str = "experiment/muscle_subdivision_register.html"):
     muscle = get_object_or_404(Muscle, pk=muscle_id)
 
     muscle_subdivision_form = MuscleSubdivisionRegisterForm(request.POST or None)
@@ -3975,7 +3977,7 @@ def muscle_subdivision_update(
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_side_create(request, muscle_id, template_name="experiment/muscle_side_register.html"):
+def muscle_side_create(request, muscle_id, template_name: str = "experiment/muscle_side_register.html"):
     muscle = get_object_or_404(Muscle, pk=muscle_id)
 
     muscle_side_form = MuscleSideRegisterForm(request.POST or None)
@@ -4009,7 +4011,7 @@ def muscle_side_create(request, muscle_id, template_name="experiment/muscle_side
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_side_view(request, muscle_side_id, template_name="experiment/muscle_side_register.html"):
+def muscle_side_view(request, muscle_side_id, template_name: str = "experiment/muscle_side_register.html"):
     muscle_side = get_object_or_404(MuscleSide, pk=muscle_side_id)
 
     muscle_side_form = MuscleSideRegisterForm(request.POST or None, instance=muscle_side)
@@ -4041,7 +4043,7 @@ def muscle_side_view(request, muscle_side_id, template_name="experiment/muscle_s
 
 @login_required
 @permission_required("experiment.register_equipment")
-def muscle_side_update(request, muscle_side_id, template_name="experiment/muscle_side_register.html"):
+def muscle_side_update(request, muscle_side_id, template_name: str = "experiment/muscle_side_register.html"):
     muscle_side = get_object_or_404(MuscleSide, pk=muscle_side_id)
 
     muscle_side_form = MuscleSideRegisterForm(request.POST or None, instance=muscle_side)
@@ -4069,13 +4071,13 @@ def muscle_side_update(request, muscle_side_id, template_name="experiment/muscle
 
 @login_required
 @permission_required("experiment.register_equipment")
-def software_list(request, template_name="experiment/software_list.html"):
+def software_list(request, template_name: str = "experiment/software_list.html"):
     return render(request, template_name, {"softwares": Software.objects.all().order_by("name")})
 
 
 @login_required
 @permission_required("experiment.register_equipment")
-def software_create(request, template_name="experiment/software_register.html"):
+def software_create(request, template_name: str = "experiment/software_register.html"):
     software_form = SoftwareRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -4101,7 +4103,7 @@ def software_create(request, template_name="experiment/software_register.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def software_view(request, software_id, template_name="experiment/software_register.html"):
+def software_view(request, software_id, template_name: str = "experiment/software_register.html"):
     software = get_object_or_404(Software, pk=software_id)
     # musclesubdivisions = muscle.musclesubdivision_set.all()
     # musclesides = muscle.muscleside_set.all()
@@ -4135,7 +4137,7 @@ def software_view(request, software_id, template_name="experiment/software_regis
 
 @login_required
 @permission_required("experiment.register_equipment")
-def software_update(request, software_id, template_name="experiment/software_register.html"):
+def software_update(request, software_id, template_name: str = "experiment/software_register.html"):
     software = get_object_or_404(Software, pk=software_id)
 
     software_form = SoftwareRegisterForm(request.POST or None, instance=software)
@@ -4159,7 +4161,7 @@ def software_update(request, software_id, template_name="experiment/software_reg
 
 @login_required
 @permission_required("experiment.register_equipment")
-def software_version_create(request, software_id, template_name="experiment/software_version_register.html"):
+def software_version_create(request, software_id, template_name: str = "experiment/software_version_register.html"):
     software = get_object_or_404(Software, pk=software_id)
 
     software_version_form = SoftwareVersionRegisterForm(request.POST or None)
@@ -4262,7 +4264,7 @@ def software_version_update(
 
 @login_required
 @permission_required("experiment.register_equipment")
-def electrodemodel_list(request, template_name="experiment/electrodemodel_list.html"):
+def electrodemodel_list(request, template_name: str = "experiment/electrodemodel_list.html"):
     return render(
         request,
         template_name,
@@ -4272,7 +4274,7 @@ def electrodemodel_list(request, template_name="experiment/electrodemodel_list.h
 
 @login_required
 @permission_required("experiment.register_equipment")
-def electrodemodel_create(request, template_name="experiment/electrodemodel_register.html"):
+def electrodemodel_create(request, template_name: str = "experiment/electrodemodel_register.html"):
     electrodemodel_form = ElectrodeModelRegisterForm(request.POST or None)
 
     tags = set_all_tags()
@@ -4310,7 +4312,7 @@ def electrodemodel_create(request, template_name="experiment/electrodemodel_regi
 
 @login_required
 @permission_required("experiment.register_equipment")
-def electrodemodel_update(request, electrodemodel_id, template_name="experiment/electrodemodel_register.html"):
+def electrodemodel_update(request, electrodemodel_id, template_name: str = "experiment/electrodemodel_register.html"):
     electrodemodel = get_object_or_404(ElectrodeModel, pk=electrodemodel_id)
 
     electrodemodel_form = ElectrodeModelRegisterForm(request.POST or None, instance=electrodemodel)
@@ -4344,7 +4346,7 @@ def electrodemodel_update(request, electrodemodel_id, template_name="experiment/
 
 @login_required
 @permission_required("experiment.register_equipment")
-def electrodemodel_view(request, electrodemodel_id, template_name="experiment/electrodemodel_register.html"):
+def electrodemodel_view(request, electrodemodel_id, template_name: str = "experiment/electrodemodel_register.html"):
     electrodemodel = get_object_or_404(ElectrodeModel, pk=electrodemodel_id)
 
     electrodemodel_form = ElectrodeModelRegisterForm(request.POST or None, instance=electrodemodel)
@@ -4377,13 +4379,13 @@ def electrodemodel_view(request, electrodemodel_id, template_name="experiment/el
 
 @login_required
 @permission_required("experiment.register_equipment")
-def coil_list(request, template_name="experiment/coil_list.html"):
+def coil_list(request, template_name: str = "experiment/coil_list.html"):
     return render(request, template_name, {"equipments": CoilModel.objects.all().order_by("name")})
 
 
 @login_required
 @permission_required("experiment.register_equipment")
-def coil_create(request, template_name="experiment/coil_register.html"):
+def coil_create(request, template_name: str = "experiment/coil_register.html"):
     coil_model_form = CoilModelRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -4409,7 +4411,7 @@ def coil_create(request, template_name="experiment/coil_register.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def coil_view(request, coil_id, template_name="experiment/coil_register.html"):
+def coil_view(request, coil_id, template_name: str = "experiment/coil_register.html"):
     coilmodel = get_object_or_404(CoilModel, pk=coil_id)
 
     coilmodel_form = CoilModelRegisterForm(request.POST or None, instance=coilmodel)
@@ -4439,7 +4441,7 @@ def coil_view(request, coil_id, template_name="experiment/coil_register.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def coil_update(request, coil_id, template_name="experiment/coil_register.html"):
+def coil_update(request, coil_id, template_name: str = "experiment/coil_register.html"):
     coilmodel = get_object_or_404(CoilModel, pk=coil_id)
 
     coilmodel_form = CoilModelRegisterForm(request.POST or None, instance=coilmodel)
@@ -4467,13 +4469,13 @@ def coil_update(request, coil_id, template_name="experiment/coil_register.html")
 
 @login_required
 @permission_required("experiment.register_equipment")
-def stimuli_eq_list(request, template_name="experiment/stimuli_eq_list.html") -> HttpResponse:
+def stimuli_eq_list(request, template_name: str = "experiment/stimuli_eq_list.html") -> HttpResponse:
     return render(request, template_name, {"equipments": StimuliEq.objects.all()})
 
 
 @login_required
 @permission_required("experiment.register_equipment")
-def stimuli_eq_create(request, template_name="experiment/stimuli_eq_register.html"):
+def stimuli_eq_create(request, template_name: str = "experiment/stimuli_eq_register.html"):
     stimuli_eq_form = StimuliEqRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -4500,7 +4502,7 @@ def stimuli_eq_create(request, template_name="experiment/stimuli_eq_register.htm
 
 @login_required
 @permission_required("experiment.register_equipment")
-def stimuli_eq_view(request, stimuli_eq_id, template_name="experiment/stimuli_eq_register.html"):
+def stimuli_eq_view(request, stimuli_eq_id, template_name: str = "experiment/stimuli_eq_register.html"):
     stimuli_eq = get_object_or_404(StimuliEq, pk=stimuli_eq_id)
 
     stimuli_eq_form = StimuliEqRegisterForm(request.POST or None, instance=stimuli_eq)
@@ -4530,7 +4532,7 @@ def stimuli_eq_view(request, stimuli_eq_id, template_name="experiment/stimuli_eq
 
 @login_required
 @permission_required("experiment.register_equipment")
-def stimuli_eq_update(request, stimuli_eq_id, template_name="experiment/stimuli_eq_register.html"):
+def stimuli_eq_update(request, stimuli_eq_id, template_name: str = "experiment/stimuli_eq_register.html"):
     stimuli_eq = get_object_or_404(StimuliEq, pk=stimuli_eq_id)
 
     stimuli_eq_form = StimuliEqRegisterForm(request.POST or None, instance=stimuli_eq)
@@ -4558,13 +4560,13 @@ def stimuli_eq_update(request, stimuli_eq_id, template_name="experiment/stimuli_
 
 @login_required
 @permission_required("experiment.register_equipment")
-def tmsdevice_list(request, template_name="experiment/tmsdevice_list.html"):
+def tmsdevice_list(request, template_name: str = "experiment/tmsdevice_list.html"):
     return render(request, template_name, {"equipments": TMSDevice.objects.all()})
 
 
 @login_required
 @permission_required("experiment.register_equipment")
-def tmsdevice_create(request, template_name="experiment/tmsdevice_register.html"):
+def tmsdevice_create(request, template_name: str = "experiment/tmsdevice_register.html"):
     tms_device_form = TMSDeviceRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -4591,7 +4593,7 @@ def tmsdevice_create(request, template_name="experiment/tmsdevice_register.html"
 
 @login_required
 @permission_required("experiment.register_equipment")
-def tmsdevice_view(request, tmsdevice_id, template_name="experiment/tmsdevice_register.html"):
+def tmsdevice_view(request, tmsdevice_id, template_name: str = "experiment/tmsdevice_register.html"):
     tmsdevice = get_object_or_404(TMSDevice, pk=tmsdevice_id)
 
     tmsdevice_form = TMSDeviceRegisterForm(request.POST or None, instance=tmsdevice)
@@ -4621,7 +4623,7 @@ def tmsdevice_view(request, tmsdevice_id, template_name="experiment/tmsdevice_re
 
 @login_required
 @permission_required("experiment.register_equipment")
-def tmsdevice_update(request, tmsdevice_id, template_name="experiment/tmsdevice_register.html"):
+def tmsdevice_update(request, tmsdevice_id, template_name: str = "experiment/tmsdevice_register.html"):
     tmsdevice = get_object_or_404(TMSDevice, pk=tmsdevice_id)
 
     tmsdevice_form = TMSDeviceRegisterForm(request.POST or None, instance=tmsdevice)
@@ -4649,13 +4651,13 @@ def tmsdevice_update(request, tmsdevice_id, template_name="experiment/tmsdevice_
 
 @login_required
 @permission_required("experiment.register_equipment")
-def material_list(request, template_name="experiment/material_list.html"):
+def material_list(request, template_name: str = "experiment/material_list.html"):
     return render(request, template_name, {"equipments": Material.objects.all().order_by("name")})
 
 
 @login_required
 @permission_required("experiment.register_equipment")
-def material_create(request, template_name="experiment/material_register.html"):
+def material_create(request, template_name: str = "experiment/material_register.html"):
     material_form = MaterialRegisterForm(request.POST or None)
 
     if request.method == "POST":
@@ -4681,7 +4683,7 @@ def material_create(request, template_name="experiment/material_register.html"):
 
 @login_required
 @permission_required("experiment.register_equipment")
-def material_update(request, material_id, template_name="experiment/material_register.html"):
+def material_update(request, material_id, template_name: str = "experiment/material_register.html"):
     material = get_object_or_404(Material, pk=material_id)
 
     material_form = MaterialRegisterForm(request.POST or None, instance=material)
@@ -4705,7 +4707,7 @@ def material_update(request, material_id, template_name="experiment/material_reg
 
 @login_required
 @permission_required("experiment.register_equipment")
-def material_view(request, material_id, template_name="experiment/material_register.html"):
+def material_view(request, material_id, template_name: str = "experiment/material_register.html"):
     material = get_object_or_404(Material, pk=material_id)
 
     material_form = MaterialRegisterForm(request.POST or None, instance=material)
@@ -4735,7 +4737,7 @@ def material_view(request, material_id, template_name="experiment/material_regis
 
 @login_required
 @permission_required("experiment.register_equipment")
-def eegelectrodenet_list(request, template_name="experiment/eegelectrodenet_list.html"):
+def eegelectrodenet_list(request, template_name: str = "experiment/eegelectrodenet_list.html"):
     return render(
         request,
         template_name,
@@ -4745,7 +4747,7 @@ def eegelectrodenet_list(request, template_name="experiment/eegelectrodenet_list
 
 @login_required
 @permission_required("experiment.register_equipment")
-def eegelectrodenet_create(request, template_name="experiment/eegelectrodenet_register.html"):
+def eegelectrodenet_create(request, template_name: str = "experiment/eegelectrodenet_register.html"):
     eegelectrodenet_form = EEGElectrodeNETRegisterForm(request.POST or None)
     cap_form = EEGElectrodeCapRegisterForm(request.POST or None)
 
@@ -5129,7 +5131,7 @@ def eegelectrodenet_cap_size_view(
 
 @login_required
 @permission_required("experiment.register_equipment")
-def ad_converter_list(request, template_name="experiment/ad_converter_list.html"):
+def ad_converter_list(request, template_name: str = "experiment/ad_converter_list.html"):
     return render(
         request,
         template_name,
@@ -5139,7 +5141,7 @@ def ad_converter_list(request, template_name="experiment/ad_converter_list.html"
 
 @login_required
 @permission_required("experiment.register_equipment")
-def ad_converter_create(request, template_name="experiment/ad_converter_register.html"):
+def ad_converter_create(request, template_name: str = "experiment/ad_converter_register.html"):
     ad_converter_form = ADConverterRegisterForm(request.POST or None, initial={"equipment_type": "ad_converter"})
 
     if request.method == "POST":
@@ -5171,7 +5173,7 @@ def ad_converter_create(request, template_name="experiment/ad_converter_register
 
 @login_required
 @permission_required("experiment.register_equipment")
-def ad_converter_update(request, ad_converter_id, template_name="experiment/ad_converter_register.html"):
+def ad_converter_update(request, ad_converter_id, template_name: str = "experiment/ad_converter_register.html"):
     ad_converter = get_object_or_404(ADConverter, pk=ad_converter_id)
 
     ad_converter_form = ADConverterRegisterForm(request.POST or None, instance=ad_converter)
@@ -5200,7 +5202,7 @@ def ad_converter_update(request, ad_converter_id, template_name="experiment/ad_c
 
 @login_required
 @permission_required("experiment.register_equipment")
-def ad_converter_view(request, ad_converter_id, template_name="experiment/ad_converter_register.html"):
+def ad_converter_view(request, ad_converter_id, template_name: str = "experiment/ad_converter_register.html"):
     ad_converter = get_object_or_404(ADConverter, pk=ad_converter_id)
 
     ad_converter_form = ADConverterRegisterForm(request.POST or None, instance=ad_converter)
@@ -5382,7 +5384,7 @@ def questionnaire_view(
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def subjects(request, group_id, template_name="experiment/subjects.html"):
+def subjects(request, group_id, template_name: str = "experiment/subjects.html"):
     experimental_protocol_info = {
         "number_of_questionnaires": 0,
         "number_of_eeg_data": 0,
@@ -5983,7 +5985,7 @@ def get_data_collections_from_group(group, data_type=None):
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def search_subjects(request, group_id, template_name="experiment/search_subjects.html"):
+def search_subjects(request, group_id, template_name: str = "experiment/search_subjects.html"):
     experimental_protocol_info = {
         "number_of_questionnaires": 0,
         "number_of_eeg_data": 0,
@@ -7267,7 +7269,7 @@ def eeg_data_reading(eeg_file: EEGFile, preload=False) -> EEGReading:
 
 @login_required
 @permission_required("experiment.change_experiment")
-def eeg_data_view(request, eeg_data_id, tab, template_name="experiment/subject_eeg_data_form.html"):
+def eeg_data_view(request, eeg_data_id, tab, template_name: str = "experiment/subject_eeg_data_form.html"):
     eeg_data: EEGData = get_object_or_404(EEGData, pk=eeg_data_id)
     eeg_data_form = EEGDataForm(request.POST or None, instance=eeg_data)
     eeg_step: EEG = get_object_or_404(EEG, id=eeg_data.data_configuration_tree.component_configuration.component.id)
@@ -7347,7 +7349,7 @@ def eeg_data_view(request, eeg_data_id, tab, template_name="experiment/subject_e
 
 @login_required
 @permission_required("experiment.change_experiment")
-def eeg_data_edit(request, eeg_data_id, tab, template_name="experiment/subject_eeg_data_form.html"):
+def eeg_data_edit(request, eeg_data_id, tab, template_name: str = "experiment/subject_eeg_data_form.html"):
     eeg_data = get_object_or_404(EEGData, pk=eeg_data_id)
 
     # get the current before change
@@ -7480,7 +7482,7 @@ def eeg_data_edit(request, eeg_data_id, tab, template_name="experiment/subject_e
 
 @login_required
 @permission_required("experiment.change_experiment")
-def eeg_image_edit(request, eeg_data_id, tab, template_name="experiment/subject_eeg_image_data.html"):
+def eeg_image_edit(request, eeg_data_id, tab, template_name: str = "experiment/subject_eeg_image_data.html"):
     eeg_data = get_object_or_404(EEGData, pk=eeg_data_id)
 
     eeg_data_form = EEGDataForm(request.POST or None, instance=eeg_data)
@@ -7542,7 +7544,7 @@ def eeg_data_get_process_requisition_status(request, process_requisition):
         del request.session["process_requisition_status" + str(process_requisition)]
         del request.session["process_requisition_message" + str(process_requisition)]
     response_data = {"status": status, "message": message}
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 def update_process_requisition(request, process_requisition, status, message):
@@ -8115,7 +8117,7 @@ def eeg_electrode_position_collection_status_change_the_order(
 # @login_required
 # @permission_required("experiment.change_experiment")
 # def stimuli_data_view(
-#     request, stimuli_data_id, template_name="experiment/subject_stimuli_data_form.html"
+#     request, stimuli_data_id, template_name: str="experiment/subject_stimuli_data_form.html"
 # ):
 #     stimuli_data = get_object_or_404(StimuliData, pk=stimuli_data_id)
 #     stimuli_step = get_object_or_404(
@@ -8164,7 +8166,7 @@ def eeg_electrode_position_collection_status_change_the_order(
 # @login_required
 # @permission_required("experiment.change_experiment")
 # def stimuli_data_edit(
-#     request, stimuli_data_id, template_name="experiment/subject_stimuli_data_form.html"
+#     request, stimuli_data_id, template_name: str="experiment/subject_stimuli_data_form.html"
 # ):
 #     stimuli_data = get_object_or_404(StimuliData, pk=stimuli_data_id)
 
@@ -8348,7 +8350,7 @@ def subject_tms_data_create(
 
 @login_required
 @permission_required("experiment.change_experiment")
-def tms_data_view(request, tms_data_id, template_name="experiment/subject_tms_data_form.html"):
+def tms_data_view(request, tms_data_id, template_name: str = "experiment/subject_tms_data_form.html"):
     tms_data = get_object_or_404(TMSData, pk=tms_data_id)
     tms_step = get_object_or_404(TMS, id=tms_data.data_configuration_tree.component_configuration.component.id)
 
@@ -8745,7 +8747,7 @@ def digital_game_phase_data_edit(request, digital_game_phase_data_id):
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def group_goalkeeper_game_data(request, group_id, template_name="experiment/group_goalkeeper_game_data.html"):
+def group_goalkeeper_game_data(request, group_id, template_name: str = "experiment/group_goalkeeper_game_data.html"):
     group = get_object_or_404(Group, id=group_id)
 
     if request.method == "POST":
@@ -9510,12 +9512,14 @@ def get_pulse_by_tms_setting(request, tms_setting_id):
         "name": stimulus_name,
     }
 
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 @login_required
 @permission_required("experiment.change_experiment")
-def tms_data_position_setting_register(request, tms_data_id, template_name="experiment/tms_data_position_setting.html"):
+def tms_data_position_setting_register(
+    request, tms_data_id, template_name: str = "experiment/tms_data_position_setting.html"
+):
     tms_data = get_object_or_404(TMSData, pk=tms_data_id)
 
     tms_step = get_object_or_404(TMS, id=tms_data.data_configuration_tree.component_configuration.component.id)
@@ -9566,7 +9570,9 @@ def tms_data_position_setting_register(request, tms_data_id, template_name="expe
 
 @login_required
 @permission_required("experiment.change_experiment")
-def tms_data_position_setting_view(request, tms_data_id, template_name="experiment/tms_data_position_setting.html"):
+def tms_data_position_setting_view(
+    request, tms_data_id, template_name: str = "experiment/tms_data_position_setting.html"
+):
     tms_data = get_object_or_404(TMSData, pk=tms_data_id)
 
     tms_step = get_object_or_404(TMS, id=tms_data.data_configuration_tree.component_configuration.component.id)
@@ -9950,7 +9956,7 @@ def subject_emg_data_create(
 
 @login_required
 @permission_required("experiment.change_experiment")
-def emg_data_view(request, emg_data_id, template_name="experiment/subject_emg_data_form.html"):
+def emg_data_view(request, emg_data_id, template_name: str = "experiment/subject_emg_data_form.html"):
     emg_data = get_object_or_404(EMGData, pk=emg_data_id)
     emg_step = get_object_or_404(EMG, id=emg_data.data_configuration_tree.component_configuration.component.id)
 
@@ -9998,7 +10004,7 @@ def emg_data_view(request, emg_data_id, template_name="experiment/subject_emg_da
 
 @login_required
 @permission_required("experiment.change_experiment")
-def emg_data_edit(request, emg_data_id, template_name="experiment/subject_emg_data_form.html"):
+def emg_data_edit(request, emg_data_id, template_name: str = "experiment/subject_emg_data_form.html"):
     emg_data = get_object_or_404(EMGData, pk=emg_data_id)
     emg_step = get_object_or_404(EMG, id=emg_data.data_configuration_tree.component_configuration.component.id)
 
@@ -10808,7 +10814,7 @@ def get_cap_size_list_from_eeg_setting(request, eeg_setting_id):
         if EEGElectrodeCap.objects.filter(id=eeg_electrode_net_id):
             list_of_cap_size = EEGCapSize.objects.filter(eeg_electrode_cap_id=eeg_electrode_net_id)
     json_cap_size = serializers.serialize("json", list_of_cap_size)
-    return HttpResponse(json_cap_size, JsonResponse())
+    return HttpResponse(json_cap_size, content_type=JsonResponse())
 
 
 @login_required
@@ -10825,7 +10831,7 @@ def set_worked_positions(request):
             "new": 128,
         }
     )
-    return HttpResponse(json.dumps(json_response), JsonResponse())
+    return HttpResponse(json.dumps(json_response), content_type=JsonResponse())
 
 
 @login_required
@@ -10908,7 +10914,7 @@ def search_patients_ajax(request: HttpRequest) -> HttpResponse | HttpResponseNot
 
 @login_required
 @permission_required("experiment.change_experiment")
-def upload_file(request, subject_id, group_id, template_name="experiment/upload_consent_form.html"):
+def upload_file(request, subject_id, group_id, template_name: str = "experiment/upload_consent_form.html"):
     group = get_object_or_404(Group, pk=group_id)
 
     check_can_change(request.user, group.experiment.research_project)
@@ -10952,7 +10958,7 @@ def upload_file(request, subject_id, group_id, template_name="experiment/upload_
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def component_list(request, experiment_id, template_name="experiment/component_list.html"):
+def component_list(request, experiment_id, template_name: str = "experiment/component_list.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     if request.method == "POST":
@@ -13330,7 +13336,7 @@ def component_reuse(request, path_of_the_components, component_id):
 @login_required
 @permission_required("experiment.register_equipment")
 def eeg_electrode_localization_system_list(
-    request, template_name="experiment/eeg_electrode_localization_system_list.html"
+    request, template_name: str = "experiment/eeg_electrode_localization_system_list.html"
 ):
     return render(
         request,
@@ -13342,7 +13348,7 @@ def eeg_electrode_localization_system_list(
 @login_required
 @permission_required("experiment.register_equipment")
 def eeg_electrode_localization_system_create(
-    request, template_name="experiment/eeg_electrode_localization_system_register.html"
+    request, template_name: str = "experiment/eeg_electrode_localization_system_register.html"
 ):
     localization_system_form = EEGElectrodeLocalizationSystemRegisterForm(request.POST or None)
 
@@ -13739,7 +13745,7 @@ def eeg_electrode_position_update(
 
 @login_required
 @permission_required("experiment.add_subject")
-def emg_setting_create(request, experiment_id, template_name="experiment/emg_setting_register.html"):
+def emg_setting_create(request, experiment_id, template_name: str = "experiment/emg_setting_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     check_can_change(request.user, experiment.research_project)
@@ -13772,7 +13778,7 @@ def emg_setting_create(request, experiment_id, template_name="experiment/emg_set
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def emg_setting_view(request, emg_setting_id, template_name="experiment/emg_setting_register.html"):
+def emg_setting_view(request, emg_setting_id, template_name: str = "experiment/emg_setting_register.html"):
     emg_setting = get_object_or_404(EMGSetting, pk=emg_setting_id)
     emg_setting_form = EMGSettingForm(request.POST or None, instance=emg_setting)
 
@@ -13833,7 +13839,7 @@ def emg_setting_view(request, emg_setting_id, template_name="experiment/emg_sett
 
 @login_required
 @permission_required("experiment.change_experiment")
-def emg_setting_update(request, emg_setting_id, template_name="experiment/emg_setting_register.html"):
+def emg_setting_update(request, emg_setting_id, template_name: str = "experiment/emg_setting_register.html"):
     emg_setting = get_object_or_404(EMGSetting, pk=emg_setting_id)
 
     check_can_change(request.user, emg_setting.experiment.research_project)
@@ -13875,7 +13881,9 @@ def emg_setting_update(request, emg_setting_id, template_name="experiment/emg_se
 
 @login_required
 @permission_required("experiment.change_experiment")
-def emg_setting_digital_filter(request, emg_setting_id, template_name="experiment/emg_setting_digital_filter.html"):
+def emg_setting_digital_filter(
+    request, emg_setting_id, template_name: str = "experiment/emg_setting_digital_filter.html"
+):
     emg_setting = get_object_or_404(EMGSetting, pk=emg_setting_id)
 
     can_change = get_can_change(request.user, emg_setting.experiment.research_project)
@@ -13929,7 +13937,7 @@ def emg_setting_digital_filter(request, emg_setting_id, template_name="experimen
 @login_required
 @permission_required("experiment.change_experiment")
 def emg_setting_digital_filter_edit(
-    request, emg_setting_id, template_name="experiment/emg_setting_digital_filter.html"
+    request, emg_setting_id, template_name: str = "experiment/emg_setting_digital_filter.html"
 ):
     emg_setting = get_object_or_404(EMGSetting, pk=emg_setting_id)
 
@@ -13971,7 +13979,7 @@ def emg_setting_digital_filter_edit(
 
 @login_required
 @permission_required("experiment.change_experiment")
-def emg_setting_ad_converter(request, emg_setting_id, template_name="experiment/emg_setting_ad_converter.html"):
+def emg_setting_ad_converter(request, emg_setting_id, template_name: str = "experiment/emg_setting_ad_converter.html"):
     emg_setting = get_object_or_404(EMGSetting, pk=emg_setting_id)
 
     can_change = get_can_change(request.user, emg_setting.experiment.research_project)
@@ -14072,7 +14080,7 @@ def get_json_coilmodel_attributes(request: HttpRequest, coilmodel_id: int) -> Ht
 
     response_data = {"description": coil_model.description}
 
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 @login_required
@@ -14099,7 +14107,7 @@ def get_anatomical_description_by_placement(request, emg_electrode_type, emg_ele
     if emg_electrode_type == "needle":
         anatomical_description = EMGNeedlePlacement.objects.get(pk=emg_electrode_placement_id)
 
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 @login_required
@@ -14110,7 +14118,7 @@ def get_json_muscle_side_by_electrode_placement(request, emg_electrode_placement
     )
 
     json_muscle_side = serializers.serialize("json", muscle_side_list)
-    return HttpResponse(json_muscle_side, JsonResponse())
+    return HttpResponse(json_muscle_side, content_type=JsonResponse())
 
 
 @login_required
@@ -14122,7 +14130,7 @@ def get_json_electrode_model(request, electrode_id):
         "description": electrode_model.description,
     }
 
-    return HttpResponse(json.dumps(response_data), JsonResponse())
+    return HttpResponse(json.dumps(response_data), content_type=JsonResponse())
 
 
 @login_required
@@ -14131,7 +14139,7 @@ def get_json_electrode_by_type(request, electrode_type):
     electrode_list = ElectrodeModel.objects.filter(electrode_type=electrode_type, tags__name="EMG")
 
     json_electrode_list = serializers.serialize("json", electrode_list)
-    return HttpResponse(json_electrode_list, JsonResponse())
+    return HttpResponse(json_electrode_list, content_type=JsonResponse())
 
 
 @login_required
@@ -14178,12 +14186,12 @@ def get_electrode_placement_by_type(request, electrode_type):
                 }
             )
 
-    return HttpResponse(json.dumps(placements), JsonResponse())
+    return HttpResponse(json.dumps(placements), content_type=JsonResponse())
 
 
 @login_required
 @permission_required("experiment.change_experiment")
-def emg_setting_electrode_add(request, emg_setting_id, template_name="experiment/emg_setting_electrode.html"):
+def emg_setting_electrode_add(request, emg_setting_id, template_name: str = "experiment/emg_setting_electrode.html"):
     emg_setting = get_object_or_404(EMGSetting, pk=emg_setting_id)
 
     check_can_change(request.user, emg_setting.experiment.research_project)
@@ -14676,7 +14684,7 @@ def emg_electrode_setting_amplifier_edit(
 
 @login_required
 @permission_required("experiment.add_subject")
-def tms_setting_create(request, experiment_id, template_name="experiment/tms_setting_register.html"):
+def tms_setting_create(request, experiment_id, template_name: str = "experiment/tms_setting_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     check_can_change(request.user, experiment.research_project)
@@ -14707,7 +14715,7 @@ def tms_setting_create(request, experiment_id, template_name="experiment/tms_set
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def tms_setting_view(request, tms_setting_id, template_name="experiment/tms_setting_register.html"):
+def tms_setting_view(request, tms_setting_id, template_name: str = "experiment/tms_setting_register.html"):
     tms_setting = get_object_or_404(TMSSetting, pk=tms_setting_id)
     tms_setting_form = TMSSettingForm(request.POST or None, instance=tms_setting)
 
@@ -14761,7 +14769,7 @@ def tms_setting_view(request, tms_setting_id, template_name="experiment/tms_sett
 
 @login_required
 @permission_required("experiment.change_experiment")
-def tms_setting_update(request, tms_setting_id, template_name="experiment/tms_setting_register.html"):
+def tms_setting_update(request, tms_setting_id, template_name: str = "experiment/tms_setting_register.html"):
     tms_setting = get_object_or_404(TMSSetting, pk=tms_setting_id)
 
     check_can_change(request.user, tms_setting.experiment.research_project)
@@ -14792,7 +14800,7 @@ def tms_setting_update(request, tms_setting_id, template_name="experiment/tms_se
 
 @login_required
 @permission_required("experiment.change_experiment")
-def tms_setting_coil_model(request, tms_setting_id, template_name="experiment/tms_setting_coil_model.html"):
+def tms_setting_coil_model(request, tms_setting_id, template_name: str = "experiment/tms_setting_coil_model.html"):
     tms_setting = get_object_or_404(TMSSetting, pk=tms_setting_id)
 
     can_change = get_can_change(request.user, tms_setting.experiment.research_project)
@@ -14811,7 +14819,7 @@ def tms_setting_coil_model(request, tms_setting_id, template_name="experiment/tm
 
 @login_required
 @permission_required("experiment.change_experiment")
-def tms_setting_tms_device(request, tms_setting_id, template_name="experiment/tms_setting_tms_device.html"):
+def tms_setting_tms_device(request, tms_setting_id, template_name: str = "experiment/tms_setting_tms_device.html"):
     tms_setting = get_object_or_404(TMSSetting, pk=tms_setting_id)
 
     can_change = get_can_change(request.user, tms_setting.experiment.research_project)
@@ -14871,7 +14879,7 @@ def tms_setting_tms_device(request, tms_setting_id, template_name="experiment/tm
 
 @login_required
 @permission_required("experiment.change_experiment")
-def tms_setting_tms_device_edit(request, tms_setting_id, template_name="experiment/tms_setting_tms_device.html"):
+def tms_setting_tms_device_edit(request, tms_setting_id, template_name: str = "experiment/tms_setting_tms_device.html"):
     tms_setting = get_object_or_404(TMSSetting, pk=tms_setting_id)
 
     check_can_change(request.user, tms_setting.experiment.research_project)
@@ -14918,7 +14926,7 @@ def tms_setting_tms_device_edit(request, tms_setting_id, template_name="experime
 
 @login_required
 @permission_required("experiment.register_equipment")
-def tms_localization_system_list(request, template_name="experiment/tms_localization_system_list.html"):
+def tms_localization_system_list(request, template_name: str = "experiment/tms_localization_system_list.html"):
     return render(
         request,
         template_name,
@@ -14928,7 +14936,7 @@ def tms_localization_system_list(request, template_name="experiment/tms_localiza
 
 @login_required
 @permission_required("experiment.register_equipment")
-def tms_localization_system_create(request, template_name="experiment/tms_localization_system_register.html"):
+def tms_localization_system_create(request, template_name: str = "experiment/tms_localization_system_register.html"):
     localization_system_form = TMSLocalizationSystemForm(request.POST or None)
 
     if request.method == "POST":
@@ -15028,7 +15036,7 @@ def tms_localization_system_update(
 
 @login_required
 @permission_required("experiment.add_subject")
-def context_tree_create(request, experiment_id, template_name="experiment/context_tree_register.html"):
+def context_tree_create(request, experiment_id, template_name: str = "experiment/context_tree_register.html"):
     experiment = get_object_or_404(Experiment, pk=experiment_id)
 
     check_can_change(request.user, experiment.research_project)
@@ -15063,7 +15071,7 @@ def context_tree_create(request, experiment_id, template_name="experiment/contex
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def context_tree_view(request, context_tree_id, template_name="experiment/context_tree_register.html"):
+def context_tree_view(request, context_tree_id, template_name: str = "experiment/context_tree_register.html"):
     context_tree = get_object_or_404(ContextTree, pk=context_tree_id)
     context_tree_form = ContextTreeForm(request.POST or None, instance=context_tree)
 
@@ -15097,7 +15105,7 @@ def context_tree_view(request, context_tree_id, template_name="experiment/contex
 
 @login_required
 @permission_required("experiment.change_experiment")
-def context_tree_update(request, context_tree_id, template_name="experiment/context_tree_register.html"):
+def context_tree_update(request, context_tree_id, template_name: str = "experiment/context_tree_register.html"):
     context_tree = get_object_or_404(ContextTree, pk=context_tree_id)
 
     check_can_change(request.user, context_tree.experiment.research_project)
@@ -15130,7 +15138,7 @@ def context_tree_update(request, context_tree_id, template_name="experiment/cont
 
 @login_required
 @permission_required("experiment.view_researchproject")
-def setup_menu(request, template_name="experiment/setup_menu.html"):
+def setup_menu(request, template_name: str = "experiment/setup_menu.html"):
     basic_register_list = [
         {
             "item": _("Material"),

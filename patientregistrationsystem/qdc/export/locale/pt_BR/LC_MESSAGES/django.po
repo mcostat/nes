@@ -330,7 +330,7 @@ msgstr "Campos escolhidos:"
 
 #: export/templates/export/export_experiment_data.html:330
 #: export/templates/export/export_experiment_data.html:439
-msgid "Obs.: NES doesn't retrieve 'file upload' questions from LimeSurvey."
+msgid "Obs.: NES doesn't retrieve file upload questions from LimeSurvey."
 msgstr "O NES não importa arquivos carregados em questões no Limesurvey"
 
 #: export/templates/export/export_experiment_data.html:331

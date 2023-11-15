@@ -30,30 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
       manufacturer_id = "0";
     }
 
-    var url =
-      "/experiment/equipment/get_equipment_by_manufacturer/" +
-      equipment_type +
-      "/" +
-      manufacturer_id;
+    var url = "/experiment/equipment/get_equipment_by_manufacturer/" + equipment_type + "/" + manufacturer_id;
 
     fetch(url)
       .then((all_equipment) => {
         var options = '<option value="" selected="selected">---------</option>';
         for (var i = 0; i < all_equipment.length; i++) {
           if (equipment_type == "eeg_solution") {
-            options +=
-              '<option value="' +
-              all_equipment[i].pk +
-              '">' +
-              all_equipment[i].fields["name"] +
-              "</option>";
+            options += '<option value="' + all_equipment[i].pk + '">' + all_equipment[i].fields["name"] + "</option>";
           } else {
             options +=
-              '<option value="' +
-              all_equipment[i].pk +
-              '">' +
-              all_equipment[i].fields["identification"] +
-              "</option>";
+              '<option value="' + all_equipment[i].pk + '">' + all_equipment[i].fields["identification"] + "</option>";
           }
         }
         select_equipment.html(options);
@@ -126,10 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (equipment_type == "eeg_machine") {
               software_version.prop("value", equipment["software_version"]);
               number_of_channels.prop("value", equipment["number_of_channels"]);
-              number_of_channels_used.prop(
-                "max",
-                equipment["number_of_channels"]
-              );
+              number_of_channels_used.prop("max", equipment["number_of_channels"]);
             }
             if (equipment_type == "amplifier") {
               gain.prop("value", equipment["gain"]);
@@ -155,9 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // if (equipment_type == "eeg_electrode_net" && select_localization_system.val() == "" ) {
         if (equipment_type == "eeg_electrode_net") {
           // update the electrode net list
-          url =
-            "/experiment/equipment/get_localization_system_by_electrode_net/" +
-            equipment_id;
+          url = "/experiment/equipment/get_localization_system_by_electrode_net/" + equipment_id;
 
           fetch(url)
             .then((all_localization_system) => {
@@ -167,10 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
               var string_selected = "";
               for (var i = 0; i < all_localization_system.length; i++) {
                 string_selected = "";
-                if (
-                  parseInt(select_localization_system.val()) ==
-                  all_localization_system[i].pk
-                ) {
+                if (parseInt(select_localization_system.val()) == all_localization_system[i].pk) {
                   has_selected = true;
                   string_selected = 'selected="selected"';
                 }
@@ -186,8 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
               if (has_selected) {
                 first_option = '<option value="">---------</option>';
               } else {
-                first_option =
-                  '<option value="" selected="selected">---------</option>';
+                first_option = '<option value="" selected="selected">---------</option>';
               }
 
               select_localization_system.html(first_option + options);
@@ -245,8 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fetch(url)
           .then((all_equipment) => {
-            var options =
-              '<option value="" selected="selected">---------</option>';
+            var options = '<option value="" selected="selected">---------</option>';
             for (var i = 0; i < all_equipment.length; i++) {
               options +=
                 '<option value="' +

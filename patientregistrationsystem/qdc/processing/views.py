@@ -8,16 +8,15 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-
 from experiment.models import Experiment, Group, ResearchProject, SubjectOfGroup
 from patient.models import Patient
 
 
 def handle_uploaded_file(file: File) -> str:
-    with tempfile.NamedTemporaryFile("wb+", delete=False, suffix=".edf") as f:
+    with tempfile.NamedTemporaryFile("wb+", delete=False, suffix=".edf") as file_:
         for chunk in file.chunks():
-            f.write(chunk)
-        return f.name
+            file_.write(chunk)
+        return file_.name
 
 
 # @login_required

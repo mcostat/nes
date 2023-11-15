@@ -12,12 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   var undefined_interval = $("#id_interval_0");
   var defined_interval = $("#id_interval_1");
-  var id_interval_between_repetitions_value = $(
-    "#id_interval_between_repetitions_value"
-  );
-  var id_interval_between_repetitions_unit = $(
-    "#id_interval_between_repetitions_unit"
-  );
+  var id_interval_between_repetitions_value = $("#id_interval_between_repetitions_value");
+  var id_interval_between_repetitions_unit = $("#id_interval_between_repetitions_unit");
 
   if (id_number_of_repetitions.val() == "") {
     id_number_of_repetitions.prop("disabled", true);
@@ -43,19 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function manage_interval_disable_flag() {
     var should_disable = !(
-      unlimited_number_of_repetitions.is(":checked") ||
-      Number(id_number_of_repetitions.val()) > 1
+      unlimited_number_of_repetitions.is(":checked") || Number(id_number_of_repetitions.val()) > 1
     );
     var undefined = undefined_interval.is(":checked");
 
-    id_interval_between_repetitions_value.prop(
-      "disabled",
-      should_disable || undefined
-    );
-    id_interval_between_repetitions_unit.prop(
-      "disabled",
-      should_disable || undefined
-    );
+    id_interval_between_repetitions_value.prop("disabled", should_disable || undefined);
+    id_interval_between_repetitions_unit.prop("disabled", should_disable || undefined);
 
     if (should_disable) {
       fix_bootstrap_error_message_interval();
@@ -67,16 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function fix_bootstrap_error_message_interval() {
     setTimeout(function () {
-      $("#div_form_interval_between_repetitions_value").removeClass(
-        "has-error"
-      );
-      $("#div_for_errors_in_interval_between_repetitions_value")
-        .children("ul")
-        .remove();
+      $("#div_form_interval_between_repetitions_value").removeClass("has-error");
+      $("#div_for_errors_in_interval_between_repetitions_value").children("ul").remove();
       $("#div_form_interval_between_repetitions_unit").removeClass("has-error");
-      $("#div_for_errors_in_interval_between_repetitions_unit")
-        .children("ul")
-        .remove();
+      $("#div_for_errors_in_interval_between_repetitions_unit").children("ul").remove();
       $("#submit_button").removeClass("disabled");
     }, 500);
   }
@@ -138,12 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function redirect_with_number_of_uses(url) {
   if (url.indexOf("?") === -1) {
-    window.location.assign(
-      url + "?number_of_uses=" + $("#id_number_of_uses_to_insert").val()
-    );
+    window.location.assign(url + "?number_of_uses=" + $("#id_number_of_uses_to_insert").val());
   } else {
-    window.location.assign(
-      url + "&number_of_uses=" + $("#id_number_of_uses_to_insert").val()
-    );
+    window.location.assign(url + "&number_of_uses=" + $("#id_number_of_uses_to_insert").val());
   }
 }

@@ -14,7 +14,7 @@ from django.contrib import messages
 from django.contrib.admin.utils import flatten
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models.deletion import ProtectedError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -94,7 +94,7 @@ def get_survey_title_based_on_the_user_language(survey, language_code, update=Fa
 
 @login_required
 @permission_required("survey.view_survey")
-def survey_list(request, template_name="survey/survey_list.html"):
+def survey_list(request, template_name: str = "survey/survey_list.html") -> HttpResponse:
     surveys = Questionnaires()
     limesurvey_available_ = check_limesurvey_access(request, surveys)
 
@@ -149,10 +149,10 @@ def survey_list(request, template_name="survey/survey_list.html"):
 
 @login_required
 @permission_required("survey.add_survey")
-def survey_create(request, template_name="survey/survey_register.html"):
+def survey_create(request, template_name: str = "survey/survey_register.html"):
     survey_form = SurveyForm(request.POST or None, initial={"title": "title", "is_initial_evaluation": False})
     surveys = Questionnaires()
-    limesurvey_available = check_limesurvey_access(request, surveys)
+    limesurvey_available_ = check_limesurvey_access(request, surveys)
     questionnaires_list = []
 
     if request.method == "POST":
@@ -169,7 +169,7 @@ def survey_create(request, template_name="survey/survey_register.html"):
 
                 return HttpResponseRedirect(redirect_url)
 
-    if limesurvey_available:
+    if limesurvey_available_:
         questionnaires_list = surveys.find_all_active_questionnaires()
 
     if questionnaires_list:
@@ -190,7 +190,7 @@ def survey_create(request, template_name="survey/survey_register.html"):
         "creating": True,
         "editing": True,
         "questionnaires_list": questionnaires_list,
-        "limesurvey_available": limesurvey_available,
+        "limesurvey_available": limesurvey_available_,
     }
 
     return render(request, template_name, context)
@@ -198,13 +198,13 @@ def survey_create(request, template_name="survey/survey_register.html"):
 
 @login_required
 @permission_required("survey.change_survey")
-def survey_update(request, survey_id, template_name="survey/survey_register.html"):
+def survey_update(request, survey_id, template_name: str = "survey/survey_register.html"):
     survey = get_object_or_404(Survey, pk=survey_id)
 
     surveys = Questionnaires()
     language = get_questionnaire_language(surveys, survey.lime_survey_id, request.LANGUAGE_CODE)
     survey_title = surveys.get_survey_title(survey.lime_survey_id, language)
-    limesurvey_available = check_limesurvey_access(request, surveys)
+    limesurvey_available_ = check_limesurvey_access(request, surveys)
 
     surveys.release_session_key()
 
@@ -226,7 +226,7 @@ def survey_update(request, survey_id, template_name="survey/survey_register.html
             return HttpResponseRedirect(redirect_url)
 
     context = {
-        "limesurvey_available": limesurvey_available,
+        "limesurvey_available": limesurvey_available_,
         "survey": survey,
         "survey_form": survey_form,
         "survey_title": survey_title,
@@ -239,13 +239,13 @@ def survey_update(request, survey_id, template_name="survey/survey_register.html
 
 @login_required
 @permission_required("survey.change_survey")
-def survey_update_sensitive_questions(request, survey_id, template_name="survey/survey_sensitive_fields.html"):
+def survey_update_sensitive_questions(request, survey_id, template_name: str = "survey/survey_sensitive_fields.html"):
     survey = get_object_or_404(Survey, pk=survey_id)
 
     surveys = Questionnaires()
     language = get_questionnaire_language(surveys, survey.lime_survey_id, request.LANGUAGE_CODE)
     survey_title = surveys.get_survey_title(survey.lime_survey_id, language)
-    limesurvey_available = check_limesurvey_access(request, surveys)
+    limesurvey_available_ = check_limesurvey_access(request, surveys)
 
     current_selected_fields = SensitiveQuestion.objects.filter(survey=survey)
 
@@ -306,7 +306,7 @@ def survey_update_sensitive_questions(request, survey_id, template_name="survey/
 
     context = {
         "available_fields": available_fields,
-        "limesurvey_available": limesurvey_available,
+        "limesurvey_available": limesurvey_available_,
         "survey": survey,
         "survey_title": survey_title,
     }
@@ -697,7 +697,7 @@ def make_messages(request, responses):
 
 @login_required
 @permission_required("survey.view_survey")
-def survey_view(request, survey_id, template_name="survey/survey_register.html"):
+def survey_view(request, survey_id, template_name: str = "survey/survey_register.html"):
     survey = get_object_or_404(Survey, pk=survey_id)
 
     surveys = Questionnaires()
@@ -811,7 +811,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                     and properties["attributes"]["hidden"] == "1",
                                 }
                             )
-                            for key, value in sorted(properties["subquestions"].items()):
+                            for _key, value in sorted(properties["subquestions"].items()):
                                 question_properties.append(
                                     {
                                         "gid": group["id"]["gid"],

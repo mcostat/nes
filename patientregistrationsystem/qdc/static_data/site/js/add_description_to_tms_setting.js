@@ -15,20 +15,14 @@ document.addEventListener("DOMContentLoaded", () => {
       manufacturer_id = "0";
     }
 
-    var url =
-      "/experiment/equipment/get_equipment_by_manufacturer/tms_device/" +
-      manufacturer_id;
+    var url = "/experiment/equipment/get_equipment_by_manufacturer/tms_device/" + manufacturer_id;
 
     fetch(url)
       .then((all_equipment) => {
         var options = '<option value="" selected="selected">---------</option>';
         for (var i = 0; i < all_equipment.length; i++) {
           options +=
-            '<option value="' +
-            all_equipment[i].pk +
-            '">' +
-            all_equipment[i].fields["identification"] +
-            "</option>";
+            '<option value="' + all_equipment[i].pk + '">' + all_equipment[i].fields["identification"] + "</option>";
         }
 
         select_tmsdevice.html(options);

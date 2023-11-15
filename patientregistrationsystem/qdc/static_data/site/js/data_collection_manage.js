@@ -30,9 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function check_data_selection(transfer) {
   // check selected data
   is_data_selected = false;
-  data_collection_selection = document.getElementsByClassName(
-    "data-collection-selection"
-  );
+  data_collection_selection = document.getElementsByClassName("data-collection-selection");
   var i;
   for (i = 0; i < data_collection_selection.length; i++) {
     if (data_collection_selection[i].checked) {

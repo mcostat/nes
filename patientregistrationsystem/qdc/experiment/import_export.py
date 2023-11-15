@@ -103,8 +103,8 @@ class ExportExperiment:
         sys.stdout = sysout
 
     def _remove_auth_user_model_from_json(self) -> None:
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as f:
-            data = f.read().replace("\n", "")
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as file_:
+            data = file_.read().replace("\n", "")
 
         deserialized = json.loads(data)
         while True:
@@ -116,12 +116,12 @@ class ExportExperiment:
                 break
             del deserialized[index]
 
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as f:
-            f.write(json.dumps(deserialized))
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as file_:
+            file_.write(json.dumps(deserialized))
 
     def _remove_researchproject_keywords_model_from_json(self) -> None:
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as f:
-            data = f.read().replace("\n", "")
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as file_:
+            data = file_.read().replace("\n", "")
 
         deserialized = json.loads(data)
         indexes = [
@@ -132,41 +132,41 @@ class ExportExperiment:
         for i in sorted(indexes, reverse=True):
             del deserialized[i]
 
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as f:
-            f.write(json.dumps(deserialized))
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as file_:
+            file_.write(json.dumps(deserialized))
 
     # TODO: In future, import groups verifying existence of group_codes in the database, not excluding them
     def _change_group_code_to_null_from_json(self) -> None:
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as f:
-            data = f.read().replace("\n", "")
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as file_:
+            data = file_.read().replace("\n", "")
 
         serialized = json.loads(data)
         indexes = [index for (index, dict_) in enumerate(serialized) if dict_["model"] == "experiment.group"]
         for i in sorted(indexes, reverse=True):
             serialized[i]["fields"]["code"] = None
 
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as f:
-            f.write(json.dumps(serialized))
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as file_:
+            file_.write(json.dumps(serialized))
 
     def _remove_survey_code(self) -> None:
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as f:
-            data = f.read().replace("\n", "")
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as file_:
+            data = file_.read().replace("\n", "")
 
         serialized = json.loads(data)
         indexes = [index for (index, dict_) in enumerate(serialized) if dict_["model"] == "survey.survey"]
         for i in indexes:
             serialized[i]["fields"]["code"] = ""
 
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as f:
-            f.write(json.dumps(serialized))
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as file_:
+            file_.write(json.dumps(serialized))
 
     def _update_classification_of_diseases_reference(self) -> None:
         """Change json data exported to replace references to classification
         of diseases so the reference is to code not to id. We consider that
         NES instances all share the same classification of diseases data
         """
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as f:
-            data = f.read().replace("\n", "")
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), encoding="utf-8") as file_:
+            data = file_.read().replace("\n", "")
 
         serialized = json.loads(data)
         indexes = [index for (index, dict_) in enumerate(serialized) if dict_["model"] == "patient.diagnosis"]
@@ -190,12 +190,12 @@ class ExportExperiment:
                 break
             del serialized[index]
 
-        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as f:
-            f.write(json.dumps(serialized))
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as file_:
+            file_.write(json.dumps(serialized))
 
     def get_indexes(self, app, model) -> list[int]:
-        with open(self.get_file_path("json"), encoding="utf-8") as f:
-            data = json.load(f)
+        with open(self.get_file_path("json"), encoding="utf-8") as file_:
+            data = json.load(file_)
         return [index for (index, dict_) in enumerate(data) if dict_["model"] == app + "." + model]
 
     def _export_surveys(self):
@@ -235,8 +235,8 @@ class ExportExperiment:
         to file paths from models that have FileField fields
         :param survey_archives: list of survey archive paths
         """
-        with open(self.get_file_path("json"), encoding="utf-8") as f:
-            data = json.load(f)
+        with open(self.get_file_path("json"), encoding="utf-8") as file_:
+            data = json.load(file_)
 
         indexes = [index for index, dict_ in enumerate(data) if dict_["model"] in MODELS_WITH_FILE_FIELD]
         with zipfile.ZipFile(self.get_file_path(), "w") as zip_file:
@@ -396,7 +396,7 @@ class ImportExperiment:
 
     def _verify_keywords(self) -> None:
         indexes = [index for (index, dict_) in enumerate(self.data) if dict_["model"] == "experiment.keyword"]
-        next_keyword_id: int = Keyword.objects.last().id + 1 if Keyword.objects.count() > 0 else 1
+        next_keyword_id: int = Keyword.objects[-1].id + 1 if Keyword.objects.count() > 0 else 1
         indexes_of_keywords_already_updated = []
         for i in indexes:
             # Get the keyword and check on database if the keyword already exists.
@@ -670,8 +670,8 @@ class ImportExperiment:
         try:
             with zipfile.ZipFile(self.file_path) as zip_file:
                 json_file = zip_file.extract(self.FIXTURE_FILE_NAME, self.temp_dir)
-                with open(json_file) as f:
-                    data = json.load(f)
+                with open(json_file, encoding="utf-8") as file_:
+                    data = json.load(file_)
         except (ValueError, JSONDecodeError):
             return (
                 self.BAD_JSON_FILE_ERROR_CODE,
@@ -848,9 +848,9 @@ class ImportExperiment:
                     app_model = self.data[index]["model"].split(".")
                     model_class = apps.get_model(app_model[0], app_model[1])
                     object_imported = model_class.objects.get(id=self.data[index]["pk"])
-                    with File(open(file_path, "rb")) as f:
+                    with File(open(file_path, "rb")) as file_:
                         file_field = MODELS_WITH_FILE_FIELD[self.data[index]["model"]]
-                        getattr(object_imported, file_field).save(path.basename(file_path), f)
+                        getattr(object_imported, file_field).save(path.basename(file_path), file_)
                         object_imported.save()
 
     def _get_indexes(self, app, model):
@@ -943,7 +943,7 @@ class ImportExperiment:
                 )
                 if isinstance(ls_subject_id_column_name, tuple):  # Returned error
                     result = ls_subject_id_column_name[0], _(
-                        "Could not update identification questions for all " "responses."
+                        "Could not update identification questions for all responses."
                     )
                     continue
                 ls_responsible_id_column_name = (
@@ -953,7 +953,7 @@ class ImportExperiment:
                 )
                 if isinstance(ls_responsible_id_column_name, tuple):  # Returned error
                     result = ls_responsible_id_column_name[0], _(
-                        "Could not update identification questions for all " "responses."
+                        "Could not update identification questions for all responses."
                     )
                     continue
                 result_update = ls_interface.update_response(
@@ -1025,8 +1025,8 @@ class ImportExperiment:
         try:
             with zipfile.ZipFile(self.file_path) as zip_file:
                 json_file = zip_file.extract(self.FIXTURE_FILE_NAME, self.temp_dir)
-                with open(json_file, encoding="utf-8") as f:
-                    self.data = json.load(f)
+                with open(json_file, encoding="utf-8") as file_:
+                    self.data = json.load(file_)
                     # To Import Log page
                     self._set_last_objects_before_import(research_project_id)
         except (ValueError, JSONDecodeError):
