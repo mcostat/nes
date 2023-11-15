@@ -13,13 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.db.models import Q
-from django.http import (
-    HttpRequest,
-    HttpResponse,
-    HttpResponseNotAllowed,
-    HttpResponseRedirect,
-    JsonResponse,
-)
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as ug_
@@ -498,7 +492,7 @@ def export_create(
                     directory,
                     *resource,
                 ) in export.files_to_zip_list:  # just by now
-                    fdir, fname = path.split(filename)
+                    _fdir, fname = path.split(filename)
                     zip_file.write(filename.encode("utf-8"), path.join(directory, fname))
 
             output_export_file = path.join(
@@ -518,8 +512,8 @@ def export_create(
 
         return export_complete_filename
 
-    except OSError as e:
-        error_msg = e
+    except OSError as error:
+        error_msg = error
         messages.error(request, error_msg)
         return render(request, template_name)
 
@@ -809,12 +803,12 @@ def export_view(request, template_name: str = "export/export_data.html"):
 
             # Get the questionnaire fields from the
             # questionnaires_list_final and show them for selection
-            error, questionnaires_fields_list = get_questionnaire_fields(
+            _error, questionnaires_fields_list = get_questionnaire_fields(
                 [dict_["sid"] for index, dict_ in enumerate(questionnaires_list_final)],
                 request.LANGUAGE_CODE,
             )
 
-            if len(selected_ev_quest):
+            if len(selected_ev_quest) > 0:
                 questionnaire_ids, field_id = zip(*selected_ev_quest)
             else:
                 questionnaire_ids = ()
@@ -833,7 +827,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
     if not index:
         index = 0
     if "group_selected_list" in request.session and questionnaires_experiment_list_final:
-        if len(selected_ev_quest_experiments):
+        if len(selected_ev_quest_experiments) > 0:
             questionnaire_ids, field_id = zip(*selected_ev_quest_experiments)
         else:
             questionnaire_ids = ()
@@ -997,7 +991,7 @@ def update_questionnaire_list(questionnaire_list, heading_type, experiment_quest
         # position 4: output_list (field, header)
         if experiment_questionnaire:
             questionnaire_id = questionnaire[2]
-            fields, headers = zip(*questionnaire[4])
+            fields, _headers = zip(*questionnaire[4])
             index = questionnaire[0]
             title = questionnaire[3]
             group_id = questionnaire[1]
@@ -1018,7 +1012,7 @@ def update_questionnaire_list(questionnaire_list, heading_type, experiment_quest
         # position 2: output_list (field, header)
         else:
             questionnaire_id = questionnaire[1]
-            fields, headers = zip(*questionnaire[3])
+            fields, _headers = zip(*questionnaire[3])
             index = questionnaire[0]
             title = questionnaire[2]
 
