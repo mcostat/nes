@@ -13,7 +13,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import (
+    HttpRequest,
+    HttpResponse,
+    HttpResponseNotAllowed,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as ug_
@@ -1521,7 +1527,7 @@ def list_data_configuration_tree(eeg_configuration_id, list_of_path):
     return data_configuration_tree_id
 
 
-def search_locations(request):
+def search_locations(request: HttpRequest) -> HttpResponse:
     if request.accepts("application/json"):
         search_text = request.GET.get("term", "")
 
@@ -1550,8 +1556,10 @@ def search_locations(request):
 
         return HttpResponse(data, mimetype)
 
+    return HttpResponse(status=406)
 
-def search_diagnosis(request):
+
+def search_diagnosis(request: HttpRequest) -> HttpResponse:
     if request.accepts("application/json"):
         search_text = request.GET.get("term", "")
 
@@ -1584,6 +1592,8 @@ def search_diagnosis(request):
         mimetype = "application/json"
 
         return HttpResponse(data, mimetype)
+
+    return HttpResponse(status=406)
 
 
 def select_experiments_by_study(request, study_id):

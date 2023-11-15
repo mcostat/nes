@@ -1,11 +1,10 @@
 import re
 
+from custom_user.models import UserProfile
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.deprecation import MiddlewareMixin
-
-from custom_user.models import UserProfile
 
 
 class PasswordChangeMiddleware(MiddlewareMixin):
@@ -19,3 +18,5 @@ class PasswordChangeMiddleware(MiddlewareMixin):
             and UserProfile.cached_force_password_change(request.user)
         ):
             return redirect(reverse("password_change"))
+
+        return None

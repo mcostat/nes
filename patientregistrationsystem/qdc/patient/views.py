@@ -1,4 +1,3 @@
-# coding=utf-8
 import datetime
 import re
 from functools import partial
@@ -316,7 +315,7 @@ def patient_update_social_demographic_data(
                     ):
                         messages.warning(
                             request,
-                            _("Social class was not calculated, " "because all the necessary fields were not filled."),
+                            _("Social class was not calculated, because all the necessary fields were not filled."),
                         )
 
                 new_social_demographic_data.changed_by = request.user
@@ -785,30 +784,29 @@ def medical_record_view(
     else:
         patient = current_patient.code
 
-    if medical_record:
-        diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
-        complementary_exams_list = []
-        for diagnosis in diagnosis_list:
-            complementary_exams_list.append(ComplementaryExam.objects.filter(diagnosis=diagnosis.pk))
+    diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
+    complementary_exams_list = []
+    for diagnosis in diagnosis_list:
+        complementary_exams_list.append(ComplementaryExam.objects.filter(diagnosis=diagnosis.pk))
 
-        lists_diagnosis_exams = list(zip(diagnosis_list, complementary_exams_list))
+    lists_diagnosis_exams = list(zip(diagnosis_list, complementary_exams_list))
 
-        return render(
-            request,
-            template_name,
-            {
-                "patient": patient,
-                "patient_id": patient_id,
-                "record_id": medical_record.id,
-                "object_list": diagnosis_list,
-                "lists_diagnosis_exams": lists_diagnosis_exams,
-                "complementary_exams_list": complementary_exams_list,
-                "record_date": medical_record.record_date,
-                "record_responsible": medical_record.record_responsible,
-                "editing": False,
-                "status": status,
-            },
-        )
+    return render(
+        request,
+        template_name,
+        {
+            "patient": patient,
+            "patient_id": patient_id,
+            "record_id": medical_record.id,
+            "object_list": diagnosis_list,
+            "lists_diagnosis_exams": lists_diagnosis_exams,
+            "complementary_exams_list": complementary_exams_list,
+            "record_date": medical_record.record_date,
+            "record_responsible": medical_record.record_responsible,
+            "editing": False,
+            "status": status,
+        },
+    )
 
 
 @login_required
@@ -828,59 +826,58 @@ def medical_record_update(request, patient_id, record_id, template_name: str = "
     else:
         patient = current_patient.code
 
-    if medical_record:
-        diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
-        complementary_exams_list = []
+    diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
+    complementary_exams_list = []
 
-        for diagnosis in diagnosis_list:
-            complementary_exams_list.append(ComplementaryExam.objects.filter(diagnosis=diagnosis.pk))
+    for diagnosis in diagnosis_list:
+        complementary_exams_list.append(ComplementaryExam.objects.filter(diagnosis=diagnosis.pk))
 
-        lists_diagnosis_exams = list(zip(diagnosis_list, complementary_exams_list))
+    lists_diagnosis_exams = list(zip(diagnosis_list, complementary_exams_list))
 
-        if request.method == "POST":
-            if request.POST["action"] == "finish":
-                redirect_url = reverse("patient_edit", args=(patient_id,))
-                return HttpResponseRedirect(redirect_url + "?currentTab=3")
+    if request.method == "POST":
+        if request.POST["action"] == "finish":
+            redirect_url = reverse("patient_edit", args=(patient_id,))
+            return HttpResponseRedirect(redirect_url + "?currentTab=3")
 
-            elif request.POST["action"][0:7] == "detail-":
-                diagnosis_id = int(request.POST["action"][7:])
-                diagnosis = get_object_or_404(Diagnosis, pk=diagnosis_id)
+        elif request.POST["action"][0:7] == "detail-":
+            diagnosis_id = int(request.POST["action"][7:])
+            diagnosis = get_object_or_404(Diagnosis, pk=diagnosis_id)
 
-                diagnosis.description = request.POST["description-" + str(diagnosis_id)]
-                date_text = request.POST["date-" + str(diagnosis_id)]
+            diagnosis.description = request.POST["description-" + str(diagnosis_id)]
+            date_text = request.POST["date-" + str(diagnosis_id)]
 
-                try:
-                    if date_text:
-                        diagnosis.date = datetime.datetime.strptime(date_text, _("%m/%d/%Y"))
-                    else:
-                        diagnosis.date = None
+            try:
+                if date_text:
+                    diagnosis.date = datetime.datetime.strptime(date_text, _("%m/%d/%Y"))
+                else:
+                    diagnosis.date = None
 
-                    diagnosis.save()
-                    messages.success(request, _("Diagnosis details successfully changed."))
+                diagnosis.save()
+                messages.success(request, _("Diagnosis details successfully changed."))
 
-                    redirect_url = reverse("medical_record_edit", args=(patient_id, record_id))
-                    return HttpResponseRedirect(redirect_url + "?status=edit")
+                redirect_url = reverse("medical_record_edit", args=(patient_id, record_id))
+                return HttpResponseRedirect(redirect_url + "?status=edit")
 
-                except ValueError:
-                    messages.error(request, _("Incorrect date. Use format: mm/dd/yyyy"))
+            except ValueError:
+                messages.error(request, _("Incorrect date. Use format: mm/dd/yyyy"))
 
-        return render(
-            request,
-            template_name,
-            {
-                "patient": patient,
-                "patient_id": patient_id,
-                "record_id": medical_record.id,
-                "object_list": diagnosis_list,
-                "lists_diagnosis_exams": lists_diagnosis_exams,
-                "complementary_exams_list": complementary_exams_list,
-                "record_date": medical_record.record_date,
-                "record_responsible": medical_record.record_responsible,
-                "editing": True,
-                "status": status,
-                "currentTab": current_tab,
-            },
-        )
+    return render(
+        request,
+        template_name,
+        {
+            "patient": patient,
+            "patient_id": patient_id,
+            "record_id": medical_record.id,
+            "object_list": diagnosis_list,
+            "lists_diagnosis_exams": lists_diagnosis_exams,
+            "complementary_exams_list": complementary_exams_list,
+            "record_date": medical_record.record_date,
+            "record_responsible": medical_record.record_responsible,
+            "editing": True,
+            "status": status,
+            "currentTab": current_tab,
+        },
+    )
 
 
 @login_required
@@ -1079,7 +1076,7 @@ def exam_edit(
     if complementary_exam:
         complementary_exam_form = ComplementaryExamForm(request.POST or None, instance=complementary_exam)
         exam_file_list = ExamFile.objects.filter(exam=exam_id)
-        length = exam_file_list.__len__()
+        length = len(exam_file_list)
 
         if request.method == "POST":
             file_form = ExamFileForm(request.POST, request.FILES)
@@ -1576,7 +1573,7 @@ def questionnaire_response_start_fill_questionnaire(request: HttpRequest, patien
         if not result:
             messages.warning(
                 request,
-                _("Failed to generate token to answer the questionnaire. " "Make sure the questionnaire is active"),
+                _("Failed to generate token to answer the questionnaire. Make sure the questionnaire is active"),
             )
             return None, None
 

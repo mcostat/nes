@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 
 
@@ -13,7 +13,7 @@ def get_export_dir(instance, filename):
 
 
 class Export(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=False)
     date = models.DateTimeField(null=False, auto_now_add=True)
     input_file = models.FileField(upload_to=get_export_dir, null=False, max_length=1000)
     output_export = models.FileField(upload_to=get_export_dir, null=False, max_length=1000)

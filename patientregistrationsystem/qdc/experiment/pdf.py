@@ -5,6 +5,7 @@ from io import BytesIO
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
+from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
 
@@ -24,12 +25,12 @@ def fetch_resources(uri, rel):
 
     # make sure that file exists
     if not os.path.isfile(path):
-        raise Exception("media URI must start with %s or %s" % (static_url, media_url))
+        raise ValueError(f"media URI must start with {static_url} or {media_url}")
 
     return path
 
 
-def render(template_src, context_dict, css_source=None):
+def render(template_src, context_dict, css_source=None) -> HttpResponse:
     template = get_template(template_src)
     # context = Context(context_dict)
     html = template.render(context_dict)
@@ -57,4 +58,4 @@ def render(template_src, context_dict, css_source=None):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type="application/pdf")
 
-    return HttpResponse("_(We had some errors<pre>%s</pre>)" % escape(html))
+    return HttpResponse(_("We had some errors<pre>%(html)</pre>)") % {"html": escape(html)})

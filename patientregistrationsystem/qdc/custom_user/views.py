@@ -174,7 +174,7 @@ def user_update(
                     if "password_flag" in request.POST:
                         if request.POST["password"]:
                             user = get_object_or_404(get_user_model(), id=user_id)
-                            profile, created = UserProfile.objects.get_or_create(user=user)
+                            profile, _created = UserProfile.objects.get_or_create(user=user)
                             profile.force_password_change = True
                             profile.save()
 

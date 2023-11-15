@@ -8,7 +8,7 @@ from typing import Any
 import coreapi
 from coreapi.exceptions import CoreAPIException
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils import translation
 from survey.abc_search_engine import Questionnaires
 from survey.survey_utils import QuestionnaireUtils
@@ -1245,7 +1245,7 @@ def send_research_project_to_portal(experiment: Experiment):
     return portal_research_project
 
 
-def send_researcher_to_portal(research_project_id, researcher: User | None):
+def send_researcher_to_portal(research_project_id, researcher: get_user_model() | None):
     rest = RestApiClient()
 
     if not rest.active:

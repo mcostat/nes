@@ -76,7 +76,7 @@ class ExportExperiment:
         )
         sys.stdout = sysout
 
-    def _generate_detached_fixture(self, filename, elements) -> None:
+    def _generate_detached_fixture(self, filename: str, elements: list) -> None:
         with open(path.join(self.temp_dir, elements[3] + ".json"), encoding="utf-8") as file:
             data = json.load(file)
         parent_ids = [dict_["pk"] for index, dict_ in enumerate(data) if dict_["model"] == elements[2]]
@@ -223,9 +223,10 @@ class ExportExperiment:
                 )
             decoded_archive = b64decode(result)
             lsa_archive_path = os.path.join(self.temp_dir, str(survey.lime_survey_id) + ".lsa")
-            lsa_archive = open(lsa_archive_path, "wb")
-            lsa_archive.write(decoded_archive)
-            archive_paths.append(lsa_archive_path)
+
+            with open(lsa_archive_path, "wb") as lsa_archive:
+                lsa_archive.write(decoded_archive)
+                archive_paths.append(lsa_archive_path)
 
         ls_interface.release_session_key()
 
@@ -264,8 +265,8 @@ class ExportExperiment:
             return path.join(self.temp_dir, self.FILE_NAME_ZIP)
         elif type_ == "json":
             return path.join(self.temp_dir, self.FILE_NAME_JSON)
-        else:
-            raise ArgumentError(type_, message="type not zip or json")
+
+        raise ArgumentError(type_, message="type not zip or json")
 
     def export_all(self) -> tuple:
         for key, value in EXPERIMENT_JSON_FILES.items():
@@ -854,11 +855,11 @@ class ImportExperiment:
                         getattr(object_imported, file_field).save(path.basename(file_path), file_)
                         object_imported.save()
 
-    def _get_indexes(self, app, model):
+    def _get_indexes(self, app, model) -> list[int]:
         # TODO (NES-956): disseminate to rest of the script
         return [index for (index, dict_) in enumerate(self.data) if dict_["model"] == app + "." + model]
 
-    def _remove_limesurvey_participants(self):
+    def _remove_limesurvey_participants(self) -> tuple[int, str]:
         """Must be called after updating Limesurvey surveys references"""
 
         result = 0, ""
@@ -914,7 +915,7 @@ class ImportExperiment:
 
         return result
 
-    def _update_limesurvey_identification_questions(self):
+    def _update_limesurvey_identification_questions(self) -> tuple[int, str]:
         """Must be called after updating Limesurvey surveys references"""
         result = 0, ""
         indexes = self._get_indexes("experiment", "questionnaire")
@@ -972,7 +973,7 @@ class ImportExperiment:
 
         return result
 
-    def _import_limesurvey_surveys(self):
+    def _import_limesurvey_surveys(self) -> tuple[int, str]:
         """Import surveys to Limesurvey server
         :return: list of limsurvey surveys imported
         """
@@ -1021,7 +1022,7 @@ class ImportExperiment:
 
         return result
 
-    def import_all(self, request, research_project_id=None, patients_to_update=None):
+    def import_all(self, request, research_project_id=None, patients_to_update=None) -> tuple[int, str]:
         # TODO: maybe this try in constructor
         try:
             with zipfile.ZipFile(self.file_path) as zip_file:
@@ -1049,5 +1050,5 @@ class ImportExperiment:
 
         return result
 
-    def get_new_objects(self):
+    def get_new_objects(self) -> dict[str, Any]:
         return self.new_objects

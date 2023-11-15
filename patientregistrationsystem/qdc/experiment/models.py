@@ -110,7 +110,7 @@ class Experiment(models.Model):
         if self.pk is None:
             saved_file = self.ethics_committee_project_file
             self.ethics_committee_project_file = None
-            super(Experiment, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             self.ethics_committee_project_file = saved_file
             kwargs.pop("force_insert", None)
 
@@ -825,7 +825,7 @@ class EMGPreamplifierSetting(models.Model):
     gain = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGPreamplifierSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_electrode_setting.emg_setting.experiment.save()
 
 
@@ -845,7 +845,7 @@ class EMGPreamplifierFilterSetting(models.Model):
     order = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
 
     def save(self, *args, **kwargs) -> None:
-        super(EMGPreamplifierFilterSetting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.emg_preamplifier_filter_setting.emg_electrode_setting.emg_setting.experiment.save()
 
 
@@ -976,17 +976,17 @@ class TMSLocalizationSystem(models.Model):
 
     def delete(self, *args, **kwargs):
         self.tms_localization_system_image.delete()
-        super(TMSLocalizationSystem, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs) -> None:
         if self.pk is None:
             saved_file = self.tms_localization_system_image
             self.tms_localization_system_image = None
-            super(TMSLocalizationSystem, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             self.tms_localization_system_image = saved_file
             kwargs.pop("force_insert")
 
-        super(TMSLocalizationSystem, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class CoilOrientation(models.Model):
@@ -1179,17 +1179,17 @@ class ContextTree(models.Model):
 
     def delete(self, *args, **kwargs):
         self.setting_file.delete()
-        super(ContextTree, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs) -> None:
         if self.pk is None:
             saved_file = self.setting_file
             self.setting_file = None
-            super(ContextTree, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             self.setting_file = saved_file
             kwargs.pop("force_insert", None)
 
-        super(ContextTree, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         self.experiment.save()
 

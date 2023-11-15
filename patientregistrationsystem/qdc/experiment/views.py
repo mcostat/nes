@@ -10300,10 +10300,10 @@ def get_experimental_protocol_image(experimental_protocol, tree, url=False):
     file_name = "experimental_protocol_" + str(experimental_protocol.id) + ".png"
 
     # writing
-    errors, path_complete = create_directory(settings.MEDIA_ROOT, "temp")
+    _errors, path_complete = create_directory(settings.MEDIA_ROOT, "temp")
 
     try:
-        graph.write_png(os.path.join(path_complete, file_name))
+        graph.write(os.path.join(path_complete, file_name), format="png")
     except:
         return None
 

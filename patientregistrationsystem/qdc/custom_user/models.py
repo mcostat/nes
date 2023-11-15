@@ -27,7 +27,7 @@ class Institution(models.Model):  # type: ignore [django-manager-missing]
     )
 
     def __str__(self) -> str:
-        return f"{self.name}"
+        return str(self.name)
 
     class Meta(TypedModelMeta):
         ordering = ["name"]
@@ -53,12 +53,12 @@ class UserProfile(models.Model):
         if isinstance(pw_change, bool):
             return pw_change
 
-        u = UserProfile.objects.filter(user=_user).first()
+        profile = UserProfile.objects.filter(user=_user).first()
 
-        if isinstance(u, UserProfile):
-            cache.set(key, u.force_password_change, 30 * 60)
+        if isinstance(profile, UserProfile):
+            cache.set(key, profile.force_password_change, 30 * 60)
 
-            return u.force_password_change
+            return profile.force_password_change
 
         return False
 
@@ -88,7 +88,7 @@ def password_change_signal(sender, instance, **kwargs) -> None:
             return
 
         if user.password != instance.password:
-            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile, _created = UserProfile.objects.get_or_create(user=user)
             profile.force_password_change = False
             profile.save()
     except get_user_model().DoesNotExist:

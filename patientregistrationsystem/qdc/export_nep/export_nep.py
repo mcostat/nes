@@ -1,15 +1,14 @@
 import subprocess
 
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
 from experiment import models
 from patient.models import Patient
 
 # Collect and send User's (nep: Researcher's) -> ResearchProject's
 # (nep: Study's), Experiment's and Experiment releated objects
-users = User.objects.all()
+users = get_user_model().objects.all()
 
-portal_server = "http://192.168.59.61:8000"
+PORTAL_SERVER = "http://192.168.59.61:8000"
 
 for user in users:
     subprocess.call(
@@ -19,7 +18,7 @@ for user in users:
             "lab1:nep-lab1",
             "--ignore-stdin",
             "POST",
-            portal_server + "/api/researchers/",
+            PORTAL_SERVER + "/api/researchers/",
             "first_name=" + user.first_name,
             "surname=" + user.last_name,
             "nes_id=" + str(user.id),
@@ -34,7 +33,7 @@ for user in users:
                     "lab1:nep-lab1",
                     "--ignore-stdin",
                     "POST",
-                    portal_server + "/api/researchers/" + str(user.id) + "/studies/",
+                    PORTAL_SERVER + "/api/researchers/" + str(user.id) + "/studies/",
                     "title=" + research_project.title,
                     "description=" + research_project.description,
                     "start_date=" + str(research_project.start_date),
@@ -49,7 +48,7 @@ for user in users:
                     "lab1:nep-lab1",
                     "--ignore-stdin",
                     "POST",
-                    portal_server + "/api/researchers/" + str(user.id) + "/studies/",
+                    PORTAL_SERVER + "/api/researchers/" + str(user.id) + "/studies/",
                     "title=" + research_project.title,
                     "description=" + research_project.description,
                     "start_date=" + str(research_project.start_date),
@@ -65,7 +64,7 @@ for user in users:
                     "lab1:nep-lab1",
                     "--ignore-stdin",
                     "POST",
-                    portal_server + "/api/studies/" + str(research_project.id) + "/experiments/",
+                    PORTAL_SERVER + "/api/studies/" + str(research_project.id) + "/experiments/",
                     "title=" + experiment.title,
                     "description=" + experiment.description,
                     "data_acquisition_none=" + str(experiment.data_acquisition_is_concluded),
@@ -81,7 +80,7 @@ for user in users:
                             "lab1:nep-lab1",
                             "--ignore-stdin",
                             "POST",
-                            portal_server + "/api/experiments/" + str(experiment.id) + "/protocol_components/",
+                            PORTAL_SERVER + "/api/experiments/" + str(experiment.id) + "/protocol_components/",
                             "identification=" + component.identification,
                             "description=" + str(component.description),
                             "duration_unit=" + str(component.duration_unit),
@@ -97,7 +96,7 @@ for user in users:
                             "lab1:nep-lab1",
                             "--ignore-stdin",
                             "POST",
-                            portal_server + "/api/experiments/" + str(experiment.id) + "/protocol_components/",
+                            PORTAL_SERVER + "/api/experiments/" + str(experiment.id) + "/protocol_components/",
                             "identification=" + component.identification,
                             "description=" + str(component.description),
                             "duration_value=" + str(component.duration_value),
@@ -114,7 +113,7 @@ for user in users:
                             "lab1:nep-lab1",
                             "--ignore-stdin",
                             "POST",
-                            portal_server + "/api/" "protocol_components/" + str(component.id) + "/groups/",
+                            PORTAL_SERVER + "/api/" "protocol_components/" + str(component.id) + "/groups/",
                             "title=" + group.title,
                             "nes_id=" + str(group.id),
                         ]
@@ -131,7 +130,7 @@ for subject in models.Subject.objects.all():
             "lab1:nep-lab1",
             "--ignore-stdin",
             "POST",
-            portal_server + "/api/participants/",
+            PORTAL_SERVER + "/api/participants/",
             "date_birth=" + str(patient.date_birth),
             "district=" + str(patient.district),
             "city=" + str(patient.city),
