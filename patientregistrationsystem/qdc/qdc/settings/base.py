@@ -321,8 +321,8 @@ DATABASES = {
 
 # LimeSurvey configuration
 LIMESURVEY = {
-    "URL_API": "http://" + os.getenv("LIMESURVEY_HOST", "limesurvey") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
-    "URL_WEB": "http://" + os.getenv("LIMESURVEY_URL_WEB", "limesurvey") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
+    "URL_API": "http://" + os.getenv("LIMESURVEY_HOST", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
+    "URL_WEB": "http://" + os.getenv("LIMESURVEY_URL_WEB", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
     "USER": os.getenv("LIMESURVEY_ADMIN_USER", "lime_admin"),
     "PASSWORD": os.getenv("LIMESURVEY_ADMIN_PASSWORD", "lime_admin_password"),
 }
