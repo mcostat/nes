@@ -1,13 +1,12 @@
 import os
-
 from html import escape
-from xhtml2pdf import pisa
-from django.http import HttpResponse
-from django.template import Context
-from django.template.loader import get_template
 from io import BytesIO
 
-from qdc import settings
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.utils.translation import gettext_lazy as _
+from xhtml2pdf import pisa
 
 
 def fetch_resources(uri, rel):
@@ -26,32 +25,37 @@ def fetch_resources(uri, rel):
 
     # make sure that file exists
     if not os.path.isfile(path):
-        raise Exception(
-            'media URI must start with %s or %s' % (static_url, media_url)
-        )
+        raise ValueError(f"media URI must start with {static_url} or {media_url}")
 
     return path
 
 
-def render(template_src, context_dict, css_source=None):
+def render(template_src, context_dict, css_source=None) -> HttpResponse:
     template = get_template(template_src)
-    context = Context(context_dict)
-    html = template.render(context)
+    # context = Context(context_dict)
+    html = template.render(context_dict)
     result = BytesIO()
 
     if css_source:
-        pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")),
-                                dest=result,
-                                encoding='UTF-8',
-                                link_callback=fetch_resources,
-                                default_css=open(os.path.join(settings.BASE_DIR, 'static', 'css', css_source)).read())
+        pdf = pisa.pisaDocument(
+            BytesIO(html.encode("UTF-8")),
+            dest=result,
+            encoding="UTF-8",
+            link_callback=fetch_resources,
+            default_css=open(
+                os.path.join(settings.BASE_DIR, "static", "css", css_source),
+                encoding="utf-8",
+            ).read(),
+        )
     else:
-        pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")),
-                                dest=result,
-                                encoding='UTF-8',
-                                link_callback=fetch_resources)
+        pdf = pisa.pisaDocument(
+            BytesIO(html.encode("UTF-8")),
+            dest=result,
+            encoding="UTF-8",
+            link_callback=fetch_resources,
+        )
 
     if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
+        return HttpResponse(result.getvalue(), content_type="application/pdf")
 
-    return HttpResponse('_(We had some errors<pre>%s</pre>)' % escape(html))
+    return HttpResponse(_("We had some errors<pre>%(html)</pre>)") % {"html": escape(html)})

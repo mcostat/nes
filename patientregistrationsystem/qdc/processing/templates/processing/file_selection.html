@@ -1,0 +1,85 @@
+{% extends "base/template.html" %}
+
+{% load i18n static %}
+
+{% block activeExport %} active{% endblock %}
+
+{% block form %}
+    <form id="user_form" method="post" data-toggle="validator">
+    {% csrf_token %}
+{% endblock form %}
+
+{% block content %}
+    <div class="tab-pane fade show active" id="mainMenuUserTab">
+        <div class="container-fluid">
+            <div id="studies_container" class="my-3 p-3 bg-body rounded shadow-sm">
+                <h4>{% trans "Filters selection" %}</h4>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 col-sm-12">
+                            <label for="id_research_projects" class="form-label">{% trans "Studies" %} <b class="text-danger">*</b></label>
+                            <select class="form-control" id="id_research_projects" name="research_projects_selected">
+                                <option value>-------</option>
+                                {% for research_project in research_projects %}
+                                    <option {% if research_project.id == research_project_selected.id %}selected="selected"{% endif %} value="{{ research_project.id }}">{{ research_project.title }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text with-errors text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 col-12">
+                            <label for="id_experiments" class="form-label">{% trans "Experiments" %} <b class="text-danger">*</b></label>
+                            <select class="form-control" id="id_experiments" name="experiment_selected">
+                                <option value>-------</option>
+                                {% for experiment in experiment_list %}
+                                    <option {% if not creating and experiment.id == experiment_selected.id %}selected="selected"{% endif %} value="{{ experiment.id }}">{{ experiment.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12 col-12">
+                            <label for="group_selected" class="form-label">{% trans "Groups" %} <b class="text-danger">*</b></label>
+                            <select class="form-control" id="group_selected" name="group_selected" multiple="multiple">
+                                {% for group in group_list %}
+                                    <option title="{{ group.title }}" value="{{ group.id }}">{{ group.title }}</option>
+                                {% endfor %}
+                            </select>
+                            <label class="form-label">{% trans "* use ctrl-click to select more than one field. (command-click on Mac)" %} </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-toolbar justify-content-between" role="toolbar">
+                    <div class="btn-group"></div>
+                    <div class="btn-group float-end">
+                        <button type="submit" name="action" value="next-step-participants" class="btn btn-primary">{% trans "Next" %}
+                            <span class="fa-fw fa fa-forward"></span>
+                        </button>
+                        <a href="/export" class="btn btn-light">{% trans "Cancel" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+            
+{% endblock %}
+
+{% block end_form %}
+    </form>
+{% endblock %}
+
+{% block extrascript %}
+    
+    <script type="text/javascript" defer  src={% static "site/js/file_selection.js" %}></script>
+{% endblock %}

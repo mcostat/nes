@@ -1,11 +1,11 @@
 {% extends "experiment/emg_placement_register_template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n %}
 
 {% block breadcrumb %}
 
     {% if creating %}
-        <li class="active">{% trans "New intramuscular placement" %}</li>
+        <li class="breadcrumb-item active">{% trans "New intramuscular placement" %}</li>
     {% endif %}
 
 {% endblock %}
@@ -27,21 +27,21 @@
 {% block specialized_fields %}
 
     <div class="row">
-        <div class="col-xs-12 col-sm-12">
+        <div class="col-12 col-sm-12">
             <div class="form-group">
-                <label class="control-label">{% trans "Method of insertion" %}</label>
+                <label class="form-label">{% trans "Method of insertion" %}</label>
                 {{ emg_electrode_placement_form.method_of_insertion }}
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-sm-12">
+        <div class="col-12 col-sm-12">
             <div class="form-group">
-                <label class="control-label">{% trans "Depth of insertion" %}</label>
+                <label class="form-label">{% trans "Depth of insertion" %}</label>
                 {{ emg_electrode_placement_form.depth_of_insertion }}
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
             </div>
         </div>
     </div>

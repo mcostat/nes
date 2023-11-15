@@ -1,111 +1,91 @@
-{% extends "quiz/template.html" %}
-{% block activeAdvancedResearchProject %}class="active"{% endblock %}
+{% extends "base/template.html" %}
+{% block activeAdvancedResearchProject %} active{% endblock activeAdvancedResearchProject  %}
 
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block form %}
-    <div class="row">
+    
     <form id="emg_setting_form" method="post" data-toggle="validator">
     {% csrf_token %}
 {% endblock %}
 
 {% block content %}
 
-    {% if messages %}
-        {% for message in messages %}
 
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %}
 
     {% if component_form.errors %}
-        <script type="text/javascript">
+        <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
             showErrorMessage(gettext('Please, correct fields highlighted.'))
         </script>
     {% endif %}
 
 
-    <div class="tab-pane fade in active" id="experimentBreadCrumb">
-        <div class="col-md-10">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li><a href="/experiment/research_project/{{ emg_setting.experiment.research_project.id }}">{{ emg_setting.experiment.research_project.title }}</a></li>
-                <li><a href="/experiment/{{ emg_setting.experiment.id }}">{{ emg_setting.experiment.title }}</a></li>
-                <li><a href="/experiment/emg_setting/{{ emg_setting.id }}">{{ emg_setting.name }}</a></li>
+    <div class="tab-pane fade show active" id="experimentBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/{{ emg_setting.experiment.research_project.id }}">{{ emg_setting.experiment.research_project.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/{{ emg_setting.experiment.id }}">{{ emg_setting.experiment.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/emg_setting/{{ emg_setting.id }}">{{ emg_setting.name }}</a></li>
 
                 {% if creating %}
-                    <li class="active">{% trans "Add electrode setting" %} </li>
+                    <li class="breadcrumb-item active">{% trans "Add electrode setting" %} </li>
                 {% else %}
                     {% if editing %}
-                        <li><a href="/experiment/emg_electrode_setting/{{ emg_electrode_setting.id }}">{{ emg_electrode_setting.emg_electrode_placement_setting.emg_electrode_placement }}</a></li>
-                        <li class="active">{% trans "Editing" %}</li>
+                        <li class="breadcrumb-item"><a href="/experiment/emg_electrode_setting/{{ emg_electrode_setting.id }}">{{ emg_electrode_setting.emg_electrode_placement_setting.emg_electrode_placement }}</a></li>
+                        <li class="breadcrumb-item active">{% trans "Editing" %}</li>
                     {% else %}
-                        <li class="active"> {{ emg_electrode_setting.emg_electrode_placement_setting.emg_electrode_placement }} </li>
+                        <li class="breadcrumb-item active"> {{ emg_electrode_setting.emg_electrode_placement_setting.emg_electrode_placement }} </li>
                     {% endif %}
                 {% endif %}
             </ol>
-        </div>
+        </nav>
     </div>
 
-    <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well">
+    <div class="tab-pane fade show active" id="menuUserTab">
+        <div class="container-fluid">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
 
                 <h4>{% trans "EMG electrode settings" %}</h4>
-
+                <hr>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Electrode type" %} </label>
+                            <label for="id_electrode_type" class="form-label">{% trans "Electrode type" %} <b class="text-danger">*</b></label>
                             {{ emg_electrode_model_form.electrode_type }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
 
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Electrode" %} </label>
+                            <label for="id_electrode" class="form-label">{% trans "Electrode" %} <b class="text-danger">*</b></label>
                             {{ emg_electrode_setting_form.electrode }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
 
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Description" %} </label>
+                            <label for="id_description" class="form-label">{% trans "Description" %} </label>
                             {{ emg_electrode_model_form.description }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
 
                             <div class="form-group">
-                                <label class="control-label">{% trans "Electrode placement" %} <b style="color: red;">*</b></label>
+                                <label class="form-label">{% trans "Electrode placement" %} <b class="text-danger">*</b></label>
                                 {{ emg_electrode_placement_setting_form.emg_electrode_placement }}
-                                <div class="help-block with-errors"></div>
+                                <div class="form-text with-errors text-danger"></div>
                             </div>
 
                         </div>
@@ -113,90 +93,90 @@
                 </div>
 
                 <div class="row" id="div-muscle-side">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Muscle side" %} <b style="color: red;">*</b></label>
+                            <label class="form-label">{% trans "Muscle side" %} <b class="text-danger">*</b></label>
                             {{ emg_electrode_placement_setting_form.muscle_side }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row" id="div-start_posture">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Start posture" %}</label>
+                            <label class="form-label">{% trans "Start posture" %}</label>
                             {{ emg_surface_placement_form.start_posture }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row" id="div-orientation">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Orientation" %} </label>
+                            <label class="form-label">{% trans "Orientation" %} </label>
                             {{ emg_surface_placement_form.orientation }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row" id="div-fixation_on_the_skin">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Fixation on the skin" %} </label>
+                            <label class="form-label">{% trans "Fixation on the skin" %} </label>
                             {{ emg_surface_placement_form.fixation_on_the_skin }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row" id="div-reference_electrode">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Reference electrode" %} </label>
+                            <label class="form-label">{% trans "Reference electrode" %} </label>
                             {{ emg_surface_placement_form.reference_electrode }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row" id="div-clinical_test">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Clinical test" %} </label>
+                            <label class="form-label">{% trans "Clinical test" %} </label>
                             {{ emg_surface_placement_form.clinical_test }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row" id="div-method_of_insertion">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Method of insertion" %} </label>
+                            <label class="form-label">{% trans "Method of insertion" %} </label>
                             {{ emg_intramuscular_placement_form.method_of_insertion }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row" id="div-depth_of_insertion">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Depth of insertion" %} </label>
+                            <label class="form-label">{% trans "Depth of insertion" %} </label>
                             {{ emg_intramuscular_placement_form.depth_of_insertion }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12">
+                    <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label class="control-label">{% trans "Remarks" %} </label>
+                            <label class="form-label">{% trans "Remarks" %} </label>
                             {{ emg_electrode_placement_setting_form.remarks }}
-                            <div class="help-block with-errors"></div>
+                            <div class="form-text with-errors text-danger"></div>
                         </div>
                     </div>
                 </div>
 
                 {% if not editing and not creating and can_change %}
-                    <div class="btn-group pull-left">
+                    <div class="btn-group">
                         <a href="/experiment/emg_electrode_setting/{{ emg_electrode_setting.id }}/edit" class="btn btn-primary">{% trans "Edit" %}</a>
                     </div>
                 {% endif %}
@@ -205,10 +185,10 @@
 
             {% if not editing %}
 
-                <div class="container span6 offset3 well ">
-                    <h4><span class="glyphicon glyphicon-cog"></span> {% trans "Amplifier settings:" %}</h4>
+                <div class="my-3 p-3 bg-body rounded shadow-sm">
+                    <h4><span class="fa-fw fa fa-cog"></span> {% trans "Amplifier settings:" %}</h4>
                     <div class="form-group">
-                        <table class="table table-striped col-xs-12 col-md-12">
+                        <table class="table table-striped col-12 col-lg-12">
                             <thead>
                             <tr>
                                 <th>{% trans "Type" %}</th>
@@ -246,7 +226,7 @@
                                     </td>
                                     <td>
                                         {% if emg_electrode_setting.emg_preamplifier_setting %}
-                                            <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                            <a class="btn fa-fw fa fa-remove" data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                onclick="show_modal_remove_setting('preamplifier');"></a>
                                         {% endif %}
                                     </td>
@@ -279,7 +259,7 @@
                                     </td>
                                     <td>
                                         {% if emg_electrode_setting.emg_amplifier_setting %}
-                                            <a class="btn glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
+                                            <a class="btn fa-fw fa fa-remove" data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Delete setting from list" %}" style="color: indianred; vertical-align: -5%; padding-left: 0;"
                                                onclick="show_modal_remove_setting('amplifier');"></a>
                                         {% endif %}
                                     </td>
@@ -293,25 +273,25 @@
 
             {% endif %}
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar justify-content-between" role="toolbar">
                 {% if editing or creating%}
-                    <div class="btn-group pull-right">
+                    <div class="btn-group float-end">
                         <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save setting" %}</button>
                     </div>
                     {% if creating %}
-                        <div class="btn-group pull-right">
+                        <div class="btn-group float-end">
                             <a href="/experiment/emg_setting/{{ emg_setting.id }}"
-                               class="btn" style="background-color: #f5f5f5">{% trans "Cancel" %}</a>
+                               class="btn btn-light">{% trans "Cancel" %}</a>
                         </div>
                     {% else %}
-                        <div class="btn-group pull-right">
+                        <div class="btn-group float-end">
                             <a href="/experiment/emg_electrode_setting/{{ emg_electrode_setting.id }}"
-                               class="btn" style="background-color: #f5f5f5">{% trans "Cancel" %}</a>
+                               class="btn btn-light">{% trans "Cancel" %}</a>
                         </div>
                     {% endif %}
                 {% else %}
-                    <div class="btn-group pull-right">
-                        <a href="/experiment/emg_setting/{{ emg_setting.id }}" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+                    <div class="btn-group float-end">
+                        <a href="/experiment/emg_setting/{{ emg_setting.id }}" class="btn btn-light">{% trans "Back" %}</a>
                     </div>
                 {% endif %}
             </div>
@@ -326,7 +306,7 @@
                     {% trans "Are you sure you want to delete this setting from list?" %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
                     <button type="submit" id="remove-electrode-setting" class="btn btn-danger" value="remove" name="action">{% trans "Delete" %}</button>
                 </div>
             </div>
@@ -340,6 +320,6 @@
 </div>
 {% endblock %}
 
-{% block script %}
-    <script src="{% static 'quiz/js/emg_electrode_setting_register.js' %}"></script>
+{% block extrascript %}
+    <script type="text/javascript" defer  src={% static "site/js/emg_electrode_setting_register.js" %}></script>
 {% endblock %}

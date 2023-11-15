@@ -1,120 +1,68 @@
-{% load static %}
+{% extends "base/template_registration.html" %}
 
-{% load i18n admin_static %}
+{% load i18n %}
+
 {% load qdc_tags %}
 
-{% block extrahead %}
-    <title>{% trans "Neuroscience Experiments System - NES" %}</title>
-{% endblock %}
-
-{% block extrastyle %}
-
-    <link href="{% static 'quiz/toastr/toastr.css' %}" rel="stylesheet"/>
-    <link href="{% static 'quiz/bootstrap-3.0.0-dist/css/bootstrap.min.css' %}" rel="stylesheet">
-
-    <style>
-        body {
-            padding-top: 40px;
-            padding-bottom: 40px;
-            background-color: #fff;
-        }
-
-        .form-signin {
-            max-width: 330px;
-            padding: 15px;
-            margin: 0 auto;
-        }
-
-        .form-signin .form-signin-heading,
-        .form-signin .checkbox {
-            margin-bottom: 10px;
-        }
-
-        .form-signin .checkbox {
-            font-weight: normal;
-        }
-
-        .form-signin .form-control {
-            position: relative;
-            height: auto;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        .form-signin .form-control:focus {
-            z-index: 2;
-        }
-
-        .form-signin input[type="email"] {
-            margin-bottom: -1px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-
-        .form-signin input[type="password"] {
-            margin-bottom: 10px;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-        }
-    </style>
-
-{% endblock %}
 {% block content %}
-
     <div class="container">
-
-        <form method="post" class="form-signin" action="{% url 'login' %}">
+        <form method="post" class="form-signin needs-validation" action="{% url 'login' %}" data-toggle="validator">
             {% csrf_token %}
 
-            <h2 class="form-signin-heading">NES</h2>
+            <h1 class="mb-3 fw-normal d-flex justify-content-center">
+                NES
+            </h1>
 
-            <div class="container span6 offset3 well" style="margin-bottom: 0">
+            <br>
 
-                <div class="row" align="center">
-                    <span style="color: #428bca; font-size: 50px" class="glyphicon glyphicon-user"></span>
-                    <br/><br/>
-                </div>
-
-                <input id="id_username" type="text" class="form-control" placeholder="{% trans "User" %}" name="username" required=""
-                       autofocus=""/>
-                <br/>
-
-                <input type="password" class="form-control" name="password" placeholder="{% trans "Password" %}" required=""/>
-
-                <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">{% trans "Login" %}</button>
-
-                <input type="hidden" name="next" value="{{ next }}"/>
-
-                <div class="checkbox">
-                    <label>
-                        <a href="/user/password/reset">{% trans "I forgot my password" %}</a>
-                    </label>
-                </div>
-
+            <div class="mb-4 d-flex justify-content-center">
+                <span style="font-size: 50px" class="fa-fw fa fa-user-circle text-primary"></span>
             </div>
 
-            <h6 style="margin-top: 0; text-align: right; font-family: 'Comic Sans MS'; font-size: 14px; color: blueviolet;">
-                v{% settings_value "VERSION" %}
-            </h6>
+            <div class="form-floating">
+                <input id="id_username"
+                       type="text"
+                       class="form-control"
+                       placeholder="{% trans "User" %}"
+                       name="username"
+                       autocomplete="username"
+                       required
+                       autofocus
+                       pattern="[A-Za-z0-9._]{1,}"
+                       title="{% trans "Username must contain only letters, numbers and periods(.)" %}" />
+                <label for="id_username">
+                    {% trans "User" %}
+                </label>
+            </div>
 
+            <div class="form-floating">
+                <input id="id_password" type="password" class="form-control" name="password" autocomplete="current-password" placeholder="{% trans "Password" %}" required />
+                <label for="id_password">
+                    {% trans "Password" %}
+                </label>
+            </div>
+
+            <br>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">
+                {% trans "Login" %}
+            </button>
+
+            <input type="hidden" name="next" value="{{ next }}" />
+
+            <div class="checkbox">
+                <a href="{% url "password_reset" %}">{% trans "I forgot my password" %}</a>
+            </div>
+
+            <p style="margin-top: 0; text-align: right; font-family: 'Comic Sans MS'; font-size: 14px; color: blueviolet;">
+                {% settings_value "VERSION" %}
+            </p>
         </form>
-
     </div>
+{% endblock content %}
 
-    <script src="{% static 'quiz/jquery/jquery-1.9.1.min.js' %}"></script>
-    <script src="{% static 'quiz/jquery/jquery-migrate-1.2.1.min.js' %}"></script>
-    <script src="{% static 'quiz/toastr/toastr.js' %}"></script>
-    <script src="{% static 'quiz/js/quiz.js' %}"></script>
-    <script type="text/javascript" src="{% url 'javascript_catalog' %}"></script>
+{% block extrascript %}
     {% if form.non_field_errors %}
-        <script type="text/javascript">
-            {% for error in form.non_field_errors %}
-                showErrorMessageTemporary(gettext('{{ error }}'));
-            {% endfor %}
-        </script>
+        <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">{% for error in form.non_field_errors %}showErrorMessageTemporary(gettext('{{ error }}'));{% endfor %}</script>
     {% endif %}
-
-{% endblock %}
+{% endblock extrascript %}

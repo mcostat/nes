@@ -1,7 +1,7 @@
-from os import path, makedirs
+from os import makedirs, path
 
 
-def create_directory(basedir, path_to_create):
+def create_directory(basedir: str, path_to_create: str) -> tuple[str, str]:
     """
     Create a directory
 
@@ -14,16 +14,14 @@ def create_directory(basedir, path_to_create):
 
     complete_path = ""
 
-    if not path.exists(basedir.encode('utf-8')):
+    if not path.exists(basedir.encode("utf-8")):
         return "Base path does not exist", complete_path
 
-    complete_path = path.join(basedir, path_to_create)
+    complete_path: str = path.normpath(path.join(basedir, path_to_create))
+    if not complete_path.startswith(basedir):
+        raise ValueError("Invalid path")
 
-    # print("encode: ", sys.getfilesystemencoding(), sys.getdefaultencoding())
-    # print("create_directory-encode:", complete_path.encode('utf-8'))
-    if not path.exists(complete_path.encode('utf-8')):
-        # print("create_directory:", basedir, path_to_create)
-        # print("create_directory:", complete_path)
-        makedirs(complete_path.encode('utf-8'))
+    if not path.exists(complete_path.encode("utf-8")):
+        makedirs(complete_path.encode("utf-8"))
 
     return "", complete_path

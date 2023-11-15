@@ -1,11 +1,11 @@
 {% extends "experiment/component_template.html" %}
 
-{% load i18n admin_static %}
+{% load i18n %}
 
 {% block breadcrumb %}
 
     {% if creating %}
-        <li class="active">{% trans "New EMG" %}</li>
+        <li class="breadcrumb-item active">{% trans "New EMG" %}</li>
     {% endif %}
 
 {% endblock %}
@@ -26,17 +26,17 @@
 
 {% block extra_fields %}
     <div class="row">
-        <div class="col-xs-6 col-sm-6">
+        <div class="col-6 col-sm-6">
             <div class="form-group">
-                <label class="control-label">{% trans "EMG setting" %}<b style="color: red;">*</b></label>
+                <label class="form-label">{% trans "EMG setting" %}<b class="text-danger">*</b></label>
                     {{ specific_form.emg_setting }}
-                <div class="help-block with-errors"></div>
+                <div class="form-text with-errors text-danger"></div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {# In case of inclusion of javascript, insert parent template scripts #}
-{#{% block script %}#}
+{#{% block extrascript %}#}
 {# Uncomment this block and insert parent template scripts #}
 {#{% endblock %}#}

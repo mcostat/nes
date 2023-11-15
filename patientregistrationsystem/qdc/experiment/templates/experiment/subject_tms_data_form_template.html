@@ -1,120 +1,58 @@
-{% extends "quiz/template.html" %}
-{% load i18n admin_static %}
+{% extends "base/template.html" %}
+
+{% load i18n static %}
 {% load subjects_tags %}
 
-{% block header %}
-    <style>
-        {#  based on tip from http://stackoverflow.com/questions/21168521/scrollable-table-with-fixed-header-in-bootstrap #}
-        .header-fixed {
-            width: 100%
-        }
-
-        .header-fixed > thead,
-        .header-fixed > tbody,
-        .header-fixed > thead > tr,
-        .header-fixed > tbody > tr,
-        .header-fixed > thead > tr > th,
-        .header-fixed > tbody > tr > td {
-            display: block;
-        }
-
-        .header-fixed > tbody > tr:after,
-        .header-fixed > thead > tr:after {
-            content: ' ';
-            display: block;
-            visibility: hidden;
-            clear: both;
-        }
-
-        .header-fixed > tbody {
-            overflow-y: auto;
-            height: 400px;
-        }
-
-        .header-fixed > tbody > tr > td,
-        .header-fixed > thead > tr > th {
-            width: 50%;
-            float: left;
-        }
-    </style>
-{% endblock %}
-
 {% block form %}
-    <div class="row">
     <form id="user_form" method="post" data-toggle="validator" enctype="multipart/form-data">
     {% csrf_token %}
 {% endblock %}
 
 {% block content %}
+    <div class="tab-pane fade show active" id="tmsDataProjectBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a></li>
 
-    <div class="tab-pane fade in active" id="tmsDataProjectBreadCrumb">
-        <div class="col-md-10">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
-                <li><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
-                <li><a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a></li>
-
-                <li><a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/tms">{% get_name_or_code subject.patient.id %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/tms">{% get_name_or_code subject.patient.id %}</a></li>
 
                 {% if creating %}
-                    <li class="active">{% trans "New TMS data file" %}</li>
+                    <li class="breadcrumb-item active">{% trans "New TMS data file" %}</li>
                 {% else %}
-                    <li class="active">{{ tms_data_form.description.value }}</li>
+                    <li class="breadcrumb-item active">{{ tms_data_form.description.value }}</li>
                 {% endif %}
 
             </ol>
-        </div>
+        </nav>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %}
-
     {% if tms_data_form.errors %}
-        <script type="text/javascript">
+        <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
             showErrorMessage(gettext('Please, correct fields highlighted.'))
         </script>
     {% endif %}
 
-    <div class="tab-pane fade in active" id="menuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
-
+    <div class="tab-pane fade show active" id="menuUserTab">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
                 <h4>{% trans "TMS data collection" %}</h4>
-
+                <hr>
                 <ul class="nav nav-tabs">
 
                     {% if creating or editing %}
-                        <li {% if tab == '1' %}class="active"{% else %}class="disabled"{% endif %}><a href="#">{% trans "Data collection" %}</a></li>
-                        <li {% if tab == '2' %}class="active"{% else %}class="disabled"{% endif %}><a href="#">{% trans "Position setting" %}</a>
+                        <li {% if tab == "1" %}class="active"{% else %}class="disabled"{% endif %}><a href="#">{% trans "Data collection" %}</a></li>
+                        <li {% if tab == "2" %}class="active"{% else %}class="disabled"{% endif %}><a href="#">{% trans "Position setting" %}</a>
                         </li>
                     {% else %}
-                        <li {% if tab == '1' %}class="active"{% endif %}>
+                        <li {% if tab == "1" %}class="active"{% endif %}>
                             <a href="/experiment/tms_data/{{ tms_data.id }}/data_collection">{% trans "Data collection" %}</a>
                         </li>
 
-                        <li {% if tab == '2' %}class="active"{% endif %}>
+                        <li {% if tab == "2" %}class="active"{% endif %}>
                             <a href="/experiment/tms_data/{{ tms_data.id }}/position_setting">{% trans "Position setting" %}</a>
                         </li>
                     {% endif %}
@@ -123,46 +61,43 @@
 
                 <div class="tab-content">
 
-                    <div id="data_collection" {% if tab == '1' %}class="tab-pane fade in active"{% else %}class="tab-pane fade"{% endif %}>
+                    <div id="data_collection" {% if tab == "1" %}class="tab-pane fade show active"{% else %}class="tab-pane fade"{% endif %}>
 
                     </div>
 
-                    <div id="tms_position" {% if tab == '2' %}class="tab-pane fade in active"{% else %}class="tab-pane fade"{% endif %}>
+                    <div id="tms_position" {% if tab == "2" %}class="tab-pane fade show active"{% else %}class="tab-pane fade"{% endif %}>
 
                     </div>
 
                 </div>
             </div>
 
-            <div class="btn-toolbar">
-                <div class="btn-group pull-left">
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                <div class="btn-group">
                     {% if not editing and perms.experiment.delete_researchproject and can_change %}
                         <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
                     {% endif %}
                 </div>
                 {% if editing %}
-                    <div class="btn-group pull-right">
+                    <div class="btn-group float-end">
                         <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save" %}</button>
-                    </div>
-                    <div class="btn-group pull-right">
 
                         {% if creating %}
                             <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/tms"
-                               class="btn" style="background-color: #f5f5f5">{% trans "Cancel" %}</a>
+                               class="btn btn-light">{% trans "Cancel" %}</a>
                         {% else %}
                             <a href="/experiment/tms_data/{{ tms_data.id }}/{{ tab }}"
-                               class="btn" style="background-color: #f5f5f5">{% trans "Cancel" %}</a>
+                               class="btn btn-light">{% trans "Cancel" %}</a>
                         {% endif %}
 
                     </div>
                 {% else %}
-                    <div class="btn-group pull-right">
-                        <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/tms" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+                    <div class="btn-group float-end">
+                        <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/tms" class="btn btn-light">{% trans "Back" %}</a>
                     </div>
                 {% endif %}
 
             </div>
-        </div>
     </div>
 
     <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -172,23 +107,22 @@
                     {% trans "Are you sure you want to delete TMS data?" %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="disableRemoveButton()">{% trans "Cancel" %}</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="disableRemoveButton()">{% trans "Cancel" %}</button>
                     <button type="submit" class="btn btn-danger" id="remove_button" value="remove" disabled name="action">{% trans "Delete" %}</button>
                 </div>
             </div>
         </div>
     </div>
 
-{% endblock %}
+{% endblock content %}
 
 {% block end_form %}
     </form>
-    </div>
-{% endblock %}
+{% endblock end_form %}
 
-{% block script %}
-    <script src="{% static 'quiz/js/research_project.js' %}"></script>
-    <script>
+{% block extrascript %}
+    <script type="text/javascript" defer  src={% static "site/js/research_project.js" %}></script>
+    <script type="text/javascript" nonce="{{ request.csp_nonce }}">
         $(document).ready(function () {
             var $id_file_format = $("#id_file_format");
             var $id_file_format_description = $("#id_file_format_description");
@@ -210,12 +144,12 @@
 
             {% if file_format_list %}
                 {% for item in file_format_list %}
-                    {% if item.code == 'other' %}
+                    {% if item.code == "other" %}
                         $other_code = {{ item.id }};
-                    {% elif item.code == 'txt' %}
+                    {% elif item.code == "txt" %}
                         $txt_code = {{ item.id }};
                         $txt_extension = "{{ item.extension }}";
-                    {% elif item.code == 'NEO-RawBinarySignalIO' %}
+                    {% elif item.code == "NEO-RawBinarySignalIO" %}
                         $raw_code = {{ item.id }};
                         $raw_extension = "{{ item.extension }}";
                     {% endif %}
@@ -303,4 +237,4 @@
             }));
         });
     </script>
-{% endblock %}
+{% endblock extrascript %}

@@ -1,104 +1,71 @@
-{% extends "quiz/template.html" %}
+{% extends "base/template.html" %}
 
 {% load i18n %}
 
-{% block activeSetup %}class="active"{% endblock %}
+{% block activeSetup %} active{% endblock activeSetup %}
 
 {% block content %}
-
-    {% if messages %}
-        {% for message in messages %}
-
-            {% if message.tags == "success" %}
-                <script>showSuccessMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "warning" %}
-                <script>showWarningMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "error" %}
-                <script>showErrorMessage('{{ message }}')</script>
-            {% endif %}
-
-            {% if message.tags == "info" %}
-                <script>showInfoMessage('{{ message }}')</script>
-            {% endif %}
-
-        {% endfor %}
-    {% endif %}
-
-    <div class="tab-pane fade in active" id="tmsLocalizationSystemBreadCrumb">
-        <div class="col-md-10">
-            <ol class="breadcrumb">
-                <li><a href="/home">{% trans "Home" %}</a></li>
-                <li><a href="/experiment/setup">{% trans "Set up" %}</a></li>
-                <li class="active">{% trans "TMS localization system" %}</li>
+    <div class="tab-pane fade show active" id="tmsLocalizationSystemBreadCrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item"><a href="/experiment/setup">{% trans "Set up" %}</a></li>
+                <li class="breadcrumb-item active">{% trans "TMS localization system" %}</li>
             </ol>
-        </div>
+        </nav>
     </div>
 
-    <div class="tab-pane fade in active" id="mainMenuUserTab">
-        <div class="col-md-10">
-            <div class="container span6 offset3 well ">
-                <h4>{% trans "TMS localization system list" %}</h4>
-                <div class="form-group">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>{% trans "Name" %}</th>
-                                <th>{% trans "Description" %}</th>
-                                <th>{% trans "Brain area" %}</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for tms_localization_system in tms_localization_systems %}
-                            <tr>
-                                <td>
-                                    <a data-toggle="tooltip" data-placement="left" title="{% trans "Visualize" %}"
-                                       href="/experiment/tms_localization_system/{{ tms_localization_system.id }}">
-                                        {{ tms_localization_system.name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ tms_localization_system.description }}
-                                </td>
-                                <td>
-                                    {{ tms_localization_system.brain_area }}
-                                </td>
-                                <td>
-                                    {% if tms_localization_system.tms_localization_system_image %}
-                                        <span class="glyphicon glyphicon-camera"></span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% if perms.experiment.view_equipment %}
-                    <div class="btn-group pull-left">
-                        <a href="/experiment/tms_localization_system/new/" class="btn btn-primary">{% trans "Insert new localization system" %}</a>
-                    </div>
-                {% endif %}
+    <div class="tab-pane fade show active" id="mainMenuUserTab">
+        <div class="my-3 p-3 bg-body rounded shadow-sm">
+            <h4>{% trans "TMS localization system list" %}</h4>
+            <hr>
+            <div class="form-group">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "Description" %}</th>
+                            <th>{% trans "Brain area" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for tms_localization_system in tms_localization_systems %}
+                        <tr>
+                            <td>
+                                <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Visualize" %}"
+                                    href="/experiment/tms_localization_system/{{ tms_localization_system.id }}">
+                                    {{ tms_localization_system.name }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ tms_localization_system.description }}
+                            </td>
+                            <td>
+                                {{ tms_localization_system.brain_area }}
+                            </td>
+                            <td>
+                                {% if tms_localization_system.tms_localization_system_image %}
+                                    <span class="fa-fw fa fa-camera"></span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-            <div class="btn-toolbar">
-                <div class="btn-group pull-right">
-                    <a href="/experiment/setup" class="btn" style="background-color: #f5f5f5">{% trans "Back" %}</a>
+            {% if perms.experiment.view_equipment %}
+                <br>
+                <div class="btn-group">
+                    <a href="/experiment/tms_localization_system/new/" class="btn btn-primary">{% trans "Insert new localization system" %}</a>
                 </div>
-            </div>
+            {% endif %}
+        </div>
 
+        <div class="btn-group float-end">
+            <a href="/experiment/setup" class="btn btn-light">{% trans "Back" %}</a>
         </div>
     </div>
 
 {% endblock %}
 
-{% block script %}
-    <script>
-        $(function(){
-            $("[data-toggle=tooltip]").tooltip();
-        });
-    </script>
-{% endblock %}

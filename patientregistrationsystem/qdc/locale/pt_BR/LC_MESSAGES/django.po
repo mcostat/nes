@@ -4,719 +4,862 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 13:27-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2023-11-08 17:26-0300\n"
+"PO-Revision-Date: 2023-11-08 17:45-0300\n"
+"Last-Translator:   <lapis@peb.ufrj.br>\n"
+"Language-Team: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: add_initial_data.py:13
+#: add_initial_data.py:14
 msgid "Can add alcohol frequency"
 msgstr "Pode adicionar frequência de etilismo"
 
-#: add_initial_data.py:14
-msgid "Can add alcohol period"
-msgstr "Pode adicionar period de etilismo"
-
 #: add_initial_data.py:15
+msgid "Can add alcohol period"
+msgstr "Pode adicionar período de etilismo"
+
+#: add_initial_data.py:16
 msgid "Can add amount cigarettes"
 msgstr "Pode adicionar quantidade de cigarros"
 
-#: add_initial_data.py:16
-msgid "Can add block"
-msgstr "Pode adicionar conjunnto de passos"
-
 #: add_initial_data.py:17
+msgid "Can add block"
+msgstr "Pode adicionar conjunto de passos"
+
+#: add_initial_data.py:18
 msgid "Can add classification of diseases"
 msgstr "Pode adicionar classificação de doenças"
 
-#: add_initial_data.py:18
+#: add_initial_data.py:19
 msgid "Can add complementary exam"
 msgstr "Pode adicionar exame complementar"
 
-#: add_initial_data.py:19
+#: add_initial_data.py:20
 msgid "Can add component"
 msgstr "Pode adicionar componente"
 
-#: add_initial_data.py:20
-msgid "Can add component configuration"
-msgstr "Pode adicionar component configuration"
-
 #: add_initial_data.py:21
+msgid "Can add component configuration"
+msgstr "Pode adicionar configuração de componentes"
+
+#: add_initial_data.py:22
 msgid "Can add content type"
 msgstr "Pode adicionar tipo"
 
-#: add_initial_data.py:22
+#: add_initial_data.py:23
 msgid "Can add diagnosis"
 msgstr "Pode adicionar diagnóstico"
 
-#: add_initial_data.py:23
+#: add_initial_data.py:24
 msgid "Can add exam file"
 msgstr "Pode adicionar arquivo de exame"
 
-#: add_initial_data.py:24
+#: add_initial_data.py:25
 msgid "Can add experiment"
 msgstr "Pode adicionar experimento"
 
-#: add_initial_data.py:25
+#: add_initial_data.py:26
 msgid "Can add flesh tone"
 msgstr "Pode adicionar cor da pele"
 
-#: add_initial_data.py:26
+#: add_initial_data.py:27
 msgid "Can add gender"
 msgstr "Pode adicionar sexo"
 
-#: add_initial_data.py:27 add_initial_data.py:28
+#: add_initial_data.py:28 add_initial_data.py:29
 msgid "Can add group"
 msgstr "Pode adicionar grupo"
 
-#: add_initial_data.py:29
+#: add_initial_data.py:30
 msgid "Can add historical experiment"
 msgstr "Pode adicionar histórico de experimento"
 
-#: add_initial_data.py:30
+#: add_initial_data.py:31
 msgid "Can add historical patient"
 msgstr "Pode adicionar histórico de participante"
 
-#: add_initial_data.py:31
+#: add_initial_data.py:32
 msgid "Can add historical questionnaire response"
 msgstr "Pode adicionar resposta de questionário"
 
-#: add_initial_data.py:32
+#: add_initial_data.py:33
 msgid "Can add historical social demographic data"
 msgstr "Pode adicionar dados sociodemográficos"
 
-#: add_initial_data.py:33
+#: add_initial_data.py:34
 msgid "Can add historical social history data"
 msgstr "Pode adicionar histórico de história social"
 
-#: add_initial_data.py:34
+#: add_initial_data.py:35
 msgid "Can add historical telephone"
 msgstr "Pode adicionar histórico de telefone"
 
-#: add_initial_data.py:35
+#: add_initial_data.py:36
 msgid "Can add instruction"
 msgstr "Pode adicionar instrução"
 
-#: add_initial_data.py:36
+#: add_initial_data.py:37
 msgid "Can add keyword"
 msgstr "Pode adicionar palavra-chave"
 
-#: add_initial_data.py:37
+#: add_initial_data.py:38
 msgid "Can add log entry"
 msgstr "Pode adicionar log de entrada"
 
-#: add_initial_data.py:38
+#: add_initial_data.py:39
 msgid "Can add marital status"
 msgstr "Pode adicionar estado civil"
 
-#: add_initial_data.py:39
+#: add_initial_data.py:40
 msgid "Can add medical record data"
 msgstr "Pode adicionar dados de registro médico"
 
-#: add_initial_data.py:40
+#: add_initial_data.py:41
 msgid "Can add migration history"
 msgstr "Pode adicionar histórico de migração"
 
-#: add_initial_data.py:41
+#: add_initial_data.py:42
 msgid "Can add patient"
 msgstr "Pode adicionar participante"
 
-#: add_initial_data.py:42
+#: add_initial_data.py:43
 msgid "Can add pause"
 msgstr "Pode adicionar pausa"
 
-#: add_initial_data.py:43
+#: add_initial_data.py:44
 msgid "Can add payment"
 msgstr "Pode adicionar pagamento"
 
-#: add_initial_data.py:44
+#: add_initial_data.py:45
 msgid "Can add permission"
 msgstr "Pode adicionar permissão"
 
-#: add_initial_data.py:45
+#: add_initial_data.py:46
 msgid "Can add questionnaire"
 msgstr "Pode adicionar questinário"
 
-#: add_initial_data.py:46 add_initial_data.py:47
+#: add_initial_data.py:47 add_initial_data.py:48
 msgid "Can add questionnaire response"
 msgstr "Pode adicionar resposta de questionário"
 
-#: add_initial_data.py:48
+#: add_initial_data.py:49
 msgid "Can add religion"
 msgstr "Pode adicionar religião"
 
-#: add_initial_data.py:49
+#: add_initial_data.py:50
 msgid "Can add research project"
 msgstr "Pode adicionar projeto de pesquisa"
 
-#: add_initial_data.py:50
-msgid "Can add schooling"
-msgstr "Pode adicionar grau de instrução"
-
 #: add_initial_data.py:51
+msgid "Can add schooling"
+msgstr "Pode adicionar configuração de componentes"
+
+#: add_initial_data.py:52
 msgid "Can add session"
 msgstr "Pode adicionar sessão"
 
-#: add_initial_data.py:52
+#: add_initial_data.py:53
 msgid "Can add social demographic data"
 msgstr "Pode adicionar dados sociodemográficos"
 
-#: add_initial_data.py:53
+#: add_initial_data.py:54
 msgid "Can add social history data"
 msgstr "Pode adicionar dados de história social"
 
-#: add_initial_data.py:54
+#: add_initial_data.py:55
 msgid "Can add stimulus"
 msgstr "Pode adicionar estímulo"
 
-#: add_initial_data.py:55
+#: add_initial_data.py:56
 msgid "Can add stimulus type"
 msgstr "Pode adicionar tipo de estímulo"
 
-#: add_initial_data.py:56
+#: add_initial_data.py:57
 msgid "Can add subject"
 msgstr "Pode adicionar participante"
 
-#: add_initial_data.py:57
+#: add_initial_data.py:58
 msgid "Can add subject of group"
 msgstr "Pode adicionar grupo de participante"
 
-#: add_initial_data.py:58
+#: add_initial_data.py:59
 msgid "Can add survey"
 msgstr "Pode adicionar pesquisa"
 
-#: add_initial_data.py:59
+#: add_initial_data.py:60
 msgid "Can add task"
 msgstr "Pode adicionar tarefa"
 
-#: add_initial_data.py:60
+#: add_initial_data.py:61
 msgid "Can add task for the experimenter"
 msgstr "Pode adicionar tarefa para o experimentador"
 
-#: add_initial_data.py:61
+#: add_initial_data.py:62
 msgid "Can add telephone"
 msgstr "Pode adicionar telefone"
 
-#: add_initial_data.py:62
+#: add_initial_data.py:63
 msgid "Can add user"
 msgstr "Pode adicionar usuário"
 
-#: add_initial_data.py:63
+#: add_initial_data.py:64
 msgid "Can add user profile"
 msgstr "Pode adicionar perfil do usuário"
 
-#: add_initial_data.py:64
+#: add_initial_data.py:65
 msgid "Can change alcohol frequency"
 msgstr "Pode alterar frequência de etilismo"
 
-#: add_initial_data.py:65
+#: add_initial_data.py:66
 msgid "Can change alcohol period"
 msgstr "Pode alterar periodo de etilismo"
 
-#: add_initial_data.py:66
+#: add_initial_data.py:67
 msgid "Can change amount cigarettes"
 msgstr "Pode alterar quantidade de cigarros"
 
-#: add_initial_data.py:67
+#: add_initial_data.py:68
 msgid "Can change block"
 msgstr "Pode alterar participante"
 
-#: add_initial_data.py:68
+#: add_initial_data.py:69
 msgid "Can change classification of diseases"
 msgstr "Pode alterar classificação de doenças"
 
-#: add_initial_data.py:69
+#: add_initial_data.py:70
 msgid "Can change complementary exam"
 msgstr "Pode alterar exame complementar"
 
-#: add_initial_data.py:70
+#: add_initial_data.py:71
 msgid "Can change component"
 msgstr "Pode alterar componente"
 
-#: add_initial_data.py:71
+#: add_initial_data.py:72
 msgid "Can change component configuration"
 msgstr "Pode alterar component configuration"
 
-#: add_initial_data.py:72
+#: add_initial_data.py:73
 msgid "Can change content type"
 msgstr "Pode alterar tipo de conteúdo"
 
-#: add_initial_data.py:73
+#: add_initial_data.py:74
 msgid "Can change diagnosis"
 msgstr "Pode alterar diagnóstico"
 
-#: add_initial_data.py:74
+#: add_initial_data.py:75
 msgid "Can change exam file"
 msgstr "Pode alterar arquivo de exame"
 
-#: add_initial_data.py:75
+#: add_initial_data.py:76
 msgid "Can change experiment"
 msgstr "Pode alterar experimento"
 
-#: add_initial_data.py:76
+#: add_initial_data.py:77
 msgid "Can change flesh tone"
 msgstr "Pode alterar cor da pele"
 
-#: add_initial_data.py:77
+#: add_initial_data.py:78
 msgid "Can change gender"
 msgstr "Pode alterar sexo"
 
-#: add_initial_data.py:78 add_initial_data.py:79
+#: add_initial_data.py:79 add_initial_data.py:80
 msgid "Can change group"
 msgstr "Pode alterar grupo"
 
-#: add_initial_data.py:80
+#: add_initial_data.py:81
 msgid "Can change historical experiment"
 msgstr "Pode alterar histórico de experimento"
 
-#: add_initial_data.py:81
+#: add_initial_data.py:82
 msgid "Can change historical patient"
 msgstr "Pode alterar histórico de participante"
 
-#: add_initial_data.py:82
+#: add_initial_data.py:83
 msgid "Can change historical questionnaire response"
 msgstr "Pode alterar histórico de resposta de questionário"
 
-#: add_initial_data.py:83
+#: add_initial_data.py:84
 msgid "Can change historical social demographic data"
 msgstr "Pode alterar dados sociodemográficos"
 
-#: add_initial_data.py:84
+#: add_initial_data.py:85
 msgid "Can change historical social history data"
 msgstr "Pode alterar histórico de história social"
 
-#: add_initial_data.py:85
+#: add_initial_data.py:86
 msgid "Can change historical telephone"
 msgstr "Pode alterar histórico de telefone"
 
-#: add_initial_data.py:86
+#: add_initial_data.py:87
 msgid "Can change instruction"
 msgstr "Pode alterar instrução"
 
-#: add_initial_data.py:87
+#: add_initial_data.py:88
 msgid "Can change keyword"
 msgstr "Pode alterar palavra-chave"
 
-#: add_initial_data.py:88
+#: add_initial_data.py:89
 msgid "Can change log entry"
 msgstr "Pode alterar log de entrada"
 
-#: add_initial_data.py:89
+#: add_initial_data.py:90
 msgid "Can change marital status"
 msgstr "Pode alterar estado civil"
 
-#: add_initial_data.py:90
+#: add_initial_data.py:91
 msgid "Can change medical record data"
 msgstr "Pode alterar dados de registro médico"
 
-#: add_initial_data.py:91
+#: add_initial_data.py:92
 msgid "Can change migration history"
 msgstr "Pode alterar histórico de migração"
 
-#: add_initial_data.py:92
+#: add_initial_data.py:93
 msgid "Can change patient"
 msgstr "Pode alterar participante"
 
-#: add_initial_data.py:93
+#: add_initial_data.py:94
 msgid "Can change pause"
 msgstr "Pode alterar pausa"
 
-#: add_initial_data.py:94
+#: add_initial_data.py:95
 msgid "Can change payment"
 msgstr "Pode alterar pagamento"
 
-#: add_initial_data.py:95
+#: add_initial_data.py:96
 msgid "Can change permission"
 msgstr "Pode alterar permissão"
 
-#: add_initial_data.py:96
+#: add_initial_data.py:97
 msgid "Can change questionnaire"
 msgstr "Pode alterar questinário"
 
-#: add_initial_data.py:97 add_initial_data.py:98
+#: add_initial_data.py:98 add_initial_data.py:99
 msgid "Can change questionnaire response"
 msgstr "Pode alterar respostas do questionário"
 
-#: add_initial_data.py:99
+#: add_initial_data.py:100
 msgid "Can change religion"
 msgstr "Pode alterar religião"
 
-#: add_initial_data.py:100
+#: add_initial_data.py:101
 msgid "Can change research project"
 msgstr "Pode alterar projeto de pesquisa"
 
-#: add_initial_data.py:101
+#: add_initial_data.py:102
 msgid "Can change research project created by others"
 msgstr "Pode alterar projeto de pesquisa criado por outros"
 
-#: add_initial_data.py:102
+#: add_initial_data.py:103
 msgid "Can change schooling"
 msgstr "Pode alterar grau de instrução"
 
-#: add_initial_data.py:103
+#: add_initial_data.py:104
 msgid "Can change session"
 msgstr "Pode alterar sessão"
 
-#: add_initial_data.py:104
+#: add_initial_data.py:105
 msgid "Can change social demographic data"
 msgstr "Pode alterar dados sociodemográficos"
 
-#: add_initial_data.py:105
+#: add_initial_data.py:106
 msgid "Can change social history data"
 msgstr "Pode alterar dados de história social"
 
-#: add_initial_data.py:106
+#: add_initial_data.py:107
 msgid "Can change stimulus"
 msgstr "Pode alterar estímulo"
 
-#: add_initial_data.py:107
+#: add_initial_data.py:108
 msgid "Can change stimulus type"
 msgstr "Pode alterar tipo de estímulo"
 
-#: add_initial_data.py:108
+#: add_initial_data.py:109
 msgid "Can change subject"
 msgstr "Pode alterar participante"
 
-#: add_initial_data.py:109
+#: add_initial_data.py:110
 msgid "Can change subject of group"
 msgstr "Pode alterar grupo de participante"
 
-#: add_initial_data.py:110
+#: add_initial_data.py:111
 msgid "Can change survey"
 msgstr "Pode alterar pesquisa"
 
-#: add_initial_data.py:111
+#: add_initial_data.py:112
 msgid "Can change task"
 msgstr "Pode alterar tarefa"
 
-#: add_initial_data.py:112
+#: add_initial_data.py:113
 msgid "Can change task for the experimenter"
 msgstr "Pode alterar tarefa para o experimentador"
 
-#: add_initial_data.py:113
+#: add_initial_data.py:114
 msgid "Can change telephone"
 msgstr "Pode alterar telefone"
 
-#: add_initial_data.py:114
+#: add_initial_data.py:115
 msgid "Can change user"
 msgstr "Pode alterar usuário"
 
-#: add_initial_data.py:115
+#: add_initial_data.py:116
 msgid "Can change user profile"
 msgstr "Pode alterar perfil do usuário"
 
-#: add_initial_data.py:116
+#: add_initial_data.py:117
 msgid "Can delete alcohol frequency"
 msgstr "Pode remover frequência de etilismo"
 
-#: add_initial_data.py:117
+#: add_initial_data.py:118
 msgid "Can delete alcohol period"
 msgstr "Pode remover período de etilismo"
 
-#: add_initial_data.py:118
+#: add_initial_data.py:119
 msgid "Can delete amount cigarettes"
 msgstr "Pode remover quantidade de cigarros"
 
-#: add_initial_data.py:119
+#: add_initial_data.py:120
 msgid "Can delete block"
 msgstr "Pode remover participante"
 
-#: add_initial_data.py:120
+#: add_initial_data.py:121
 msgid "Can delete classification of diseases"
 msgstr "Pode remover classificação de doenças"
 
-#: add_initial_data.py:121
+#: add_initial_data.py:122
 msgid "Can delete complementary exam"
 msgstr "Pode remover exame complementar"
 
-#: add_initial_data.py:122
+#: add_initial_data.py:123
 msgid "Can delete component"
 msgstr "Pode remover componente"
 
-#: add_initial_data.py:123
+#: add_initial_data.py:124
 msgid "Can delete component configuration"
 msgstr "Pode remover component configuration"
 
-#: add_initial_data.py:124
+#: add_initial_data.py:125
 msgid "Can delete content type"
 msgstr "Pode remover tipo"
 
-#: add_initial_data.py:125
+#: add_initial_data.py:126
 msgid "Can delete diagnosis"
 msgstr "Pode remover diagnóstico"
 
-#: add_initial_data.py:126
+#: add_initial_data.py:127
 msgid "Can delete exam file"
 msgstr "Pode remover arquivo de exame"
 
-#: add_initial_data.py:127
+#: add_initial_data.py:128
 msgid "Can delete experiment"
 msgstr "Pode remover experimento"
 
-#: add_initial_data.py:128
+#: add_initial_data.py:129
 msgid "Can delete flesh tone"
 msgstr "Pode remover cor da pele"
 
-#: add_initial_data.py:129
+#: add_initial_data.py:130
 msgid "Can delete gender"
 msgstr "Pode remover sexo"
 
-#: add_initial_data.py:130 add_initial_data.py:131
+#: add_initial_data.py:131 add_initial_data.py:132
 msgid "Can delete group"
 msgstr "Pode remover grupo"
 
-#: add_initial_data.py:132
+#: add_initial_data.py:133
 msgid "Can delete historical experiment"
 msgstr "Pode remover histórico de experimento"
 
-#: add_initial_data.py:133
+#: add_initial_data.py:134
 msgid "Can delete historical patient"
 msgstr "Pode remover histórico de participante"
 
-#: add_initial_data.py:134
+#: add_initial_data.py:135
 msgid "Can delete historical questionnaire response"
 msgstr "Pode remover histórico de resposta de questionário"
 
-#: add_initial_data.py:135
+#: add_initial_data.py:136
 msgid "Can delete historical social demographic data"
 msgstr "Pode remover dados sociodemográficos"
 
-#: add_initial_data.py:136
+#: add_initial_data.py:137
 msgid "Can delete historical social history data"
 msgstr "Pode remover histórico de história social"
 
-#: add_initial_data.py:137
+#: add_initial_data.py:138
 msgid "Can delete historical telephone"
 msgstr "Pode remover histórico de telefone"
 
-#: add_initial_data.py:138
+#: add_initial_data.py:139
 msgid "Can delete instruction"
 msgstr "Pode remover instrução"
 
-#: add_initial_data.py:139
+#: add_initial_data.py:140
 msgid "Can delete keyword"
 msgstr "Pode remover palavra-chave"
 
-#: add_initial_data.py:140
+#: add_initial_data.py:141
 msgid "Can delete log entry"
 msgstr "Pode remover log de entrada"
 
-#: add_initial_data.py:141
+#: add_initial_data.py:142
 msgid "Can delete marital status"
 msgstr "Pode remover estado civil"
 
-#: add_initial_data.py:142
+#: add_initial_data.py:143
 msgid "Can delete medical record data"
 msgstr "Pode remover dados de prontuário"
 
-#: add_initial_data.py:143
+#: add_initial_data.py:144
 msgid "Can delete migration history"
 msgstr "Pode remover histórico de migração"
 
-#: add_initial_data.py:144
+#: add_initial_data.py:145
 msgid "Can delete patient"
 msgstr "Pode remover participante"
 
-#: add_initial_data.py:145
+#: add_initial_data.py:146
 msgid "Can delete pause"
 msgstr "Pode remover usuário"
 
-#: add_initial_data.py:146
+#: add_initial_data.py:147
 msgid "Can delete payment"
 msgstr "Pode remover pagamento"
 
-#: add_initial_data.py:147
+#: add_initial_data.py:148
 msgid "Can delete permission"
 msgstr "Pode remover permissão"
 
-#: add_initial_data.py:148
+#: add_initial_data.py:149
 msgid "Can delete questionnaire"
 msgstr "Pode remover questinário"
 
-#: add_initial_data.py:149 add_initial_data.py:150
+#: add_initial_data.py:150 add_initial_data.py:151
 msgid "Can delete questionnaire response"
 msgstr "Pode remover respostas do questionário"
 
-#: add_initial_data.py:151
+#: add_initial_data.py:152
 msgid "Can delete religion"
 msgstr "Pode remover religião"
 
-#: add_initial_data.py:152
+#: add_initial_data.py:153
 msgid "Can delete research project"
 msgstr "Pode remover projeto de pesquisa"
 
-#: add_initial_data.py:153
+#: add_initial_data.py:154
 msgid "Can delete schooling"
 msgstr "Pode remover grau de instrução"
 
-#: add_initial_data.py:154
+#: add_initial_data.py:155
 msgid "Can delete session"
 msgstr "Pode remover sessão"
 
-#: add_initial_data.py:155
+#: add_initial_data.py:156
 msgid "Can delete social demographic data"
 msgstr "Pode remover dados sociodemográficos"
 
-#: add_initial_data.py:156
+#: add_initial_data.py:157
 msgid "Can delete social history data"
 msgstr "Pode remover dados de história social"
 
-#: add_initial_data.py:157
+#: add_initial_data.py:158
 msgid "Can delete stimulus"
 msgstr "Pode remover estímulo"
 
-#: add_initial_data.py:158
+#: add_initial_data.py:159
 msgid "Can delete stimulus type"
 msgstr "Pode remover tipo de estímulo"
 
-#: add_initial_data.py:159
+#: add_initial_data.py:160
 msgid "Can delete subject"
 msgstr "Pode remover participante"
 
-#: add_initial_data.py:160
+#: add_initial_data.py:161
 msgid "Can delete subject of group"
 msgstr "Pode remover grupo de participante"
 
-#: add_initial_data.py:161
+#: add_initial_data.py:162
 msgid "Can delete survey"
 msgstr "Pode remover pesquisa"
 
-#: add_initial_data.py:162
+#: add_initial_data.py:163
 msgid "Can delete task"
 msgstr "Pode remover tarefa"
 
-#: add_initial_data.py:163
+#: add_initial_data.py:164
 msgid "Can delete task for the experimenter"
 msgstr "Pode remover tarefa para o experimentador"
 
-#: add_initial_data.py:164
+#: add_initial_data.py:165
 msgid "Can delete telephone"
 msgstr "Pode remover telefone"
 
-#: add_initial_data.py:165
+#: add_initial_data.py:166
 msgid "Can delete user"
 msgstr "Pode remover usuário"
 
-#: add_initial_data.py:166
+#: add_initial_data.py:167
 msgid "Can delete user profile"
 msgstr "Pode remover perfil do usuário"
 
-#: add_initial_data.py:167
-msgid "Can view medical record"
+#: add_initial_data.py:168
+msgid "Can view medical record data"
 msgstr "Pode ver dados de registro médico"
 
-#: add_initial_data.py:168
+#: add_initial_data.py:169
 msgid "Can view patient"
 msgstr "Pode ver participante"
 
-#: add_initial_data.py:169 add_initial_data.py:170
+#: add_initial_data.py:170 add_initial_data.py:171
 msgid "Can view questionnaire response"
 msgstr "Pode ver resposta de questionário"
 
-#: add_initial_data.py:171
+#: add_initial_data.py:172
 msgid "Can view research project"
 msgstr "Pode ver projeto de pesquisa"
 
-#: add_initial_data.py:172
+#: add_initial_data.py:173
 msgid "Can view survey"
 msgstr "Pode ver questionário"
 
-#: add_initial_data.py:173
-msgid "Can export medical record"
+#: add_initial_data.py:174
+msgid "Can export medical record data"
 msgstr "Pode exportar dados de registro médico"
 
-#: add_initial_data.py:174
+#: add_initial_data.py:175
 msgid "Can export patient"
 msgstr "Pode exportar participante"
 
-#: add_initial_data.py:175
+#: add_initial_data.py:176
 msgid "Can export questionnaire response"
 msgstr "Pode exportar respostas do questionário"
 
-#: add_initial_data.py:176
+#: add_initial_data.py:177
 msgid "Can register equipment"
 msgstr "Pode registrar experimento"
 
-#: add_initial_data.py:177
+#: add_initial_data.py:178
 msgid "Can view sensitive patient data"
 msgstr "Pode ver dados sensíveis de participante"
 
-#: add_initial_data.py:178
+#: add_initial_data.py:179
 msgid "Can send data to plugin"
-msgstr ""
+msgstr "Pode enviar dados para o plugin"
 
-#: add_initial_data.py:182
+#: add_initial_data.py:183
 msgid "Attendant"
 msgstr "Atendente"
 
-#: add_initial_data.py:183
+#: add_initial_data.py:184
 msgid "Physiotherapist"
 msgstr "Fisioterapeuta"
 
-#: add_initial_data.py:184
+#: add_initial_data.py:185
 msgid "Doctor"
 msgstr "Médico"
 
-#: add_initial_data.py:185
+#: add_initial_data.py:186
 msgid "Junior researcher"
 msgstr "Pesquisador júnior"
 
-#: add_initial_data.py:186
+#: add_initial_data.py:187
 msgid "Senior researcher"
 msgstr "Pesquisador sênior"
 
-#: add_initial_data.py:187
+#: add_initial_data.py:188
 msgid "Administrator"
 msgstr "Administrador"
 
-#: templates/404.html:14 templates/registration/change_password_custom.html:123
-#: templates/registration/logged_out.html:4
+#: configuration/templates/configuration/links_list.html:14
+#: templates/base/template.html:112
+#: templates/registration/change_password_custom.html:71
+#: templates/registration/logged_out.html:7
 msgid "Home"
 msgstr "Home"
 
-#: templates/404.html:20
+#: configuration/templates/configuration/links_list.html:16
+#: configuration/templates/configuration/links_list.html:22
+#: templates/base/template.html:194
+msgid "Useful Links"
+msgstr "Links uteis"
+
+#: configuration/templates/configuration/links_list.html:35
+#| msgid "Add login"
+msgid "Add new link"
+msgstr "Adicionar novo link"
+
+#: processing/templates/processing/file_selection.html:16
+msgid "Filters selection"
+msgstr ""
+
+#: processing/templates/processing/file_selection.html:20
+#: templates/base/template.html:129
+msgid "Studies"
+msgstr "Estudos"
+
+#: processing/templates/processing/file_selection.html:35
+#| msgid "Can add experiment"
+msgid "Experiments"
+msgstr "Experimentos"
+
+#: processing/templates/processing/file_selection.html:49
+msgid "Groups"
+msgstr "Grupos"
+
+#: processing/templates/processing/file_selection.html:55
+msgid "* use ctrl-click to select more than one field. (command-click on Mac)"
+msgstr ""
+"* use ctrl+click para selecionar mais que um campo (command+click no Mac)"
+
+#: processing/templates/processing/file_selection.html:63
+msgid "Next"
+msgstr "Próximo"
+
+#: processing/templates/processing/file_selection.html:66
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: processing/views.py:88
+msgid "No group(s) selected!"
+msgstr "Nenhum grupo selecionado"
+
+#: templates/404.html:8
 msgid "404 Page Not Found"
 msgstr "404 Página Não Encontrada"
 
-#: templates/404.html:21
+#: templates/404.html:9
 msgid "This page does not exist yet!"
 msgstr "Esta página ainda não existe!"
 
-#: templates/404.html:28
+#: templates/404.html:13
 msgid "Back"
 msgstr "Voltar"
 
-#: templates/admin/base_site.html:4
+#: templates/admin/base_site.html:6
 msgid "QDC site admin test"
 msgstr "QDC site admin teste"
 
-#: templates/admin/base_site.html:7
+#: templates/admin/base_site.html:10
 msgid "QDC administration"
 msgstr "Administração QDC"
 
-#: templates/admin/qdc_403.html:9
+#: templates/admin/qdc_403.html:7
 msgid "Access is not authorized"
 msgstr "Acesso não autorizado"
 
-#: templates/registration/change_password_custom.html:9
-#: templates/registration/login.html:7
-#: templates/registration/password_reset_form.html:9
+#: templates/base/contato.html:24 templates/base/template.html:10
+#: templates/base/template_registration.html:11
 msgid "Neuroscience Experiments System - NES"
 msgstr "Sistema de Experimentos de Neurociência - NES"
 
-#: templates/registration/change_password_custom.html:78
+#: templates/base/contato.html:27
+msgid ""
+"Welcome to NES! If you need help you can check the <a "
+"href='https://nes.readthedocs.io/en/latest/userguide/userguide.html'>user "
+"guide here</a>. <br>Please report any bug to the admin."
+msgstr ""
+
+#: templates/base/template.html:38
+msgid "NES"
+msgstr "NES"
+
+#: templates/base/template.html:77
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/base/template.html:79
+msgid "Change password"
+msgstr "Alterar senha"
+
+#: templates/base/template.html:80
+msgid "Help"
+msgstr ""
+
+#: templates/base/template.html:81
+#: templates/registration/change_password_custom.html:73
+msgid "Logout"
+msgstr "Logout"
+
+#: templates/base/template.html:89
+msgid "Light Theme"
+msgstr ""
+
+#: templates/base/template.html:90
+msgid "Dark Theme"
+msgstr ""
+
+#: templates/base/template.html:118
+msgid "Add people that participated in the experiments"
+msgstr ""
+
+#: templates/base/template.html:120
+msgid "Participants"
+msgstr ""
+
+#: templates/base/template.html:127 templates/base/template.html:136
+msgid "Add publications"
+msgstr ""
+
+#: templates/base/template.html:138
+msgid "Publications"
+msgstr ""
+
+#: templates/base/template.html:145 templates/base/template.html:154
+msgid "Add users and institutions to the database"
+msgstr ""
+
+#: templates/base/template.html:147
+#| msgid "Can add questionnaire"
+msgid "Questionnaires"
+msgstr "Questinários"
+
+#: templates/base/template.html:156
+#| msgid "Junior researcher"
+msgid "Researchers"
+msgstr "Pesquisadores"
+
+#: templates/base/template.html:163
+msgid "Export your projects"
+msgstr "Exportar seus projetos"
+
+#: templates/base/template.html:165
+msgid "Export"
+msgstr "Exportar"
+
+#: templates/base/template.html:172
+msgid "Here you can setup the equipments used in the projects"
+msgstr ""
+
+#: templates/base/template.html:174
+msgid "Set up"
+msgstr ""
+
+#: templates/base/template.html:186
+msgid "Plugin"
+msgstr "Plugin"
+
+#: templates/base/template.html:192
+msgid "Useful links of tools"
+msgstr ""
+
+#: templates/base/template.html:203
+msgid "Please enable Javascript"
+msgstr "Por favor habilite o Javascript"
+
+#: templates/registration/change_password_custom.html:16
 msgid "Password change"
 msgstr "Alterar senha"
 
-#: templates/registration/change_password_custom.html:95
-#: templates/registration/password_reset_confirm.html:84
+#: templates/registration/change_password_custom.html:40
+#: templates/registration/password_reset_confirm.html:22
 msgid ""
 "Password must contain at least 8 characters, including at least one "
 "uppercase letter, digit or special character."
@@ -724,64 +867,56 @@ msgstr ""
 "Senha deve conter pelo menos 8 caracteres, incluindo ao menos uma letra "
 "maiúscula, dígito ou caractere especial."
 
-#: templates/registration/change_password_custom.html:118
+#: templates/registration/change_password_custom.html:65
 msgid "Save"
 msgstr "Salvar"
 
-#: templates/registration/change_password_custom.html:125
-msgid "Logout"
-msgstr ""
-
-#: templates/registration/logged_out.html:8
+#: templates/registration/logged_out.html:13
 msgid "Thanks for spending some quality time with the Web site today."
 msgstr "Obrigado por passar momentos de qualidade com o site hoje."
 
-#: templates/registration/logged_out.html:10
+#: templates/registration/logged_out.html:17
 msgid "Log in again"
 msgstr "Faça login novamente"
 
-#: templates/registration/login.html:81
+#: templates/registration/login.html:24 templates/registration/login.html:31
 msgid "User"
 msgstr "Usuário"
 
-#: templates/registration/login.html:85
+#: templates/registration/login.html:30
+msgid "Username must contain only letters, numbers and periods(.)"
+msgstr "Nome de usuário deve conter apenas letras, números e pontos"
+
+#: templates/registration/login.html:40 templates/registration/login.html:42
 msgid "Password"
 msgstr "Senha"
 
-#: templates/registration/login.html:87
+#: templates/registration/login.html:47
 msgid "Login"
 msgstr "Fazer login"
 
-#: templates/registration/login.html:93
+#: templates/registration/login.html:52
 msgid "I forgot my password"
 msgstr "Esqueci minha senha"
 
-#: templates/registration/password_define_email.html:5
+#: templates/registration/password_define_email.html:4
 msgid ""
 "Hi, is everything ok?\n"
 "\n"
-"    You are receiving this e-mail for password definition into your user "
-"account.\n"
+"    You are receiving this e-mail for password definition into your user account.\n"
 "\n"
 "    Please, go to the next page and enter your password:\n"
 "    "
 msgstr ""
 "Ola tudo bem?\n"
 "\n"
-"    Você está recebendo este e-mail para definição de senha para sua conta "
-"de usuário.\n"
+"    Você está recebendo este e-mail para definição de senha para sua conta de usuário.\n"
 "\n"
 "    Por favor, vá para a seguinte página e entre com uma senha:\n"
 "    "
 
-#: templates/registration/password_define_email.html:16
-#, fuzzy, python-format
-#| msgid ""
-#| "Your username: %(user.usernae)s\n"
-#| "\n"
-#| "    Thank you for using our site!\n"
-#| "\n"
-#| "    Neuromat Team."
+#: templates/registration/password_define_email.html:15
+#, python-format
 msgid ""
 "Your username: %(user.username)s\n"
 "\n"
@@ -794,9 +929,10 @@ msgstr ""
 "\n"
 "    Obrigado por usar o nosso site!\n"
 "\n"
-"    Equipe Neuromat."
+"    Equipe Neuromat.\n"
+"    "
 
-#: templates/registration/password_reset_complete.html:13
+#: templates/registration/password_reset_complete.html:9
 msgid ""
 "Your password was configured successfully.\n"
 "           Access the system using your new credentials."
@@ -804,122 +940,138 @@ msgstr ""
 "Sua senha foi configurada com sucesso.\n"
 "            Acesse o sistema utilizando suas novas credenciais."
 
-#: templates/registration/password_reset_complete.html:16
+#: templates/registration/password_reset_complete.html:13
 msgid "Access"
 msgstr "Acessar"
 
-#: templates/registration/password_reset_confirm.html:81
-#: templates/registration/password_reset_form.html:77
+#: templates/registration/password_reset_confirm.html:13
+#: templates/registration/password_reset_form.html:47
 msgid "Reset password"
 msgstr "Redefinir senha"
 
-#: templates/registration/password_reset_confirm.html:85
+#: templates/registration/password_reset_confirm.html:23
 msgid "New password"
 msgstr "Nova senha"
 
-#: templates/registration/password_reset_confirm.html:88
+#: templates/registration/password_reset_confirm.html:33
 msgid "Confirm password"
 msgstr "Confirmar senha"
 
-#: templates/registration/password_reset_confirm.html:90
+#: templates/registration/password_reset_confirm.html:38
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: templates/registration/password_reset_confirm.html:93
+#: templates/registration/password_reset_confirm.html:43
 msgid "Password reset failed."
 msgstr "Redefinição de senha falhou."
 
-#: templates/registration/password_reset_confirm.html:94
+#: templates/registration/password_reset_confirm.html:46
+#| msgid ""
+#| "Invalid link for password reset, possibly because this link has already been used previously. <br/>\n"
+#| "                Please, request a new password reset."
 msgid ""
-"Invalid link for password reset, possibly because this link has already been "
-"used previously. <br/>\n"
+"Invalid link for password reset, possibly because this link has already been used previously. <br />\n"
 "                Please, request a new password reset."
 msgstr ""
-"Link inválido para redefinição de senha, possivelmente porque este link ja "
-"foi usado anteriormente. <br/>\n"
-"                Por favor, faça uma nova requisição de redefinição de senha."
+"Link inválido para redefinição de senha, possivelmente porque este link ja foi usado anteriormente. <br/>\n"
+" Por favor, faça uma nova requisição de redefinição de senha."
 
-#: templates/registration/password_reset_done.html:16
+#: templates/registration/password_reset_done.html:9
 msgid ""
 "We sent you a message with instructions to set up your password\n"
 "            for the e-mail provided. "
 msgstr ""
-"Nós enviamos uma mensagem com instruções para configurar a sua senha para o "
-"endereço de\n"
+"Nós enviamos uma mensagem com instruções para configurar a sua senha para o endereço de\n"
 "            e-mail informado. "
 
-#: templates/registration/password_reset_done.html:18
+#: templates/registration/password_reset_done.html:13
 msgid "You should receive it soon."
 msgstr "Você deve recebê-lo em breve."
 
 #: templates/registration/password_reset_email.html:4
+#| msgid ""
+#| "Hi, is everything ok?\n"
+#| "\n"
+#| "        You are receiving this e-mail because you requested a password reset for your user account.\n"
+#| "\n"
+#| "        Please, go to the next page and enter a new password:\n"
+#| "    "
 msgid ""
 "Hi, is everything ok?\n"
 "\n"
-"        You are receiving this e-mail because you requested a password reset "
-"for your user account.\n"
+"    You are receiving this e-mail because you requested a password reset for your user account.\n"
 "\n"
-"        Please, go to the next page and enter a new password:\n"
+"    Please, go to the next page and enter a new password:\n"
 "    "
 msgstr ""
 "Ola tudo bem?\n"
 "\n"
-"        Você está recebendo este e-mail porque você pediu uma redefinição de "
-"senha para sua conta de usuário.\n"
+"Você está recebendo este e-mail porque você pediu uma redefinição de senha para sua conta de usuário.\n"
 "\n"
-"        Por favor, vá para a seguinte página e entre com uma nova senha:\n"
-"    "
+"Por favor, vá para a seguinte página e entre com uma nova senha:"
 
-#: templates/registration/password_reset_email.html:14
+#: templates/registration/password_reset_email.html:15
 msgid ""
 "\n"
 "    Thank you for using our site!\n"
 "\n"
-"    Neuromat Team.\n"
+"    NES Team.\n"
 "    "
 msgstr ""
 "\n"
 "    Obrigado por usar o nosso site!\n"
 "\n"
-"    Equipe Neuromat."
+"    Equipe Neuromat.\n"
+"    "
 
-#: templates/registration/password_reset_form.html:61
+#: templates/registration/password_reset_form.html:23
 msgid "Please enter your e-mail to receive instructions for password reset."
 msgstr ""
 "Especifique seu e-mail para receber as instruções para redefinição de senha."
 
-#: templates/registration/password_reset_form.html:72
+#: templates/registration/password_reset_form.html:36
 msgid "E-mail"
 msgstr "E-mail"
 
-#: templates/registration/password_reset_subject.txt:2
 #, python-format
-msgid "Password reset on %(site_name)s"
-msgstr "Alterar senha em %(site_name)s"
+#~ msgid "Password reset on %(site_name)s"
+#~ msgstr "Alterar senha em %(site_name)s"
 
-#~ msgid "Type a new username"
-#~ msgstr "Informe um novo nome de usuário"
+#, fuzzy
+#~ msgid "Researchers and Institutions"
+#~ msgstr "Remover instituição"
 
-#~ msgid "Type password"
-#~ msgstr "Informe a senha"
+#, fuzzy
+#~ msgid "Show/Hide researchers"
+#~ msgstr "Pesquisador sênior"
 
-#~ msgid "first name"
-#~ msgstr "Nome"
+#, fuzzy
+#~ msgid "Researcher"
+#~ msgstr "Pesquisador júnior"
 
-#~ msgid "last name"
+#~ msgid "Institution"
+#~ msgstr "Instituição"
+
+#, fuzzy
+#~ msgid "Username"
+#~ msgstr "Usuário"
+
+#, fuzzy
+#~ msgid "Citation name"
 #~ msgstr "Sobrenome"
 
-#~ msgid "email address"
-#~ msgstr "E-mail"
+#~ msgid "Edit"
+#~ msgstr "Editar"
 
-#~ msgid "Teams"
-#~ msgstr "Equipes"
+#~ msgid "Insert new"
+#~ msgstr "Inserir novo"
 
 #~ msgid "Institutions"
 #~ msgstr "Instituições"
 
-#~ msgid "Institutions list"
-#~ msgstr "Lista de instituições"
+#, fuzzy
+#~ msgid "Show/Hide institutions"
+#~ msgstr "Remover instituição"
 
 #~ msgid "Name"
 #~ msgstr "Nome"
@@ -936,26 +1088,15 @@ msgstr "Alterar senha em %(site_name)s"
 #~ msgid "Visualize"
 #~ msgstr "Visualizar"
 
-#~ msgid "Insert new"
-#~ msgstr "Inserir novo"
-
-#~ msgid "New"
-#~ msgstr "Novo"
+#, fuzzy
+#~ msgid "New institution"
+#~ msgstr "Remover instituição"
 
 #~ msgid "Editing"
 #~ msgstr "Edição"
 
-#~ msgid "Institution"
-#~ msgstr "Instituição"
-
-#~ msgid "Edit"
-#~ msgstr "Editar"
-
 #~ msgid "Delete institution"
 #~ msgstr "Remover instituição"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
 
 #~ msgid "Are you sure you want to delete this institution?"
 #~ msgstr "Tem certeza que deseja remover esta instituição?"
@@ -963,14 +1104,729 @@ msgstr "Alterar senha em %(site_name)s"
 #~ msgid "Delete"
 #~ msgstr "Remover"
 
-#~ msgid "Persons"
-#~ msgstr "Pessoas"
+#~ msgid "New"
+#~ msgstr "Novo"
 
-#~ msgid "Person list"
+#~ msgid "First name"
+#~ msgstr "Nome"
+
+#~ msgid "Last name"
+#~ msgstr "Sobrenome"
+
+#~ msgid "Please confirm password"
+#~ msgstr "Confirmar senha"
+
+#~ msgid "Type password"
+#~ msgstr "Informe a senha"
+
+#~ msgid "Update password"
+#~ msgstr "Alterar senha"
+
+#~ msgid "Profiles"
+#~ msgstr "Perfis"
+
+#~ msgid "In which these profiles does user identify?"
+#~ msgstr "Em quais desses perfis o usuário se identifica?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this researcher?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to deactivate this researcher's system access?"
+#~ msgstr "Tem certeza que deseja desativar esta pessoa"
+
+#~ msgid "Deactivate"
+#~ msgstr "Desativar"
+
+#, fuzzy
+#~ msgid ""
+#~ "Invalid link for password reset, possibly because this link has already been used previously. &lt;br/></span>&nbsp;</span><span class=\"r\"></span></p>\n"
+#~ "    <p class=\"mis show_mis\"><span class=\"n\"><a id=\"t95\" href=\"#t95\">95</a></span><span class=\"t\"><span class=\"txt\">                Please, request a new password reset."
+#~ msgstr ""
+#~ "Link inválido para redefinição de senha, possivelmente porque este link ja foi usado anteriormente. <br/>\n"
+#~ "                Por favor, faça uma nova requisição de redefinição de senha."
+
+#, fuzzy
+#~ msgid "Questionnaire information"
+#~ msgstr "Pode adicionar configurações ao questionário"
+
+#, fuzzy
+#~ msgid "Questionnaire"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "Please, select a questionnaire from the list."
+#~ msgstr "Por favor, selecione um questionario da lista"
+
+#, fuzzy
+#~ msgid "Question code"
+#~ msgstr "Codigo de Pergunta"
+
+#, fuzzy
+#~ msgid "Question"
+#~ msgstr "Pergunta"
+
+#~ msgid "Participant"
+#~ msgstr "Participante"
+
+#, fuzzy
+#~ msgid "Used in experiments"
+#~ msgstr "Pode alterar experimento"
+
+#, fuzzy
+#~ msgid "Experiment:"
+#~ msgstr "Pode adicionar experimento"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete questionnaire?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Doctor name"
+#~ msgstr "Médico"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete exam?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Diagnosis"
+#~ msgstr "Pode adicionar diagnóstico"
+
+#, fuzzy
+#~ msgid "(no diagnosis)"
+#~ msgstr "Pode adicionar diagnóstico"
+
+#, fuzzy
+#~ msgid "Insert exam"
+#~ msgstr "Inserir novo"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete diagnosis?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Personal data"
 #~ msgstr "Lista de pessoas"
+
+#, fuzzy
+#~ msgid "Social demographic data"
+#~ msgstr "Pode adicionar dados sociodemográficos"
+
+#, fuzzy
+#~ msgid "Social history"
+#~ msgstr "Pode adicionar dados de história social"
+
+#, fuzzy
+#~ msgid "Delete participant"
+#~ msgstr "Pode remover participante"
+
+#, fuzzy
+#~ msgid "Do not save"
+#~ msgstr "Informação não salva."
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete participant?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Insert medical record"
+#~ msgstr "Pode exportar dados de registro médico"
+
+#, fuzzy
+#~ msgid "Full name"
+#~ msgstr "Sobrenome"
+
+#, fuzzy
+#~ msgid "Medical record"
+#~ msgstr "Pode adicionar dados de registro médico"
+
+#, fuzzy
+#~ msgid "Marital status"
+#~ msgstr "Pode adicionar estado civil"
+
+#, fuzzy
+#~ msgid "Address"
+#~ msgstr "E-mail"
+
+#, fuzzy
+#~ msgid "Questionnaire fills"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "Updated"
+#~ msgstr "Alterar senha"
+
+#, fuzzy
+#~ msgid "Choose another questionnaire to fill"
+#~ msgstr "Pode alterar questinário"
+
+#, fuzzy
+#~ msgid "Experiment/Project questionnaires"
+#~ msgstr "Pode remover questinário"
+
+#, fuzzy
+#~ msgid "Research project"
+#~ msgstr "Pode adicionar projeto de pesquisa"
+
+#, fuzzy
+#~ msgid "Choose a questionnaire to fill"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "Per questionnaire"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "Questionnaires from experiments"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "Participants and Diagnosis"
+#~ msgstr "Pode adicionar diagnóstico"
+
+#, fuzzy
+#~ msgid "Questionnaires data"
+#~ msgstr "Pode adicionar questinário"
+
+#~ msgid "List view"
+#~ msgstr "Exibição da lista"
+
+#, fuzzy
+#~ msgid "Identification"
+#~ msgstr "Instituição"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete A/D converter?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "information"
+#~ msgstr "Informação não salva."
+
+#~ msgid "Insert"
+#~ msgstr "Inserir"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete step?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Add participant"
+#~ msgstr "Pode adicionar participante"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete amplifier?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Insert step"
+#~ msgstr "Inserir novo"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this coil model?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "New researcher"
+#~ msgstr "Pesquisador sênior"
+
+#, fuzzy
+#~ msgid "Add researchers"
+#~ msgstr "Pesquisador júnior"
+
+#, fuzzy
+#~ msgid "There is no researcher to add!"
+#~ msgstr "Não há alteração para salvar."
+
+#, fuzzy
+#~ msgid "Insert new step"
+#~ msgstr "Inserir novo"
+
+#, fuzzy
+#~ msgid "Information about"
+#~ msgstr "Informação não salva."
+
+#, fuzzy
+#~ msgid "Information about this use of step"
+#~ msgstr "Informação não salva."
+
+#, fuzzy
+#~ msgid "There is no setting file associated."
+#~ msgstr "Não há alteração para salvar."
+
+#, fuzzy
+#~ msgid "Delete context tree"
+#~ msgstr "Pode remover tipo"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this context tree?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this setting from list?"
+#~ msgstr "Tem certeza que deseja remover esta instituição?"
+
+#, fuzzy
+#~ msgid "There is no step to transfer"
+#~ msgstr "Não há alteração para salvar."
+
+#~ msgid "Remove"
+#~ msgstr "Remover"
+
+#, fuzzy
+#~ msgid "Conflict"
+#~ msgstr "Confirmar"
+
+#, fuzzy
+#~ msgid "New instruction"
+#~ msgstr "Pode adicionar instrução"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete localization system?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Positions"
+#~ msgstr "Instituições"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Instituição"
+
+#, fuzzy
+#~ msgid "Coordinate X"
+#~ msgstr "É coordenador"
+
+#, fuzzy
+#~ msgid "Coordinate Y"
+#~ msgstr "É coordenador"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete position?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Delete EEG setting"
+#~ msgstr "Remover instituição"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this EEG setting?"
+#~ msgstr "Tem certeza que deseja remover esta instituição?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete equipment from list?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Add setting"
+#~ msgstr "Adicionar login"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete EEG electrode net?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete cap size?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete EEG machine?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Components"
+#~ msgstr "Pode adicionar componente"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete EEG solution?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete electrode model?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Low pass"
+#~ msgstr "Nova senha"
+
+#, fuzzy
+#~ msgid "Depth of insertion"
+#~ msgstr "Remover instituição"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this emg electrode placement?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Add new"
+#~ msgstr "Adicionar login"
+
+#, fuzzy
+#~ msgid "Delete EMG setting"
+#~ msgstr "Remover instituição"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this EMG setting?"
+#~ msgstr "Tem certeza que deseja remover esta instituição?"
+
+#, fuzzy
+#~ msgid "Last update"
+#~ msgstr "Sobrenome"
+
+#, fuzzy
+#~ msgid "No registered researcher"
+#~ msgstr "Pesquisador sênior"
+
+#, fuzzy
+#~ msgid "Last update of the experiment:"
+#~ msgstr "Pode adicionar tarefa para o experimentador"
+
+#, fuzzy
+#~ msgid "Portal status"
+#~ msgstr "Pode adicionar estado civil"
 
 #~ msgid "Person"
 #~ msgstr "Pessoa"
+
+#, fuzzy
+#~ msgid "Not registered"
+#~ msgstr "Cadastros"
+
+#, fuzzy
+#~ msgid "Remove researcher"
+#~ msgstr "Pesquisador sênior"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete experiment?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to remove this researcher?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa da equipe?"
+
+#, fuzzy
+#~ msgid "send patient age"
+#~ msgstr "Pode adicionar participante"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete filter type?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Information type"
+#~ msgstr "Informação não salva."
+
+#, fuzzy
+#~ msgid "Change institution code"
+#~ msgstr "Pode alterar instrução"
+
+#, fuzzy
+#~ msgid "Create institution code"
+#~ msgstr "Remover instituição"
+
+#, fuzzy
+#~ msgid "Change group code"
+#~ msgstr "Pode alterar grupo"
+
+#, fuzzy
+#~ msgid "Create group code"
+#~ msgstr "Pode remover grupo"
+
+#, fuzzy
+#~ msgid "Change game and phase"
+#~ msgstr "Pode alterar sexo"
+
+#, fuzzy
+#~ msgid "Image not available."
+#~ msgstr "Ação não disponível."
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete group?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to unprovision experimental protocol?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa da equipe?"
+
+#, fuzzy
+#~ msgid "the instruction"
+#~ msgstr "Pode alterar instrução"
+
+#, fuzzy
+#~ msgid "Instruction text"
+#~ msgstr "Lista de instituições"
+
+#, fuzzy
+#~ msgid "Add a new keyword"
+#~ msgstr "Pode alterar palavra-chave"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete manufacturer?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete material?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete muscle?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete muscle side?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Anatomy insertion"
+#~ msgstr "Pode adicionar instrução"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete muscle subdivision?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "New pause"
+#~ msgstr "Nova senha"
+
+#, fuzzy
+#~ msgid "the pause"
+#~ msgstr "Pode alterar pausa"
+
+#, fuzzy
+#~ msgid "Publication list"
+#~ msgstr "Lista de publicações"
+
+#, fuzzy
+#~ msgid "Insert new publication"
+#~ msgstr "Inserir novo"
+
+#, fuzzy
+#~ msgid "Citation"
+#~ msgstr "Instituição"
+
+#, fuzzy
+#~ msgid "Related experiments/Projects"
+#~ msgstr "Pode remover experimento"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this publication?"
+#~ msgstr "Tem certeza que deseja remover esta instituição?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to remove experiment/project from list?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa da equipe?"
+
+#, fuzzy
+#~ msgid "New questionnaire"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "the questionnaire"
+#~ msgstr "Pode alterar questinário"
+
+#, fuzzy
+#~ msgid "Identification:"
+#~ msgstr "Instituição"
+
+#, fuzzy
+#~ msgid "Use name:"
+#~ msgstr "Sobrenome"
+
+#, fuzzy
+#~ msgid "Studies list"
+#~ msgstr "Lista de instituições"
+
+#, fuzzy
+#~ msgid "Insert new study"
+#~ msgstr "Inserir novo"
+
+#, fuzzy
+#~ msgid "Copy experiment"
+#~ msgstr "Pode adicionar experimento"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete study?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to remove this collaborator from this team?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa da equipe?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Are you sure you want to change the coordinator status for this "
+#~ "collaborator?"
+#~ msgstr "Tem certeza que deseja alterar o status de coordenador desta pessoa?"
+
+#, fuzzy
+#~ msgid "Change is_coordinator"
+#~ msgstr "Alterar status de coordenador"
+
+#, fuzzy
+#~ msgid "Enter a diagnosis"
+#~ msgstr "Pode adicionar diagnóstico"
+
+#, fuzzy
+#~ msgid "Basic registers"
+#~ msgstr "Cadastros"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete software?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete software version?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this Source Code?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this source code from list?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "EMG electrode placements"
+#~ msgstr "Pode remover pagamento"
+
+#, fuzzy
+#~ msgid "Insert electrode placement"
+#~ msgstr "Pode remover pagamento"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this EMG electrode placement system?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete Stimuli Equipment"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this Stimuli Equipment setting?"
+#~ msgstr "Tem certeza que deseja remover esta instituição?"
+
+#, fuzzy
+#~ msgid "New stimulus"
+#~ msgstr "Pode alterar estímulo"
+
+#, fuzzy
+#~ msgid "the stimulus"
+#~ msgstr "Pode alterar estímulo"
+
+#, fuzzy
+#~ msgid "Stimulus type"
+#~ msgstr "Pode adicionar tipo de estímulo"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete additional data?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete goalkeeper game phase data?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Export nwb file format"
+#~ msgstr "Exportação foi finalizada com sucesso"
+
+#, fuzzy
+#~ msgid "There is not image"
+#~ msgstr "Não há alteração para salvar."
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete EEG data?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete EMG data?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this collection data?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this questionnaire's fill?"
+#~ msgstr "Tem certeza que deseja remover esta instituição?"
+
+#, fuzzy
+#~ msgid "Reuse questionnaire response"
+#~ msgstr "Pode remover respostas do questionário"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete TMS data?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Import questionnaire responses"
+#~ msgstr "Pode exportar respostas do questionário"
+
+#, fuzzy
+#~ msgid "Completed questionnaires"
+#~ msgstr "Pode remover questinário"
+
+#, fuzzy
+#~ msgid "Fill questionnaires"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "Are you sure import questionnaire responses?"
+#~ msgstr "Pode exportar respostas do questionário"
+
+#, fuzzy
+#~ msgid "New task for experimenter"
+#~ msgstr "Pode adicionar tarefa para o experimentador"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete TMS Position?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Delete TMS setting"
+#~ msgstr "Remover instituição"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete this TMS setting?"
+#~ msgstr "Tem certeza que deseja remover esta instituição?"
+
+#, fuzzy
+#~ msgid "Pulse stimulus type"
+#~ msgstr "Pode remover tipo de estímulo"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete TMS device?"
+#~ msgstr "Tem certeza que deseja remover esta pessoa"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete attachment?"
+#~ msgstr "Tem certeza que deseja remover esta equipe?"
+
+#, fuzzy
+#~ msgid "Questionnaires data to be sent"
+#~ msgstr "Pode adicionar questinário"
+
+#, fuzzy
+#~ msgid "Per Experiment"
+#~ msgstr "Pode alterar experimento"
+
+#, fuzzy
+#~ msgid "Participants available:"
+#~ msgstr "Ação não disponível."
+
+#~ msgid "Type a new username"
+#~ msgstr "Informe um novo nome de usuário"
+
+#~ msgid "first name"
+#~ msgstr "Nome"
+
+#~ msgid "Teams"
+#~ msgstr "Equipes"
+
+#~ msgid "Persons"
+#~ msgstr "Pessoas"
 
 #~ msgid "Is this person allowed to login on the system?"
 #~ msgstr "Esta pessoa pode efetuar login no sistema?"
@@ -981,56 +1837,14 @@ msgstr "Alterar senha em %(site_name)s"
 #~ msgid "Yes, a new login should be created."
 #~ msgstr "Sim, um novo login será criado."
 
-#~ msgid "First name"
-#~ msgstr "Nome"
-
-#~ msgid "Last name"
-#~ msgstr "Sobrenome"
-
-#~ msgid "Update password"
-#~ msgstr "Alterar senha"
-
-#~ msgid "Please confirm password"
-#~ msgstr "Confirmar senha"
-
 #~ msgid "Deactivate login"
 #~ msgstr "Desativar login"
-
-#~ msgid "Add login"
-#~ msgstr "Adicionar login"
 
 #~ msgid "Cancel add login"
 #~ msgstr "Cancelar adicionar login"
 
-#~ msgid "Profiles"
-#~ msgstr "Perfis"
-
-#~ msgid "In which these profiles does user identify?"
-#~ msgstr "Em quais desses perfis o usuário se identifica?"
-
-#~ msgid "Are you sure you want to delete person?"
-#~ msgstr "Tem certeza que deseja remover esta pessoa"
-
-#~ msgid "Are you sure you want to deactivate the user?"
-#~ msgstr "Tem certeza que deseja desativar esta pessoa"
-
-#~ msgid "Deactivate"
-#~ msgstr "Desativar"
-
-#~ msgid "Registers"
-#~ msgstr "Cadastros"
-
-#~ msgid "List view"
-#~ msgstr "Exibição da lista"
-
 #~ msgid "Team list"
 #~ msgstr "Lista de equipes"
-
-#~ msgid "Action not available."
-#~ msgstr "Ação não disponível."
-
-#~ msgid "Information not saved."
-#~ msgstr "Informação não salva."
 
 #~ msgid "E-mail already exists."
 #~ msgstr "E-mail já existe."
@@ -1046,9 +1860,6 @@ msgstr "Alterar senha em %(site_name)s"
 
 #~ msgid "Person updated successfully."
 #~ msgstr "Pessoa atualizada com sucesso."
-
-#~ msgid "There is no changes to save."
-#~ msgstr "Não há alteração para salvar."
 
 #~ msgid "User deactivated successfully."
 #~ msgstr "Pessoa desativada com sucesso."
@@ -1068,40 +1879,17 @@ msgstr "Alterar senha em %(site_name)s"
 #~ msgid "Institution updated successfully."
 #~ msgstr "Instituição atualizada com sucesso."
 
-#~ msgid "Is_coordinator"
-#~ msgstr "É coordenador"
-
 #~ msgid "Team"
 #~ msgstr "Equipe"
 
 #~ msgid "Is coordinator"
 #~ msgstr "É coordenador"
 
-#~ msgid "Remove"
-#~ msgstr "Remover"
-
 #~ msgid "is coordinator"
 #~ msgstr "é coordenador"
 
-#~ msgid "Insert"
-#~ msgstr "Inserir"
-
 #~ msgid "Delete team"
 #~ msgstr "Remover equipe"
-
-#~ msgid "Are you sure you want to remove this person from this team?"
-#~ msgstr "Tem certeza que deseja remover esta pessoa da equipe?"
-
-#~ msgid "Are you sure you want to delete this team?"
-#~ msgstr "Tem certeza que deseja remover esta equipe?"
-
-#~ msgid ""
-#~ "Are you sure you want to change the coordinator status for this person?"
-#~ msgstr ""
-#~ "Tem certeza que deseja alterar o status de coordenador desta pessoa?"
-
-#~ msgid "Change Is_coordinator"
-#~ msgstr "Alterar status de coordenador"
 
 #~ msgid "Team created successfully."
 #~ msgstr "Equipe criada com sucesso."
@@ -1144,15 +1932,6 @@ msgstr "Alterar senha em %(site_name)s"
 
 #~ msgid "Last Name"
 #~ msgstr "Sobrenome"
-
-#~ msgid "Change password"
-#~ msgstr "Alterar senha"
-
-#~ msgid "Export was finished correctly"
-#~ msgstr "Exportação foi finalizada com sucesso"
-
-#~ msgid "Can add questionnaire configuration"
-#~ msgstr "Pode adicionar configurações ao questionário"
 
 #~ msgid "Can change questionnaire configuration"
 #~ msgstr "Pode alterar configurações de questionário"

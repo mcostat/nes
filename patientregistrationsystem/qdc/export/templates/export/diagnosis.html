@@ -1,0 +1,21 @@
+{% load i18n static %}
+
+<ul id="ul-diagnosis-list" class="list-group list-group-flush">
+    {% if classification_of_diseases_list.count > 0 %}
+        {% for classification_of_disease in classification_of_diseases_list %}
+            <li class="list-group-item list-group-item-action">
+                <a href="#"
+                   onclick="add_disease('{{ classification_of_diseases }}', '{{ classification_of_diseases__abbreviated_description }}'); return false;">{{ classification_of_diseases }} - {{ classification_of_diseases__abbreviated_description }}</a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>{% trans "No diagnosis found!" %}</li>
+    {% endif %}
+</ul>
+
+{% block extrascript %}
+
+    
+
+    <script type="text/javascript" defer  src={% static "site/js/participant_selection.js" %}></script>
+{% endblock extrascript %}

@@ -1,61 +1,61 @@
 
-{% load i18n admin_static %}
+{% load i18n %}
 
 <tr>
     {% if not configuration.random_position %}
-        <td class="col-md-2">
+        <td class="col-lg-2">
             <span class="{{ configuration.component.icon_class }}"></span>
             {{ configuration.component.get_component_type_display }}
         </td>
         {% if not component_configuration and can_change %}
-            <td class="col-md-4">
+            <td class="col-lg-4">
                 {% if configuration.component.component_type == "block" %}
-                    <a data-toggle="tooltip" data-placement="left" title="{% trans "Edit" %}" href="/experiment/component/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Edit" %}" href="/experiment/component/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
                 {% else %}
-                    <a data-toggle="tooltip" data-placement="left" title="{% trans "Edit" %}" href="/experiment/component/edit/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Edit" %}" href="/experiment/component/edit/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
                 {% endif %}
             </td>
             {% if component.type == "sequence" %}
-                <td class="col-md-3">
+                <td class="col-lg-3">
                     {% if configuration.name != None %}
                         {{ configuration.name }}
                     {% endif %}
                 </td>
-                <td  class="text-right col-md-1">
+                <td  class="text-end col-lg-1">
                     {% if configuration != configuration_list|last|last %}
-                        <a class="btn glyphicon glyphicon-arrow-down" href="/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}/down/"></a>
+                        <a class="btn fa-fw fa fa-arrow-down" href="/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}/down/"></a>
                     {% endif %}
                 </td>
-                <td class="col-md-1">
+                <td class="col-lg-1">
                     {% if configuration != configuration_list|first|first %}
-                        <a class="btn glyphicon glyphicon-arrow-up" href="/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}/up/"></a>
+                        <a class="btn fa-fw fa fa-arrow-up" href="/experiment/component/change_the_order/{{ path_of_the_components }}/{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}/up/"></a>
                     {% endif %}
                 </td>
             {% else %}
-                <td class="col-md-5">
+                <td class="col-lg-5">
                     {% if configuration.name != None %}
                         {{ configuration.name }}
                     {% endif %}
                 </td>
             {% endif %}
-            <td class="text-center col-md-1">
+            <td class="text-center col-lg-1">
                 {% if configuration.id in protected_uses_of_step %}
                     {# Warn that there is data collected for this step #}
-                    <a data-toggle="tooltip" data-placement="right" style="color: indianred;" class="btn glyphicon glyphicon-ban-circle" title="{% trans "There is data collection related to this step. Alternatively, make a copy of the experiment." %}" ></a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="right" style="color: indianred;" class="btn fa-fw fa fa-ban" title="{% trans "There is data collection related to this step. Alternatively, make a copy of the experiment." %}" ></a>
                 {% else %}
                     {# Remove item from the list #}
-                    <a data-toggle="tooltip" data-placement="right" style="color: indianred;" class="btn glyphicon glyphicon-remove" title="{% trans "Delete uses from list" %}" onclick="show_modal_remove('fixed', {{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }});"></a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="right" style="color: indianred;" class="btn fa-fw fa fa-remove" title="{% trans "Delete uses from list" %}" onclick="show_modal_remove('fixed', {{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }});"></a>
                 {% endif %}
             </td>
         {% else %}
-            <td class="col-md-5">
+            <td class="col-lg-5">
                 {% if configuration.component.component_type == "block" %}
-                    <a data-toggle="tooltip" data-placement="left" title="{% trans "Edit" %}" href="/experiment/component/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Edit" %}" href="/experiment/component/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
                 {% else %}
-                    <a data-toggle="tooltip" data-placement="left" title="{% trans "Edit" %}" href="/experiment/component/edit/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="{% trans "Edit" %}" href="/experiment/component/edit/{{ path_of_the_components }}-U{{ configuration.id }}">{{ configuration.component.identification }}</a>
                 {% endif %}
             </td>
-            <td class="col-md-3">
+            <td class="col-lg-3">
                 {% if configuration.name != None %}
                     {{ configuration.name }}
                 {% endif %}

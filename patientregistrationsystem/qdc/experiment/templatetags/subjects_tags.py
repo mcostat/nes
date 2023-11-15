@@ -1,24 +1,27 @@
 from django import template
+
 from patient.models import Patient
 
 register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def get_name_or_code(context, patient_id):
+def get_name_or_code(context, patient_id) -> str:
+    patient: Patient = Patient.objects.get(id=patient_id)
 
-    patient = Patient.objects.get(id=patient_id)
-
-    if context.request.user.has_perm('patient.sensitive_data_patient'):
-        if patient.name:
-            return patient.name
-        else:
-            return patient.code
+    if context.request.user.has_perm("patient.sensitive_data_patient"):
+        return patient.name if patient.name else patient.code
     else:
         return patient.code
 
 
-@register.filter(name='add_attr')
+@register.filter(name="add_attr")
 def add_attr(field, attr):
-    attrs = {'disabled': attr}
+    attrs = {"disabled": attr}
+    return field.as_widget(attrs=attrs)
+
+
+@register.filter(name="add_class")
+def add_class(field, arg):
+    attrs = {"class": arg}
     return field.as_widget(attrs=attrs)

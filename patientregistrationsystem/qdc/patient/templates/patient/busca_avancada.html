@@ -1,14 +1,14 @@
-{% extends "quiz/template.html" %}
-{% block activeAdvancedSearch %}class="active"{% endblock %}
+{% extends "base/template.html" %}
+
+{% block activeAdvancedSearch %}
+    active
+{% endblock activeAdvancedSearch %}
 
 {% block content %}
-
-    <div class="tab-pane fade in active" id="mainMenuAdvancedSearchTab">
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-10">
-            <h3></h3>
+    <div class="tab-pane fade show active" id="mainMenuAdvancedSearchTab">
+        <div class="col-lg-1"></div>
+        <div class="container">
+            
         </div>
     </div>
-
-{% endblock %}
+{% endblock content %}

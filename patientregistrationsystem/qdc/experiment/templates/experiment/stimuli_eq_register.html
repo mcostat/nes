@@ -1,0 +1,143 @@
+{% extends "base/template.html" %}
+
+{% load i18n static %}
+
+{% block activeSetup %}
+    active
+{% endblock activeSetup %}
+
+{% block form %}
+
+    <form id="user_form" method="post" data-toggle="validator">
+        {% csrf_token %}
+    {% endblock form %}
+
+    {% block content %}
+
+        {% if equipment_form.errors %}<script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">showErrorMessage(gettext('Please, correct fields highlighted.'))</script>{% endif %}
+
+        <div class="tab-pane fade show active" id="equipmentBreadCrumb">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                    <li class="breadcrumb-item">
+                        <a href="{% url "home" %}">{% trans "Home" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/setup">{% trans "Set up" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/stimuli_eq/list">{% trans "Stimuli Equipment" %}</a>
+                    </li>
+
+                    {% if creating %}
+                        <li class="breadcrumb-item active">{% trans "New" %}</li>
+                    {% else %}
+                        {% if editing %}
+                            <li class="breadcrumb-item">
+                                <a href="/experiment/stimuli_eq/{{ equipment.id }}">{{ equipment_form.identification.value }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">{% trans "Editing" %}</li>
+                        {% else %}
+                            <li class="breadcrumb-item active">{{ equipment_form.identification.value }}</li>
+                        {% endif %}
+                    {% endif %}
+                </ol>
+            </nav>
+        </div>
+
+        <div class="tab-pane fade show active" id="menuUserTab">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                <h4>{% trans "Stimuli Equipment" %}</h4>
+                <hr>
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">
+                                {% trans "Manufacturer" %} <b class="text-danger">*</b>
+                            </label>
+                            {{ equipment_form.manufacturer }}
+                            <div class="form-text with-errors text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">
+                                {% trans "Identification" %} <b class="text-danger">*</b>
+                            </label>
+                            {{ equipment_form.identification }}
+                            <div class="form-text with-errors text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">{% trans "Description" %}</label>
+                            {{ equipment_form.description }}
+                            <div class="form-text with-errors text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">{% trans "Serial number" %}</label>
+                            {{ equipment_form.serial_number }}
+                            <div class="form-text with-errors text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if not editing and can_change %}
+                    <br>
+                    <div class="btn-group">
+                        <a href="/experiment/stimuli_eq/edit/{{ equipment.id }}" class="btn btn-primary">{% trans "Edit" %}</a>
+                    </div>
+                {% endif %}
+
+            </div>
+            {% if not editing %}{% endif %}
+
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+                <div class="btn-group">
+                    {% if not editing and perms.experiment.register_equipment and can_change %}
+                        <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
+                    {% endif %}
+                </div>
+                {% if editing %}
+                    <div class="btn-group float-end">
+                        <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save" %}</button>
+                        <a href="/experiment/stimuli_eq/{% if creating %}list{% else %}{{ equipment.id }}{% endif %}" class="btn btn-light">{% trans "Cancel" %}</a>
+                    </div>
+                {% else %}
+                    <div class="btn-group float-end">
+                        <a href="/experiment/stimuli_eq/list" class="btn btn-light">{% trans "Back" %}</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">{% trans "Are you sure you want to delete Stimuli Equipment" %}</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="disableRemoveButton()">{% trans "Cancel" %}</button>
+                        <button type="submit" class="btn btn-danger" id="remove_button" value="remove" disabled name="action">{% trans "Delete" %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endblock content %}
+
+    {% block end_form %}
+    </form>
+{% endblock end_form %}
+
+{% block extrascript %}
+    <script type="text/javascript" defer  src={% static "site/js/equipment.js" %}></script>
+{% endblock extrascript %}
