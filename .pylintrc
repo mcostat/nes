@@ -81,7 +81,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint_django
+load-plugins=pylint_django, pylint_django.checkers.migrations
 ; django-settings-module=patientregistrationsystem.qdc.qdc.settings.dev
 
 # Pickle collected data for later comparisons.

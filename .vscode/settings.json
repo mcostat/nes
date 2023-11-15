@@ -29,13 +29,6 @@
         }
     ],
     "pylint.importStrategy": "fromEnvironment",
-    "pylint.args": [
-        "--disable=C0111",
-        "--load-plugins=pylint_django",
-        "--load-plugins=pylint_django.checkers.migrations",
-        // "--django-settings-module=patientregistrationsystem.qdc.qdc.settings.dev",
-        // "--disable=django-not-configured"
-    ],
     "python.analysis.include": [],
     "python.analysis.exclude": [
         "**/docs/",
