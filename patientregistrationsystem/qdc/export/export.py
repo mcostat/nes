@@ -8,6 +8,7 @@ from csv import writer
 from datetime import date, datetime, timedelta
 from os import makedirs, path
 from sys import modules
+from typing import Any
 
 from django.apps import apps
 from django.conf import settings
@@ -605,7 +606,7 @@ class ExportExecution:
                             subject_of_group=subject_of_group,
                             data_configuration_tree=None,
                         )
-                        data_collections = [
+                        data_collections: list[dict[str, Any]] = [
                             {
                                 "component_configuration": None,
                                 "path": None,

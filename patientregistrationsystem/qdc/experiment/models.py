@@ -1352,15 +1352,16 @@ def get_data_file_dir(instance, filename: str) -> str:
         )
 
     # TODO (NES-987): see backlog
-    # elif isinstance(instance, HotSpot):
-    #     directory = path.join(
-    #         'data_collection_files',
-    #         str(instance.tms_data.subject_of_group.group.experiment.id),
-    #         str(instance.tms_data.subject_of_group.group.id),
-    #         str(instance.tms_data.subject_of_group.subject.id),
-    #         str(instance.tms_data.data_configuration_tree.id if instance.tms_data.data_configuration_tree else 0),
-    #         'hot_spot_map'
-    #     )
+    # TODO: create TEST
+    elif isinstance(instance, HotSpot):
+        directory = path.join(
+            "data_collection_files",
+            str(instance.tms_data.subject_of_group.group.experiment.id),
+            str(instance.tms_data.subject_of_group.group.id),
+            str(instance.tms_data.subject_of_group.subject.id),
+            str(instance.tms_data.data_configuration_tree.id if instance.tms_data.data_configuration_tree else 0),
+            "hot_spot_map",
+        )
 
     return path.join(directory, filename)
 

@@ -10,6 +10,8 @@ env:
   DJANGO_SETTINGS_MODULE: qdc.settings.test
   LIMESURVEY_HOST: limesurvey
   LIMESURVEY_PORT: 8080
+  LIMESURVEY_ADMIN_USER: lime_admin
+  LIMESURVEY_ADMIN_PASSWORD: lime_admin_password
   LIMESURVEY_URL_WEB: "172.0.0.1"
   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -17,8 +19,6 @@ jobs:
   quality-assurance:
     name: Quality Assurance
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
 
     services:
       limesurvey_db:
