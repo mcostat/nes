@@ -37,7 +37,7 @@ DEBUG404 = True
 IS_TESTING = True
 
 
-AXES_COOLOFF_MESSAGE = _("Your accouunt has been locked for 30 MINUTES: too many login attempts.")
+AXES_COOLOFF_MESSAGE = _("Your account has been locked for 30 MINUTES: too many login attempts.")
 AXES_FAILURE_LIMIT = 5
 AXES_RESET_ON_SUCCESS = True
 AXES_COOLOFF_TIME = 0.5
@@ -57,7 +57,7 @@ CSP_IMG_SRC = ["'self'", "data:"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'"]
 CSP_BASE_URI = "'none'"
-# CSP_INCLUDE_NONCE_IN = ["script-src"] #TODO enable this as soon as posible
+# CSP_INCLUDE_NONCE_IN = ["script-src"] #TODO enable this as soon as possible
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = False
@@ -72,7 +72,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:8080",
     "https://" + os.getenv("NES_IP", "127.0.0.1"),
     "https://" + os.getenv("NES_HOSTNAME", "localhost"),
-    "https://" + os.getenv("LIMESURVEY_HOST", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
+    "https://" + os.getenv("LIMESURVEY_HOST", "limesurvey") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
+    "http://" + os.getenv("LIMESURVEY_HOST", "limesurvey") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
     "http://" + os.getenv("LIMESURVEY_URL_WEB", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
 ]
 
@@ -115,7 +116,6 @@ INSTALLED_APPS += PROJECT_APPS
 MIDDLEWARE: list[str] = [
     "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    # "django.middleware.cache.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -124,7 +124,6 @@ MIDDLEWARE: list[str] = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
     "maintenance_mode.middleware.MaintenanceModeMiddleware",
@@ -196,7 +195,6 @@ WSGI_APPLICATION = "qdc.wsgi.application"
 
 # AUTH_USER_MODEL = 'quiz.UserProfile'
 # AUTH_PROFILE_MODULE = 'quiz.UserProfile'
-
 
 LANGUAGE_CODE = "pt-br"
 
@@ -324,7 +322,7 @@ DATABASES = {
 # LimeSurvey configuration
 LIMESURVEY = {
     "URL_API": "http://" + os.getenv("LIMESURVEY_HOST", "limesurvey") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
-    "URL_WEB": "http://" + os.getenv("LIMESURVEY_URL_WEB", "localhost") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
+    "URL_WEB": "http://" + os.getenv("LIMESURVEY_URL_WEB", "limesurvey") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
     "USER": os.getenv("LIMESURVEY_ADMIN_USER", "lime_admin"),
     "PASSWORD": os.getenv("LIMESURVEY_ADMIN_PASSWORD", "lime_admin_password"),
 }

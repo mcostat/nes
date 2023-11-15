@@ -14,9 +14,9 @@ else
     
 	cat <<-EOF >/tmp/create_superuser.py
 from django.contrib.auth import get_user_model
-User = get_user_model()
+user = get_user_model()
 try:
-    User.objects.create_superuser("$NES_ADMIN_USER", "$NES_ADMIN_EMAIL", "$NES_ADMIN_PASSWORD")
+    user.objects.create_superuser("$NES_ADMIN_USER", "$NES_ADMIN_EMAIL", "$NES_ADMIN_PASSWORD")
 except:
     print("erro criando super usuario.")
 	EOF

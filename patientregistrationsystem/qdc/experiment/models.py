@@ -413,7 +413,7 @@ def get_eeg_electrode_system_dir(instance, filename):
 class EEGElectrodeLocalizationSystem(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(null=True, blank=True)
-    map_image_file = models.FileField(upload_to=get_eeg_electrode_system_dir, null=True, blank=True)
+    map_image_file = models.ImageField(upload_to=get_eeg_electrode_system_dir, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -718,7 +718,7 @@ class EMGElectrodePlacement(models.Model):
     placement_reference = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
-    photo = models.FileField(upload_to=get_emg_placement_dir, null=True, blank=True)
+    photo = models.ImageField(upload_to=get_emg_placement_dir, null=True, blank=True)
     location = models.TextField(null=True, blank=True)
     placement_type = models.CharField(max_length=50, choices=PLACEMENT_TYPES)
 
@@ -947,7 +947,7 @@ class BrainAreaSystem(models.Model):
 
 
 class BrainAreaSystemPerspective(models.Model):
-    brain_area_image = models.FileField(upload_to=get_tms_brain_area_dir, null=True, blank=True)
+    brain_area_image = models.ImageField(upload_to=get_tms_brain_area_dir, null=True, blank=True)
     brain_area_system = models.ForeignKey(BrainAreaSystem, on_delete=models.CASCADE)
 
 
@@ -967,7 +967,7 @@ class BrainArea(models.Model):
 class TMSLocalizationSystem(models.Model):
     name = models.CharField(null=False, max_length=50, blank=False)
     description = models.TextField(null=True, blank=True)
-    tms_localization_system_image = models.FileField(upload_to=get_tms_localization_system_dir, null=True, blank=True)
+    tms_localization_system_image = models.ImageField(upload_to=get_tms_localization_system_dir, null=True, blank=True)
     brain_area = models.ForeignKey(BrainArea, on_delete=models.CASCADE)
 
     def __str__(self) -> str:

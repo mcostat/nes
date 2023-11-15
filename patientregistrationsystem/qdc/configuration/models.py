@@ -7,7 +7,7 @@ from solo.models import SingletonModel
 
 
 def get_institution_logo_dir(instance: Any, filename: str) -> str:
-    return "institution_logo/%s/%s" % (instance.id, filename)
+    return f"institution_logo/{instance.id}/{filename}"
 
 
 class LocalInstitution(SingletonModel):
@@ -15,7 +15,7 @@ class LocalInstitution(SingletonModel):
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
 
     url = models.URLField(null=True, blank=True)
-    logo = models.FileField(upload_to=get_institution_logo_dir, null=True, blank=True)
+    logo = models.ImageField(upload_to=get_institution_logo_dir, null=True, blank=True)
 
     def __str__(self) -> str:
         return "Local Institution"
@@ -29,7 +29,7 @@ class Contact(SingletonModel):
     email = models.EmailField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return "%s" % self.name
+        return f"{self.name}"
 
     class Meta(TypedModelMeta):
         verbose_name = "Contact"
@@ -49,4 +49,4 @@ class UsefulLink(models.Model):
     url = models.URLField()
 
     def __str__(self) -> str:
-        return "%s" % self.name
+        return f"{self.name}"

@@ -4,7 +4,7 @@ import datetime
 import random
 from typing import Any
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -283,7 +283,7 @@ class Payment(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Gender(models.Model):
@@ -292,7 +292,7 @@ class Gender(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class FleshTone(models.Model):
@@ -301,7 +301,7 @@ class FleshTone(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class MaritalStatus(models.Model):
@@ -310,7 +310,7 @@ class MaritalStatus(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Religion(models.Model):
@@ -319,7 +319,7 @@ class Religion(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Schooling(models.Model):
@@ -328,7 +328,7 @@ class Schooling(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class AmountCigarettes(models.Model):
@@ -337,7 +337,7 @@ class AmountCigarettes(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class AlcoholFrequency(models.Model):
@@ -346,7 +346,7 @@ class AlcoholFrequency(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class AlcoholPeriod(models.Model):
@@ -355,7 +355,7 @@ class AlcoholPeriod(models.Model):
     objects: MultilingualManager
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
 
 class Patient(models.Model):
@@ -379,7 +379,7 @@ class Patient(models.Model):
     email = models.EmailField(null=True, blank=True)
     removed = models.BooleanField(null=False, default=False)
     history = HistoricalRecords()
-    changed_by = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    changed_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     @property
     def _history_user(self):
@@ -397,10 +397,10 @@ class Patient(models.Model):
         )
 
     def get_absolute_url(self) -> str:
-        return "/patient/%i/" % self.pk
+        return f"/patient/{self.pk}/"
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs) -> None:
         if not self.pk:
@@ -443,7 +443,7 @@ class Telephone(models.Model):
 
     # Audit trail
     history = HistoricalRecords()
-    changed_by = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    changed_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     @property
     def _history_user(self):
@@ -495,7 +495,7 @@ class SocialDemographicData(models.Model):
 
     # Changes to audit trail
     history = HistoricalRecords()
-    changed_by = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    changed_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return str(self.patient)
@@ -562,7 +562,7 @@ class SocialHistoryData(models.Model):
 
     # Audit trail
     history = HistoricalRecords()
-    changed_by = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    changed_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     @property
     def _history_user(self):
@@ -587,7 +587,7 @@ class SocialHistoryData(models.Model):
 class MedicalRecordData(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=False)
     record_date = models.DateTimeField(null=False, auto_now_add=True)
-    record_responsible = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    record_responsible = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=False)
 
     class Meta:
         permissions = (
@@ -613,7 +613,7 @@ class ClassificationOfDiseases(models.Model):  # type: ignore [django-manager-mi
     objects: ClassificationOfDiseasesManager = ClassificationOfDiseasesManager()
 
     def __str__(self) -> str:
-        return self.abbreviated_description
+        return str(self.abbreviated_description)
 
     def natural_key(self) -> str:
         return self.code
@@ -665,8 +665,9 @@ class ExamFile(models.Model):
     exam = models.ForeignKey(ComplementaryExam, on_delete=models.CASCADE, null=False)
     content = models.FileField(upload_to=get_user_dir, null=False)
 
-    def delete(self, *args, **kwargs):
-        self.content.delete()
+    def delete(self, *args, **kwargs) -> None:
+        # TODO: should we delete the exam file??Even if we should, FileField doesnt have .delete() method
+        # self.content.delete()
         super().delete(*args, **kwargs)
 
 
@@ -679,7 +680,9 @@ class QuestionnaireResponse(models.Model):
         null=False,
         validators=[validate_date_questionnaire_response],
     )
-    questionnaire_responsible = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="+")
+    questionnaire_responsible = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, null=False, related_name="+"
+    )
     is_completed = models.CharField(null=False, max_length=50, default="")
 
     class Meta:
