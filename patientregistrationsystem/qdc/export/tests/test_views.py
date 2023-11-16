@@ -3778,7 +3778,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     "EEGData_" + str(i),
                     filename,
                 ),
-                "description": "Data Collection (format: %s)" % file_format_nes_code,
+                "description": f"Data Collection (format: {file_format_nes_code})",
             }
             i += 1
 
@@ -4084,7 +4084,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     "EMGData_" + str(i),
                     filename,
                 ),
-                "description": "Data Collection (format: %s)" % file_format_nes_code,
+                "description": f"Data Collection (format: {file_format_nes_code})",
             }
             i += 1
 
@@ -4266,7 +4266,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 "DigitalGamePhaseData_1",
                 filename,
             ),
-            "description": "Data Collection (format: %s)" % file_format_nes_code,
+            "description": f"Data Collection (format: {file_format_nes_code})",
         }
 
         self.assertIn(digital_game_phase_resource1, json_data["resources"])

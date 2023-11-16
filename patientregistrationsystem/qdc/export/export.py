@@ -171,7 +171,7 @@ def to_number(value: str) -> int:
     return int(float(value))
 
 
-def save_to_csv(complete_filename, rows_to_be_saved, filesformat_type, mode="w"):
+def save_to_csv(complete_filename: str, rows_to_be_saved: list, filesformat_type: str, mode: str = "w") -> None:
     """
     :param complete_filename: filename and directory structure where file is
     going to be saved
@@ -193,7 +193,7 @@ def save_to_csv(complete_filename, rows_to_be_saved, filesformat_type, mode="w")
             export_writer.writerow(row)
 
 
-def replace_multiple_choice_question_answers(responses_short, question_list):
+def replace_multiple_choice_question_answers(responses_short, question_list) -> None:
     """Get responses list that are multiple choices/multiple choices with
     comments question types (from question_list), and replaces the options
     that was not selected by participants with a 'N' (options that was
@@ -2576,7 +2576,7 @@ class ExportExecution:
                                             # TODO (NES-987): implement get_mediatype(extension) method and apply in the
                                             #  other places
                                             "format": extension,
-                                            "mediatype": "application/%s" % extension,
+                                            "mediatype": f"application/{extension}",
                                         },
                                     ]
                                 )
@@ -2633,7 +2633,7 @@ class ExportExecution:
                                     "name": unique_name,
                                     "title": unique_name,
                                     "path": path.join(export_eeg_data_directory, eeg_data_filename),
-                                    "description": "Data Collection (format: %s)" % file_format_nes_code,
+                                    "description": f"Data Collection (format: {file_format_nes_code})",
                                 }
 
                                 with open(path_eeg_data_file, "rb") as f:
@@ -2746,7 +2746,6 @@ class ExportExecution:
                             for emg_file in emg_data["emg_file_list"]:
                                 path_emg_data_file = emg_file.file.name
                                 emg_data_filename = path.basename(path_emg_data_file)
-                                complete_emg_data_filename = validate_path(path_per_emg_data, emg_data_filename)
 
                                 # For datapackage resources
                                 unique_name = slugify(emg_data_filename)
@@ -2755,9 +2754,10 @@ class ExportExecution:
                                     "name": unique_name,
                                     "title": unique_name,
                                     "path": path.join(export_emg_data_directory, emg_data_filename),
-                                    "description": "Data Collection (format: %s)" % file_format_nes_code,
+                                    "description": f"Data Collection (format: {file_format_nes_code})",
                                 }
 
+                                complete_emg_data_filename = validate_path(path_per_emg_data, emg_data_filename)
                                 with open(url, "rb") as f:
                                     data = f.read()
                                 with open(complete_emg_data_filename, "wb") as f:
@@ -2791,7 +2791,7 @@ class ExportExecution:
                                             ),
                                             # TODO (NES-987): implement get_mediatype(extension) method
                                             "format": extension,
-                                            "mediatype": "application/%s" % extension,
+                                            "mediatype": f"application/{extension}",
                                         },
                                     ]
                                 )
@@ -2844,7 +2844,7 @@ class ExportExecution:
                                         "path": path.join(export_tms_step_directory, TMS_DATA_FILENAME),
                                         # TODO (NES-987): implement get_mediatype(extension) method
                                         "format": extension,
-                                        "mediatype": "application/%s" % extension,
+                                        "mediatype": f"application/{extension}",
                                     },
                                 ]
                             )
@@ -2887,7 +2887,7 @@ class ExportExecution:
                                                 ),
                                                 # TODO (NES-987): implement get_mediatype(extension) method
                                                 "format": extension,
-                                                "mediatype": "image/%s" % extension,
+                                                "mediatype": f"image/{extension}",
                                             },
                                         ]
                                     )
@@ -3451,7 +3451,7 @@ class ExportExecution:
                     "title": "Participants",
                     "path": path.join(base_directory, export_filename),
                     "format": file_extension,
-                    "mediatype": "text/%s" % file_extension,
+                    "mediatype": f"text/{file_extension}",
                     "encoding": "UTF-8",
                     "profile": "tabular-data-resource",
                     "schema": {
@@ -3497,7 +3497,7 @@ class ExportExecution:
                         "title": "Diagnosis",
                         "path": path.join(base_directory, export_filename),
                         "format": file_extension,
-                        "mediatype": "text/%s" % file_extension,
+                        "mediatype": f"text/{file_extension}",
                         "encoding": "UTF-8",
                         "profile": "tabular-data-resource",
                         "schema": {
@@ -3853,7 +3853,7 @@ class ExportExecution:
                     "title": "Experiment",
                     "path": path.join(export_experiment_data, filename_experiment_resume),
                     "format": file_extension,
-                    "mediatype": "text/%s" % file_extension,
+                    "mediatype": f"text/{file_extension}",
                     "encoding": "UTF-8",
                     "profile": "tabular-data-resource",
                     "schema": {
@@ -3947,7 +3947,7 @@ class ExportExecution:
                                     PROTOCOL_IMAGE_FILENAME,
                                 ),
                                 "format": extension,
-                                "mediatype": "image/%s" % extension,
+                                "mediatype": f"image/{extension}",
                             },
                         ]
                     )
@@ -3977,7 +3977,7 @@ class ExportExecution:
                                     ),
                                     # TODO (NES-987): implement get_mediatype(extension) method
                                     "format": extension,
-                                    "mediatype": "application/%s" % extension,
+                                    "mediatype": f"application/{extension}",
                                 },
                             ]
                         )

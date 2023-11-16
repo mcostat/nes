@@ -1,5 +1,7 @@
 from os import makedirs, path
 
+from qdc.utils import validate_path
+
 
 def create_directory(basedir: str, path_to_create: str) -> tuple[str, str]:
     """
@@ -17,9 +19,7 @@ def create_directory(basedir: str, path_to_create: str) -> tuple[str, str]:
     if not path.exists(basedir.encode("utf-8")):
         return "Base path does not exist", complete_path
 
-    complete_path: str = path.normpath(path.join(basedir, path_to_create))
-    if not complete_path.startswith(basedir):
-        raise ValueError("Invalid path")
+    complete_path: str = validate_path(basedir, path_to_create)
 
     if not path.exists(complete_path.encode("utf-8")):
         makedirs(complete_path.encode("utf-8"))

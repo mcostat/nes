@@ -869,7 +869,7 @@ class ImportExperiment:
         # As there can be same survey in more than one questionnaire component,
         # create a dictionaire to nao questionnaire compontents by limesurvey
         # surveys.
-        token_ids_survey = {}
+        token_ids_survey: dict[int, list] = {}
         for index in indexes:
             questionnaire = Questionnaire.objects.get(id=self.data[index]["pk"])
             limesurvey_id = questionnaire.survey.lime_survey_id
