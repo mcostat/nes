@@ -265,8 +265,8 @@ def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_pl
                     plugin_url += "?user_id=" + str(request.user.id) + "&export_id=" + str(export.id)
                     # Puts in session to open plugin and load posted values
                     request.session["plugin_url"] = plugin_url
-                    request.session["experiment_selected_id"] = int(request.POST.get("experiment_selected", None))
-                    request.session["participants_from"] = list(map(int, request.POST.getlist("from[]", None)))
+                    request.session["experiment_selected_id"] = int(request.POST.get("experiment_selected"))
+                    request.session["participants_from"] = list(map(int, request.POST.getlist("from[]")))
                     request.session["participants_to"] = list(map(int, request.POST.getlist("patients_selected[]")))
                 return redirect(reverse("send-to-plugin"))
 
