@@ -1055,25 +1055,25 @@ class ComponentAdditionalFile(models.Model):
 
 
 class Task(Component):
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Task Component - {self.identification}"
 
 
 class TaskForTheExperimenter(Component):
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Expertimenter Task Component - {self.identification}"
 
 
 class Instruction(Component):
     text = models.TextField(null=False, blank=False)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Instruction Component - {self.identification}"
 
 
 class Pause(Component):
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Pause Component - {self.identification}"
 
 
 def get_stimulus_media_file_dir(instance, filename: str) -> str:
@@ -1086,15 +1086,15 @@ class Stimulus(Component):
 
     stimuli_setting = models.ForeignKey(StimuliEqSetting, on_delete=models.CASCADE, null=True, blank=True)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Stimulus Component - {self.identification}"
 
 
 class Questionnaire(Component):
     survey = models.ForeignKey(Survey, null=False, blank=False, on_delete=models.PROTECT)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Questionnaire Component - {self.identification}"
 
 
 class Block(Component):
@@ -1104,29 +1104,29 @@ class Block(Component):
     number_of_mandatory_components = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
     type = models.CharField(null=False, max_length=20, choices=BLOCK_TYPES)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Block Component - {self.identification}"
 
 
 class EEG(Component):
     eeg_setting = models.ForeignKey(EEGSetting, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"EEG Component - {self.identification}"
 
 
 class EMG(Component):
     emg_setting = models.ForeignKey(EMGSetting, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"EMG Component - {self.identification}"
 
 
 class TMS(Component):
     tms_setting = models.ForeignKey(TMSSetting, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"TMS Component - {self.identification}"
 
 
 class InformationType(models.Model):
@@ -1152,15 +1152,15 @@ class InformationTypeMedia(models.Model):
 class GenericDataCollection(Component):
     information_type = models.ForeignKey(InformationType, on_delete=models.CASCADE, null=False, blank=False)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Generic Data Component - {self.identification}"
 
 
 class MediaCollection(Component):
     information_type_media = models.ForeignKey(InformationTypeMedia, on_delete=models.CASCADE, null=False, blank=False)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Media Component - {self.identification}"
 
 
 def get_context_tree_dir(instance, filename: str) -> str:
@@ -1198,8 +1198,8 @@ class DigitalGamePhase(Component):
     software_version = models.ForeignKey(SoftwareVersion, on_delete=models.CASCADE)
     context_tree = models.ForeignKey(ContextTree, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs) -> None:
-        super().save(*args, **kwargs)
+    def __str__(self) -> str:
+        return f"Digital Game Component - {self.identification}"
 
 
 class ComponentConfiguration(models.Model):
@@ -1236,7 +1236,7 @@ class ComponentConfiguration(models.Model):
         if not self.pk and not self.order:
             top = ComponentConfiguration.objects.filter(parent=self.parent).order_by("-order").first()
             self.order = top.order + 1 if top else 1
-        super(ComponentConfiguration, self).save()
+        super().save()
         self.component.experiment.save()
 
 
@@ -1260,7 +1260,7 @@ class Group(models.Model):
         verbose_name = _("Group")
 
     def save(self, *args, **kwargs) -> None:
-        super(Group, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.experiment.save()
 
 
@@ -1441,7 +1441,7 @@ class DataCollection(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs) -> None:
-        super(DataCollection, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.subject_of_group.group.experiment.save()
 
 
@@ -1554,7 +1554,6 @@ class EEGData(DataFile, DataCollection):
     eeg_setting_reason_for_change = models.TextField(null=True, blank=True, default="")
     eeg_cap_size = models.ForeignKey(EEGCapSize, on_delete=models.CASCADE, null=True, blank=True)
 
-    # changed_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     history = HistoricalRecords()
 
     def __str__(self) -> str:

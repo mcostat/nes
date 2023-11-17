@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from custom_user.regex_utils import DATE_REGEX, FULLNAME_REGEX, PHONE_REGEX
 from django import forms
 from django.core.validators import EMPTY_VALUES
 from django.forms import (
@@ -37,7 +38,7 @@ class PatientForm(ModelForm):
         ),
     )
 
-    def __init__(self, data=None, *args, **kwargs):
+    def __init__(self, data=None, *args, **kwargs) -> None:
         super().__init__(data, *args, **kwargs)
         self.fields["zipcode"].widget.attrs["onBlur"] = "pesquisacep(this.value);"
         self.fields["country"].initial = "BR"
@@ -73,7 +74,9 @@ class PatientForm(ModelForm):
                     # "autofocus": "",
                     "required": "",
                     "data-error": _("Name must be included"),
+                    "minlength": "2",
                     "maxlength": "50",
+                    "pattern": FULLNAME_REGEX,
                     "oninput": "this.value = this.value.toUpperCase()",
                 }
             ),
@@ -83,7 +86,7 @@ class PatientForm(ModelForm):
             "date_birth": TextInput(
                 attrs={
                     "type": "date",
-                    "pattern": r"\d{4}-\d{2}-\d{2}",
+                    "pattern": DATE_REGEX,
                     "class": "form-control",
                     "required": "",
                     "placeholder": _("mm/dd/yyyy"),
@@ -149,7 +152,8 @@ class TelephoneForm(ModelForm):
                 attrs={
                     "type": "tel",
                     "class": "form-control telephone_number",
-                    "pattern": r"^[- ()0-9]+",
+                    # "pattern": r"^[- ()0-9]+",
+                    "pattern": PHONE_REGEX,
                 }
             ),
             "type": Select(attrs={"class": "form-select"}),
@@ -339,8 +343,7 @@ class ComplementaryExamForm(ModelForm):
             "date": TextInput(
                 attrs={
                     "type": "date",
-                    "pattern": r"\d{4}-\d{2}-\d{2}",
-                    # "class": "form-control datepicker",
+                    "pattern": DATE_REGEX,
                     "class": "form-control",
                     "placeholder": _("mm/dd/yyyy"),
                     "required": "",
@@ -379,7 +382,7 @@ class QuestionnaireResponseForm(ModelForm):
                 attrs={
                     "type": "date",
                     "class": "form-control",
-                    "pattern": r"\d{4}-\d{2}-\d{2}",
+                    "pattern": DATE_REGEX,
                     "placeholder": _("mm/dd/yyyy"),
                     "required": "",
                     "data-error": _("Fill date must be filled."),

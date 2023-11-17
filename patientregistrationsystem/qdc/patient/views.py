@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q as importedQ
 from django.forms.models import inlineformset_factory
 from django.http import HttpRequest, HttpResponseNotFound, HttpResponseRedirect
 from django.http.response import HttpResponse, HttpResponseNotAllowed
@@ -93,11 +94,8 @@ def patient_view(request: HttpRequest, patient_id: int) -> HttpResponse:
             return patient_view_social_history(request, patient, context)
         elif current_tab == "3":
             return patient_view_medical_record(request, patient, context)
-        else:  # current_tab == '4':
-            if request.user.has_perm("survey.view_survey"):
-                return patient_view_questionnaires(request, patient, context, False)
-            else:
-                raise PermissionDenied
+        elif current_tab == "4" and request.user.has_perm("survey.view_survey"):
+            return patient_view_questionnaires(request, patient, context, False)
 
     raise PermissionDenied
 
@@ -106,7 +104,7 @@ def patient_view(request: HttpRequest, patient_id: int) -> HttpResponse:
 @permission_required("patient.add_patient")
 def patient_create(request: HttpRequest, template_name: str = "patient/register_personal_data.html") -> HttpResponse:
     patient_form = PatientForm(request.POST or None)
-    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm)
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=1)
 
     if request.method == "POST":
         patient_form.city = request.POST["city"] if "city" in request.POST else ""
@@ -119,6 +117,7 @@ def patient_create(request: HttpRequest, template_name: str = "patient/register_
             # homonym search.
             if new_patient.name:
                 new_patient.name = new_patient.name.strip()
+                new_patient.name = new_patient.name.upper()
 
             if not new_patient.cpf:
                 new_patient.cpf = None
@@ -202,7 +201,7 @@ def get_current_tab(request: HttpRequest) -> str:
 def patient_update_personal_data(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     patient_form = PatientForm(request.POST or None, instance=patient)
 
-    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm)
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=1)
 
     if not patient.name:
         patient_form.fields["anonymous"].widget.attrs["checked"] = True
@@ -390,9 +389,9 @@ def finish_handling_post(request: HttpRequest, patient_id: int, current_tab: int
 def patient_view_personal_data(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     patient_form = PatientForm(instance=patient)
 
-    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=1)
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=0)
     telephone_formset = telephone_inlineformset(instance=patient)
-    patient_form.fields["anonymous"].widget.attrs["checked"] = True
+    patient_form.fields["anonymous"].widget.attrs["checked"] = False
     if not patient.name:
         patient_form.fields["anonymous"].widget.attrs["checked"] = True
 
@@ -717,7 +716,6 @@ def search_cid10_ajax(request):
 
         if search_text:
             # to solve circular import error
-            from django.db.models import Q as importedQ
 
             cid_10_list = ClassificationOfDiseases.objects.filter(
                 importedQ(abbreviated_description__icontains=search_text)
@@ -1123,6 +1121,8 @@ def exam_edit(
                 "new_medical_record": new_medical_record,
             },
         )
+
+    return None
 
 
 @login_required

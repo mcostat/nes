@@ -12,7 +12,8 @@ from xml.etree import ElementTree
 from xml.etree.ElementTree import XML
 
 from django.conf import settings
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.contrib.messages.api import MessageFailure
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.cache import cache
@@ -313,14 +314,16 @@ class CpfValidationTest(TestCase):
 
 
 class PatientFormValidation(TestCase):
-    user: User = User()
+    user: get_user_model() = get_user_model()
     data: dict[str, Any] = {}
     util = UtilTests()
 
     def setUp(self):
         """Set up authentication and variables to start each test"""
 
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -372,7 +375,7 @@ class PatientFormValidation(TestCase):
 
         response = self.client.post(reverse(PATIENT_NEW), self.data)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
     def test_patient_future_date_birth(self):
         """
@@ -388,7 +391,7 @@ class PatientFormValidation(TestCase):
 
         self.client.post(reverse(PATIENT_NEW), self.data)
 
-        self.assertEqual(Patient.objects.filter(name=name).count(), 0)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 0)
 
     def get_current_date(self):
         """
@@ -415,7 +418,7 @@ class PatientFormValidation(TestCase):
 
         self.client.post(reverse(PATIENT_NEW), self.data)
 
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
     def fill_management_form(self):
         self.data["telephone_set-TOTAL_FORMS"] = "3"
@@ -434,7 +437,7 @@ class PatientFormValidation(TestCase):
         self.fill_management_form()
 
         self.client.post(reverse(PATIENT_NEW), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
     def test_anonymous_patient_create(self):
         """
@@ -489,17 +492,17 @@ class PatientFormValidation(TestCase):
         self.fill_management_form()
 
         response = self.client.post(reverse(PATIENT_NEW), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=self.data["name"]).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=self.data["name"]).count(), 1)
         self.assertNotContains(response, _("Social class was not calculated"))
 
         # Prepare to test social demographic data tab
-        patient_to_update = Patient.objects.filter(name=self.data["name"]).first()
+        patient_to_update = Patient.objects.filter(name__iexact=self.data["name"]).first()
         self.fill_social_demographic_data()
         self.data["currentTab"] = 1
         assert isinstance(patient_to_update, Patient)
         # Success case
         response = self.client.post(reverse(PATIENT_EDIT, args=(patient_to_update.pk,)), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=self.data["name"]).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=self.data["name"]).count(), 1)
         self.assertContains(response, _("Social demographic data successfully written."))
         self.assertNotContains(response, _("Social class was not calculated"))
 
@@ -533,10 +536,10 @@ class PatientFormValidation(TestCase):
         self.fill_management_form()
 
         self.client.post(reverse(PATIENT_NEW), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
         # Prepare to test social history data tab
-        patient_to_update = Patient.objects.filter(name=name).first()
+        patient_to_update = Patient.objects.filter(name__iexact=name).first()
         self.data["smoker"] = True
         self.data["ex_smoker"] = True
         self.data["currentTab"] = 2
@@ -546,7 +549,7 @@ class PatientFormValidation(TestCase):
             self.data,
             follow=True,
         )
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
         self.assertNotContains(response, _("Social history successfully recorded."))
 
     def test_non_smoker_patient_can_not_fill_amount_of_cigarettes(self):
@@ -556,10 +559,10 @@ class PatientFormValidation(TestCase):
         self.fill_management_form()
 
         self.client.post(reverse(PATIENT_NEW), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
         # Prepare to test social history data tab
-        patient_to_update = Patient.objects.filter(name=name).first()
+        patient_to_update = Patient.objects.filter(name__iexact=name).first()
 
         amount_cigarettes = AmountCigarettes.objects.create(name=_("Less than 1 pack"))
         amount_cigarettes.save()
@@ -573,7 +576,7 @@ class PatientFormValidation(TestCase):
             self.data,
             follow=True,
         )
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
         self.assertNotContains(response, _("Social history successfully recorded."))
 
     def test_non_alcoholic_patient_can_not_fill_alcohol_frequency(self):
@@ -583,10 +586,10 @@ class PatientFormValidation(TestCase):
         self.fill_management_form()
 
         self.client.post(reverse(PATIENT_NEW), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
         # Prepare to test social history data tab
-        patient_to_update = Patient.objects.filter(name=name).first()
+        patient_to_update = Patient.objects.filter(name__iexact=name).first()
 
         alcohol_frequency = AlcoholFrequency.objects.create(name=_("Sporadically"))
         alcohol_frequency.save()
@@ -600,7 +603,7 @@ class PatientFormValidation(TestCase):
             self.data,
             follow=True,
         )
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
         self.assertNotContains(response, _("Social history successfully recorded."))
 
     def test_non_alcoholic_patient_can_not_fill_alcohol_period(self):
@@ -610,10 +613,10 @@ class PatientFormValidation(TestCase):
         self.fill_management_form()
 
         self.client.post(reverse(PATIENT_NEW), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
         # Prepare to test social history data tab
-        patient_to_update = Patient.objects.filter(name=name).first()
+        patient_to_update = Patient.objects.filter(name__iexact=name).first()
 
         alcohol_period = AlcoholPeriod.objects.create(name=_("Less than 1 year"))
         alcohol_period.save()
@@ -627,7 +630,7 @@ class PatientFormValidation(TestCase):
             self.data,
             follow=True,
         )
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
         self.assertNotContains(response, _("Social history successfully recorded."))
 
     def test_patient_social_history_data(self):
@@ -642,10 +645,10 @@ class PatientFormValidation(TestCase):
         self.fill_management_form()
 
         self.client.post(reverse(PATIENT_NEW), self.data, follow=True)
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
 
         # Prepare to test social history data tab
-        patient_to_update = Patient.objects.filter(name=name).first()
+        patient_to_update = Patient.objects.filter(name__iexact=name).first()
         self.fill_social_history_data()
         self.data["currentTab"] = 2
 
@@ -655,7 +658,7 @@ class PatientFormValidation(TestCase):
             self.data,
             follow=True,
         )
-        self.assertEqual(Patient.objects.filter(name=name).count(), 1)
+        self.assertEqual(Patient.objects.filter(name__iexact=name).count(), 1)
         self.assertContains(response, _("Social history successfully recorded."))
 
     def test_patient_valid_email(self):
@@ -949,7 +952,9 @@ class MedicalRecordFormValidation(TestCase):
     util = UtilTests()
 
     def setUp(self) -> None:
-        self.user: User = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user: get_user_model() = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -1471,12 +1476,14 @@ class QuestionnaireFormValidation(TestCase):
     - questionnaire with error: invalid survey (SURVEY_INVALID)
     """
 
-    user: User = object()
+    user: get_user_model() = object()
     data: dict[str, Any] = {}
     util = UtilTests()
 
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -2456,7 +2463,9 @@ A000,Cholera due to Vibrio cholerae 01 biovar cholerae,Cólera devida a Vibrio c
 """
 
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()

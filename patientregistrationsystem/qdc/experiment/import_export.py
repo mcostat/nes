@@ -314,7 +314,7 @@ class ImportExperiment:
         self.data: list[dict] = []
         self.last_objects_before_import: dict[str, Any] = {}
         self.new_objects: dict[str, Any] = {}
-        self.limesurvey_relations: dict[int, list] = {}
+        self.limesurvey_relations: dict[int, int] = {}
 
     def __del__(self) -> None:
         shutil.rmtree(self.temp_dir)

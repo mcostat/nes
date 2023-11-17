@@ -491,7 +491,7 @@ def export_create(
                 for (
                     filename,
                     directory,
-                    *resource,
+                    *_resource,
                 ) in export.files_to_zip_list:  # just by now
                     _fdir, fname = path.split(filename)
                     zip_file.write(filename.encode("utf-8"), path.join(directory, fname))
@@ -535,7 +535,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
     selected_participant = []
     selected_diagnosis = []
     selected_ev_quest_experiments = []
-    questionnaires_fields_list: list[dict[str, Any]] = []
+    questionnaires_fields_list: list[dict[str, dict[str, Any]]] = []
     questionnaires_experiment_fields_list = []
     language_code = request.LANGUAGE_CODE
 
@@ -1124,7 +1124,7 @@ def get_questionnaire_experiment_fields(questionnaire_code_list, language_curren
 
 def get_questionnaire_fields(
     questionnaire_code_list: list[int], current_language: str = "pt-BR"
-) -> tuple[int, list[dict[str, Any]]]:
+) -> tuple[int, list[dict[str, dict[str, Any]]]]:
     """
     :param questionnaire_code_list: list with questionnaire id to be
     formatted with json file

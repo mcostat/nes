@@ -55,7 +55,7 @@ CONN_HEALTH_CHECKS = True
 
 CSP_IMG_SRC = ["'self'", "data:"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
-CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'"]
+CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "http://viacep.com.br/"]
 CSP_BASE_URI = "'none'"
 # CSP_INCLUDE_NONCE_IN = ["script-src"] #TODO enable this as soon as possible
 

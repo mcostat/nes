@@ -386,7 +386,7 @@ class Patient(models.Model):
         return self.changed_by
 
     @_history_user.setter
-    def _history_user(self, value):
+    def _history_user(self, value) -> None:
         self.changed_by = value
 
     class Meta:
@@ -409,8 +409,8 @@ class Patient(models.Model):
 
     @staticmethod
     def create_random_patient_code() -> str:
-        used_codes = set([patient.code for patient in Patient.objects.all()])
-        possible_code = set(["P" + str(item) for item in range(1, 100000)])
+        used_codes = {patient.code for patient in Patient.objects.all()}
+        possible_code = {"P" + str(item) for item in range(1, 100000)}
         available_codes = list(possible_code - used_codes)
         return random.choice(available_codes)
 
@@ -450,11 +450,11 @@ class Telephone(models.Model):
         return self.changed_by
 
     @_history_user.setter
-    def _history_user(self, value):
+    def _history_user(self, value) -> None:
         self.changed_by = value
 
     def __str__(self) -> str:
-        return self.number + "(" + self.type + ") - " + self.note
+        return f"{self.number} ( {self.type} ) - {self.note}"
 
 
 class SocialDemographicData(models.Model):
