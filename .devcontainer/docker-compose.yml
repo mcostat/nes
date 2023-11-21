@@ -24,7 +24,7 @@ services:
     expose:
       - 8080
     ports:
-      - "8080:8080"
+      - 8080:8080
     env_file:
       - .env
     environment:
@@ -45,6 +45,16 @@ services:
     depends_on:
       - limesurvey_db
 
+  jupyterhub:
+    image: jupyterhub/jupyterhub
+    restart: unless-stopped
+    volumes:
+      - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media:ro
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+
   nes_db:
     image: postgres:16-bookworm
     restart: unless-stopped
@@ -53,7 +63,7 @@ services:
     expose:
       - 5432
     ports:
-      - "5432:5432"
+      - 5432:5432
     env_file:
       - .env
     environment:
@@ -71,6 +81,7 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - ../..:/workspaces:cached
+      - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media
     # Overrides default command so things don't shut down after the process ends.
     restart: unless-stopped
     command: sleep infinity
@@ -78,7 +89,7 @@ services:
     #network_mode: service:nes_db
     stdin_open: true
     ports:
-      - "80:80"
+      - 80:80
     env_file:
       - .env
     environment:
@@ -109,3 +120,4 @@ volumes:
   nes_pgdata:
   limesurvey_pgdata:
   limesurvey_data:
+  nes_media:

@@ -16,3 +16,5 @@ python3 -u manage.py collectstatic --no-input || true
 
 echo "  INFO: compress"
 python3 -u manage.py compress --force || true
+python3 -u manage.py collectstatic --no-input || true
+python manage.py runserver --nostaticpython manage.py runserver --nostatic

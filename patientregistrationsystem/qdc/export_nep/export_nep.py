@@ -113,7 +113,7 @@ for user in users:
                             "lab1:nep-lab1",
                             "--ignore-stdin",
                             "POST",
-                            PORTAL_SERVER + "/api/" "protocol_components/" + str(component.id) + "/groups/",
+                            PORTAL_SERVER + "/api/protocol_components/" + str(component.id) + "/groups/",
                             "title=" + group.title,
                             "nes_id=" + str(group.id),
                         ]

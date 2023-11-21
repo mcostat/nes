@@ -15,6 +15,7 @@ django-extensions>=3.2.3, <4.0
 django-cors-headers
 django-csp
 django_compressor
+whitenoise[brotli]
 
 jsonrpclib==0.2.1
 

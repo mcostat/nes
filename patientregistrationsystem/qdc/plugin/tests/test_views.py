@@ -85,15 +85,15 @@ class PluginTest(ExportTestCase):
         response = self.client.get(reverse("send-to-plugin"))
         self.assertContains(
             response,
-            "Título do Questionário Avaliação de Entrada não " "disponível em pt-BR",
+            "Título do Questionário Avaliação de Entrada não disponível em pt-BR",
         )
         self.assertContains(
             response,
-            "Título do Questionário Avaliação Cirúrgica não " "disponível em pt-BR",
+            "Título do Questionário Avaliação Cirúrgica não disponível em pt-BR",
         )
         self.assertContains(
             response,
-            "Título do Questionário Avaliação de Seguimento não " "disponível em pt-BR",
+            "Título do Questionário Avaliação de Seguimento não disponível em pt-BR",
         )
 
     @override_settings(LANGUAGE_CODE="en")

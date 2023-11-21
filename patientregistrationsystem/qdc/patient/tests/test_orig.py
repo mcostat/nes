@@ -1458,7 +1458,7 @@ class MedicalRecordFormValidation(TestCase):
         self.data[search_text_meta] = ""
         response = self.client.post(reverse("cid10_search"), self.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["cid_10_list"], "")
+        self.assertEqual(response.context["cid_10_list"], None)
 
 
 class QuestionnaireFormValidation(TestCase):

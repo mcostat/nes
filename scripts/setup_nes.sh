@@ -43,8 +43,8 @@ except:
     python3 -u manage.py collectstatic --no-input || true
     
     echo "  INFO: compress"
-    python3 -u manage.py compress || true
     python3 -u manage.py compress --force || true
+    python3 -u manage.py collectstatic --no-input || true
     
     echo "	INFO: populate_history"
     python3 -u manage.py populate_history --auto || true

@@ -2,7 +2,6 @@
 from typing import Any, Iterable
 
 from custom_user.models import Institution, UserProfile
-from custom_user.regex_utils import PASSWORD_REGEX, USERNAME_REGEX
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.hashers import make_password
@@ -17,6 +16,7 @@ from django.forms import (
     ValidationError,
 )
 from django.utils.translation import gettext_lazy as _
+from qdc.utils import PASSWORD_REGEX, USERNAME_REGEX
 
 
 class UserForm(ModelForm):

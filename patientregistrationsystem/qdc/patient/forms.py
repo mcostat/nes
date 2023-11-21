@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-from custom_user.regex_utils import DATE_REGEX, FULLNAME_REGEX, PHONE_REGEX
 from django import forms
 from django.core.validators import EMPTY_VALUES
 from django.forms import (
@@ -21,6 +20,7 @@ from patient.models import (
     SocialHistoryData,
     Telephone,
 )
+from qdc.utils import DATE_REGEX, FULLNAME_REGEX, PHONE_REGEX
 
 NULLBOOLEAN_CHOICE = ((True, _("Yes")), (False, _("No")), (None, _("Unknown")))
 RATINGS_CHOICE = ((0, "0"), (1, "1"), (2, "2"), (3, "3"), (4, _("4 or +")))

@@ -444,7 +444,7 @@ def research_project_view(
             experiment_id = request.POST["experiment_id"]
             experiment = get_object_or_404(Experiment, pk=experiment_id)
             copy_experiment(experiment, True)
-            messages.success(request, _("The experiment was copied with " "all data collections"))
+            messages.success(request, _("The experiment was copied with all data collections"))
             redirect_url = reverse("experiment_view", args=(experiment.id,))
             return HttpResponseRedirect(redirect_url)
 
@@ -878,7 +878,7 @@ def experiment_view(request, experiment_id, template_name: str = "experiment/exp
                 except ProtectedError:
                     messages.error(
                         request,
-                        _("It was not possible to delete experiment " "because there are groups connected."),
+                        _("It was not possible to delete experiment because there are groups connected."),
                     )
                     redirect_url = reverse("experiment_view", args=(experiment_id,))
                     return HttpResponseRedirect(redirect_url)
@@ -5231,7 +5231,7 @@ def ad_converter_view(request, ad_converter_id, template_name: str = "experiment
 
 
 def search_cid10_ajax(request):
-    cid_10_list = ""
+    cid_10_list = None
 
     if request.method == "POST":
         search_text = request.POST["search_text"]
@@ -6152,7 +6152,7 @@ def subject_questionnaire_response_start_fill_questionnaire(
         if not check_required_fields(questionnaire_lime_survey, lime_survey_id):
             messages.warning(
                 request,
-                _("Fill not available - Questionnaire does not contain " "standard fields."),
+                _("Fill not available - Questionnaire does not contain standard fields."),
             )
             return None, None
 
@@ -6163,7 +6163,7 @@ def subject_questionnaire_response_start_fill_questionnaire(
         if not result:
             messages.warning(
                 request,
-                _("Fail trying to generate token to answer questionnaire. " "Check if questionnaire is active."),
+                _("Fail trying to generate token to answer questionnaire. Check if questionnaire is active."),
             )
             return None, None
 
@@ -6251,7 +6251,7 @@ def subject_questionnaire_response_create(
                     + " "
                     + subject.patient.name
                     + ". "
-                    + _("Patient has not email registered. Please " "register an email for her/him")
+                    + _("Patient has not email registered. Please register an email for her/him")
                     + ".",
                 )
             else:
@@ -12478,7 +12478,7 @@ def component_view(request, path_of_the_components):
             return HttpResponseRedirect(redirect_url)
         elif request.POST["action"] == "copy_experiment_with_data":
             copy_experiment(experiment, True)
-            messages.success(request, _("The experiment was copied with " "all data collections"))
+            messages.success(request, _("The experiment was copied with all data collections"))
             redirect_url = reverse("experiment_view", args=(experiment.id,))
             return HttpResponseRedirect(redirect_url)
 

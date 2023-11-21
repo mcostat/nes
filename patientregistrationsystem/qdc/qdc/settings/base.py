@@ -116,6 +116,7 @@ INSTALLED_APPS += PROJECT_APPS
 MIDDLEWARE: list[str] = [
     "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -188,6 +189,7 @@ CACHES: dict[str, Any] = {
 COMPRESS_CACHE_BACKEND = "redis"
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
+COMPRESS_STORAGE = "compressor.storage.BrotliCompressorFileStorage"
 
 ROOT_URLCONF = "qdc.urls"
 
@@ -270,7 +272,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 

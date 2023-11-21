@@ -1,7 +1,7 @@
-from custom_user.regex_utils import PASSWORD_MIN_LEN, PASSWORD_REGEX
 from django.contrib.auth.forms import PasswordChangeForm
 from django.forms import PasswordInput, ValidationError
 from django.utils.translation import gettext_lazy as _
+from qdc.utils import PASSWORD_MIN_LEN, PASSWORD_REGEX
 
 
 class PasswordChangeFormCustomized(PasswordChangeForm):

@@ -18,9 +18,10 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
 
-INSTALLED_APPS += [
+INSTALLED_APPS = [
     "debug_toolbar",
-]
+    "whitenoise.runserver_nostatic",
+] + INSTALLED_APPS
 
 MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
 

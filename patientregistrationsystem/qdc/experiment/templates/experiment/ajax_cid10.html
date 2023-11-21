@@ -1,10 +1,13 @@
 {% load i18n %}
+
 <ul style="list-style-type: none; padding: 0; margin: 0;">
-    {% if cid_10_list.count > 0 %}
-        {% for cid_10 in cid_10_list %}
-            <li><a href="/experiment/group/{{ group_id }}/diagnosis/{{ cid_10.id }}">{{ cid_10.code }} - {{ cid_10.description }}</a></li>
-        {% endfor %}
-    {% else %}
-        <li>{% trans "No diseases found!" %}</li>
-    {% endif %}
+    {% for cid_10 in cid_10_list %}
+        <li>
+            <a href="/experiment/group/{{ group_id }}/diagnosis/{{ cid_10.id }}">{{ cid_10.code }} - {{ cid_10.description }}</a>
+        </li>
+    {% empty %}
+        <li>
+            {% trans "No diseases found!" %}
+        </li>
+    {% endfor %}
 </ul>

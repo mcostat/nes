@@ -104,7 +104,7 @@ def patient_view(request: HttpRequest, patient_id: int) -> HttpResponse:
 @permission_required("patient.add_patient")
 def patient_create(request: HttpRequest, template_name: str = "patient/register_personal_data.html") -> HttpResponse:
     patient_form = PatientForm(request.POST or None)
-    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=1)
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=2)
 
     if request.method == "POST":
         patient_form.city = request.POST["city"] if "city" in request.POST else ""
@@ -201,7 +201,7 @@ def get_current_tab(request: HttpRequest) -> str:
 def patient_update_personal_data(request: HttpRequest, patient: Patient, context: dict[str, Any]) -> HttpResponse:
     patient_form = PatientForm(request.POST or None, instance=patient)
 
-    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=1)
+    telephone_inlineformset = inlineformset_factory(Patient, Telephone, form=TelephoneForm, extra=1, can_delete=True)
 
     if not patient.name:
         patient_form.fields["anonymous"].widget.attrs["checked"] = True
@@ -231,6 +231,9 @@ def patient_update_personal_data(request: HttpRequest, patient: Patient, context
                 for phone in new_phone_list:
                     phone.changed_by = request.user
                     phone.save()
+
+                for deleted_phone in telephone_formset.deleted_objects:
+                    deleted_phone.delete()
 
             if patient_form_has_changed or telephone_formset_has_changed:
                 messages.success(request, _("Personal data successfully written."))
@@ -707,7 +710,7 @@ def patients_verify_homonym_excluded(request: HttpRequest) -> HttpResponse:
 @login_required
 @permission_required("patient.add_medicalrecorddata")
 def search_cid10_ajax(request):
-    cid_10_list = []
+    cid_10_list = None
 
     if request.method == "POST":
         search_text = request.POST["search_text"]
@@ -1636,7 +1639,7 @@ def get_limesurvey_response_url(questionnaire_response: QuestionnaireResponse) -
         "token",
     )
 
-    redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/acquisitiondate/%s/" "subjectid/%s/newtest/Y" % (
+    redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/acquisitiondate/%s/subjectid/%s/newtest/Y" % (
         settings.LIMESURVEY["URL_WEB"],
         questionnaire_response.survey.lime_survey_id,
         token,
