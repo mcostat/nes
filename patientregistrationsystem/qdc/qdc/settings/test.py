@@ -12,8 +12,6 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
 
-WHITENOISE_AUTOREFRESH = True
-
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DATABASES["default"] = {

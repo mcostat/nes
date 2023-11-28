@@ -30,14 +30,13 @@ def qdc_permission_denied_view(
 
 @login_required
 def contact(request: HttpRequest) -> HttpResponse:
-    # messages.success(request, _("Test !"))
     if_upgrade = False
     if check_upgrade(request):
         if_upgrade = True
         if request.user.has_perm("configuration.upgrade_rights"):
             messages.info(
                 request,
-                mark_safe('<a href="/home/upgrade_nes/">There is a new version of NES. Click ' "for upgrade</a>"),
+                mark_safe('<a href="/home/upgrade_nes/">There is a new version of NES. Click for upgrade</a>'),
             )
 
         else:
@@ -47,7 +46,6 @@ def contact(request: HttpRequest) -> HttpResponse:
             )
 
     context = {
-        "logo_institution": settings.LOGO_INSTITUTION,
         "if_upgrade": if_upgrade,
     }
 

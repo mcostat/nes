@@ -96,8 +96,6 @@
                         <a class="thumbnail" href="{{ institution_config.url }}">
                             {% if institution_config.logo %}
                                 <img class="img-fluid" src="/media/{{ institution_config.logo }}" alt="Logo do {{ institution_config.name }}" width="200" height="100" />
-                            {% else %}
-                                <img class="img-fluid" src="{{ STATIC_URL }}/imgs/{{ logo_institution }}" alt="Logo do {{ institution_config.name }}" width="200" height="100" />
                             {% endif %}
                         </a>
                     </div>

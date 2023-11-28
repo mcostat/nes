@@ -10,7 +10,7 @@ ENV LC_ALL en_US.UTF-8
 
 
 ARG NES_BRANCH
-ENV NES_BRANCH=$NES_BRANCH
+ENV NES_BRANCH="jupyter"
 ENV NES_DIR="/usr/local/nes"
 
 

@@ -77,7 +77,7 @@ class ExportExperiment:
         )
         sys.stdout = sysout
 
-    def _generate_detached_fixture(self, filename: str, elements: list) -> None:
+    def _generate_detached_fixture(self, filename: str, elements: tuple) -> None:
         with open(path.join(self.temp_dir, elements[3] + ".json"), encoding="utf-8") as file:
             data = json.load(file)
         parent_ids = [dict_["pk"] for index, dict_ in enumerate(data) if dict_["model"] == elements[2]]

@@ -36,6 +36,10 @@ DEBUG404 = True
 # SECURITY WARNING: don't run with "is testing" in production
 IS_TESTING = True
 
+# LOGIN_URL = "/admin/login/"
+OAUTH2_PROVIDER = {"PKCE_REQUIRED": False, "ALLOWED_SCHEMES": ["http", "https"], "OIDC_ENABLED ": True}
+OIDC_ENABLED = True
+
 
 AXES_COOLOFF_MESSAGE = _("Your account has been locked for 30 MINUTES: too many login attempts.")
 AXES_FAILURE_LIMIT = 5
@@ -70,6 +74,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://localhost:8080",
     "http://127.0.0.1:8080",
     "https://127.0.0.1:8080",
+    "http://localhost:8000",
+    "https://localhost:8000",
     "https://" + os.getenv("NES_IP", "127.0.0.1"),
     "https://" + os.getenv("NES_HOSTNAME", "localhost"),
     "https://" + os.getenv("LIMESURVEY_HOST", "limesurvey") + ":" + os.getenv("LIMESURVEY_PORT", "8080"),
@@ -98,6 +104,7 @@ INSTALLED_APPS: list[str] = [
     "django_extensions",
     "compressor",
     "corsheaders",
+    "oauth2_provider",
 ]
 
 PROJECT_APPS: list[str] = [
@@ -108,7 +115,6 @@ PROJECT_APPS: list[str] = [
     "export",
     "configuration",
     "plugin",
-    "processing",
 ]
 
 INSTALLED_APPS += PROJECT_APPS
@@ -116,7 +122,6 @@ INSTALLED_APPS += PROJECT_APPS
 MIDDLEWARE: list[str] = [
     "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -189,13 +194,21 @@ CACHES: dict[str, Any] = {
 COMPRESS_CACHE_BACKEND = "redis"
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
-COMPRESS_STORAGE = "compressor.storage.BrotliCompressorFileStorage"
+COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
+
+COMPRESS_FILTERS = {
+    "css": [
+        "compressor.filters.css_default.CssAbsoluteFilter",
+        "compressor.filters.cssmin.rCSSMinFilter",
+    ],
+    "js": ["compressor.filters.jsmin.JSMinFilter"],
+}
 
 ROOT_URLCONF = "qdc.urls"
 
 WSGI_APPLICATION = "qdc.wsgi.application"
 
-# AUTH_USER_MODEL = 'quiz.UserProfile'
+# AUTH_USER_MODEL = "custom_user.UserProfile"
 # AUTH_PROFILE_MODULE = 'quiz.UserProfile'
 
 LANGUAGE_CODE = "pt-br"
@@ -272,7 +285,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
 
@@ -296,7 +309,6 @@ MEDIA_ROOT: str = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "media/"
 
 
-# TODO: move some of those env variables to a secret file
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
@@ -343,9 +355,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "")
 SERVER_EMAIL = EMAIL_HOST_USER
-
-
-LOGO_INSTITUTION = os.getenv("NES_PROJECT_PATH", "") + "/logo-institution.png"
 
 PROJECT_REPO = "https://github.com/mcostat/nes.git"
 

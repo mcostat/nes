@@ -144,4 +144,7 @@ ready(function () {
 
   // When the user clicks on the button, scroll to the top of the document
   mybutton.addEventListener("click", backToTop);
+
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 });

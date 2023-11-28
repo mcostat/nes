@@ -1,5 +1,7 @@
 import os
 
+from configuration import views as confviews
+from custom_user.forms import CustomPasswordResetForm
 from django import get_version
 from django.conf import settings
 from django.conf.urls import include
@@ -10,9 +12,6 @@ from django.urls import path, re_path, reverse_lazy
 from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
 from django.views.static import serve as staticserve
-
-from configuration import views as confviews
-from custom_user.forms import CustomPasswordResetForm
 from qdc import views as qdcviews
 
 from .forms import PasswordChangeFormCustomized
@@ -21,6 +20,7 @@ admin.autodiscover()
 
 urlpatterns = [
     re_path(r"^admin/", admin.site.urls, name="admin"),
+    path("o/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     re_path(r"^rosetta/", include("rosetta.urls")),
     re_path(r"^patient/", include("patient.urls")),
     re_path(r"^user/", include("custom_user.urls")),
@@ -28,7 +28,6 @@ urlpatterns = [
     re_path(r"^survey/", include("survey.urls")),
     re_path(r"^export/", include("export.urls")),
     re_path(r"^plugin/", include("plugin.urls")),
-    re_path(r"^processing/", include("processing.urls")),
     re_path(r"^home/$", qdcviews.contact, name="contact"),
     re_path(r"^home/$", qdcviews.contact, name="home"),
     re_path(r"^links/$", confviews.useful_links_view, name="useful_links"),

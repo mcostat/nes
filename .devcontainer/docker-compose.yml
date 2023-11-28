@@ -54,6 +54,8 @@ services:
       - 8000
     ports:
       - 8000:8000
+    depends_on:
+      - nes_db
 
   nes_db:
     image: postgres:16-bookworm

@@ -6,7 +6,7 @@ PASSWORD_REGEX = r"^(?=.*\d)(?=.*[a-z]).{8,127}$"
 
 FIRSTNAME_REGEX = r"^[a-zA-Z]+((\s|\-)[a-zA-Z]+)?$"
 LASTNAME_REGEX = r"^[a-zA-Z]+((\s|\-)[a-zA-Z]+)?$"
-FULLNAME_REGEX = r"^[A-Z][a-zA-Z]{1,}(?: [a-zA-Z0-9]+){1,5}$"
+FULLNAME_REGEX = r"^[A-Z][a-zA-Z']{1,}(?: [a-zA-Z0-9']+){0,5}$"
 
 PHONE_REGEX = r"^[ \(\)\-\d]+"
 
