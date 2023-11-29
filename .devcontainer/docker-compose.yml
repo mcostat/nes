@@ -4,9 +4,12 @@ services:
 
   limesurvey_db:
     image: postgres:11-bookworm
+    hostname: limesurvey_db
     volumes:
       - limesurvey_pgdata:/var/lib/postgresql/data:delegated
     restart: unless-stopped
+    networks:
+      - nes-network
     expose:
       - 5432
     env_file:
@@ -18,9 +21,12 @@ services:
 
   limesurvey:
     image: neuromat/nes-compose:limesurvey
+    hostname: limesurvey
     volumes:
       - "limesurvey_data:/var/www/limesurvey"
     restart: unless-stopped
+    networks:
+      - nes-network
     expose:
       - 8080
     ports:
@@ -46,22 +52,35 @@ services:
       - limesurvey_db
 
   jupyterhub:
-    image: jupyterhub/jupyterhub
+    build: https://github.com/mcostat/nes-jupyterhub.git
+    image: nes-jupyterhub
     restart: unless-stopped
+    hostname: jupyterhub
+    container_name: jupyterhub
     volumes:
-      - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media:ro
+      - nes_media:/nes/media:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - jupyterhub-data:/data
+    networks:
+      - nes-network
+      - jupyterhub-network
     expose:
       - 8000
     ports:
       - 8000:8000
+    environment:
+      DOCKER_NETWORK_NAME: jupyterhub-network
     depends_on:
-      - nes_db
+      - nes
 
   nes_db:
     image: postgres:16-bookworm
+    hostname: nes_db
     restart: unless-stopped
     volumes:
       - nes_pgdata:/var/lib/postgresql/data:delegated
+    networks:
+      - nes-network
     expose:
       - 5432
     ports:
@@ -81,6 +100,7 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    hostname: nes
     volumes:
       - ../..:/workspaces:cached
       - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media
@@ -90,6 +110,8 @@ services:
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     #network_mode: service:nes_db
     stdin_open: true
+    networks:
+      - nes-network
     ports:
       - 80:80
     env_file:
@@ -123,3 +145,11 @@ volumes:
   limesurvey_pgdata:
   limesurvey_data:
   nes_media:
+  jupyterhub-data:
+
+
+networks:
+  nes-network:
+    name: nes-network
+  jupyterhub-network:
+    name: jupyterhub-network

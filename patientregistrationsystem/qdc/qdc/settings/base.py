@@ -37,7 +37,16 @@ DEBUG404 = True
 IS_TESTING = True
 
 # LOGIN_URL = "/admin/login/"
-OAUTH2_PROVIDER = {"PKCE_REQUIRED": False, "ALLOWED_SCHEMES": ["http", "https"], "OIDC_ENABLED ": True}
+OAUTH2_PROVIDER = {
+    "PKCE_REQUIRED": False,
+    "ALLOWED_SCHEMES": ["http", "https"],
+    "OAUTH2_VALIDATOR_CLASS": "qdc.oauth.CustomOAuth2Validator",
+    "OIDC_ENABLED": True,
+    "SCOPES": {
+        "openid": "OpenID Connect scope",
+        # ... any other scopes that you use
+    },
+}
 OIDC_ENABLED = True
 
 
@@ -64,7 +73,7 @@ CSP_BASE_URI = "'none'"
 # CSP_INCLUDE_NONCE_IN = ["script-src"] #TODO enable this as soon as possible
 
 # CORS
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "https://localhost",
@@ -313,6 +322,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "0.0.0.0",
+    "nes",
     os.getenv("NES_IP", "127.0.0.1"),
     os.getenv("NES_HOSTNAME", "localhost"),
 ]
