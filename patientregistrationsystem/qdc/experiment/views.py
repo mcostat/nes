@@ -6665,7 +6665,7 @@ def questionnaire_response_view(
         survey_title = cache.get(survey_title_key)
         groups_of_questions = cache.get(groups_of_questions_key)
     except:
-        survey_title = None
+        survey_title = ""
         groups_of_questions = None
 
     if not survey_title and not groups_of_questions:
@@ -12830,7 +12830,7 @@ def component_update(request, path_of_the_components):
     protected_steps, protected_uses_of_step = get_protected_steps_and_uses_of_steps(experiment, group)
 
     questionnaire_id = None
-    questionnaire_title = None
+    questionnaire_title = ""
     configuration_list = []
     configuration_list_of_random_components = []
     specific_form = None
@@ -13346,7 +13346,7 @@ def component_reuse(request, path_of_the_components, component_id):
         )
 
     questionnaire_id = None
-    questionnaire_title = None
+    questionnaire_title = ""
     specific_form = None
     duration_string = None
     has_unlimited = None

@@ -1,3 +1,5 @@
+import logging
+
 from .base import *  # noqa: F401
 
 DEBUG = False
@@ -15,7 +17,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DATABASES["default"] = {
     "ENGINE": "django.db.backends.sqlite3",
-    "NAME": "teste_db",
+    "NAME": ":memory:",
 }
 
 PASSWORD_HASHERS: list[str] = [
@@ -37,4 +39,4 @@ CACHES = {
 
 WHITENOISE_AUTOREFRESH = True
 
-LOGGING_CONFIG = None
+logging.disable(logging.CRITICAL)

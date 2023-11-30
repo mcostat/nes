@@ -331,9 +331,9 @@ def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_pl
     admission_participants = {}
     surgical_participants = {}
     followup_participants = {}
-    admission_title = None
-    surgical_title = None
-    followup_title = None
+    admission_title = ""
+    surgical_title = ""
+    followup_title = ""
 
     # Patients that answered the admission assessment,
     # surgical evaluation and followup assessment questionnaires

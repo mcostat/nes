@@ -29,9 +29,6 @@
             "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
             "django": true,
             "justMyCode": true,
-            "env": {
-                "DEBUG": "true"
-            }
         },
         {
             "name": "Python: Coverage",
@@ -41,14 +38,11 @@
             "args": [
                 "run",
                 "manage.py",
-                "test"
+                "test",
             ],
             "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
             "django": true,
             "justMyCode": true,
-            "env": {
-                "DEBUG": "true"
-            }
         }
     ]
 }

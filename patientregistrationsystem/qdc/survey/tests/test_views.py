@@ -61,8 +61,8 @@ class ABCSearchEngineTest(TestCase):
             lime_survey.get_participant_properties(self.test_sid, result_token, "token")
 
         # except TRANSPORT_ERROR:
-        except Error as e:
-            print("ERROR", e)
+        except Error as err:
+            print("ERROR", err)
             self.session_key = None
 
     def tearDown(self) -> None:
@@ -517,7 +517,7 @@ class SurveyTest(TestCase):
         # Create a survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1)
         isinstance(survey.pt_title, str)
-        self.assertIsNone(survey.pt_title)
+        self.assertEqual(survey.pt_title, "")
 
         response = self.client.get(reverse("survey_list"))
         self.assertIsNotNone(Survey.objects.last().pt_title)
@@ -536,7 +536,7 @@ class SurveyTest(TestCase):
 
         # Create a survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1)
-        self.assertIsNone(survey.en_title)
+        self.assertEqual(survey.en_title, "")
 
         response = self.client.get(reverse("survey_list"))
         self.assertIsNotNone(Survey.objects.last().en_title)
@@ -550,7 +550,7 @@ class SurveyTest(TestCase):
 
         # Create an survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1, en_title="Test_en_title")
-        self.assertIsNone(survey.pt_title)
+        self.assertEqual(survey.pt_title, "")
 
         response = self.client.get(reverse("survey_list"))
         self.assertEqual(response.status_code, 200)
@@ -560,7 +560,7 @@ class SurveyTest(TestCase):
         self.assertContains(response, survey.en_title)
 
         # Check that the pt_title field remains null
-        self.assertIsNone(Survey.objects.last().pt_title)
+        self.assertEqual(Survey.objects.last().pt_title, "")
 
     @override_settings(LANGUAGE_CODE="en")
     @patch("survey.abc_search_engine.Server")
@@ -569,7 +569,7 @@ class SurveyTest(TestCase):
 
         # Create a survey with a dummy lime survey id and without any code
         survey = Survey.objects.create(lime_survey_id=-1, pt_title="Teste_pt_title")
-        self.assertIsNone(survey.en_title)
+        self.assertEqual(survey.en_title, "")
 
         response = self.client.get(reverse("survey_list"))
         self.assertEqual(response.status_code, 200)
@@ -579,7 +579,7 @@ class SurveyTest(TestCase):
         self.assertContains(response, survey.pt_title)
 
         # Check that the en_title field remains null
-        self.assertIsNone(Survey.objects.last().en_title)
+        self.assertEqual(Survey.objects.last().en_title, "")
 
     @patch("survey.abc_search_engine.Server")
     def test_survey_without_pt_or_en_title_returns_default_language_title_to_be_listed_but_does_not_save(
@@ -608,8 +608,8 @@ class SurveyTest(TestCase):
         self.assertContains(response, fr_title_survey)
 
         # Check that pt_title and en_title remain null
-        self.assertIsNone(Survey.objects.last().en_title)
-        self.assertIsNone(Survey.objects.last().pt_title)
+        self.assertEqual(Survey.objects.last().en_title, "")
+        self.assertEqual(Survey.objects.last().pt_title, "")
 
     @patch("survey.abc_search_engine.Server")
     def test_surveys_list_get_updated(self, mock_server):

@@ -8,8 +8,8 @@ class Survey(models.Model):  # type: ignore [django-manager-missing]
 
     lime_survey_id = models.IntegerField(unique=True)
     is_initial_evaluation = models.BooleanField(default=True)
-    pt_title = models.CharField(max_length=255, default="")
-    en_title = models.CharField(max_length=255, default="")
+    pt_title = models.CharField(max_length=255, blank=True, default="")
+    en_title = models.CharField(max_length=255, blank=True, default="")
     is_active = models.BooleanField(null=True)
 
     class Meta:

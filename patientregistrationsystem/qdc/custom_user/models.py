@@ -26,15 +26,15 @@ class Institution(models.Model):  # type: ignore [django-manager-missing]
         related_name="children+",
     )
 
-    def __str__(self) -> str:
-        return str(self.name)
-
     class Meta(TypedModelMeta):
         ordering = ["name"]
 
         constraints = [
             models.UniqueConstraint(fields=["name", "acronym", "country"], name="unique_institution"),
         ]
+
+    def __str__(self) -> str:
+        return str(self.name)
 
 
 class UserProfile(models.Model):
@@ -43,6 +43,9 @@ class UserProfile(models.Model):
     login_enabled = models.BooleanField(default=False, choices=LOGIN)
     force_password_change = models.BooleanField(default=True)
     citation_name = models.CharField(max_length=150, blank=True, default="")
+
+    def __str__(self) -> str:
+        return self.user.get_username()
 
     @staticmethod
     def cached_force_password_change(_user) -> bool:

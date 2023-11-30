@@ -75,11 +75,11 @@ class PluginTest(ExportTestCase):
 
         self._create_basic_objects()
         random_forest = RandomForests.objects.get()
-        random_forest.admission_assessment.pt_title = None
+        random_forest.admission_assessment.pt_title = ""
         random_forest.admission_assessment.save()
-        random_forest.surgical_evaluation.pt_title = None
+        random_forest.surgical_evaluation.pt_title = ""
         random_forest.surgical_evaluation.save()
-        random_forest.followup_assessment.pt_title = None
+        random_forest.followup_assessment.pt_title = ""
         random_forest.followup_assessment.save()
 
         response = self.client.get(reverse("send-to-plugin"))
@@ -104,11 +104,11 @@ class PluginTest(ExportTestCase):
 
         self._create_basic_objects()
         random_forest = RandomForests.objects.get()
-        random_forest.admission_assessment.en_title = None
+        random_forest.admission_assessment.en_title = ""
         random_forest.admission_assessment.save()
-        random_forest.surgical_evaluation.en_title = None
+        random_forest.surgical_evaluation.en_title = ""
         random_forest.surgical_evaluation.save()
-        random_forest.followup_assessment.en_title = None
+        random_forest.followup_assessment.en_title = ""
         random_forest.followup_assessment.save()
 
         response = self.client.get(reverse("send-to-plugin"))
