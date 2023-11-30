@@ -485,7 +485,7 @@ def create_experiments_questionnaire_data_list(survey, surveys):
                     }
 
     # Transform dictionary into a list to include questionnaire components that are not in use and to sort.
-    experiments_questionnaire_data_list = []
+    experiments_questionnaire_data_list: list[dict[str, Any]] = []
 
     for key, value in list(experiments_questionnaire_data_dictionary.items()):
         value["component_id"] = ComponentConfiguration.objects.get(id=key).component_id
