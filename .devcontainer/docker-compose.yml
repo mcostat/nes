@@ -3,66 +3,33 @@ version: '3.8'
 services:
 
   limesurvey_db:
-    image: postgres:11-bookworm
-    hostname: limesurvey_db
-    volumes:
-      - limesurvey_pgdata:/var/lib/postgresql/data:delegated
-    restart: unless-stopped
-    networks:
-      - nes-network
-    expose:
-      - 5432
+    extends:
+      file: ../docker/docker-compose.yml
+      service: limesurvey_db
     env_file:
       - .env
-    environment:
-      POSTGRES_DB: limesurvey_db
-      POSTGRES_USER: ${LIMESURVEY_DB_USERNAME:-limesurvey_user}
-      POSTGRES_PASSWORD: ${LIMESURVEY_DB_PASSWORD:-lime_password}
 
   limesurvey:
-    image: neuromat/nes-compose:limesurvey
-    hostname: limesurvey
-    volumes:
-      - "limesurvey_data:/var/www/limesurvey"
-    restart: unless-stopped
-    networks:
-      - nes-network
-    expose:
-      - 8080
-    ports:
-      - 8080:8080
+    extends:
+      file: ../docker/docker-compose.yml
+      service: limesurvey
     env_file:
       - .env
-    environment:
-      LIMESURVEY_PORT: 8080
-      LIMESURVEY_DB_TYPE: pgsql
-      LIMESURVEY_DB_HOST: limesurvey_db
-      LIMESURVEY_DB_PORT: 5432
-      LIMESURVEY_DB_NAME: limesurvey_db
-      LIMESURVEY_DB_TABLE_PREFIX: lime_
-      LIMESURVEY_DB_USERNAME: ${LIMESURVEY_DB_USERNAME:-limesurvey_user}
-      LIMESURVEY_DB_PASSWORD: ${LIMESURVEY_DB_PASSWORD:-lime_password}
-      LIMESURVEY_ADMIN_USER: ${LIMESURVEY_ADMIN_USER:-lime_admin}
-      LIMESURVEY_ADMIN_PASSWORD: ${LIMESURVEY_ADMIN_PASSWORD:-lime_admin_password}
-      LIMESURVEY_ADMIN_NAME: Lime Administrator
-      LIMESURVEY_ADMIN_EMAIL: limesurvey@limemail.fake
-      LIMESURVEY_URL_FORMAT: path
-      #LIMESURVEY_URL_DOWNLOAD: https://github.com/LimeSurvey/LimeSurvey/archive/5.6.32+230731.tar.gz
     depends_on:
       - limesurvey_db
 
   jupyterhub:
+    container_name: jupyterhub.nes
     build: https://github.com/mcostat/nes-jupyterhub.git
     image: nes-jupyterhub
     restart: unless-stopped
     hostname: jupyterhub
-    container_name: jupyterhub
     volumes:
       - nes_media:/nes/media:ro
       - /var/run/docker.sock:/var/run/docker.sock:rw
-      - jupyterhub-data:/data
+      - jupyterhub_data:/data
     networks:
-      - nes-network
+      - nes_network
       - jupyterhub-network
     expose:
       - 8000
@@ -74,82 +41,46 @@ services:
       - nes
 
   nes_db:
-    image: postgres:16-bookworm
-    hostname: nes_db
-    restart: unless-stopped
-    volumes:
-      - nes_pgdata:/var/lib/postgresql/data:delegated
-    networks:
-      - nes-network
-    expose:
-      - 5432
-    ports:
-      - 5432:5432
+    extends:
+      file: ../docker/docker-compose.yml
+      service: nes_db
     env_file:
       - .env
     environment:
-      POSTGRES_DB: nes_db
-      POSTGRES_USER: ${NES_DB_USER:-nes_user}
-      POSTGRES_PASSWORD: ${NES_DB_PASSWORD:-nes_password}
-      PGDATA: /var/lib/postgresql/data
       POSTGRES_HOST_AUTH_METHOD: md5
       POSTGRES_INITDB_ARGS: --auth-host=md5
-      PGCLIENTENCODING: UTF8
 
   nes:
+    extends:
+      file: ../docker/docker-compose.yml
+      service: nes_base
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
-    hostname: nes
     volumes:
       - ../..:/workspaces:cached
       - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media
-    # Overrides default command so things don't shut down after the process ends.
-    restart: unless-stopped
-    command: sleep infinity
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    #network_mode: service:nes_db
     stdin_open: true
-    networks:
-      - nes-network
-    ports:
-      - 80:80
     env_file:
       - .env
     environment:
       DEBUG: true
-      NES_DB_TYPE: pgsql
-      NES_DB_HOST: nes_db
-      NES_DB: nes_db
-      NES_DB_USER: ${NES_DB_USER:-nes_user}
-      NES_DB_PASSWORD: ${NES_DB_PASSWORD:-nes_password}
-      NES_DB_PORT: 5432
-      NES_SECRET_KEY: ${NES_SECRET_KEY:-your_secret_key}
-      NES_HOSTNAME: lapisnes.local
-      NES_IP: localhost
-      NES_PORT: 80
-      NES_ADMIN_USER: ${NES_ADMIN_USER:-nes_admin}
-      NES_ADMIN_EMAIL: ${NES_ADMIN_EMAIL:-nes_admin@nesmail.com}
-      NES_ADMIN_PASSWORD: ${NES_ADMIN_PASSWORD:-nes_admin_password}
-      LIMESURVEY_ADMIN_USER: ${LIMESURVEY_ADMIN_USER:-lime_admin}
-      LIMESURVEY_ADMIN_PASSWORD: ${LIMESURVEY_ADMIN_PASSWORD:-lime_admin_password}
-      LIMESURVEY_HOST: limesurvey
-      LIMESURVEY_PORT: 8080
-      LIMESURVEY_URL_WEB: lapisnes.local
+      NES_HOSTNAME: localhost
+      LIMESURVEY_URL_WEB: localhost
     depends_on:
       - nes_db
       - limesurvey
 
 volumes:
-  nes_pgdata:
   limesurvey_pgdata:
   limesurvey_data:
+  nes_pgdata:
   nes_media:
-  jupyterhub-data:
+  jupyterhub_data:
 
 
 networks:
-  nes-network:
-    name: nes-network
+  nes_network:
+    name: nes_network
   jupyterhub-network:
     name: jupyterhub-network

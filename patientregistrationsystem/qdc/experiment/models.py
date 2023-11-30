@@ -1196,10 +1196,6 @@ class ContextTree(models.Model):
     def __str__(self) -> str:
         return str(self.name)
 
-    def delete(self, *args, **kwargs):
-        self.setting_file.delete()
-        super().delete(*args, **kwargs)
-
     def save(self, *args, **kwargs) -> None:
         if self.pk is None:
             saved_file = self.setting_file
@@ -1211,6 +1207,10 @@ class ContextTree(models.Model):
         super().save(*args, **kwargs)
 
         self.experiment.save()
+
+    def delete(self, *args, **kwargs):
+        self.setting_file.delete()
+        super().delete(*args, **kwargs)
 
 
 class DigitalGamePhase(Component):
@@ -1501,7 +1501,7 @@ class FileFormat(models.Model):
 
     name = models.CharField(max_length=50)
     extension = models.CharField(max_length=100)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True, default="")
     tags = models.ManyToManyField(Tag, blank=True)
 
     objects: MultilingualManager

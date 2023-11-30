@@ -8,12 +8,12 @@ if [ "$NES_DB_TYPE" != "pgsql" ]; then
     exit 1
 fi
 
-while ! nc -z "$NES_DB_HOST" "$NES_DB_PORT"; do
+while ! nc -z "$NES_DB_HOSTNAME" "$NES_DB_PORT"; do
     sleep 0.2
 done
 echo "INFO: Database OK"
 
-while ! nc -z "$LIMESURVEY_HOST" "$LIMESURVEY_PORT"; do
+while ! nc -z "$LIMESURVEY_HOSTNAME" "$LIMESURVEY_PORT"; do
     sleep 0.2
 done
 echo "INFO: Limesurvey OK"
