@@ -323,6 +323,7 @@
 
                         {% block subcontent %}
                         {% endblock subcontent %}
+
                     </div>
                 </div>
             </div>
@@ -388,7 +389,7 @@
     {{ block.super }}
     <script type="text/javascript" defer  src={% static "site/js/research_project.js" %}></script>
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-        $(document).ready(function () {
+        document.addEventListener("DOMContentLoaded", () => {
             var select_tms_setting = $("#id_tms_setting");
             var pulse_type = $("#pulse_type");
             var div_paired_pulse = $("#div_paired_pulse");

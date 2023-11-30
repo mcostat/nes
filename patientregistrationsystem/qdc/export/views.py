@@ -535,8 +535,8 @@ def export_view(request, template_name: str = "export/export_data.html"):
     selected_participant = []
     selected_diagnosis = []
     selected_ev_quest_experiments = []
-    questionnaires_fields_list: list[dict[str, dict[str, Any]]] = []
-    questionnaires_experiment_fields_list = []
+    questionnaires_fields_list: list[dict[str, Any]] = []
+    questionnaires_experiment_fields_list: list[dict[str, Any]] = []
     language_code = request.LANGUAGE_CODE
 
     component_list: dict[str, Any] = {}
@@ -1074,7 +1074,7 @@ def get_questionnaire_header(
     return questionnaire_list
 
 
-def get_questionnaire_experiment_fields(questionnaire_code_list, language_current="pt-BR"):
+def get_questionnaire_experiment_fields(questionnaire_code_list, language_current="pt-BR") -> list[dict[str, Any]]:
     questionnaires_included = []
     questionnaire_lime_survey = Questionnaires()
 

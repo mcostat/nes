@@ -1,7 +1,6 @@
 from .base import *
 
 DEBUG = False
-DEBUG404 = False
 IS_TESTING = True
 
 AXES_ENABLED = False
@@ -16,7 +15,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DATABASES["default"] = {
     "ENGINE": "django.db.backends.sqlite3",
-    "NAME": "test_database",
+    "NAME": "teste_db",
 }
 
 PASSWORD_HASHERS: list[str] = [
@@ -36,4 +35,6 @@ CACHES = {
     },
 }
 
-DJANGO_LOG_LEVEL = "ERROR"
+WHITENOISE_AUTOREFRESH = True
+
+LOGGING_CONFIG = None

@@ -93,7 +93,8 @@
 
                 <div class="tab-content">
                     <div id="data_collection" {% if tab == "1" %}class="tab-pane fade show active"{% else %}class="tab-pane fade"{% endif %}>
-                        <h4></h4>
+                        <h4>
+                        </h4>
                         <div class="row">
                             <div class="col-6 col-sm-6">
                                 <div class="form-group {% if eeg_data_form.errors.date %}is-invalid{% endif %}">
@@ -499,7 +500,7 @@
     <script type="text/javascript" defer  src={% static "site/js/subject_eeg_data_form.js" %}></script>
     <script type="text/javascript" defer  src={% static "site/js/eeg_electrode_worked_setted.js" %}></script>
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-        $(document).ready(function () {
+        document.addEventListener("DOMContentLoaded", () => {
             var $id_file_format = $("#id_file_format");
             var $id_file_format_description = $("#id_file_format_description");
             var $div_file_format_description = $("#div-file-format-description");

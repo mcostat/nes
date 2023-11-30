@@ -323,22 +323,23 @@
     <script type="text/javascript" defer  src={% static "site/js/experiment_selection.js" %}></script>
     <script type="text/javascript" defer  src={% static "site/js/participant_import.js" %}></script>
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-        function validate_plugin_form() {
-            if (!$("select[name='patients_selected\\[\\]'] option").length) {
-                showWarningMessage(gettext("Choose at least one participant"));
-                return false;
-            }
-            if (!$("select[name='patient_selected'] option:selected").length) {
-                showWarningMessage(gettext("At least one field from participants have to be set"));
-                return false;
-            }
-            return true;
+        document.addEventListener("DOMContentLoaded", () => {
+            function validate_plugin_form() {
+                if (!$("select[name='patients_selected\\[\\]'] option").length) {
+                    showWarningMessage(gettext("Choose at least one participant"));
+                    return false;
+                }
+                if (!$("select[name='patient_selected'] option:selected").length) {
+                    showWarningMessage(gettext("At least one field from participants have to be set"));
+                    return false;
+                }
+                return true;
 
-        }
-        $("#patient_selected").on("click", function () {
-            $("#gender_field").prop('selected', true);
+            }
+            $("#patient_selected").on("click", function () {
+                $("#gender_field").prop('selected', true);
+            });
         });
-
         {# If redirected, open url plugin #}
         {% if plugin_url %}window.open("{{ plugin_url | escapejs }}", "_blank");{% endif %}
     </script>

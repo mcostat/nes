@@ -24,7 +24,8 @@
             "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
             "args": [
                 "test",
-                "--tag=integration"
+                "--exclude-tag=integration",
+                "--parallel"
             ],
             "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
             "django": true,

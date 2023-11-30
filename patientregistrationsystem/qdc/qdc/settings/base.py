@@ -1,11 +1,6 @@
 """
-Django settings for qdc project.
+Django base settings for qdc project.
 
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,18 +18,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "django-insecure")
+SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "django-insecure-&llnw)2g1lqmm3n*wv2+9x03se4g+%e#@x8@_2m_#zz!e%b#=n")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG404 = True
+
+# SECURITY WARNING: don't run with "is testing" in production
+IS_TESTING = True
 
 # Put this line in local settings to put in maintenance mode, or uncomment, and
 # restart application server
 # MAINTENANCE_MODE = True
-
-# SECURITY WARNING: don't run with "is testing" in production
-IS_TESTING = True
 
 # LOGIN_URL = "/admin/login/"
 OAUTH2_PROVIDER = {
@@ -49,7 +43,7 @@ OAUTH2_PROVIDER = {
 }
 OIDC_ENABLED = True
 
-
+# AXES
 AXES_COOLOFF_MESSAGE = _("Your account has been locked for 30 MINUTES: too many login attempts.")
 AXES_FAILURE_LIMIT = 5
 AXES_RESET_ON_SUCCESS = True
@@ -57,15 +51,8 @@ AXES_COOLOFF_TIME = 0.5
 AXES_CACHE = "redis"
 AXES_LOCKOUT_PARAMETERS = ["ip_address", ["username", "user_agent"]]
 
-ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "0.0.0.0"]
-
-
-CONN_MAX_AGE = 10 * 60
-CONN_HEALTH_CHECKS = True
-
 
 # Content Security Policy
-
 CSP_IMG_SRC = ["'self'", "data:"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "http://viacep.com.br/"]
@@ -73,7 +60,7 @@ CSP_BASE_URI = "'none'"
 # CSP_INCLUDE_NONCE_IN = ["script-src"] #TODO enable this as soon as possible
 
 # CORS
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "https://localhost",
@@ -102,6 +89,7 @@ INSTALLED_APPS: list[str] = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "simple_history",
     "jsonrpclib",
@@ -131,6 +119,7 @@ INSTALLED_APPS += PROJECT_APPS
 MIDDLEWARE: list[str] = [
     "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -294,7 +283,8 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        # "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
@@ -310,13 +300,16 @@ STATICFILES_FINDERS = (
 )
 
 STATIC_ROOT: str = os.path.join(BASE_DIR, "static")
-STATIC_URL = "static/"
+STATIC_HOST = os.getenv("DJANGO_STATIC_HOST", default="")
+STATIC_URL = STATIC_HOST + "/static/"
 
 ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
 
 MEDIA_ROOT: str = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "media/"
 
+
+WHITENOISE_MAX_AGE = 7 * 24 * 60 * 60 if not DEBUG else 0
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -340,6 +333,8 @@ DATABASES = {
         "PASSWORD": os.getenv("NES_DB_PASSWORD", "nes_password"),
         "HOST": os.getenv("NES_DB_HOST", "nes_db"),
         "PORT": os.getenv("NES_DB_PORT", "5432"),
+        "CONN_MAX_AGE": 10 * 60,
+        "CONN_HEALTH_CHECKS": True,
     }
 }
 
@@ -366,6 +361,67 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "")
 SERVER_EMAIL = EMAIL_HOST_USER
 
-PROJECT_REPO = "https://github.com/mcostat/nes.git"
+PROJECT_REPO = os.getenv("GITHUB_PROJECT_REPO", "https://github.com/mcostat/nes.git")
 
 VERSION = "2.0.0"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "formatters": {
+        "django.server": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[{server_time}] {message}",
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+        },
+        "django.server": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "django.server",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+            "include_html": True,
+        },
+        "file": {
+            "level": "WARNING",
+            "filters": ["require_debug_false"],
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "debug.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "mail_admins"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["mail_admins", "file"],
+            "level": "WARNING",
+            "propagate": True,
+        },
+        "django.server": {
+            "handlers": ["django.server"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}

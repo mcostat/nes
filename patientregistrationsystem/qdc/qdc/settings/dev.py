@@ -7,7 +7,6 @@ from .base import *
 django_stubs_ext.monkeypatch()
 
 DEBUG = True
-DEBUG404 = True
 IS_TESTING = True
 
 AXES_ENABLED = True
@@ -18,11 +17,11 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
 
-INSTALLED_APPS = [
+INSTALLED_APPS += [
     "debug_toolbar",
-] + INSTALLED_APPS
+]
 
-MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
+MIDDLEWARE.insert(3, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 

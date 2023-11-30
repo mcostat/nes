@@ -1,0 +1,21 @@
+
+django-debug-toolbar>=4.2, <5.0
+
+
+# For testing
+goodtables==2.5.4
+Faker==2.0.4
+coverage
+django-coverage-plugin
+
+
+# Development
+types-python-dateutil
+mypy
+django-stubs[compatible-mypy]
+django-stubs-ext 
+flake8
+flake8-django
+pylint
+pylint-django
+djlint

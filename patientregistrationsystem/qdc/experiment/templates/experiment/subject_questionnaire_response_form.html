@@ -390,7 +390,7 @@
 
     {% if FAIL == False %}
         <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-            $(document).ready(function () {
+            document.addEventListener("DOMContentLoaded", () => {
                 var elem_remove_button = undefined;
                 var elem_fill_button;
 

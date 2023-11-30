@@ -1,61 +1,86 @@
 {% extends "base/template.html" %}
-{% block activeAdvancedResearchProject %} active{% endblock activeAdvancedResearchProject  %}
+
+{% block activeAdvancedResearchProject %}
+    active
+{% endblock activeAdvancedResearchProject %}
 
 {% load i18n static %}
+
 {% load subjects_tags %}
 
 
 {% block form %}
-    
+
     <form id="user_form" method="post" data-toggle="validator" enctype="multipart/form-data">
-    {% csrf_token %}
-{% endblock %}
+        {% csrf_token %}
+    {% endblock %}
 
-{% block content %}
+    {% block content %}
 
-    <div class="tab-pane fade show active" id="digitalGamePhaseDataProjectBreadCrumb">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
-                <li class="breadcrumb-item"><a href="{% url "home" %}">{% trans "Home" %}</a></li>
-                <li class="breadcrumb-item"><a href="/experiment/research_project/list">{% trans "Studies" %}</a></li>
-                <li class="breadcrumb-item"><a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a></li>
-                <li class="breadcrumb-item"><a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a></li>
-                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}">{{ group.title }}</a></li>
-                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a></li>
+        <div class="tab-pane fade show active" id="digitalGamePhaseDataProjectBreadCrumb">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+                    <li class="breadcrumb-item">
+                        <a href="{% url "home" %}">{% trans "Home" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/research_project/list">{% trans "Studies" %}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/research_project/{{ group.experiment.research_project.id }}">{{ group.experiment.research_project.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/{{ group.experiment.id }}">{{ group.experiment.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/group/{{ group.id }}">{{ group.title }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/group/{{ group.id }}/subjects/">{% trans "Participant" %}</a>
+                    </li>
 
-                <li class="breadcrumb-item"><a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/digital_game_phase">{% get_name_or_code subject.patient.id %}</a></li>
+                    <li class="breadcrumb-item">
+                        <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/digital_game_phase">{% get_name_or_code subject.patient.id %}</a>
+                    </li>
 
-                {% if creating %}
-                    <li class="breadcrumb-item active">{% trans "New goalkeeper game phase data file" %}</li>
-                {% else %}
-                    <li class="breadcrumb-item active">{{ digital_game_phase_data_form.description.value }}</li>
-                {% endif %}
+                    {% if creating %}
+                        <li class="breadcrumb-item active">
+                            {% trans "New goalkeeper game phase data file" %}
+                        </li>
+                    {% else %}
+                        <li class="breadcrumb-item active">
+                            {{ digital_game_phase_data_form.description.value }}
+                        </li>
+                    {% endif %}
 
-            </ol>
-        </nav>
-    </div>
+                </ol>
+            </nav>
+        </div>
 
-
-
-    {% if digital_game_phase_data_form.errors %}
-        <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
+        {% if digital_game_phase_data_form.errors %}
+            <script type="text/javascript" charset="utf-8" nonce="{{ request.csp_nonce }}">
             showErrorMessage(gettext('Please, correct fields highlighted.'))
-        </script>
-    {% endif %}
+            </script>
+        {% endif %}
 
-    <div class="tab-pane fade show active" id="menuUserTab">
-        <div class="container-fluid">
-            <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <div class="tab-pane fade show active" id="menuUserTab">
+            <div class="container-fluid">
+                <div class="my-3 p-3 bg-body rounded shadow-sm">
 
-                <h4>{% trans "Goalkeeper game phase data collection" %}</h4>
+                    <h4>
+                        {% trans "Goalkeeper game phase data collection" %}
+                    </h4>
 
                     <div id="data_collection">
 
-                        <h4></h4>
+                        <h4>
+                        </h4>
                         <div class="row">
                             <div class="col-6 col-sm-6">
                                 <div class="form-group {% if digital_game_phase_data_form.errors.date %}is-invalid{% endif %}">
-                                    <label class="form-label">{% trans "Date" %} <b class="text-danger">*</b></label>
+                                    <label class="form-label">
+                                        {% trans "Date" %} <b class="text-danger">*</b>
+                                    </label>
                                     {{ digital_game_phase_data_form.date }}
                                     <div class="form-text with-errors text-danger">
                                         {% for error in digital_game_phase_data_form.date.errors %}
@@ -67,7 +92,9 @@
 
                             <div class="col-6 col-sm-6">
                                 <div class="form-group {% if digital_game_phase_data_form.errors.time %}is-invalid{% endif %}">
-                                    <label class="form-label">{% trans "Hour" %}</label>
+                                    <label class="form-label">
+                                        {% trans "Hour" %}
+                                    </label>
                                     {{ digital_game_phase_data_form.time }}
                                     <div class="form-text with-errors text-danger">
                                         {% for error in digital_game_phase_data_form.time.errors %}
@@ -82,9 +109,12 @@
                         <div class="row">
                             <div class="col-6 col-sm-6">
                                 <div class="form-group">
-                                    <label class="form-label">{% trans "File format" %} <b class="text-danger">*</b></label>
+                                    <label class="form-label">
+                                        {% trans "File format" %} <b class="text-danger">*</b>
+                                    </label>
                                     {{ digital_game_phase_data_form.file_format }}
-                                    <div class="form-text with-errors text-danger"></div>
+                                    <div class="form-text with-errors text-danger">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -92,9 +122,12 @@
                         <div class="row" id="div-file-format-description">
                             <div class="col-12 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">{% trans "File format description" %} <b class="text-danger">*</b></label>
+                                    <label class="form-label">
+                                        {% trans "File format description" %} <b class="text-danger">*</b>
+                                    </label>
                                     {{ digital_game_phase_data_form.file_format_description }}
-                                    <div class="form-text with-errors text-danger"></div>
+                                    <div class="form-text with-errors text-danger">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -102,9 +135,12 @@
                         <div class="row">
                             <div class="col-12 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">{% trans "Goalkeeper game phase data collection description" %} <b class="text-danger">*</b></label>
+                                    <label class="form-label">
+                                        {% trans "Goalkeeper game phase data collection description" %} <b class="text-danger">*</b>
+                                    </label>
                                     {{ digital_game_phase_data_form.description }}
-                                    <div class="form-text with-errors text-danger"></div>
+                                    <div class="form-text with-errors text-danger">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -112,9 +148,12 @@
                         <div class="row">
                             <div class="col-12 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">{% trans "Sequence used in context tree" %}</label>
+                                    <label class="form-label">
+                                        {% trans "Sequence used in context tree" %}
+                                    </label>
                                     {{ digital_game_phase_data_form.sequence_used_in_context_tree }}
-                                    <div class="form-text with-errors text-danger"></div>
+                                    <div class="form-text with-errors text-danger">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,36 +162,49 @@
                             <div class="col-12 col-sm-12">
                                 <div class="form-group {% if digital_game_phase_data_form.errors.file %}is-invalid{% endif %}">
 
-                                {% if creating or editing %}
-                                    <label class="form-label">{% trans "Files to upload" %} <b class="text-danger">*</b></label>
-                                    <br/>
-                                    <input type="file" name="digital_game_phase_files" multiple>
-                                    <br/>
-                                {% endif %}
-
-                                {% if not creating %}
-                                    {% if digital_game_phase_data.digital_game_phase_files %}
-                                        <label class="form-label">{% trans "Uploaded files" %} <b class="text-danger">*</b></label>
-                                        <br/>
-                                        <table><tbody>
-                                        {% for digital_game_phase_file in digital_game_phase_data.digital_game_phase_files.all %}
-                                            <tr>
-                                            <td>{{ digital_game_phase_file.file.url }}</td>
-                                            <td>
-                                                <button class="btn btn-light" type="button" onclick="location.href='{{ digital_game_phase_file.file.url }}'"><span class="fa-fw fa fa-download-alt  text-info"></span></button>
-                                            </td>
-                                            <td>{{ digital_game_phase_file.file.size|filesizeformat }}</td>
-                                            {% if editing %}
-                                                <td>
-                                                    <input type="checkbox" name="remove_digital_game_phase_file_{{ digital_game_phase_file.id }}"/>
-                                                    {% trans "Delete" %}</td>
-                                            {% endif %}
-                                            </tr>
-                                        {% endfor %}
-
-                                        </tbody></table>
+                                    {% if creating or editing %}
+                                        <label class="form-label">
+                                            {% trans "Files to upload" %} <b class="text-danger">*</b>
+                                        </label>
+                                        <br />
+                                        <input type="file" name="digital_game_phase_files" multiple>
+                                        <br />
                                     {% endif %}
-                                {% endif %}
+
+                                    {% if not creating %}
+                                        {% if digital_game_phase_data.digital_game_phase_files %}
+                                            <label class="form-label">
+                                                {% trans "Uploaded files" %} <b class="text-danger">*</b>
+                                            </label>
+                                            <br />
+                                            <table>
+                                                <tbody>
+                                                    {% for digital_game_phase_file in digital_game_phase_data.digital_game_phase_files.all %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ digital_game_phase_file.file.url }}
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-light" type="button" onclick="location.href='{{ digital_game_phase_file.file.url }}'">
+                                                                    <span class="fa-fw fa fa-download-alt  text-info"></span>
+                                                                </button>
+                                                            </td>
+                                                            <td>
+                                                                {{ digital_game_phase_file.file.size|filesizeformat }}
+                                                            </td>
+                                                            {% if editing %}
+                                                                <td>
+                                                                    <input type="checkbox" name="remove_digital_game_phase_file_{{ digital_game_phase_file.id }}" />
+                                                                    {% trans "Delete" %}
+                                                                </td>
+                                                            {% endif %}
+                                                        </tr>
+                                                    {% endfor %}
+
+                                                </tbody>
+                                            </table>
+                                        {% endif %}
+                                    {% endif %}
 
                                 </div>
                             </div>
@@ -161,7 +213,7 @@
                         {% if sensors_image != None and not creating %}
                             <div class="row">
                                 <div class="card-body">
-                                    <img src="{% static sensors_image %}" class="img-fluid mx-auto.d-block" width="800" height="600" style="margin: auto" >
+                                    <img src="{% static sensors_image %}" class="img-fluid mx-auto.d-block" width="800" height="600" style="margin: auto">
                                 </div>
                             </div>
                         {% endif %}
@@ -173,54 +225,60 @@
                         {% endif %}
 
                     </div>
-{#                </div>#}
-            </div>
+                    {#                </div>#}
+                </div>
 
-            <div class="btn-toolbar justify-content-between" role="toolbar">
-                <div class="btn-group">
-                    {% if not editing and perms.experiment.delete_researchproject and can_change %}
-                        <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">{% trans "Delete" %}</button>
+                <div class="btn-toolbar justify-content-between" role="toolbar">
+                    <div class="btn-group">
+                        {% if not editing and perms.experiment.delete_researchproject and can_change %}
+                            <button type="button" class="btn btn-danger" onclick="showDialogAndEnableRemoveButton()">
+                                {% trans "Delete" %}
+                            </button>
+                        {% endif %}
+                    </div>
+                    {% if editing %}
+                        <div class="btn-group float-end">
+                            <button type="submit" name="action" value="save" class="btn btn-primary">
+                                {% trans "Save" %}
+                            </button>
+
+                            {% if creating %}
+                                <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/digital_game_phase" class="btn btn-light">{% trans "Cancel" %}</a>
+                            {% else %}
+                                <a href="/experiment/digital_game_phase_data/{{ digital_game_phase_data.id }}/{{ tab }}" class="btn btn-light">{% trans "Cancel" %}</a>
+                            {% endif %}
+
+                        </div>
+                    {% else %}
+                        <div class="btn-group float-end">
+                            <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/digital_game_phase" class="btn btn-light">{% trans "Back" %}</a>
+                        </div>
                     {% endif %}
                 </div>
-                {% if editing %}
-                    <div class="btn-group float-end">
-                        <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save" %}</button>
-
-                        {% if creating %}
-                            <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/digital_game_phase"
-                               class="btn btn-light">{% trans "Cancel" %}</a>
-                        {% else %}
-                            <a href="/experiment/digital_game_phase_data/{{ digital_game_phase_data.id }}/{{ tab }}"
-                               class="btn btn-light">{% trans "Cancel" %}</a>
-                        {% endif %}
-
-                    </div>
-                {% else %}
-                    <div class="btn-group float-end">
-                        <a href="/experiment/group/{{ group.id }}/subject/{{ subject.id }}/digital_game_phase" class="btn btn-light">{% trans "Back" %}</a>
-                    </div>
-                {% endif %}
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    {% trans "Are you sure you want to delete goalkeeper game phase data?" %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="disableRemoveButton()">{% trans "Cancel" %}</button>
-                    <button type="submit" class="btn btn-danger" id="remove_button" value="remove" disabled name="action">{% trans "Delete" %}</button>
+        <div class="modal fade" id="modalRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        {% trans "Are you sure you want to delete goalkeeper game phase data?" %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="disableRemoveButton()">
+                            {% trans "Cancel" %}
+                        </button>
+                        <button type="submit" class="btn btn-danger" id="remove_button" value="remove" disabled name="action">
+                            {% trans "Delete" %}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-{% endblock %}
+    {% endblock %}
 
-{% block end_form %}
+    {% block end_form %}
     </form>
 {% endblock %}
 
@@ -229,7 +287,7 @@
     <script type="text/javascript" defer  src={% static "site/js/subject_digital_game_phase_data_form.js" %}></script>
     <script type="text/javascript" defer  src={% static "site/js/digital_game_phase_electrode_worked_setted.js" %}></script>
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-        $(document).ready(function () {
+        document.addEventListener("DOMContentLoaded", () => {
             var $id_file_format = $("#id_file_format");
             var $id_file_format_description = $("#id_file_format_description");
             var $div_file_format_description = $("#div-file-format-description");

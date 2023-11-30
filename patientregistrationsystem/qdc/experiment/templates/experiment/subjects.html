@@ -189,26 +189,26 @@
                                                     </td>
                                                     <td>
                                                         <div class="row">
-                                                        <div class="col-2 col-sm-2">
-                                                            {% if can_change and perms.patient.sensitive_data_patient %}
-                                                                <a href="/experiment/group/{{ group.id }}/subject/{{ item.subject.id }}/upload_file"
-                                                                   data-bs-toggle="tooltip"
-                                                                   data-bs-placement="top"
-                                                                   title="{% trans "Upload consent form" %}">
-                                                                    <span class="fa-fw fa fa-paperclip"></span>
-                                                                </a>
-                                                            {% else %}
-                                                                <span class="fa-fw fa fa-paperclip text-secondary"></span>
-                                                            {% endif %}
+                                                            <div class="col-2 col-sm-2">
+                                                                {% if can_change and perms.patient.sensitive_data_patient %}
+                                                                    <a href="/experiment/group/{{ group.id }}/subject/{{ item.subject.id }}/upload_file"
+                                                                       data-bs-toggle="tooltip"
+                                                                       data-bs-placement="top"
+                                                                       title="{% trans "Upload consent form" %}">
+                                                                        <span class="fa-fw fa fa-paperclip"></span>
+                                                                    </a>
+                                                                {% else %}
+                                                                    <span class="fa-fw fa fa-paperclip text-secondary"></span>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-10 col-sm-10">
+                                                                {% if item.consent %}
+                                                                    <span class="label text-success">{% trans "Attached" %}</span>
+                                                                {% else %}
+                                                                    <span class="label text-warning">{% trans "No attachments" %}</span>
+                                                                {% endif %}
+                                                            </div>
                                                         </div>
-                                                        <div class="col-10 col-sm-10">
-                                                            {% if item.consent %}
-                                                                <span class="label text-success">{% trans "Attached" %}</span>
-                                                            {% else %}
-                                                                <span class="label text-warning">{% trans "No attachments" %}</span>
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
                                                     </td>
                                                     {% if experimental_protocol_info.number_of_questionnaires %}
                                                         <td>
@@ -402,7 +402,7 @@
                                                             <div class="col-12 col-sm-12">
                                                                 <span class="badge bg-success">{{ item.number_of_additional_data_uploaded }}</span>
                                                                 <a href="/experiment/group/{{ group.id }}/subject/{{ item.subject.id }}/additional_data"
-                                                                class="ms-1"
+                                                                   class="ms-1"
                                                                    data-bs-toggle="tooltip"
                                                                    title="{% trans "Uploaded additional data files" %}">{% trans "Additional" %}</a>
                                                             </div>
@@ -563,21 +563,23 @@
     <script type="text/javascript" defer  src={% static "site/js/subjects.js" %}></script>
     <script type="text/javascript" defer  src={% static "site/js/search_and_table.js" %}></script>
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-        $(document).ready(function () {
+        document.addEventListener("DOMContentLoaded", () => {
             searchAndTable("/experiment/subject/search/", {"group_id": $("#group_id").val()});
-        });
-        if ("{{ per_steps_tab_active }}") {
-            // make per_steps_of_experimental_protocol tab active if redirected from
-            // remove or transfer data collections
-            $("#per_participants_tab").removeAttr('class');
-            $("#per_steps_tab").attr('class', 'active');
-            $("#per_participants").attr('class', 'tab-pane fade');
-            $("#per_steps_of_experimental_protocol").attr("class", "tab-pane fade show active");
+        
+            if ("{{ per_steps_tab_active }}") {
+                // make per_steps_of_experimental_protocol tab active if redirected from
+                // remove or transfer data collections
+                $("#per_participants_tab").removeAttr('class');
+                $("#per_steps_tab").attr('class', 'active');
+                $("#per_participants").attr('class', 'tab-pane fade');
+                $("#per_steps_of_experimental_protocol").attr("class", "tab-pane fade show active");
 
-            // clear url query substring used to redirect to this page with per_steps_tab active
-            // see redirects in data_collection_manage view, post method sections
-            var currURL = window.location.href;
-            window.history.replaceState({}, document.title, currURL.substring(0, currURL.lastIndexOf('/')));
-        }
+                // clear url query substring used to redirect to this page with per_steps_tab active
+                // see redirects in data_collection_manage view, post method sections
+                var currURL = window.location.href;
+                window.history.replaceState({}, document.title, currURL.substring(0, currURL.lastIndexOf('/')));
+            }
+
+        });
     </script>
 {% endblock extrascript %}
