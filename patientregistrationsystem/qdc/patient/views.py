@@ -245,14 +245,16 @@ def patient_update_personal_data(request: HttpRequest, patient: Patient, context
             "patient_form": patient_form,
             "telephone_formset": telephone_formset,
             "code": patient.code,
-        }
+        },
     )
 
     return render(request, "patient/register_personal_data.html", context)
 
 
 def patient_update_social_demographic_data(
-    request: HttpRequest, patient: Patient, context: dict[str, Any]
+    request: HttpRequest,
+    patient: Patient,
+    context: dict[str, Any],
 ) -> HttpResponse:
     try:
         p_social_demo = SocialDemographicData.objects.get(patient_id=patient.id)
@@ -408,14 +410,16 @@ def patient_view_personal_data(request: HttpRequest, patient: Patient, context: 
             "code": patient.code,
             "patient_form": patient_form,
             "telephone_formset": telephone_formset,
-        }
+        },
     )
 
     return render(request, "patient/register_personal_data.html", context)
 
 
 def patient_view_social_demographic_data(
-    request: HttpRequest, patient: Patient, context: dict[str, Any]
+    request: HttpRequest,
+    patient: Patient,
+    context: dict[str, Any],
 ) -> HttpResponse:
     try:
         p_social_demo = SocialDemographicData.objects.get(patient_id=patient.id)
@@ -457,7 +461,10 @@ def patient_view_medical_record(request: HttpRequest, patient: Patient, context:
 
 
 def patient_view_questionnaires(
-    request: HttpRequest, patient: Patient, context: dict[str, Any], is_update: bool
+    request: HttpRequest,
+    patient: Patient,
+    context: dict[str, Any],
+    is_update: bool,
 ) -> HttpResponse:
     if is_update and request.method == "POST":
         return finish_handling_post(request, patient.id, 4)
@@ -495,7 +502,10 @@ def patient_view_questionnaires(
             update_completed_status(limesurvey_id, properties["completed"], questionnaire_response)
             language = get_questionnaire_language(surveys, limesurvey_id, language_code)
             acquisitiondate_updated = update_acquisition_date(
-                limesurvey_id, properties["token"], questionnaire_response, language
+                limesurvey_id,
+                properties["token"],
+                questionnaire_response,
+                language,
             )
 
             response_result = questionnaire_response.is_completed
@@ -506,7 +516,7 @@ def patient_view_questionnaires(
                     "token_id": questionnaire_response.token_id,
                     "completed": None if response_result is None else response_result != "N" and response_result != "",
                     "acquisitiondate_updated": acquisitiondate_updated,
-                }
+                },
             )
 
     patient_questionnaires_data_list = []
@@ -527,14 +537,14 @@ def patient_view_questionnaires(
     additional_survey_list = []
     if is_update:
         for survey in Survey.objects.exclude(
-            lime_survey_id__in=[item["limesurvey_id"] for item in patient_questionnaires_data_list]
+            lime_survey_id__in=[item["limesurvey_id"] for item in patient_questionnaires_data_list],
         ):
             additional_survey_list.append(
                 {
                     "id": survey.id,
                     "lime_survey_id": survey.lime_survey_id,
                     "title": find_questionnaire_name(survey, language_code)["name"],
-                }
+                },
             )
 
     # Questionnaires filled in an experiment group
@@ -543,7 +553,7 @@ def patient_view_questionnaires(
     subject_of_group_list = SubjectOfGroup.objects.filter(subject__in=subject)
     for subject_of_group in subject_of_group_list:
         experiment_questionnaire_responses = ExperimentQuestionnaireResponse.objects.filter(
-            subject_of_group=subject_of_group
+            subject_of_group=subject_of_group,
         )
         for questionnaire_response in experiment_questionnaire_responses:
             component_configuration = questionnaire_response.data_configuration_tree.component_configuration
@@ -571,7 +581,7 @@ def patient_view_questionnaires(
                     "questionnaire_response": questionnaire_response,
                     "token_id": questionnaire_response.token_id,
                     "completed": None if response_result is None else response_result != "N" and response_result != "",
-                }
+                },
             )
     surveys.release_session_key()
     context.update(
@@ -581,7 +591,7 @@ def patient_view_questionnaires(
             "limesurvey_available": limesurvey_available,
             "code": patient.code,
             "additional_survey_list": additional_survey_list,
-        }
+        },
     )
 
     return render(request, "patient/register_questionnaires.html", context)
@@ -721,7 +731,7 @@ def search_cid10_ajax(request):
             cid_10_list = ClassificationOfDiseases.objects.filter(
                 importedQ(abbreviated_description__icontains=search_text)
                 | importedQ(description__icontains=search_text)
-                | importedQ(code__icontains=search_text)
+                | importedQ(code__icontains=search_text),
             ).order_by("code")
 
         return render(
@@ -775,10 +785,7 @@ def medical_record_view(
     current_patient = get_object_or_404(Patient, pk=patient_id)
     medical_record = get_object_or_404(MedicalRecordData, pk=record_id)
 
-    if current_patient.name:
-        patient = current_patient.name
-    else:
-        patient = current_patient.code
+    patient = current_patient.name if current_patient.name else current_patient.code
 
     diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
     complementary_exams_list = []
@@ -817,10 +824,7 @@ def medical_record_update(request, patient_id, record_id, template_name: str = "
     current_patient = get_object_or_404(Patient, pk=patient_id)
     medical_record = get_object_or_404(MedicalRecordData, pk=record_id)
 
-    if current_patient.name:
-        patient = current_patient.name
-    else:
-        patient = current_patient.code
+    patient = current_patient.name if current_patient.name else current_patient.code
 
     diagnosis_list = Diagnosis.objects.filter(medical_record_data=record_id).order_by("classification_of_diseases")
     complementary_exams_list = []
@@ -890,7 +894,10 @@ def medical_record_delete(request: HttpRequest, patient_id: int, record_id: int)
 @login_required
 @permission_required("patient.add_medicalrecorddata")
 def diagnosis_create(
-    request: HttpRequest, patient_id: int, medical_record_id: int, cid10_id: int
+    request: HttpRequest,
+    patient_id: int,
+    medical_record_id: int,
+    cid10_id: int,
 ) -> HttpResponseRedirect:
     medical_record = MedicalRecordData.objects.get(pk=medical_record_id)
     cid10 = ClassificationOfDiseases.objects.get(pk=cid10_id)
@@ -988,10 +995,7 @@ def exam_create(
     diagnosis = get_object_or_404(Diagnosis, pk=diagnosis_id)
     current_patient = get_object_or_404(Patient, pk=patient_id)
 
-    if current_patient.name:
-        patient = current_patient.name
-    else:
-        patient = current_patient.code
+    patient = current_patient.name if current_patient.name else current_patient.code
 
     if request.method == "POST":
         file_form = ExamFileForm(request.POST, request.FILES)
@@ -1151,10 +1155,7 @@ def exam_view(
     except ExamFile.DoesNotExist:
         exam_file_list = None
 
-    if current_patient.name:
-        patient = current_patient.name
-    else:
-        patient = current_patient.code
+    patient = current_patient.name if current_patient.name else current_patient.code
 
     return render(
         request,
@@ -1280,36 +1281,35 @@ def questionnaire_response_view(
 
     showing = True
 
-    if request.method == "POST":
-        if request.POST["action"] == "remove":
-            if request.user.has_perm("patient.delete_questionnaireresponse"):
-                surveys = Questionnaires()
-                result = surveys.delete_participants(
-                    questionnaire_response.survey.lime_survey_id,
-                    [questionnaire_response.token_id],
-                )
-                surveys.release_session_key()
+    if request.method == "POST" and request.POST["action"] == "remove":
+        if request.user.has_perm("patient.delete_questionnaireresponse"):
+            surveys = Questionnaires()
+            result = surveys.delete_participants(
+                questionnaire_response.survey.lime_survey_id,
+                [questionnaire_response.token_id],
+            )
+            surveys.release_session_key()
 
-                can_delete = False
+            can_delete = False
 
-                if str(questionnaire_response.token_id) in result:
-                    result = result[str(questionnaire_response.token_id)]
-                    if result == "Deleted" or result == "Invalid token ID":
-                        can_delete = True
-                else:
-                    if "status" in result and result["status"] == "Error: Invalid survey ID":
-                        can_delete = True
-
-                if can_delete:
-                    questionnaire_response.delete()
-                    messages.success(request, _("Fill deleted successfully"))
-                else:
-                    messages.error(request, _("Error trying to delete"))
-
-                redirect_url = reverse("patient_edit", args=(questionnaire_response.patient.id,)) + "?currentTab=4"
-                return HttpResponseRedirect(redirect_url)
+            if str(questionnaire_response.token_id) in result:
+                result = result[str(questionnaire_response.token_id)]
+                if result == "Deleted" or result == "Invalid token ID":
+                    can_delete = True
             else:
-                raise PermissionDenied
+                if "status" in result and result["status"] == "Error: Invalid survey ID":
+                    can_delete = True
+
+            if can_delete:
+                questionnaire_response.delete()
+                messages.success(request, _("Fill deleted successfully"))
+            else:
+                messages.error(request, _("Error trying to delete"))
+
+            redirect_url = reverse("patient_edit", args=(questionnaire_response.patient.id,)) + "?currentTab=4"
+            return HttpResponseRedirect(redirect_url)
+        else:
+            raise PermissionDenied
 
     origin = get_origin(request)
 
@@ -1406,21 +1406,20 @@ def questionnaire_response_create(
 
     questionnaire_response_form = QuestionnaireResponseForm(request.POST or None)
 
-    if request.method == "POST":
-        if request.POST["action"] == "save":
-            (
-                redirect_url,
-                questionnaire_response_id,
-            ) = questionnaire_response_start_fill_questionnaire(request, patient_id, survey)
+    if request.method == "POST" and request.POST["action"] == "save":
+        (
+            redirect_url,
+            questionnaire_response_id,
+        ) = questionnaire_response_start_fill_questionnaire(request, patient_id, survey)
 
-            if not redirect_url:
-                fail = True
-            else:
-                fail = False
+        if not redirect_url:
+            fail = True
+        else:
+            fail = False
 
-                showing = True
-                for field in questionnaire_response_form.fields:
-                    questionnaire_response_form.fields[field].widget.attrs["disabled"] = True
+            showing = True
+            for field in questionnaire_response_form.fields:
+                questionnaire_response_form.fields[field].widget.attrs["disabled"] = True
 
     origin = get_origin(request)
 

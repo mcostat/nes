@@ -78,7 +78,7 @@ FOREIGN_RELATIONS = {
         (
             "experiment.eegelectrodelocalizationsystem",
             "eeg_electrode_localization_system",
-        )
+        ),
     ],
     "experiment.eegelectrodenetsystem": [
         (
@@ -500,7 +500,7 @@ PRE_LOADED_MODELS_FOREIGN_KEYS = {
         ),
     ): [("experiment.emgelectrodeplacementsetting", "emg_electrode_placement")],
     ("experiment.standardizationsystem", ("name", "description")): [
-        ("experiment.emgelectrodeplacement", "standardization_system")
+        ("experiment.emgelectrodeplacement", "standardization_system"),
     ],
 }
 
@@ -543,7 +543,7 @@ PRE_LOADED_MODELS_NOT_EDITABLE = [
 #   <app>.<model>: (<first_model_inheritance>, <second_model_inheritance>, [...])
 # }
 PRE_LOADED_MODELS_NOT_EDITABLE_INHERITANCE = {
-    "experiment.eegelectrodecap": ("experiment.eegelectrodenet", "experiment.equipment")
+    "experiment.eegelectrodecap": ("experiment.eegelectrodenet", "experiment.equipment"),
 }
 
 # TODO: Éder: insert comment here!

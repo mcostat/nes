@@ -11,7 +11,9 @@ USER_PWD = "mypassword"
 class InstitutionFormValidation(TestCase):
     def setUp(self):
         self.user: get_user_model() = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -26,7 +28,7 @@ class InstitutionFormValidation(TestCase):
                 "name": self.data["name"],
                 "acronym": self.data["acronym"],
                 "country": self.data["country"],
-            }
+            },
         )
         self.assertTrue(institution.is_valid())
 
@@ -37,7 +39,7 @@ class InstitutionFormValidation(TestCase):
                 "name": "",
                 "acronym": self.data["acronym"],
                 "country": self.data["country"],
-            }
+            },
         )
         self.assertFalse(institution.is_valid())
 
@@ -48,7 +50,7 @@ class InstitutionFormValidation(TestCase):
                 "name": self.data["name"],
                 "acronym": "",
                 "country": self.data["country"],
-            }
+            },
         )
         self.assertFalse(institution.is_valid())
 
@@ -59,7 +61,7 @@ class InstitutionFormValidation(TestCase):
                 "name": self.data["name"],
                 "acronym": self.data["acronym"],
                 "country": "",
-            }
+            },
         )
         self.assertFalse(institution.is_valid())
 
@@ -68,7 +70,9 @@ class InstitutionFormValidation(TestCase):
 class UserFormValidation(TestCase):
     def setUp(self):
         self.user: get_user_model() = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -142,7 +146,9 @@ class UserFormValidation(TestCase):
 class ResearcherFormValidation(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -183,7 +189,9 @@ class CustomPasswordResetFormTest(TestCase):
 
     def setUp(self) -> None:
         self.user: get_user_model() = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True

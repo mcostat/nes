@@ -8,22 +8,23 @@ class Survey(models.Model):  # type: ignore [django-manager-missing]
 
     lime_survey_id = models.IntegerField(unique=True)
     is_initial_evaluation = models.BooleanField(default=True)
-    pt_title = models.CharField(null=True, max_length=255, default=None)
-    en_title = models.CharField(null=True, max_length=255, default=None)
+    pt_title = models.CharField(max_length=255, default="")
+    en_title = models.CharField(max_length=255, default="")
     is_active = models.BooleanField(null=True)
-
-    def __str__(self) -> str:
-        if self.en_title:
-            return self.en_title
-        elif self.pt_title:
-            return self.pt_title
-        else:
-            return self.code
 
     class Meta:
         permissions = (
             # ("view_survey", "Can view survey"),
         )
+
+    def __str__(self) -> str:
+        if self.en_title:
+            return self.en_title
+
+        if self.pt_title:
+            return self.pt_title
+
+        return self.code
 
     def save(self, *args, **kwargs) -> None:
         if not self.pk:
@@ -45,3 +46,6 @@ class SensitiveQuestion(models.Model):
 
     class Meta:
         unique_together = ("survey", "code")
+
+    def __str__(self) -> str:
+        return self.code + ": " + self.question

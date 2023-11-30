@@ -26,7 +26,7 @@ class PatientForm(ModelForm):
         widget=CheckboxInput(
             attrs={
                 "class": "form-check-input",
-            }
+            },
         ),
     )
 
@@ -70,7 +70,7 @@ class PatientForm(ModelForm):
                     "maxlength": "50",
                     "pattern": FULLNAME_REGEX,
                     "oninput": "this.value = this.value.toUpperCase()",
-                }
+                },
             ),
             "cpf": TextInput(attrs={"class": "form-control", "placeholder": "xxx.xxx.xxx-xx"}),
             "origin": TextInput(attrs={"class": "form-control"}),
@@ -90,13 +90,13 @@ class PatientForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Gender must be filled"),
-                }
+                },
             ),
             "rg": TextInput(
                 attrs={
                     "class": "form-control",
                     "maxlength": "15",
-                }
+                },
             ),
             "marital_status": Select(attrs={"class": "form-select"}),
             "country": Select(attrs={"class": "form-select"}),
@@ -105,7 +105,7 @@ class PatientForm(ModelForm):
                     "type": "tel",
                     "class": "form-control",
                     "pattern": r"\d{5}-?\d{3}",
-                }
+                },
             ),
             "street": TextInput(attrs={"class": "form-control"}),
             "address_number": TextInput(attrs={"class": "form-control"}),
@@ -118,7 +118,7 @@ class PatientForm(ModelForm):
                     "class": "form-control",
                     "type": "email",
                     "data-error": _("Incorrect e-mail"),
-                }
+                },
             ),
         }
 
@@ -146,7 +146,7 @@ class TelephoneForm(ModelForm):
                     "class": "form-control telephone_number",
                     # "pattern": r"^[- ()0-9]+",
                     "pattern": PHONE_REGEX,
-                }
+                },
             ),
             "type": Select(attrs={"class": "form-select"}),
             "note": TextInput(attrs={"class": "form-control"}),
@@ -161,7 +161,7 @@ class SocialDemographicDataForm(ModelForm):
         widget=RadioSelect(
             attrs={
                 "class": "form-check-input",
-            }
+            },
         ),
     )
 
@@ -266,7 +266,7 @@ class SocialHistoryDataForm(ModelForm):
             attrs={
                 "class": "form-check-input",
                 "id": "id_smoker",
-            }
+            },
         ),
     )
     ex_smoker = TypedChoiceField(
@@ -276,7 +276,7 @@ class SocialHistoryDataForm(ModelForm):
         widget=Select(
             attrs={
                 "class": "form-select",
-            }
+            },
         ),
     )
     alcoholic = TypedChoiceField(
@@ -287,7 +287,7 @@ class SocialHistoryDataForm(ModelForm):
             attrs={
                 "class": "form-check-input",
                 "id": "id_alcoholic",
-            }
+            },
         ),
     )
 
@@ -321,7 +321,7 @@ class SocialHistoryDataForm(ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": "4",
-                }
+                },
             ),
         }
 
@@ -350,7 +350,7 @@ class ComplementaryExamForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled in"),
-                }
+                },
             ),
             "doctor": TextInput(attrs={"class": "form-control", "placeholder": _("Doctor")}),
             "doctor_register": TextInput(attrs={"class": "form-control", "placeholder": _("CRM")}),
@@ -379,5 +379,5 @@ class QuestionnaireResponseForm(ModelForm):
                     "required": "",
                     "data-error": _("Fill date must be filled."),
                 },
-            )
+            ),
         }

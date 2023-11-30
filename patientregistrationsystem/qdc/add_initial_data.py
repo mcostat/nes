@@ -249,7 +249,7 @@ group_doctor, doctor_created = Group.objects.get_or_create(name="Doctor")
 
 doctor_permission_list = list(physiotherapist_permission_list)
 doctor_permission_list += [
-    Permission.objects.get(codename="add_medicalrecorddata", content_type=medicalrecorddata_content_type)
+    Permission.objects.get(codename="add_medicalrecorddata", content_type=medicalrecorddata_content_type),
 ]
 
 for permission in doctor_permission_list:

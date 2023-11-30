@@ -63,7 +63,7 @@ def main(argv) -> None:
 
     print("Updating experiment questionnaire responses ...")
     for q_experiment_response in EQuestionnaireResponse.objects.filter(
-        data_configuration_tree__component_configuration__component=questionnaire.id
+        data_configuration_tree__component_configuration__component=questionnaire.id,
     ):
         update_questionnaire_response(old_tokens, new_tokens, q_experiment_response)
 

@@ -22,7 +22,7 @@ for user in users:
             "first_name=" + user.first_name,
             "surname=" + user.last_name,
             "nes_id=" + str(user.id),
-        ]
+        ],
     )
     for research_project in models.ResearchProject.objects.filter(owner__id=user.id):
         if research_project.end_date is None:
@@ -38,7 +38,7 @@ for user in users:
                     "description=" + research_project.description,
                     "start_date=" + str(research_project.start_date),
                     "nes_id=" + str(research_project.id),
-                ]
+                ],
             )
         else:
             subprocess.call(
@@ -54,7 +54,7 @@ for user in users:
                     "start_date=" + str(research_project.start_date),
                     "end_date=" + str(research_project.end_date),
                     "nes_id=" + str(research_project.id),
-                ]
+                ],
             )
         for experiment in models.Experiment.objects.filter(research_project__id=research_project.id):
             subprocess.call(
@@ -69,7 +69,7 @@ for user in users:
                     "description=" + experiment.description,
                     "data_acquisition_none=" + str(experiment.data_acquisition_is_concluded),
                     "nes_id=" + str(experiment.id),
-                ]
+                ],
             )
             for component in models.Component.objects.filter(experiment__id=experiment.id):
                 if component.duration_value is None:
@@ -86,7 +86,7 @@ for user in users:
                             "duration_unit=" + str(component.duration_unit),
                             "component_type=" + str(component.component_type),
                             "nes_id=" + str(component.id),
-                        ]
+                        ],
                     )
                 else:
                     subprocess.call(
@@ -103,7 +103,7 @@ for user in users:
                             "duration_unit=" + str(component.duration_unit),
                             "component_type=" + str(component.component_type),
                             "nes_id=" + str(component.id),
-                        ]
+                        ],
                     )
                 for group in models.Group.objects.filter(experimental_protocol__id=component.id):
                     subprocess.call(
@@ -116,7 +116,7 @@ for user in users:
                             PORTAL_SERVER + "/api/protocol_components/" + str(component.id) + "/groups/",
                             "title=" + group.title,
                             "nes_id=" + str(group.id),
-                        ]
+                        ],
                     )
 #                                     'description=' + group.description,
 
@@ -139,5 +139,5 @@ for subject in models.Subject.objects.all():
             "gender=" + patient.gender.name,
             "marital_status=" + patient.marital_status.name if patient.marital_status else "marital_status=",
             "nes_id=" + str(patient.id),
-        ]
+        ],
     )

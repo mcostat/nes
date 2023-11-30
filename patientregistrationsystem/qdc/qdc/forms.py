@@ -17,7 +17,7 @@ class PasswordChangeFormCustomized(PasswordChangeForm):
                 "required": "",
                 "placeholder": _("Current password"),
                 "autocomplete": "current-password",
-            }
+            },
         )
 
         self.fields["new_password1"].widget = PasswordInput(
@@ -28,17 +28,17 @@ class PasswordChangeFormCustomized(PasswordChangeForm):
                 "maxlength": "128",
                 "data-error": _(
                     f"Password must contain at least{PASSWORD_MIN_LEN} characters, "
-                    "including at least one uppercase letter, digit or special character."
+                    "including at least one uppercase letter, digit or special character.",
                 ),
                 "title": _(
                     f"Password must contain at least {PASSWORD_MIN_LEN} characters, "
-                    "including at least one uppercase letter, digit or special character."
+                    "including at least one uppercase letter, digit or special character.",
                 ),
                 "pattern": PASSWORD_REGEX,
                 # "pattern": self._password_regex,
                 "placeholder": _("New password"),
                 "autocomplete": "new-password",
-            }
+            },
         )
 
         self.fields["new_password2"].widget = PasswordInput(
@@ -51,7 +51,7 @@ class PasswordChangeFormCustomized(PasswordChangeForm):
                 "data-error": _("Passwords don't match"),
                 "title": _("Passwords don't match"),
                 "autocomplete": "new-password",
-            }
+            },
         )
 
     def clean_new_password1(self) -> str:
@@ -71,7 +71,7 @@ class PasswordChangeFormCustomized(PasswordChangeForm):
             raise ValidationError(
                 _(
                     f"Password must contain at least {PASSWORD_MIN_LEN} characters,"
-                    "including at least one uppercase letter, digit or special character."
+                    "including at least one uppercase letter, digit or special character.",
                 ),
             )
 

@@ -56,7 +56,8 @@
 				"esbenp.prettier-vscode",
 				"tamasfe.even-better-toml",
 				"ms-python.flake8",
-				"KevinRose.vsc-python-indent"
+				"KevinRose.vsc-python-indent",
+				"charliermarsh.ruff"
 			]
 		}
 	}

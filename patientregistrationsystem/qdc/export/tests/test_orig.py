@@ -99,7 +99,9 @@ class DirectoryTest(TestCase):
     def setUp(self):
         """Cria um participante para ser utilizado durante os testes"""
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -161,7 +163,9 @@ class PatientActiveTest(TestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -194,7 +198,7 @@ class PatientActiveTest(TestCase):
                 "tid": "4501",
                 "participant_id": None,
                 "mpid": None,
-            }
+            },
         ]
 
         patient_mock = self.util.create_patient_mock(user=self.user)
@@ -251,7 +255,9 @@ class JsonTest(TestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -277,7 +283,9 @@ class InputExportTest(TestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -397,7 +405,9 @@ class AdvancedSearchTest(TestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True

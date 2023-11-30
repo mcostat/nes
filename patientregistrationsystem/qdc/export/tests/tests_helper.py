@@ -43,7 +43,12 @@ class ExportTestCase(ExperimentTestCase):
         return json_data
 
     def assert_per_participant_step_file_exists(
-        self, step_number, component_step, data_collection_folder, filename, zipped_file
+        self,
+        step_number,
+        component_step,
+        data_collection_folder,
+        filename,
+        zipped_file,
     ) -> None:
         """Only checks self.patient"""
         self.assertTrue(
@@ -70,7 +75,12 @@ class ExportTestCase(ExperimentTestCase):
         )
 
     def assert_step_data_files_exists(
-        self, step_number, component_step, data_collection_folder, filename, zipped_file
+        self,
+        step_number,
+        component_step,
+        data_collection_folder,
+        filename,
+        zipped_file,
     ) -> None:
         self.assertTrue(
             any(

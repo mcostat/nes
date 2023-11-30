@@ -337,7 +337,7 @@ DATABASES = {
         "PORT": os.getenv("NES_DB_PORT", "5432"),
         "CONN_MAX_AGE": 10 * 60,
         "CONN_HEALTH_CHECKS": True,
-    }
+    },
 }
 
 # LimeSurvey configuration
@@ -383,7 +383,7 @@ LOGGING = {
             "()": "django.utils.log.ServerFormatter",
             "format": "[{server_time}] {message}",
             "style": "{",
-        }
+        },
     },
     "handlers": {
         "console": {

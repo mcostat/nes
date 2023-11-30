@@ -2188,7 +2188,7 @@ def set_mocks3(mockServer):
                     "title": "responsibleid",
                     "gid": 1834,
                 },
-            ]
+            ],
         ]
         + 4
         * [
@@ -3924,7 +3924,7 @@ def set_mocks5(mockServer):
             "remindersent": "N",
             "firstname": "",
             "remindercount": 0,
-        }
+        },
     ]
 
 
@@ -4061,7 +4061,7 @@ def set_mocks6(mock_server):
                 "gid": 1950,
                 "qid": 6158,
                 "language": "en",
-            }
+            },
         ],
         [
             {
@@ -4145,7 +4145,7 @@ def set_mocks6(mock_server):
                 "gid": 1950,
                 "qid": 6158,
                 "language": "en",
-            }
+            },
         ],
         [
             {
@@ -4229,7 +4229,7 @@ def set_mocks6(mock_server):
                 "gid": 1950,
                 "qid": 6158,
                 "language": "en",
-            }
+            },
         ],
         [
             {
@@ -4569,7 +4569,7 @@ def set_mocks7(mock_server):
         "mVpc2lnZXIgRnJlaXRleHQiLCJFaW4gbGFuZ2VyIGZyZWllciBUZXh0IiwiYSIsImIiLCJhIiwiWSIsIiIsIlkiLCJjIiwiWSIsImQiCgo=",
     ]
     mock_server.return_value.get_language_properties.return_value = {
-        "surveyls_title": "Fragebogen mit allen Fragetypen"
+        "surveyls_title": "Fragebogen mit allen Fragetypen",
     }
     mock_server.return_value.list_groups.side_effect = [
         [
@@ -10919,7 +10919,7 @@ def set_mocks7(mock_server):
                     "answer": "Antwort zwei",
                     "scale_id": 1,
                     "assessment_value": 0,
-                }
+                },
             },
             "attributes": "No available attributes",
             "attributes_lang": "No available attributes",
@@ -11633,7 +11633,7 @@ def set_mocks8(mock_server):
             "expires": None,
             "startdate": None,
             "sid": LIMESURVEY_SURVEY_ID_1,
-        }
+        },
     ]
     mock_server.return_value.get_survey_properties.return_value = {
         "additional_languages": "",
@@ -12059,7 +12059,7 @@ def set_mocks9(mock_server):
                 "sid": 798261,
                 "parent_qid": 0,
                 "mandatory": "N",
-            }
+            },
         ],
         [
             {
@@ -12143,7 +12143,7 @@ def set_mocks9(mock_server):
                 "sid": 798261,
                 "parent_qid": 0,
                 "mandatory": "N",
-            }
+            },
         ],
         [
             {
@@ -12309,172 +12309,6 @@ def set_mocks9(mock_server):
                 "sid": 689143,
                 "parent_qid": 0,
                 "mandatory": "N",
-            }
-        ],
-        [
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7942},
-                "gid": 1961,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 3,
-                "type": "N",
-                "scale_id": 0,
-                "other": "N",
-                "title": "subjectid",
-                "help": "",
-                "qid": 7942,
-                "modulename": None,
-                "question": "Participant Identification number<b>:</b>",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "Y",
-            },
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7941},
-                "gid": 1961,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 1,
-                "type": "D",
-                "scale_id": 0,
-                "other": "N",
-                "title": "acquisitiondate",
-                "help": "",
-                "qid": 7941,
-                "modulename": None,
-                "question": "Acquisition date<strong>:</strong><br />\n",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "Y",
-            },
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7940},
-                "gid": 1961,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 0,
-                "type": "N",
-                "scale_id": 0,
-                "other": "N",
-                "title": "responsibleid",
-                "help": "",
-                "qid": 7940,
-                "modulename": None,
-                "question": "Responsible Identification number:",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "Y",
-            },
-        ],
-        [
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7943},
-                "gid": 1962,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 1,
-                "type": "S",
-                "scale_id": 0,
-                "other": "N",
-                "title": "textfragezwei",
-                "help": "",
-                "qid": 7943,
-                "modulename": None,
-                "question": "Text Frage Zwei",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "N",
-            }
-        ],
-        [
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7943},
-                "gid": 1962,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 1,
-                "type": "S",
-                "scale_id": 0,
-                "other": "N",
-                "title": "textfragezwei",
-                "help": "",
-                "qid": 7943,
-                "modulename": None,
-                "question": "Text Frage Zwei",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "N",
-            },
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7942},
-                "gid": 1961,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 3,
-                "type": "N",
-                "scale_id": 0,
-                "other": "N",
-                "title": "subjectid",
-                "help": "",
-                "qid": 7942,
-                "modulename": None,
-                "question": "Participant Identification number<b>:</b>",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "Y",
-            },
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7941},
-                "gid": 1961,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 1,
-                "type": "D",
-                "scale_id": 0,
-                "other": "N",
-                "title": "acquisitiondate",
-                "help": "",
-                "qid": 7941,
-                "modulename": None,
-                "question": "Acquisition date<strong>:</strong><br />\n",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "Y",
-            },
-            {
-                "same_default": 0,
-                "preg": "",
-                "id": {"language": "en", "qid": 7940},
-                "gid": 1961,
-                "language": "en",
-                "relevance": "1",
-                "question_order": 0,
-                "type": "N",
-                "scale_id": 0,
-                "other": "N",
-                "title": "responsibleid",
-                "help": "",
-                "qid": 7940,
-                "modulename": None,
-                "question": "Responsible Identification number:",
-                "sid": 689143,
-                "parent_qid": 0,
-                "mandatory": "Y",
             },
         ],
         [
@@ -12559,7 +12393,173 @@ def set_mocks9(mock_server):
                 "sid": 689143,
                 "parent_qid": 0,
                 "mandatory": "N",
-            }
+            },
+        ],
+        [
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7943},
+                "gid": 1962,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 1,
+                "type": "S",
+                "scale_id": 0,
+                "other": "N",
+                "title": "textfragezwei",
+                "help": "",
+                "qid": 7943,
+                "modulename": None,
+                "question": "Text Frage Zwei",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "N",
+            },
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7942},
+                "gid": 1961,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 3,
+                "type": "N",
+                "scale_id": 0,
+                "other": "N",
+                "title": "subjectid",
+                "help": "",
+                "qid": 7942,
+                "modulename": None,
+                "question": "Participant Identification number<b>:</b>",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "Y",
+            },
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7941},
+                "gid": 1961,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 1,
+                "type": "D",
+                "scale_id": 0,
+                "other": "N",
+                "title": "acquisitiondate",
+                "help": "",
+                "qid": 7941,
+                "modulename": None,
+                "question": "Acquisition date<strong>:</strong><br />\n",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "Y",
+            },
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7940},
+                "gid": 1961,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 0,
+                "type": "N",
+                "scale_id": 0,
+                "other": "N",
+                "title": "responsibleid",
+                "help": "",
+                "qid": 7940,
+                "modulename": None,
+                "question": "Responsible Identification number:",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "Y",
+            },
+        ],
+        [
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7942},
+                "gid": 1961,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 3,
+                "type": "N",
+                "scale_id": 0,
+                "other": "N",
+                "title": "subjectid",
+                "help": "",
+                "qid": 7942,
+                "modulename": None,
+                "question": "Participant Identification number<b>:</b>",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "Y",
+            },
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7941},
+                "gid": 1961,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 1,
+                "type": "D",
+                "scale_id": 0,
+                "other": "N",
+                "title": "acquisitiondate",
+                "help": "",
+                "qid": 7941,
+                "modulename": None,
+                "question": "Acquisition date<strong>:</strong><br />\n",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "Y",
+            },
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7940},
+                "gid": 1961,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 0,
+                "type": "N",
+                "scale_id": 0,
+                "other": "N",
+                "title": "responsibleid",
+                "help": "",
+                "qid": 7940,
+                "modulename": None,
+                "question": "Responsible Identification number:",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "Y",
+            },
+        ],
+        [
+            {
+                "same_default": 0,
+                "preg": "",
+                "id": {"language": "en", "qid": 7943},
+                "gid": 1962,
+                "language": "en",
+                "relevance": "1",
+                "question_order": 1,
+                "type": "S",
+                "scale_id": 0,
+                "other": "N",
+                "title": "textfragezwei",
+                "help": "",
+                "qid": 7943,
+                "modulename": None,
+                "question": "Text Frage Zwei",
+                "sid": 689143,
+                "parent_qid": 0,
+                "mandatory": "N",
+            },
         ],
         [
             {
@@ -12643,7 +12643,7 @@ def set_mocks9(mock_server):
                 "sid": 798261,
                 "parent_qid": 0,
                 "mandatory": "N",
-            }
+            },
         ],
     ]
     mock_server.return_value.get_question_properties.side_effect = [
@@ -12853,10 +12853,10 @@ def set_mocks10(mock_server):
         "biIsIlNhY0VLeTJPblFEa0J3YSIsIjEiLCIyMDIxLTA1LTA4IDAwOjAwOjAwIiwiNSIsIjQiLCJBMSIsIkEyIiwiQTEiLCIiLCJBMiIsIiIsI"
         "jYiLCI1IiwiNSIsIjEiLCJEIiwiSSIsIjMiLCI4IiwiYSIsImIiLCJZIiwiVSIsIkEyIiwiQTEiLCIiLCJBMSIsIiIsIiIsIjIwMTktMDgtMj"
         "EgMDA6MDA6MDAiLCJHbGVpY2h1bmciLCIiLCIwIiwiTSIsImVuIiwiMSIsIjIiLCI0IiwiQTIiLCJBMSIsIiIsIlkiLCJhYmMiLCJhYmMiLCJ"
-        "hIiwiYiIsImFiYyIsIlkiLCIiLCJZIiwiYSIsIiIsIiIKCg=="
+        "hIiwiYiIsImFiYyIsIlkiLCIiLCJZIiwiYSIsIiIsIiIKCg==",
     ]
     mock_server.return_value.get_language_properties.side_effect = [
-        {"surveyls_title": "Fragebogen mit allen Fragetypen"}
+        {"surveyls_title": "Fragebogen mit allen Fragetypen"},
     ]
     mock_server.return_value.list_groups.side_effect = [
         [
@@ -24013,7 +24013,7 @@ def set_mocks10(mock_server):
                     "scale_id": 1,
                     "answer": "Antwort zwei",
                     "order": 1,
-                }
+                },
             },
             "subquestions": {
                 "6209": {
@@ -24744,7 +24744,7 @@ def set_mocks11(mock_server):
         "YyIsImEiLCJiIiwiYWJjIiwiWSIsIiIsIlkiLCIiLCIiLCIiCgo="
     )
     mock_server.return_value.get_language_properties.return_value = {
-        "surveyls_title": "Fragebogen mit allen Fragetypen"
+        "surveyls_title": "Fragebogen mit allen Fragetypen",
     }
     mock_server.return_value.list_groups.side_effect = [
         [
@@ -31095,7 +31095,7 @@ def set_mocks11(mock_server):
                     "assessment_value": 0,
                     "order": 1,
                     "scale_id": 1,
-                }
+                },
             },
             "attributes_lang": "No available attributes",
             "question_order": 13,

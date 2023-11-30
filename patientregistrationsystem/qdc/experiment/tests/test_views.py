@@ -188,7 +188,7 @@ class PermissionsresearchprojectupdateViewtest(TestCase):
             reverse(
                 "research_project_edit",
                 kwargs={"research_project_id": self.research_project.pk},
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
         self.assertRaises(PermissionDenied)
@@ -709,7 +709,7 @@ class ExportExperimentTest(TestCase):
             next(
                 (index for (index, dict_) in enumerate(deserialized) if dict_["model"] == "auth.user"),
                 None,
-            )
+            ),
         )
 
         shutil.rmtree(temp_dir)
@@ -739,7 +739,7 @@ class ExportExperimentTest(TestCase):
             next(
                 (index for (index, dict_) in enumerate(deserialized) if dict_["model"] == "auth.user"),
                 None,
-            )
+            ),
         )
 
         deserialized = json.loads(data)
@@ -920,7 +920,8 @@ class ExportExperimentTest(TestCase):
 
     @patch("survey.abc_search_engine.Server")
     def test_experiment_has_questionnaire_step_sends_base64_encoded_limesurvey_lsa_files_from_limesurvey(
-        self, mockServer
+        self,
+        mockServer,
     ):
         # TODO (NES-966): solve temp dir created misteriously
         patient = UtilTests.create_patient(changed_by=self.user)
@@ -930,13 +931,17 @@ class ExportExperimentTest(TestCase):
         # First survey
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey1},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step1)
         # Second survey
         survey2 = create_survey(505050)
         questionnaire_step2 = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey2}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey2},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step2)
 
@@ -962,13 +967,17 @@ class ExportExperimentTest(TestCase):
         # First survey
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey1},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step1)
         # Second survey
         survey2 = create_survey(505050)
         questionnaire_step2 = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey2}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey2},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step2)
 
@@ -993,7 +1002,9 @@ class ExportExperimentTest(TestCase):
         rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
 
@@ -1006,13 +1017,14 @@ class ExportExperimentTest(TestCase):
                 mockServer.call_args,
                 call(
                     settings.LIMESURVEY["URL_API"]
-                    + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action"
+                    + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action",
                 ),
             )
 
         mockServer.return_value.export_survey.side_effect = check_right_url()
         mockServer.return_value.export_survey.assert_called_once_with(
-            mockServer.return_value.get_session_key.return_value, survey.lime_survey_id
+            mockServer.return_value.get_session_key.return_value,
+            survey.lime_survey_id,
         )
 
     @patch("survey.abc_search_engine.Server")
@@ -1022,7 +1034,9 @@ class ExportExperimentTest(TestCase):
         survey = create_survey()
         rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
         questionnaire = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         component_config = ObjectsFactory.create_component_configuration(rootcomponent, questionnaire)
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
@@ -1042,7 +1056,9 @@ class ExportExperimentTest(TestCase):
         rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
 
@@ -1064,7 +1080,9 @@ class ExportExperimentTest(TestCase):
         rootcomponent = ObjectsFactory.create_component(self.experiment, "block", "root component")
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
 
@@ -1206,7 +1224,8 @@ class ImportExperimentTest(TestCase):
             eeg_electrode_localization_system=electrode_loc_sys,
         )
         electrode_layout_sys = EEGElectrodeLayoutSetting.objects.create(
-            eeg_electrode_net_system=electrode_net_sys, eeg_setting=eeg_setting
+            eeg_electrode_net_system=electrode_net_sys,
+            eeg_setting=eeg_setting,
         )
         EEGElectrodePositionSetting.objects.create(
             eeg_electrode_layout_setting=electrode_layout_sys,
@@ -1269,14 +1288,17 @@ class ImportExperimentTest(TestCase):
             material=material,
         )
         emg_electrode_setting_surface = EMGElectrodeSetting.objects.create(
-            emg_setting=emg_setting, electrode=electrode_model
+            emg_setting=emg_setting,
+            electrode=electrode_model,
         )
 
         emg_electrode_setting_intramuscular = EMGElectrodeSetting.objects.create(
-            emg_setting=emg_setting, electrode=electrode_model
+            emg_setting=emg_setting,
+            electrode=electrode_model,
         )
         emg_electrode_setting_needle = EMGElectrodeSetting.objects.create(
-            emg_setting=emg_setting, electrode=electrode_model
+            emg_setting=emg_setting,
+            electrode=electrode_model,
         )
 
         # Muscle
@@ -1329,14 +1351,16 @@ class ImportExperimentTest(TestCase):
         )
 
         emg_amplifier_setting_surface = EMGAmplifierSetting.objects.create(
-            emg_electrode_setting=emg_electrode_setting_surface, amplifier=amplifier
+            emg_electrode_setting=emg_electrode_setting_surface,
+            amplifier=amplifier,
         )
         emg_amplifier_setting_intramuscular = EMGAmplifierSetting.objects.create(
             emg_electrode_setting=emg_electrode_setting_intramuscular,
             amplifier=amplifier,
         )
         emg_amplifier_setting_needle = EMGAmplifierSetting.objects.create(
-            emg_electrode_setting=emg_electrode_setting_needle, amplifier=amplifier
+            emg_electrode_setting=emg_electrode_setting_needle,
+            amplifier=amplifier,
         )
 
         EMGAnalogFilterSetting.objects.create(emg_electrode_setting=emg_amplifier_setting_surface)
@@ -1344,19 +1368,21 @@ class ImportExperimentTest(TestCase):
         EMGAnalogFilterSetting.objects.create(emg_electrode_setting=emg_amplifier_setting_needle)
 
         emg_pre_amplifier_setting_surface = EMGPreamplifierSetting.objects.create(
-            emg_electrode_setting=emg_electrode_setting_surface, amplifier=amplifier
+            emg_electrode_setting=emg_electrode_setting_surface,
+            amplifier=amplifier,
         )
         emg_pre_amplifier_setting_intramuscular = EMGPreamplifierSetting.objects.create(
             emg_electrode_setting=emg_electrode_setting_intramuscular,
             amplifier=amplifier,
         )
         emg_pre_amplifier_setting_needle = EMGPreamplifierSetting.objects.create(
-            emg_electrode_setting=emg_electrode_setting_needle, amplifier=amplifier
+            emg_electrode_setting=emg_electrode_setting_needle,
+            amplifier=amplifier,
         )
 
         EMGPreamplifierFilterSetting.objects.create(emg_preamplifier_filter_setting=emg_pre_amplifier_setting_surface)
         EMGPreamplifierFilterSetting.objects.create(
-            emg_preamplifier_filter_setting=emg_pre_amplifier_setting_intramuscular
+            emg_preamplifier_filter_setting=emg_pre_amplifier_setting_intramuscular,
         )
         EMGPreamplifierFilterSetting.objects.create(emg_preamplifier_filter_setting=emg_pre_amplifier_setting_needle)
 
@@ -1367,7 +1393,9 @@ class ImportExperimentTest(TestCase):
         ObjectsFactory.create_group(self.experiment, self.rootcomponent)
         survey = create_survey(survey_id) if survey_id else create_survey()
         questionnaire = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         ObjectsFactory.create_component_configuration(self.rootcomponent, questionnaire)
 
@@ -1485,7 +1513,9 @@ class ImportExperimentTest(TestCase):
         rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         component_config = ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
@@ -1890,7 +1920,7 @@ class ImportExperimentTest(TestCase):
             response = self.client.post(reverse("experiment_import"), {"file": file}, follow=True)
         self.assertRedirects(response, reverse("import_log"))
         new_components = Component.objects.exclude(
-            id__in=[rootcomponent1.id, rootcomponent2.id, component1.id, component2.id]
+            id__in=[rootcomponent1.id, rootcomponent2.id, component1.id, component2.id],
         )
         new_groups = ExperimentGroup.objects.exclude(id__in=[group1.id, group2.id])
         self.assertEqual(Component.objects.count(), components_before_count + len(new_components))
@@ -2286,7 +2316,10 @@ class ImportExperimentTest(TestCase):
         ObjectsFactory.create_group(experiment)
 
         self._test_creation_and_linking_between_two_models(
-            "experiment.experiment", "experiment.group", "experiment", experiment
+            "experiment.experiment",
+            "experiment.group",
+            "experiment",
+            experiment,
         )
 
     def test_group_and_experimental_protocol(self):
@@ -2378,7 +2411,7 @@ class ImportExperimentTest(TestCase):
         self.assertRedirects(response, reverse("import_log"))
 
         new_components = Component.objects.exclude(
-            id__in=[rootcomponent1.id, rootcomponent2.id, component1.id, component2.id]
+            id__in=[rootcomponent1.id, rootcomponent2.id, component1.id, component2.id],
         )
         new_groups = ExperimentGroup.objects.exclude(id__in=[group1.id, group2.id])
         new_components_configurations = ComponentConfiguration.objects.exclude(
@@ -2387,7 +2420,7 @@ class ImportExperimentTest(TestCase):
                 component2_config.id,
                 component3_config.id,
                 component4_config.id,
-            ]
+            ],
         )
         self.assertEqual(Component.objects.count(), old_objects_count + len(new_components))
         self.assertEqual(ExperimentGroup.objects.count(), old_groups_count + len(new_groups))
@@ -2550,7 +2583,9 @@ class ImportExperimentTest(TestCase):
         subject_of_group = ObjectsFactory.create_subject_of_group(group, subject)
         survey = create_survey()
         questionnaire = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         component_config = ObjectsFactory.create_component_configuration(self.rootcomponent, questionnaire)
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
@@ -2644,7 +2679,9 @@ class ImportExperimentTest(TestCase):
         self._create_minimum_objects_to_test_components()
         stimulus_type = ObjectsFactory.create_stimulus_type()
         new_component = ObjectsFactory.create_component(
-            self.experiment, "stimulus", kwargs={"stimulus_type": stimulus_type}
+            self.experiment,
+            "stimulus",
+            kwargs={"stimulus_type": stimulus_type},
         )
         ObjectsFactory.create_component_configuration(self.rootcomponent, new_component)
 
@@ -2664,7 +2701,9 @@ class ImportExperimentTest(TestCase):
             stimulus_type.id = i
             stimulus_type.save()
             new_component = ObjectsFactory.create_component(
-                self.experiment, "stimulus", kwargs={"stimulus_type": stimulus_type}
+                self.experiment,
+                "stimulus",
+                kwargs={"stimulus_type": stimulus_type},
             )
             ObjectsFactory.create_component_configuration(self.rootcomponent, new_component)
 
@@ -2842,7 +2881,7 @@ class ImportExperimentTest(TestCase):
         new_patients = Patient.objects.exclude(id__in=[patient1_mock.id, patient2_mock.id])
         new_subjects = Subject.objects.exclude(id__in=[subject_mock1.id, subject_mock2.id])
         new_subjectsofgroups = SubjectOfGroup.objects.exclude(
-            id__in=[subject_group1.id, subject_group2.id, subject_group3.id]
+            id__in=[subject_group1.id, subject_group2.id, subject_group3.id],
         )
         self.assertEqual(2, new_patients.count())
         self.assertEqual(2, new_subjects.count())
@@ -2995,12 +3034,14 @@ class ImportExperimentTest(TestCase):
             record_responsible=self.user,  # TODO (NES-908): see if import with user or None
         )
         diagnosis1 = Diagnosis.objects.create(
-            medical_record_data=medicalevaluation1, classification_of_diseases=cid10_1
+            medical_record_data=medicalevaluation1,
+            classification_of_diseases=cid10_1,
         )
 
         medicalevaluation2 = MedicalRecordData.objects.create(patient=patient2, record_responsible=self.user)
         diagnosis2 = Diagnosis.objects.create(
-            medical_record_data=medicalevaluation2, classification_of_diseases=cid10_2
+            medical_record_data=medicalevaluation2,
+            classification_of_diseases=cid10_2,
         )
 
         # Remove their cpfs, we are simulating a new base
@@ -3326,7 +3367,7 @@ class ImportExperimentTest(TestCase):
         )
 
     @skip(
-        "test when implementing exporting/importing data collections"
+        "test when implementing exporting/importing data collections",
     )  # TODO: test when implementing exporting/importing data collections
     def test_eeg_electrode_net_and_eeg_electrode_cap(self):
         self._test_creation_and_linking_between_two_models(
@@ -4569,10 +4610,13 @@ class ImportExperimentTest(TestCase):
         information_type = ObjectsFactory.create_information_type()
 
         generic_data_collection_step = ObjectsFactory.create_component(
-            experiment, "generic_data_collection", kwargs={"it": information_type}
+            experiment,
+            "generic_data_collection",
+            kwargs={"it": information_type},
         )
         component_configuration = ObjectsFactory.create_component_configuration(
-            rootcomponent, generic_data_collection_step
+            rootcomponent,
+            generic_data_collection_step,
         )
         dct = ObjectsFactory.create_data_configuration_tree(component_configuration)
 
@@ -4810,11 +4854,13 @@ class ImportExperimentTest(TestCase):
         ObjectsFactory.create_eeg_file(eeg_data)
         eeg_electrode_localization_system = ObjectsFactory.create_eeg_electrode_localization_system()
         eeg_electrode_net_system = ObjectsFactory.create_eeg_electrode_net_system(
-            eeg_electrode_cap, eeg_electrode_localization_system
+            eeg_electrode_cap,
+            eeg_electrode_localization_system,
         )
         eeg_electrode_position = ObjectsFactory.create_eeg_electrode_position(eeg_electrode_localization_system)
         eeg_electrode_layout_setting = ObjectsFactory.create_eeg_electrode_layout_setting(
-            eeg_setting, eeg_electrode_net_system
+            eeg_setting,
+            eeg_electrode_net_system,
         )
         eeg_electrode_position_setting = ObjectsFactory.create_eeg_electrode_position_setting(
             eeg_electrode_layout_setting,
@@ -4994,24 +5040,29 @@ class ImportExperimentTest(TestCase):
             kwargs={"software_version": software_version, "context_tree": context_tree},
         )
         dgp_component_configuration = ObjectsFactory.create_component_configuration(
-            rootcomponent, digital_game_phase_step
+            rootcomponent,
+            digital_game_phase_step,
         )
         dgp_dct = ObjectsFactory.create_data_configuration_tree(dgp_component_configuration)
 
         # Generic Data Collection
         information_type = ObjectsFactory.create_information_type()
         generic_data_collection_step = ObjectsFactory.create_component(
-            experiment, "generic_data_collection", kwargs={"it": information_type}
+            experiment,
+            "generic_data_collection",
+            kwargs={"it": information_type},
         )
         gdc_component_configuration = ObjectsFactory.create_component_configuration(
-            rootcomponent, generic_data_collection_step
+            rootcomponent,
+            generic_data_collection_step,
         )
         gdc_dct = ObjectsFactory.create_data_configuration_tree(gdc_component_configuration)
 
         # Task for the Experimenter
         task_experimenter_step = ObjectsFactory.create_component(experiment, "task_experiment")
         task_experimenter_component_configuration = ObjectsFactory.create_component_configuration(
-            rootcomponent, task_experimenter_step
+            rootcomponent,
+            task_experimenter_step,
         )
 
         # Task for the Participant
@@ -5025,7 +5076,8 @@ class ImportExperimentTest(TestCase):
         # Instruction
         instruction_step = ObjectsFactory.create_component(experiment, "instruction")
         instruction_component_configuration = ObjectsFactory.create_component_configuration(
-            rootcomponent, instruction_step
+            rootcomponent,
+            instruction_step,
         )
 
         # Stimulus
@@ -5098,7 +5150,7 @@ class ImportExperimentTest(TestCase):
                 os.path.join(
                     self.TEMP_MEDIA_ROOT,
                     ComponentAdditionalFile.objects.get(id=component_ad_file_id).file.name,
-                )
+                ),
             )
 
         component_files_imported = ComponentAdditionalFile.objects.exclude(id__in=component_ad_files_ids)
@@ -5205,12 +5257,16 @@ class ImportExperimentTest(TestCase):
 
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
+            experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey1},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step1)
         survey2 = create_survey(111111)
         questionnaire_step2 = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey2}
+            experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey2},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step2)
 
@@ -5454,7 +5510,9 @@ class ImportExperimentTest(TestCase):
         rootcomponent1 = ObjectsFactory.create_component(experiment, "block", "root component")
         survey1 = create_survey()
         questionnaire_step1 = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
+            experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey1},
         )
         component_config1 = ObjectsFactory.create_component_configuration(rootcomponent1, questionnaire_step1)
         dct1 = ObjectsFactory.create_data_configuration_tree(component_config1)
@@ -5467,7 +5525,9 @@ class ImportExperimentTest(TestCase):
         subject_of_group2 = ObjectsFactory.create_subject_of_group(group2, subject2)
         rootcomponent2 = ObjectsFactory.create_component(experiment, "block", "root component")
         questionnaire_step2 = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey1}
+            experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey1},
         )
         component_config2 = ObjectsFactory.create_component_configuration(rootcomponent2, questionnaire_step2)
         dct2 = ObjectsFactory.create_data_configuration_tree(component_config2)
@@ -5549,7 +5609,7 @@ class ImportExperimentTest(TestCase):
                 mockServer.call_args,
                 call(
                     settings.LIMESURVEY["URL_API"]
-                    + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action"
+                    + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action",
                 ),
             )
 
@@ -5605,7 +5665,9 @@ class ImportExperimentTest(TestCase):
         rootcomponent = ObjectsFactory.create_component(experiment, "block", "root component")
         survey = create_survey()
         questionnaire_step = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, questionnaire_step)
 
@@ -5824,7 +5886,7 @@ class ImportExperimentTest(TestCase):
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
             message,
-            "Não foi possível atualizar as questões de identificação para todas as " "respostas.",
+            "Não foi possível atualizar as questões de identificação para todas as respostas.",
         )
 
     @patch("survey.abc_search_engine.Server")
@@ -5850,7 +5912,7 @@ class ImportExperimentTest(TestCase):
                 "randomization_group": "",
                 "group_name": "First group",
                 "description": "",
-            }
+            },
         ]
 
         # Add session variables related to updating/overwrite patients when importing
@@ -5935,7 +5997,7 @@ class ImportExperimentTest(TestCase):
         message = str(list(get_messages(response.wsgi_request))[0])
         self.assertEqual(
             message,
-            "Não foi possível atualizar as questões de identificação para todas as " "respostas.",
+            "Não foi possível atualizar as questões de identificação para todas as respostas.",
         )
 
     @patch("survey.abc_search_engine.Server")
@@ -6008,7 +6070,9 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
     @patch("survey.abc_search_engine.Server")
     @patch("experiment.views.check_required_fields")
     def test_create_questionnaire_response_build_limesurvey_url_with_correct_date_format(
-        self, mockCheckRequiredFields, mockServer
+        self,
+        mockCheckRequiredFields,
+        mockServer,
     ):
         for lang in ["en", "pt_br"]:
             mockServer.return_value.get_session_key.return_value = "abc"
@@ -6052,7 +6116,7 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     self.group.id,
                     self.component_config.id,
                 ),
-            )
+            ),
         )
         questionnaire_response = QuestionnaireResponse.objects.first()
 
@@ -6073,7 +6137,7 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     self.group.id,
                     self.component_config.id,
                 ),
-            )
+            ),
         )
 
         self.assertTrue(response.context["subject_list"][0]["questionnaire_responses"][0]["acquisitiondate_updated"])
@@ -6093,7 +6157,7 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     self.group.id,
                     self.component_config.id,
                 ),
-            )
+            ),
         )
 
         self.assertContains(response, "Atualizado", 1)
@@ -6114,7 +6178,7 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     self.group.id,
                     self.subject.id,
                 ),
-            )
+            ),
         )
         questionnaire_response = QuestionnaireResponse.objects.first()
 
@@ -6135,11 +6199,11 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     self.group.id,
                     self.subject.id,
                 ),
-            )
+            ),
         )
 
         self.assertTrue(
-            response.context["subject_questionnaires"][0]["questionnaire_responses"][0]["acquisitiondate_updated"]
+            response.context["subject_questionnaires"][0]["questionnaire_responses"][0]["acquisitiondate_updated"],
         )
 
     @patch("survey.abc_search_engine.Server")
@@ -6157,7 +6221,7 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     self.group.id,
                     self.subject.id,
                 ),
-            )
+            ),
         )
 
         self.assertContains(response, "Atualizado", 1)
@@ -6174,7 +6238,7 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     "subject_id": self.subject.id,
                     "questionnaire_id": self.component_config.id,
                 },
-            )
+            ),
         )
 
         self.assertContains(response, "Enviar convite")
@@ -6184,7 +6248,10 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
     @patch("experiment.views.check_required_fields")
     @patch("experiment.views.send_mail")
     def test_POST_subject_questionnaire_response_with_send_invite_action_creates_questionnaire_response_entry_with_correct_data(
-        self, mock_send_mail, mockCheckRequiredFields, mockServer
+        self,
+        mock_send_mail,
+        mockCheckRequiredFields,
+        mockServer,
     ):
         mockCheckRequiredFields.return_value = True
         self._set_mocks_questionnaire_response(mockServer)
@@ -6218,13 +6285,13 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
                     "subject_id": self.subject_of_group.subject_id,
                     "questionnaire_id": self.component_config.id,
                 },
-            )
+            ),
         )
 
         self.assertContains(response, "Enviar convite para participante")
         self.assertContains(
             response,
-            "Tem certeza que deseja enviar um convite para o " "participante " + self.subject.patient.name + "?",
+            "Tem certeza que deseja enviar um convite para o participante " + self.subject.patient.name + "?",
         )
         self.assertContains(response, "Enviar convite")
 
@@ -6241,7 +6308,10 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
     @patch("experiment.views.check_required_fields")
     @patch("experiment.views.send_mail")
     def test_POST_subject_questionnaire_response_with_send_invite_action_redirects_to_experiment_questionnaire_view(
-        self, mock_send_mail, mockCheckRequiredFields, mockServer
+        self,
+        mock_send_mail,
+        mockCheckRequiredFields,
+        mockServer,
     ):
         mockCheckRequiredFields.return_value = True
         self._set_mocks_questionnaire_response(mockServer)
@@ -6278,7 +6348,10 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
     @patch("experiment.views.check_required_fields")
     @patch("experiment.views.send_mail")
     def test_POST_subject_questionnaire_response_with_send_invite_action_send_email_invitation_to_participant(
-        self, mock_send_mail, mockCheckRequiredFields, mockServer
+        self,
+        mock_send_mail,
+        mockCheckRequiredFields,
+        mockServer,
     ):
         mockCheckRequiredFields.return_value = True
         token_mock = self._set_mocks_questionnaire_response(mockServer)
@@ -6300,7 +6373,7 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
 
         questionnaire_response = QuestionnaireResponse.objects.first()
 
-        redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/" "acquisitiondate/%s/subjectid/%s/newtest/Y" % (
+        redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/acquisitiondate/%s/subjectid/%s/newtest/Y" % (
             settings.LIMESURVEY["URL_WEB"],
             self.component_config.component.survey.lime_survey_id,
             token_mock,
@@ -6320,7 +6393,10 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
     @patch("experiment.views.check_required_fields")
     @patch("experiment.views.send_mail")
     def test_POST_subject_questionnaire_response_with_send_invite_action_display_success_message(
-        self, mock_send_mail, mockCheckRequiredFields, mockServer
+        self,
+        mock_send_mail,
+        mockCheckRequiredFields,
+        mockServer,
     ):
         mockCheckRequiredFields.return_value = True
         self._set_mocks_questionnaire_response(mockServer)
@@ -6350,7 +6426,10 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
     @patch("experiment.views.check_required_fields")
     @patch("experiment.views.send_mail")
     def test_POST_subject_questionnaire_response_with_send_invite_action_subject_has_not_email_display_failed_message(
-        self, mock_send_mail, mockCheckRequiredFields, mockServer
+        self,
+        mock_send_mail,
+        mockCheckRequiredFields,
+        mockServer,
     ):
         mockCheckRequiredFields.return_value = True
         self._set_mocks_questionnaire_response(mockServer)
@@ -6386,7 +6465,10 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
     @patch("experiment.views.check_required_fields")
     @patch("experiment.views.send_mail")
     def test_POST_subject_questionnaire_response_with_send_invite_action_subject_has_not_email_does_not_create_response(
-        self, mock_send_mail, mockCheckRequiredFields, mockServer
+        self,
+        mock_send_mail,
+        mockCheckRequiredFields,
+        mockServer,
     ):
         mockCheckRequiredFields.return_value = True
         self._set_mocks_questionnaire_response(mockServer)
@@ -6416,7 +6498,9 @@ class ExperimentQuestionnaireTest(ExperimentTestCase):
         :return: DataConfigurationTree model instance
         """
         questionnaire = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         component_config = ObjectsFactory.create_component_configuration(root_component, questionnaire)
         self.dct = ObjectsFactory.create_data_configuration_tree(component_config)

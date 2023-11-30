@@ -63,7 +63,7 @@ def user_create(request: HttpRequest, template_name: str = "custom_user/user_reg
                     request,
                     _(
                         "A researcher with this email address has already been registered before. "
-                        "Please contact your system administrator if you want to reactivate this account."
+                        "Please contact your system administrator if you want to reactivate this account.",
                     ),
                 )
                 return redirect("user_new")
@@ -85,7 +85,7 @@ def user_create(request: HttpRequest, template_name: str = "custom_user/user_reg
                     request,
                     _(
                         "A researcher with this email address has already been registered before. "
-                        "Please contact your system administrator if you want to reactivate this account."
+                        "Please contact your system administrator if you want to reactivate this account.",
                     ),
                 )
                 return redirect("user_new")
@@ -229,7 +229,8 @@ def user_update(
 
 @login_required
 def institution_create(
-    request: HttpRequest, template_name: str = "custom_user/institution_register.html"
+    request: HttpRequest,
+    template_name: str = "custom_user/institution_register.html",
 ) -> HttpResponse:
     institution_form = InstitutionForm(request.POST or None)
 
@@ -280,7 +281,7 @@ def institution_view(
                     request,
                     _(
                         "This institution cannot be removed because there is (are) other "
-                        "institution(s) associated with it."
+                        "institution(s) associated with it.",
                     ),
                 )
 

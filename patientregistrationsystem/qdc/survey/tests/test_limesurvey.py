@@ -72,7 +72,7 @@ class SurveyUtilsTest(TestCase):
                     {"hidden", "1"},
                     "N",
                 ],
-            )
+            ),
         )
         mockServerClass.return_value.get_question_properties.return_value = question_properties
         # mock list_groups LimeSurvey API method (fake values)
@@ -89,7 +89,7 @@ class SurveyUtilsTest(TestCase):
                 "gid": group_id,
                 "language": language,
                 "grelevance": "",
-            }
+            },
         ]
 
         lime_survey = Questionnaires()
@@ -97,7 +97,11 @@ class SurveyUtilsTest(TestCase):
             error,
             questionnaire_fields,
         ) = survey_utils.create_questionnaire_explanation_fields(
-            questionnaire_id, language, lime_survey, fields, entrance_survey
+            questionnaire_id,
+            language,
+            lime_survey,
+            fields,
+            entrance_survey,
         )
 
         # First line contains metadata column headers, subsequent lines

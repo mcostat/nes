@@ -129,11 +129,15 @@ def send_experiment_to_portal(experiment: Experiment):
             "rb",
         ) as f:
             params["ethics_committee_file"] = coreapi.utils.File(
-                os.path.basename(experiment.ethics_committee_project_file.name), f
+                os.path.basename(experiment.ethics_committee_project_file.name),
+                f,
             )
 
             portal_experiment = rest.client.action(
-                rest.schema, action_keys, params=params, encoding="multipart/form-data"
+                rest.schema,
+                action_keys,
+                params=params,
+                encoding="multipart/form-data",
             )
     else:
         portal_experiment = rest.client.action(rest.schema, action_keys, params=params, encoding="multipart/form-data")
@@ -229,7 +233,10 @@ def send_experimental_protocol_to_portal(portal_group_id, textual_description, i
         with open(settings.BASE_DIR + image, "rb") as f:
             params["image"] = coreapi.utils.File(os.path.basename(image), f)
             portal_experimental_protocol = rest.client.action(
-                rest.schema, action_keys, params=params, encoding="multipart/form-data"
+                rest.schema,
+                action_keys,
+                params=params,
+                encoding="multipart/form-data",
             )
     else:
         portal_experimental_protocol = rest.client.action(rest.schema, action_keys, params=params)
@@ -257,7 +264,8 @@ def send_eeg_setting_to_portal(eeg_setting: EEGSetting):
     # amplifier setting
     if hasattr(eeg_setting, "eeg_amplifier_setting"):
         portal_amplifier = send_amplifier_to_portal(
-            eeg_setting.experiment_id, eeg_setting.eeg_amplifier_setting.eeg_amplifier
+            eeg_setting.experiment_id,
+            eeg_setting.eeg_amplifier_setting.eeg_amplifier,
         )
         eeg_amplifier_setting = send_eeg_amplifier_setting_to_portal(
             portal_eeg_setting["id"],
@@ -268,7 +276,8 @@ def send_eeg_setting_to_portal(eeg_setting: EEGSetting):
     # solution setting
     if hasattr(eeg_setting, "eeg_solution_setting"):
         eeg_solution_setting = send_eeg_solution_setting_to_portal(
-            portal_eeg_setting["id"], eeg_setting.eeg_solution_setting
+            portal_eeg_setting["id"],
+            eeg_setting.eeg_solution_setting,
         )
 
     # filter setting
@@ -290,7 +299,8 @@ def send_eeg_setting_to_portal(eeg_setting: EEGSetting):
 
         # electrode localization system
         localization_system_portal = send_eeg_electrode_localization_system_to_portal(
-            portal_eeg_setting["id"], localization_system
+            portal_eeg_setting["id"],
+            localization_system,
         )
 
         for position in eeg_setting.eeg_electrode_layout_setting.positions_setting.all():
@@ -298,7 +308,8 @@ def send_eeg_setting_to_portal(eeg_setting: EEGSetting):
                 # electrode model
                 if position.electrode_model.id not in electrode_models:
                     electrode_model_portal = send_electrode_model_to_portal(
-                        eeg_setting.experiment_id, position.electrode_model
+                        eeg_setting.experiment_id,
+                        position.electrode_model,
                     )
                     electrode_models[position.electrode_model.id] = electrode_model_portal
                 else:
@@ -306,7 +317,9 @@ def send_eeg_setting_to_portal(eeg_setting: EEGSetting):
 
                 # electrode position
                 electrode_position_portal = send_eeg_electrode_position_to_portal(
-                    portal_eeg_setting["id"], electrode_model_portal["id"], position
+                    portal_eeg_setting["id"],
+                    electrode_model_portal["id"],
+                    position,
                 )
 
     return portal_eeg_setting
@@ -563,7 +576,8 @@ def send_electrode_model_to_portal(experiment_nes_id, electrode_model: Electrode
 
 
 def send_emg_digital_filter_setting_to_portal(
-    portal_emg_setting_id, emg_digital_filter_setting: EMGDigitalFilterSetting
+    portal_emg_setting_id,
+    emg_digital_filter_setting: EMGDigitalFilterSetting,
 ):
     rest = RestApiClient()
 
@@ -734,7 +748,8 @@ def send_emg_preamplifier_filter_setting_to_portal(
 
 
 def send_emg_analog_filter_setting_to_portal(
-    portal_emg_electrode_setting_id, emg_analog_filter_setting: EMGAnalogFilterSetting
+    portal_emg_electrode_setting_id,
+    emg_analog_filter_setting: EMGAnalogFilterSetting,
 ):
     rest = RestApiClient()
 
@@ -791,14 +806,18 @@ def send_emg_surface_placement_to_portal(experiment_nes_id, emg_surface_placemen
     action_keys = ["experiments", "emg_surface_placement", "create"]
 
     portal_surface_placement = rest.client.action(
-        rest.schema, action_keys, params=params, encoding="multipart/form-data"
+        rest.schema,
+        action_keys,
+        params=params,
+        encoding="multipart/form-data",
     )
 
     return portal_surface_placement
 
 
 def send_emg_intramuscular_placement_to_portal(
-    experiment_nes_id, emg_intramuscular_placement: EMGIntramuscularPlacement
+    experiment_nes_id,
+    emg_intramuscular_placement: EMGIntramuscularPlacement,
 ):
     rest = RestApiClient()
 
@@ -828,7 +847,10 @@ def send_emg_intramuscular_placement_to_portal(
     action_keys = ["experiments", "emg_intramuscular_placement", "create"]
 
     portal_intramuscular_placement = rest.client.action(
-        rest.schema, action_keys, params=params, encoding="multipart/form-data"
+        rest.schema,
+        action_keys,
+        params=params,
+        encoding="multipart/form-data",
     )
 
     return portal_intramuscular_placement
@@ -862,7 +884,10 @@ def send_emg_needle_placement_to_portal(experiment_nes_id, emg_needle_placement:
     action_keys = ["experiments", "emg_needle_placement", "create"]
 
     portal_needle_placement = rest.client.action(
-        rest.schema, action_keys, params=params, encoding="multipart/form-data"
+        rest.schema,
+        action_keys,
+        params=params,
+        encoding="multipart/form-data",
     )
 
     return portal_needle_placement
@@ -920,13 +945,15 @@ def send_emg_setting_to_portal(emg_setting: EMGSetting):
     # digital filter setting
     if hasattr(emg_setting, "emg_digital_filter_setting"):
         emg_digital_filter_setting = send_emg_digital_filter_setting_to_portal(
-            portal_emg_setting["id"], emg_setting.emg_digital_filter_setting
+            portal_emg_setting["id"],
+            emg_setting.emg_digital_filter_setting,
         )
 
     # ad converter setting
     if hasattr(emg_setting, "emg_ad_converter_setting"):
         portal_ad_converter = send_ad_converter_to_portal(
-            emg_setting.experiment_id, emg_setting.emg_ad_converter_setting.ad_converter
+            emg_setting.experiment_id,
+            emg_setting.emg_ad_converter_setting.ad_converter,
         )
         emg_ad_converter_setting = send_emg_ad_converter_setting_to_portal(
             portal_emg_setting["id"],
@@ -941,7 +968,8 @@ def send_emg_setting_to_portal(emg_setting: EMGSetting):
         # electrode model
         if emg_electrode_setting.electrode.id not in electrode_models:
             electrode_model_portal = send_electrode_model_to_portal(
-                emg_setting.experiment_id, emg_electrode_setting.electrode
+                emg_setting.experiment_id,
+                emg_electrode_setting.electrode,
             )
             electrode_models[emg_electrode_setting.electrode.id] = electrode_model_portal
         else:
@@ -1012,17 +1040,19 @@ def send_emg_setting_to_portal(emg_setting: EMGSetting):
                 emg_surface_placement = EMGSurfacePlacement.objects.get(pk=placement_setting.emg_electrode_placement.id)
 
                 portal_emg_electrode_placement = send_emg_surface_placement_to_portal(
-                    emg_setting.experiment_id, emg_surface_placement
+                    emg_setting.experiment_id,
+                    emg_surface_placement,
                 )
 
             # intramuscular placement
             elif placement_setting.emg_electrode_placement.placement_type == "intramuscular":
                 emg_intramuscular_placement = EMGIntramuscularPlacement.objects.get(
-                    pk=placement_setting.emg_electrode_placement.id
+                    pk=placement_setting.emg_electrode_placement.id,
                 )
 
                 portal_emg_electrode_placement = send_emg_intramuscular_placement_to_portal(
-                    emg_setting.experiment_id, emg_intramuscular_placement
+                    emg_setting.experiment_id,
+                    emg_intramuscular_placement,
                 )
 
             # needle placement
@@ -1030,7 +1060,8 @@ def send_emg_setting_to_portal(emg_setting: EMGSetting):
                 emg_needle_placement = EMGNeedlePlacement.objects.get(pk=placement_setting.emg_electrode_placement.id)
 
                 portal_emg_electrode_placement = send_emg_needle_placement_to_portal(
-                    emg_setting.experiment_id, emg_needle_placement
+                    emg_setting.experiment_id,
+                    emg_needle_placement,
                 )
 
             # placement setting
@@ -1135,12 +1166,14 @@ def send_tms_setting_to_portal(tms_setting: TMSSetting):
     if hasattr(tms_setting, "tms_device_setting"):
         # tms device
         portal_tms_device = send_tms_device_to_portal(
-            tms_setting.experiment_id, tms_setting.tms_device_setting.tms_device
+            tms_setting.experiment_id,
+            tms_setting.tms_device_setting.tms_device,
         )
 
         # coil model
         portal_coil_model = send_coil_model_to_portal(
-            tms_setting.experiment_id, tms_setting.tms_device_setting.coil_model
+            tms_setting.experiment_id,
+            tms_setting.tms_device_setting.coil_model,
         )
 
         # tms device setting
@@ -1544,7 +1577,11 @@ def get_survey_information(language, survey, surveys):
         error,
         questionnaire_fields,
     ) = questionnaire_utils.create_questionnaire_explanation_fields(
-        survey.lime_survey_id, language, surveys, fields, False
+        survey.lime_survey_id,
+        language,
+        surveys,
+        fields,
+        False,
     )
     survey_metadata = ""
     for row in questionnaire_fields:

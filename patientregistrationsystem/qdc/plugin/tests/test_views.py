@@ -353,7 +353,8 @@ class PluginTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_POST_send_to_plugin_redirect_to_send_to_plugin_view_and_remove_plugin_url_key_from_session(
-        self, mockServer
+        self,
+        mockServer,
     ):
         set_limesurvey_api_mocks(mockServer)
 
@@ -651,7 +652,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -676,7 +677,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -701,7 +702,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -711,7 +712,7 @@ class PluginTest(ExportTestCase):
         set_limesurvey_api_mocks(mockServer)
         # Could not get responses by token
         mockServer.return_value.export_responses_by_token.side_effect = 4 * [
-            {"status": "No Data, survey table does not exist."}
+            {"status": "No Data, survey table does not exist."},
         ]
         self._create_basic_objects()
         response = self.client.post(
@@ -728,7 +729,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -753,7 +754,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -778,7 +779,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -803,7 +804,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -828,7 +829,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 
@@ -853,7 +854,7 @@ class PluginTest(ExportTestCase):
             message,
             _(
                 "Error: some thing went wrong consuming LimeSurvey API. Please try again. If "
-                "problem persists please contact System Administrator."
+                "problem persists please contact System Administrator.",
             ),
         )
 

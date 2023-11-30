@@ -95,9 +95,8 @@ def survey_list(request, template_name: str = "survey/survey_list.html") -> Http
     language_code = request.LANGUAGE_CODE
 
     update = False
-    if request.method == "POST":
-        if request.POST["action"] == "update":
-            update = True
+    if request.method == "POST" and request.POST["action"] == "update":
+        update = True
 
     for survey in Survey.objects.all():
         survey_title = get_survey_title_based_on_the_user_language(survey, language_code, update)
@@ -124,7 +123,7 @@ def survey_list(request, template_name: str = "survey/survey_list.html") -> Http
                 "title": survey_title,
                 "is_initial_evaluation": survey.is_initial_evaluation,
                 "is_active": survey.is_active,
-            }
+            },
         )
 
     surveys.release_session_key()
@@ -255,7 +254,7 @@ def survey_update_sensitive_questions(request, survey_id, template_name: str = "
                     "code": field_code[counter],
                     "text": field_text[counter],
                     "checked": current_selected_fields.filter(code=field_code[counter]).exists(),
-                }
+                },
             )
         counter += 1
 
@@ -283,7 +282,7 @@ def survey_update_sensitive_questions(request, survey_id, template_name: str = "
 
             # Exclude unknown items
             unkown_items = SensitiveQuestion.objects.filter(survey=survey).exclude(
-                code__in=[field["code"] for field in available_fields]
+                code__in=[field["code"] for field in available_fields],
             )
             if unkown_items.exists():
                 unkown_items.delete()
@@ -354,8 +353,8 @@ def create_list_of_trees(block_id, component_type, numeration=""):
                         configuration.name,
                         configuration.component.identification,
                         sub_numeration,
-                    ]
-                ]
+                    ],
+                ],
             )
 
         # Look for steps in descendant blocks
@@ -401,12 +400,12 @@ def create_experiments_questionnaire_data_list(survey, surveys):
     # Create a list of questionnaires used in experiments by looking at
     # questionnaires responses. We use a dictionary because it is useful for
     # filtering out duplicate component configurations from the list.
-    experiments_questionnaire_data_dictionary = {}
+    experiments_questionnaire_data_dictionary: dict[int, dict[str, Any]] = {}
 
     for qr in QuestionnaireResponse.objects.all():
-        q = Questionnaire.objects.get(id=qr.data_configuration_tree.component_configuration.component_id)
+        questionnaire = Questionnaire.objects.get(id=qr.data_configuration_tree.component_configuration.component_id)
 
-        if q.survey == survey:
+        if questionnaire.survey == survey:
             use = qr.data_configuration_tree.component_configuration
             group = qr.subject_of_group.group
 
@@ -432,13 +431,17 @@ def create_experiments_questionnaire_data_list(survey, surveys):
                     "questionnaire_responses": [],
                 }
 
-            response_result = surveys.get_participant_properties(q.survey.lime_survey_id, qr.token_id, "completed")
+            response_result = surveys.get_participant_properties(
+                questionnaire.survey.lime_survey_id,
+                qr.token_id,
+                "completed",
+            )
 
             experiments_questionnaire_data_dictionary[use.id]["patients"][patient.id]["questionnaire_responses"].append(
                 {
                     "questionnaire_response": qr,
                     "completed": None if response_result is None else response_result != "N" and response_result != "",
-                }
+                },
             )
 
     surveys.release_session_key()
@@ -447,13 +450,15 @@ def create_experiments_questionnaire_data_list(survey, surveys):
     for g in Group.objects.all():
         if g.experimental_protocol is not None:
             list_of_component_configurations_for_questionnaires = recursively_create_list_of_steps(
-                g.experimental_protocol.id, "questionnaire", []
+                g.experimental_protocol.id,
+                "questionnaire",
+                [],
             )
 
             for use in list_of_component_configurations_for_questionnaires:
-                q = Questionnaire.objects.get(id=use.component_id)
+                questionnaire = Questionnaire.objects.get(id=use.component_id)
 
-                if q.survey == survey:
+                if questionnaire.survey == survey:
                     if use.id not in experiments_questionnaire_data_dictionary:
                         experiments_questionnaire_data_dictionary[use.id] = {
                             "experiment_title": use.component.experiment.title,
@@ -468,21 +473,20 @@ def create_experiments_questionnaire_data_list(survey, surveys):
 
     # Add questionnaires from the experiments that have no answers and are not in an experimental protocol of a group.
     for use in ComponentConfiguration.objects.filter(component__component_type="questionnaire"):
-        q = Questionnaire.objects.filter(id=use.component_id)[0]
-        assert isinstance(q, Questionnaire)
-        if q is not None:
-            if q.survey == survey:
-                if use.id not in experiments_questionnaire_data_dictionary:
-                    experiments_questionnaire_data_dictionary[use.id] = {
-                        "experiment_title": use.component.experiment.title,
-                        "group_title": "",  # It is not in use in any group.
-                        "parent_identification": use.parent.identification,
-                        "component_identification": use.component.identification,
-                        # TODO After update to Django 1.8, override from_db to avoid this if.
-                        # https://docs.djangoproject.com/en/1.8/ref/models/instances/#customizing-model-loading
-                        "use_name": use.name if use.name is not None else "",
-                        "patients": {},  # There is no answers.
-                    }
+        questionnaire = Questionnaire.objects.filter(id=use.component_id)[0]
+        assert isinstance(questionnaire, Questionnaire)
+        if questionnaire is not None and questionnaire.survey == survey:
+            if use.id not in experiments_questionnaire_data_dictionary:
+                experiments_questionnaire_data_dictionary[use.id] = {
+                    "experiment_title": use.component.experiment.title,
+                    "group_title": "",  # It is not in use in any group.
+                    "parent_identification": use.parent.identification,
+                    "component_identification": use.component.identification,
+                    # TODO After update to Django 1.8, override from_db to avoid this if.
+                    # https://docs.djangoproject.com/en/1.8/ref/models/instances/#customizing-model-loading
+                    "use_name": use.name if use.name is not None else "",
+                    "patients": {},  # There is no answers.
+                }
 
     # Transform dictionary into a list to include questionnaire components that are not in use and to sort.
     experiments_questionnaire_data_list: list[dict[str, Any]] = []
@@ -492,25 +496,25 @@ def create_experiments_questionnaire_data_list(survey, surveys):
         experiments_questionnaire_data_list.append(value)
 
     # Add questionnaires from the experiments that have no answers and are not even in use.
-    for q in Questionnaire.objects.filter(survey=survey):
+    for questionnaire in Questionnaire.objects.filter(survey=survey):
         already_included = False
 
         for dictionary in experiments_questionnaire_data_list:
-            if q.id == dictionary["component_id"]:
+            if questionnaire.id == dictionary["component_id"]:
                 already_included = True
                 break
 
         if not already_included:
             experiments_questionnaire_data_list.append(
                 {
-                    "component_id": q.id,
-                    "experiment_title": q.experiment.title,
+                    "component_id": questionnaire.id,
+                    "experiment_title": questionnaire.experiment.title,
                     "group_title": "",  # It is not in use in any group.
                     "parent_identification": "",  # It is not in use in any set of steps.
-                    "component_identification": q.identification,
+                    "component_identification": questionnaire.identification,
                     "use_name": "",  # It is not in use in any set of steps.
                     "patients": {},  # There is no answers.
-                }
+                },
             )
 
     # Sort by experiment title, group title, parent identification, step
@@ -538,7 +542,7 @@ def create_experiments_questionnaire_data_list(survey, surveys):
 
 def create_patients_questionnaire_data_list(survey, surveys):
     """Create a list of patients by looking to the answers of this
-    questionnaire. We do this way instead of looking for patients and then
+    questionnaire.We do this way instead of looking for patients and then
     looking for answers of each patient to reduce the number of access to the
     data base. Uses a dictionary because it is useful for filtering out
     duplicate patients from the list.
@@ -557,14 +561,16 @@ def create_patients_questionnaire_data_list(survey, surveys):
             }
 
         response_result = surveys.get_participant_properties(
-            response.survey.lime_survey_id, response.token_id, "completed"
+            response.survey.lime_survey_id,
+            response.token_id,
+            "completed",
         )
 
         patients_questionnaire_data_dictionary[response.patient.id]["questionnaire_responses"].append(
             {
                 "questionnaire_response": response,
                 "completed": None if response_result is None else response_result != "N" and response_result != "",
-            }
+            },
         )
 
     # Add to the dictionary patients that have not answered any questionnaire
@@ -621,7 +627,7 @@ def get_responses(survey):
     )
     nes_responses_experiments = (
         QuestionnaireResponse.objects.filter(
-            data_configuration_tree__component_configuration__component__questionnaire__survey=survey
+            data_configuration_tree__component_configuration__component__questionnaire__survey=survey,
         )
         .exclude(is_completed="N")
         .exclude(is_completed="")
@@ -661,16 +667,17 @@ def update_acquisitiondate(tokens, ls_responses, nes_responses):
     return responses_updated
 
 
-def csv_to_list(responses):
+def csv_to_list(responses) -> list[dict[str, Any]]:
     responses_csv = StringIO(responses)
-    responses_list = []
-    for row in csv.DictReader(responses_csv):
-        responses_list.append(row)
+    responses_list = list(csv.DictReader(responses_csv))
+
+    # for row in csv.DictReader(responses_csv):
+    #     responses_list.append(row)
 
     return responses_list
 
 
-def make_messages(request, responses):
+def make_messages(request, responses) -> None:
     if responses:
         messages.success(request, str(len(responses)) + " " + _("responses were updated!"))
 
@@ -682,7 +689,7 @@ def make_messages(request, responses):
                 "been changed on LimeSurvey since the last update, "
                 "the purchase date is not filled in "
                 "LimeSurvey, or was filled in a non-format "
-                "recognized by the NES."
+                "recognized by the NES.",
             ),
         )
 
@@ -722,7 +729,7 @@ def survey_view(request, survey_id, template_name: str = "survey/survey_register
                 request,
                 _(
                     "It was not possible to delete questionnaire, because"
-                    "there are experimental answers or steps associated."
+                    "there are experimental answers or steps associated.",
                 ),
             )
 
@@ -801,7 +808,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                     "attributes_lang": properties["attributes_lang"],
                                     "hidden": "hidden" in properties["attributes"]
                                     and properties["attributes"]["hidden"] == "1",
-                                }
+                                },
                             )
                             for _key, value in sorted(properties["subquestions"].items()):
                                 question_properties.append(
@@ -817,7 +824,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                         "attributes_lang": properties["attributes_lang"],
                                         "hidden": "hidden" in properties["attributes"]
                                         and properties["attributes"]["hidden"] == "1",
-                                    }
+                                    },
                                 )
                             if properties["other"] == "Y":
                                 question_properties.append(
@@ -833,7 +840,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                         "attributes_lang": properties["attributes_lang"],
                                         "hidden": "hidden" in properties["attributes"]
                                         and properties["attributes"]["hidden"] == "1",
-                                    }
+                                    },
                                 )
 
                         else:
@@ -850,7 +857,7 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                     "attributes_lang": properties["attributes_lang"],
                                     "hidden": "hidden" in properties["attributes"]
                                     and properties["attributes"]["hidden"] == "1",
-                                }
+                                },
                             )
                     else:
                         question_properties.append(
@@ -865,17 +872,17 @@ def get_questionnaire_responses(language_code, lime_survey_id, token_id, request
                                 "other": False,
                                 "attributes_lang": properties["attributes_lang"],
                                 "hidden": False,
-                            }
+                            },
                         )
 
         responses_string = surveys.get_responses_by_token(lime_survey_id, token, language)
         responses_list: list = []
 
         if responses_string:
-            reader_ = csv.reader(StringIO(responses_string), delimiter=",")
+            responses_list = list(csv.reader(StringIO(responses_string), delimiter=","))
 
-            for row in reader_:
-                responses_list.append(row)
+            # for row in reader_:
+            #     responses_list.append(row)
 
             previous_question = ""
             last_super_question = ""
@@ -1044,7 +1051,11 @@ def mark_off_super_question(groups_of_questions, last_super_question_index):
 
 
 def add_questionnaire_response_to_group(
-    groups_of_question: list[Any], question, answer, link=None, no_response_flag=False
+    groups_of_question: list[Any],
+    question,
+    answer,
+    link=None,
+    no_response_flag=False,
 ) -> list[Any]:
     groups = groups_of_question
 
@@ -1055,7 +1066,7 @@ def add_questionnaire_response_to_group(
                 "id": question["gid"],
                 "name": question["group_name"],
                 "questionnaire_responses": [],
-            }
+            },
         )
 
     groups[-1]["questionnaire_responses"].append(
@@ -1066,7 +1077,7 @@ def add_questionnaire_response_to_group(
             "other": question["other"],
             "link": link,
             "no_response_flag": no_response_flag,
-        }
+        },
     )
 
     return groups

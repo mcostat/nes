@@ -329,7 +329,7 @@ class SurveyTest(TestCase):
                 args=[
                     self.survey.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
         request.LANGUAGE_CODE = "pt-BR"
@@ -508,7 +508,8 @@ class SurveyTest(TestCase):
 
     @patch("survey.abc_search_engine.Server")
     def test_survey_without_pt_title_gets_pt_title_filled_with_limesurvey_code_when_there_is_not_en_title(
-        self, mock_server
+        self,
+        mock_server,
     ):
         mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
         mock_server.return_value.get_language_properties.return_value = {"status": "Error: Invalid survey ID"}
@@ -527,7 +528,8 @@ class SurveyTest(TestCase):
     @override_settings(LANGUAGE_CODE="en")
     @patch("survey.abc_search_engine.Server")
     def test_survey_without_en_title_gets_en_title_filled_with_limesurvey_code_when_there_is_not_pt_title(
-        self, mock_server
+        self,
+        mock_server,
     ):
         mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
         mock_server.return_value.get_language_properties.return_value = {"status": "Error: Invalid survey ID"}
@@ -581,7 +583,8 @@ class SurveyTest(TestCase):
 
     @patch("survey.abc_search_engine.Server")
     def test_survey_without_pt_or_en_title_returns_default_language_title_to_be_listed_but_does_not_save(
-        self, mock_server
+        self,
+        mock_server,
     ):
         mock_server.return_value.get_session_key.return_value = "vz224sb7jzkvh8i4kpx8fxbcxd67meht"
         mock_server.return_value.add_survey.return_value = 21212150
@@ -675,5 +678,8 @@ class SurveyTest(TestCase):
         component_config = ObjectsFactory.create_component_configuration(rootcomponent, questionnaire)
         dct = ObjectsFactory.create_data_configuration_tree(component_config)
         ObjectsFactory.create_questionnaire_response(
-            dct, self.user, token_id=token_id, subject_of_group=subject_of_group
+            dct,
+            self.user,
+            token_id=token_id,
+            subject_of_group=subject_of_group,
         )

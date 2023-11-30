@@ -108,7 +108,7 @@ class ExportForm(Form):
             attrs={
                 "class": "form-check-input",
                 "data-error": _("Response must be selected"),
-            }
+            },
         ),
         choices=RESPONSES_CHOICES,
         required=False,
@@ -177,7 +177,7 @@ class AgeIntervalForm(Form):
                 "max": "999",
                 "data-error": _("Min age must be filled."),
                 "disabled": "",
-            }
+            },
         ),
     )
     max_age = IntegerField(
@@ -190,7 +190,7 @@ class AgeIntervalForm(Form):
                 "max": "999",
                 "data-error": _("Max age must be filled."),
                 "disabled": "",
-            }
+            },
         ),
     )
 

@@ -196,7 +196,11 @@ class UtilTests:
 
     @staticmethod
     def create_response_survey(
-        responsible, patient, survey, token_id=None, is_completed=datetime.now()
+        responsible,
+        patient,
+        survey,
+        token_id=None,
+        is_completed=datetime.now(),
     ) -> QuestionnaireResponse:
         if token_id is None:
             token_id = 21
@@ -299,7 +303,7 @@ class CpfValidationTest(TestCase):
         """testa cpf com letras"""
         result = CPF(
             "1234567890123456789012345678901234567890123456789012\
-            34567890123456789012345678901234567890123456789012345678901234567890"
+            34567890123456789012345678901234567890123456789012345678901234567890",
         ).is_valid()
         self.assertEqual(result, False)
 
@@ -319,7 +323,9 @@ class PatientFormValidation(TestCase):
         """Set up authentication and variables to start each test"""
 
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -825,7 +831,7 @@ class PatientFormValidation(TestCase):
                 args=[
                     id_patient,
                 ],
-            )
+            ),
         )
         request.user = self.user
 
@@ -852,7 +858,7 @@ class PatientFormValidation(TestCase):
                 args=[
                     patient.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 
@@ -950,7 +956,9 @@ class MedicalRecordFormValidation(TestCase):
 
     def setUp(self) -> None:
         self.user: get_user_model() = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -992,7 +1000,7 @@ class MedicalRecordFormValidation(TestCase):
                     medical_record.pk,
                     cid10.id,
                 ],
-            )
+            ),
         )
         request.user = self.user
         response = diagnosis_create(
@@ -1005,8 +1013,8 @@ class MedicalRecordFormValidation(TestCase):
         self.assertEqual(
             Diagnosis.objects.filter(
                 medical_record_data=MedicalRecordData.objects.filter(
-                    patient_id=Patient.objects.get(pk=patient.pk)
-                ).first()
+                    patient_id=Patient.objects.get(pk=patient.pk),
+                ).first(),
             ).count(),
             1,
         )
@@ -1049,7 +1057,7 @@ class MedicalRecordFormValidation(TestCase):
                     patient.pk,
                     cid10.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
         response = medical_record_create_diagnosis_create(request, patient_id=patient.pk, cid10_id=cid10.pk)
@@ -1057,8 +1065,8 @@ class MedicalRecordFormValidation(TestCase):
         self.assertEqual(
             Diagnosis.objects.filter(
                 medical_record_data=MedicalRecordData.objects.filter(
-                    patient_id=Patient.objects.get(pk=patient.pk)
-                ).first()
+                    patient_id=Patient.objects.get(pk=patient.pk),
+                ).first(),
             ).count(),
             1,
         )
@@ -1225,7 +1233,7 @@ class MedicalRecordFormValidation(TestCase):
                     medical_record.pk,
                     diagnosis.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 
@@ -1479,7 +1487,9 @@ class QuestionnaireFormValidation(TestCase):
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True
@@ -1512,7 +1522,7 @@ class QuestionnaireFormValidation(TestCase):
                 "blacklisted": None,
                 "firstname": "",
                 "validuntil": None,
-            }
+            },
         ]
         mockServer.return_value.get_participant_properties.side_effect = [
             {"completed": "2018-05-15 15:51"},
@@ -1873,7 +1883,7 @@ class QuestionnaireFormValidation(TestCase):
                 "blacklisted": None,
                 "firstname": "",
                 "validuntil": None,
-            }
+            },
         ]
         mockServer.return_value.get_participant_properties.return_value = {
             "token": "xryiz4rvoh78z9v",
@@ -2047,7 +2057,7 @@ class QuestionnaireFormValidation(TestCase):
                     "usesleft": 1,
                     "emailstatus": "OK",
                     "participant_id": None,
-                }
+                },
             ],
             [
                 {
@@ -2068,7 +2078,7 @@ class QuestionnaireFormValidation(TestCase):
                     "usesleft": 1,
                     "emailstatus": "OK",
                     "participant_id": None,
-                }
+                },
             ],
         ]
 
@@ -2151,7 +2161,7 @@ class QuestionnaireFormValidation(TestCase):
             "redis": {
                 "BACKEND": "django.core.cache.backends.dummy.DummyCache",
             },
-        }
+        },
     )
     def test_entrance_ev_response_complete_without_cache(self, mockServer):
         """Test view of questionnaire response when questionnaire is complete
@@ -2177,8 +2187,8 @@ class QuestionnaireFormValidation(TestCase):
                 + str(survey_mock.lime_survey_id)
                 + "-"
                 + str(response_survey_mock.token_id)
-                + "_survey_title_participant"
-            )
+                + "_survey_title_participant",
+            ),
         )
         self.assertIsNone(
             cache.get(
@@ -2187,8 +2197,8 @@ class QuestionnaireFormValidation(TestCase):
                 + str(survey_mock.lime_survey_id)
                 + "-"
                 + str(response_survey_mock.token_id)
-                + "_group_of_questions_participant"
-            )
+                + "_group_of_questions_participant",
+            ),
         )
         self.assertEqual(
             response_survey_mock.token_id,
@@ -2206,7 +2216,7 @@ class QuestionnaireFormValidation(TestCase):
             "redis": {
                 "BACKEND": "django.core.cache.backends.dummy.DummyCache",
             },
-        }
+        },
     )
     def test_entrance_ev_response_complete_with_cache(self, mockServer):
         """Test view of questionnaire response when questionnaire is complete
@@ -2232,8 +2242,8 @@ class QuestionnaireFormValidation(TestCase):
                 + str(survey_mock.lime_survey_id)
                 + "-"
                 + str(response_survey_mock.token_id)
-                + "_survey_title_participant"
-            )
+                + "_survey_title_participant",
+            ),
         )
         self.assertIsNotNone(
             cache.get(
@@ -2242,8 +2252,8 @@ class QuestionnaireFormValidation(TestCase):
                 + str(survey_mock.lime_survey_id)
                 + "-"
                 + str(response_survey_mock.token_id)
-                + "_group_of_questions_participant"
-            )
+                + "_group_of_questions_participant",
+            ),
         )
         self.assertEqual(
             response_survey_mock.token_id,
@@ -2258,7 +2268,7 @@ class QuestionnaireFormValidation(TestCase):
         mockServer.return_value.add_survey.return_value = 99999
         mockServer.return_value.delete_survey.return_value = {"status": "OK"}
         mockServer.return_value.get_language_properties.return_value = {
-            "surveyls_title": "Questionario de teste - DjangoTests"
+            "surveyls_title": "Questionario de teste - DjangoTests",
         }
 
         # Create a research project
@@ -2296,7 +2306,8 @@ class QuestionnaireFormValidation(TestCase):
 
         try:
             new_survey, created = Survey.objects.get_or_create(
-                lime_survey_id=sid, is_initial_evaluation=False
+                lime_survey_id=sid,
+                is_initial_evaluation=False,
             )  # Create a questionnaire
             questionnaire = Questionnaire.objects.create(
                 identification="Questionnaire",
@@ -2309,12 +2320,14 @@ class QuestionnaireFormValidation(TestCase):
 
             # Include the questionnaire in the root.
             component_configuration = ComponentConfiguration.objects.create(
-                name="ComponentConfiguration", parent=block, component=questionnaire
+                name="ComponentConfiguration",
+                parent=block,
+                component=questionnaire,
             )
             component_configuration.save()
 
             data_configuration_tree = DataConfigurationTree.objects.create(
-                component_configuration=component_configuration
+                component_configuration=component_configuration,
             )
             data_configuration_tree.save()
 
@@ -2461,7 +2474,9 @@ A000,Cholera due to Vibrio cholerae 01 biovar cholerae,Cólera devida a Vibrio c
 
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+            username=USER_USERNAME,
+            email="test@dummy.com",
+            password=USER_PWD,
         )
         self.user.is_staff = True
         self.user.is_superuser = True

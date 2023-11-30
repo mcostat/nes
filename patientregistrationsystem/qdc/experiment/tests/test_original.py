@@ -161,7 +161,7 @@ class ExperimentalProtocolTest(TestCase):
         # Check if redirected to list of components
         self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
         self.assertTrue(
-            TaskForTheExperimenter.objects.filter(description=description, identification=identification).exists()
+            TaskForTheExperimenter.objects.filter(description=description, identification=identification).exists(),
         )
 
         identification = "EMG identification"
@@ -217,7 +217,7 @@ class ExperimentalProtocolTest(TestCase):
         # Check if redirected to list of components
         self.assertTrue("/experiment/" + str(experiment.id) + "/components" in response.url)
         self.assertTrue(
-            Stimulus.objects.filter(identification="Stimulus identification", stimulus_type=stimulus_type).exists()
+            Stimulus.objects.filter(identification="Stimulus identification", stimulus_type=stimulus_type).exists(),
         )
 
         self.data = {
@@ -340,7 +340,7 @@ class ExperimentalProtocolTest(TestCase):
                     block.id,
                     Block.objects.filter(identification="Block identification").first().id,
                 ),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -408,7 +408,9 @@ class ExperimentalProtocolTest(TestCase):
         self.assertEqual(Component.objects.count(), 2)
 
         component_configuration = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration_name", parent=block, component=task
+            name="ComponentConfiguration_name",
+            parent=block,
+            component=task,
         )
         component_configuration.save()
         self.assertEqual(ComponentConfiguration.objects.count(), 1)
@@ -452,13 +454,17 @@ class ExperimentalProtocolTest(TestCase):
         task.save()
 
         component_configuration1 = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration 1", parent=block, component=task
+            name="ComponentConfiguration 1",
+            parent=block,
+            component=task,
         )
         component_configuration1.save()
         self.assertEqual(component_configuration1.order, 1)
 
         component_configuration2 = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration 2", parent=block, component=task
+            name="ComponentConfiguration 2",
+            parent=block,
+            component=task,
         )
         component_configuration2.save()
         self.assertEqual(component_configuration2.order, 2)
@@ -491,13 +497,17 @@ class ExperimentalProtocolTest(TestCase):
         task.save()
 
         component_configuration1 = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration 1", parent=block, component=task
+            name="ComponentConfiguration 1",
+            parent=block,
+            component=task,
         )
         component_configuration1.save()
         self.assertEqual(component_configuration1.order, 1)
 
         component_configuration2 = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration 2", parent=block, component=task
+            name="ComponentConfiguration 2",
+            parent=block,
+            component=task,
         )
         component_configuration2.save()
         self.assertEqual(component_configuration2.order, 2)
@@ -511,7 +521,9 @@ class ExperimentalProtocolTest(TestCase):
         instruction.save()
 
         component_configuration3 = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration 3", parent=block, component=instruction
+            name="ComponentConfiguration 3",
+            parent=block,
+            component=instruction,
         )
         component_configuration3.save()
         self.assertEqual(component_configuration3.order, 3)
@@ -624,14 +636,16 @@ class ClassificationOfDiseasesTest(TestCase):
 
         # Criando instancia de ClassificationOfDiseases
         classification_of_diseases = ClassificationOfDiseases.objects.create(
-            code="1", description="test", abbreviated_description="t"
+            code="1",
+            description="test",
+            abbreviated_description="t",
         )
         # Inserindo o classification_of_diseases no group
         response = self.client.get(
             reverse(
                 CLASSIFICATION_OF_DISEASES_CREATE,
                 args=(group.id, classification_of_diseases.id),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 302)
 
@@ -649,14 +663,16 @@ class ClassificationOfDiseasesTest(TestCase):
 
         # Criando instancia de ClassificationOfDiseases
         classification_of_diseases = ClassificationOfDiseases.objects.create(
-            code="1", description="test", abbreviated_description="t"
+            code="1",
+            description="test",
+            abbreviated_description="t",
         )
         # Inserindo o classification_of_diseases no group
         response = self.client.get(
             reverse(
                 CLASSIFICATION_OF_DISEASES_CREATE,
                 args=(group.id, classification_of_diseases.id),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 302)
 
@@ -667,7 +683,7 @@ class ClassificationOfDiseasesTest(TestCase):
             reverse(
                 CLASSIFICATION_OF_DISEASES_DELETE,
                 args=(group.id, classification_of_diseases.id),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 302)
 
@@ -696,7 +712,7 @@ class ExperimentTest(TestCase):
                 args=[
                     self.research_project.pk,
                 ],
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -713,7 +729,7 @@ class ExperimentTest(TestCase):
                 args=[
                     self.research_project.pk,
                 ],
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -732,7 +748,7 @@ class ExperimentTest(TestCase):
                 args=[
                     self.research_project.pk,
                 ],
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -779,7 +795,7 @@ class ExperimentTest(TestCase):
                 args=[
                     experiment.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 
@@ -889,7 +905,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
         )
 
         component_configuration = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration", parent=block, component=questionnaire
+            name="ComponentConfiguration",
+            parent=block,
+            component=questionnaire,
         )
         data_configuration_tree = DataConfigurationTree.objects.create(component_configuration=component_configuration)
         group = ObjectsFactory.create_group(experiment, block)
@@ -932,7 +950,9 @@ class ListOfQuestionnaireFromExperimentalProtocolOfAGroupTest(TestCase):
         )
 
         component_configuration = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration", parent=block, component=questionnaire
+            name="ComponentConfiguration",
+            parent=block,
+            component=questionnaire,
         )
 
         data_configuration_tree = DataConfigurationTree.objects.create(component_configuration=component_configuration)
@@ -1076,7 +1096,9 @@ class SubjectTest(TestCase):
 
         # Include the questionnaire in the root.
         component_configuration = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration", parent=block, component=questionnaire
+            name="ComponentConfiguration",
+            parent=block,
+            component=questionnaire,
         )
         component_configuration.save()
 
@@ -1128,16 +1150,16 @@ class SubjectTest(TestCase):
         mockServer.return_value.get_session_key.return_value = "fmhcr2qv7tz37b3zpkhfz3t6rjj26eri"
         mockServer.return_value.get_language_properties.side_effect = [
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without access code table"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey inactive"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without identification group"},
+            {"surveyls_title": "NES-TestCase (used by automated tests) - Survey without access code table"},
+            {"surveyls_title": "NES-TestCase (used by automated tests) - Survey inactive"},
+            {"surveyls_title": "NES-TestCase (used by automated tests) - Survey without identification group"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without access code table"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey inactive"},
-            {"surveyls_title": "NES-TestCase (used by automated tests) - " "Survey without identification group"},
+            {"surveyls_title": "NES-TestCase (used by automated tests) - Survey without access code table"},
+            {"surveyls_title": "NES-TestCase (used by automated tests) - Survey inactive"},
+            {"surveyls_title": "NES-TestCase (used by automated tests) - Survey without identification group"},
             {"surveyls_title": "NES-TestCase (used by automated tests)"},
         ]
         mockServer.return_value.get_summary.side_effect = [
@@ -1164,7 +1186,7 @@ class SubjectTest(TestCase):
                     "group_order": 1,
                     "language": "pt-BR",
                     "sid": 828636,
-                    "description": "Teste de dominância manual baseado em " "Oldfield (1971)",
+                    "description": "Teste de dominância manual baseado em Oldfield (1971)",
                     "id": {"language": "pt-BR", "gid": 1118},
                     "randomization_group": "",
                     "grelevance": "",
@@ -1194,7 +1216,7 @@ class SubjectTest(TestCase):
                     "grelevance": "",
                     "group_name": "Teste de Lateralidade (Oldfield)",
                     "gid": 1140,
-                }
+                },
             ],
         ]
         mockServer.return_value.list_questions.side_effect = [
@@ -3327,7 +3349,7 @@ class SubjectTest(TestCase):
                 "mpid": None,
                 "email": "",
                 "firstname": "",
-            }
+            },
         ]
         mockServer.return_value.get_participant_properties.side_effect = [
             {"token": "kMR34vg97KnCOOK"},
@@ -3352,11 +3374,11 @@ class SubjectTest(TestCase):
         # Using a known questionnaires at LimeSurvey to use in this test.
         new_survey, created = Survey.objects.get_or_create(lime_survey_id=LIME_SURVEY_ID)
         new_survey_without_access_table, created = Survey.objects.get_or_create(
-            lime_survey_id=LIME_SURVEY_ID_WITHOUT_ACCESS_CODE_TABLE
+            lime_survey_id=LIME_SURVEY_ID_WITHOUT_ACCESS_CODE_TABLE,
         )
         new_survey_inactive, created = Survey.objects.get_or_create(lime_survey_id=LIME_SURVEY_ID_INACTIVE)
         new_survey_without_identification_group, created = Survey.objects.get_or_create(
-            lime_survey_id=LIME_SURVEY_ID_WITHOUT_IDENTIFICATION_GROUP
+            lime_survey_id=LIME_SURVEY_ID_WITHOUT_IDENTIFICATION_GROUP,
         )
 
         # Create a questionnaire
@@ -3398,7 +3420,9 @@ class SubjectTest(TestCase):
 
         # Include the questionnaire in the root.
         component_configuration = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration", parent=block, component=questionnaire
+            name="ComponentConfiguration",
+            parent=block,
+            component=questionnaire,
         )
         component_configuration.save()
 
@@ -3597,7 +3621,9 @@ class SubjectTest(TestCase):
 
         # Include the EEG step in the root.
         component_configuration = ComponentConfiguration.objects.create(
-            name="ComponentConfiguration", parent=block, component=eeg_step
+            name="ComponentConfiguration",
+            parent=block,
+            component=eeg_step,
         )
         component_configuration.save()
 
@@ -3620,7 +3646,7 @@ class SubjectTest(TestCase):
             reverse(
                 "subject_eeg_data_create",
                 args=(group.id, subject_mock.id, component_configuration.id),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -3704,7 +3730,7 @@ class SubjectTest(TestCase):
                     group.id,
                     subject_mock.id,
                 ),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -3788,7 +3814,7 @@ class SubjectTest(TestCase):
                     subject_mock.pk,
                     experiment.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
         response = upload_file(request, subject_id=subject_mock.pk, group_id=group.pk)
@@ -3910,7 +3936,7 @@ class ResearchProjectTest(TestCase):
                 args=[
                     research_project.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 
@@ -4351,7 +4377,7 @@ class EEGSettingTest(TestCase):
             reverse(
                 "view_eeg_setting_type",
                 args=(eeg_setting.id, "eeg_electrode_net_system"),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -4375,7 +4401,7 @@ class EEGSettingTest(TestCase):
             reverse(
                 "view_eeg_setting_type",
                 args=(eeg_setting.id, "eeg_electrode_net_system"),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -4390,7 +4416,7 @@ class EEGSettingTest(TestCase):
             reverse(
                 "edit_eeg_setting_type",
                 args=(eeg_setting.id, "eeg_electrode_net_system"),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -4794,7 +4820,7 @@ class EEGEquipmentRegisterTest(TestCase):
             reverse(
                 "emg_electrode_placement_new",
                 args=(standardization_system.id, "surface"),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -4842,7 +4868,7 @@ class EEGEquipmentRegisterTest(TestCase):
 
         # view
         emg_electrode_placement = EMGElectrodePlacement.objects.filter(
-            standardization_system=standardization_system
+            standardization_system=standardization_system,
         ).first()
 
         response = self.client.get(reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,)))
@@ -4901,7 +4927,7 @@ class EEGEquipmentRegisterTest(TestCase):
             reverse(
                 "emg_electrode_placement_new",
                 args=(standardization_system.id, "intramuscular"),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -4949,7 +4975,7 @@ class EEGEquipmentRegisterTest(TestCase):
 
         # view
         emg_electrode_placement = EMGElectrodePlacement.objects.filter(
-            standardization_system=standardization_system
+            standardization_system=standardization_system,
         ).first()
 
         response = self.client.get(reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,)))
@@ -5008,7 +5034,7 @@ class EEGEquipmentRegisterTest(TestCase):
             reverse(
                 "emg_electrode_placement_new",
                 args=(standardization_system.id, "needle"),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -5056,7 +5082,7 @@ class EEGEquipmentRegisterTest(TestCase):
 
         # view
         emg_electrode_placement = EMGElectrodePlacement.objects.filter(
-            standardization_system=standardization_system
+            standardization_system=standardization_system,
         ).first()
 
         response = self.client.get(reverse("emg_electrode_placement_view", args=(emg_electrode_placement.id,)))
@@ -6033,7 +6059,7 @@ class EEGEquipmentRegisterTest(TestCase):
             reverse(
                 "eeg_electrode_localization_system_view",
                 args=(eeg_electrode_localization_system.id,),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -6042,7 +6068,7 @@ class EEGEquipmentRegisterTest(TestCase):
             reverse(
                 "eeg_electrode_localization_system_edit",
                 args=(eeg_electrode_localization_system.id,),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -6184,7 +6210,7 @@ class EEGEquipmentRegisterTest(TestCase):
             reverse(
                 "eeg_electrode_position_create",
                 args=(eeg_electrode_localization_system.id,),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -6231,7 +6257,7 @@ class EEGEquipmentRegisterTest(TestCase):
 
         # view
         eeg_electrode_position = EEGElectrodePosition.objects.filter(
-            eeg_electrode_localization_system=eeg_electrode_localization_system
+            eeg_electrode_localization_system=eeg_electrode_localization_system,
         ).first()
 
         response = self.client.get(reverse("eeg_electrode_position_view", args=(eeg_electrode_position.id,)))
@@ -6451,7 +6477,8 @@ class EMGSettingTest(TestCase):
         }
 
         response: HttpResponse = self.client.post(
-            reverse("emg_setting_electrode_add", args=(emg_setting.id,)), self.data
+            reverse("emg_setting_electrode_add", args=(emg_setting.id,)),
+            self.data,
         )
         self.assertEqual(response.status_code, 302)
 
@@ -6522,7 +6549,7 @@ class EMGSettingTest(TestCase):
             reverse(
                 "emg_electrode_setting_preamplifier_edit",
                 args=(emg_electrode_setting.id,),
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -6680,7 +6707,7 @@ class PublicationTest(TestCase):
                 args=[
                     publication.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 
@@ -6738,7 +6765,7 @@ class PublicationTest(TestCase):
                 args=[
                     publication.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 
@@ -6802,7 +6829,7 @@ class ContextTreeTest(TestCase):
                 args=[
                     experiment.pk,
                 ],
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["context_tree_list"]), 0)
@@ -6820,7 +6847,7 @@ class ContextTreeTest(TestCase):
                 args=[
                     experiment.pk,
                 ],
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["context_tree_list"]), 1)
@@ -6836,7 +6863,7 @@ class ContextTreeTest(TestCase):
                 args=[
                     experiment.pk,
                 ],
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
 
@@ -6917,7 +6944,7 @@ class ContextTreeTest(TestCase):
                 args=[
                     context_tree.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 

@@ -102,7 +102,7 @@ class InputExport:
                         "prefix_filename_responses": PREFIX_FILENAME_RESPONSES,
                         "output_list": [],
                         "responses_list": [],
-                    }
+                    },
                 )
                 for header, field in field_header_list:
                     output_data = {"header": header, "field": field}

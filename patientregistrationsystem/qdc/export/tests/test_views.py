@@ -121,7 +121,9 @@ class ExportQuestionnaireTest(ExportTestCase):
         :return: DataConfigurationTree model instance
         """
         self.questionnaire = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": self.survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": self.survey},
         )
         # Include questionnaire in experimental protocol
         component_config = ObjectsFactory.create_component_configuration(root_component, self.questionnaire)
@@ -133,7 +135,9 @@ class ExportQuestionnaireTest(ExportTestCase):
         # TODO: use method already existent in patient.tests. See other places
         self.survey = create_survey(LIMESURVEY_SURVEY_ID_1)
         self.questionnaire = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": self.survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": self.survey},
         )
         # Include questionnaire in experimental protocol
         component_config = ObjectsFactory.create_component_configuration(self.root_component, self.questionnaire)
@@ -817,7 +821,7 @@ class ExportQuestionnaireTest(ExportTestCase):
                 "Per_questionnaire",
                 "Step_2_QUESTIONNAIRE",
                 self.survey.code + "_test-questionnaire_en.csv",
-            )
+            ),
         ) as file:
             # There're 3 lines, header line + 2 responses lines
             self.assertEqual(len(file.readlines()), 3)
@@ -1078,7 +1082,7 @@ class ExportQuestionnaireTest(ExportTestCase):
                     "Per_questionnaire",
                     "Step_1_QUESTIONNAIRE",
                     self.survey.code + "_test-questionnaire_en.csv",
-                )
+                ),
             ) as file:
                 csv_line1 = next(csv.reader(file))
                 self.assertEqual(len(csv_line1), 6)
@@ -1296,7 +1300,7 @@ class ExportQuestionnaireTest(ExportTestCase):
                     "Per_questionnaire",
                     "Step_1_QUESTIONNAIRE",
                     self.survey.code + "_test-questionnaire_en.csv",
-                )
+                ),
             ) as file:
                 csvreader = csv.reader(file)
                 rows = []
@@ -1319,7 +1323,9 @@ class ExportQuestionnaireTest(ExportTestCase):
         # In setUp we created experiment questionnaire response. Here we
         # create a participant questionnaire response (entrance questionnaire)
         questionnaire_response = UtilTests.create_response_survey(
-            responsible=self.user, patient=self.patient, survey=self.survey
+            responsible=self.user,
+            patient=self.patient,
+            survey=self.survey,
         )
         # change questionnaire respose date for testing
         questionnaire_response.date = date(2016, 4, 17)
@@ -1426,7 +1432,7 @@ class ExportQuestionnaireTest(ExportTestCase):
                 "Per_questionnaire",
                 "Step_1_QUESTIONNAIRE",
                 self.survey.code + "_test-questionnaire_en.csv",
-            )
+            ),
         ) as file:
             delimiter = csv.Sniffer().sniff(file.read(5000)).delimiter
             self.assertEqual(delimiter, ",")
@@ -1499,7 +1505,7 @@ class ExportQuestionnaireTest(ExportTestCase):
                 "Per_questionnaire",
                 "Step_1_QUESTIONNAIRE",
                 self.survey.code + "_test-questionnaire_en.tsv",
-            )
+            ),
         ) as file:
             dialect = csv.Sniffer().sniff(file.readline(), [",", "\t"])
             file.seek(0)
@@ -1846,7 +1852,11 @@ class ExportDataCollectionTest(ExportTestCase):
             step_number = path[-1][4]
 
             self.assert_per_participant_step_file_exists(
-                step_number, component_step, "", "hotspot_map.png", zipped_file
+                step_number,
+                component_step,
+                "",
+                "hotspot_map.png",
+                zipped_file,
             )
 
             self.assert_per_participant_step_file_exists(
@@ -1981,7 +1991,8 @@ class ExportDataCollectionTest(ExportTestCase):
 
         # Include dgp component in experimental protocol
         component_config: ComponentConfiguration = ObjectsFactory.create_component_configuration(
-            self.root_component, dgp
+            self.root_component,
+            dgp,
         )
         component_config1: ComponentConfiguration = ObjectsFactory.create_component_configuration(root_component1, dgp)
 
@@ -2234,7 +2245,7 @@ class ExportDataCollectionTest(ExportTestCase):
                 input_export.BASE_DIRECTORY,
                 "Participant_data",
                 "Participants.csv",
-            )
+            ),
         ) as file:
             csvreader = csv.reader(file)
             rows = []
@@ -2280,7 +2291,7 @@ class ExportDataCollectionTest(ExportTestCase):
                 input_export.BASE_DIRECTORY,
                 "Participant_data",
                 "Participants.csv",
-            )
+            ),
         ) as file:
             csvreader = csv.reader(file)
             rows = []
@@ -2328,7 +2339,7 @@ class ExportParticipantsTest(ExportTestCase):
 
         export = Export.objects.first()
         self.assertFalse(
-            os.path.exists(os.path.join(TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id)))
+            os.path.exists(os.path.join(TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id))),
         )
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -2350,7 +2361,7 @@ class ExportParticipantsTest(ExportTestCase):
 
         export = Export.objects.first()
         self.assertFalse(
-            os.path.exists(os.path.join(TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id)))
+            os.path.exists(os.path.join(TEMP_MEDIA_ROOT, EXPORT_DIRECTORY, str(self.user.id), str(export.id))),
         )
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
@@ -2583,7 +2594,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
         # TODO: use method already existent in patient.tests. See other places
         self.survey = create_survey(LIMESURVEY_SURVEY_ID_1)
         self.questionnaire = ObjectsFactory.create_component(
-            self.experiment, Component.QUESTIONNAIRE, kwargs={"survey": self.survey}
+            self.experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": self.survey},
         )
         # Include questionnaire in experimental protocol
         component_config = ObjectsFactory.create_component_configuration(self.root_component, self.questionnaire)
@@ -3529,7 +3542,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             self.assertIn("schema", participants_resource)
             self.assertIn("fields", participants_resource["schema"])
             self._assert_participants_related_fields_table_schema(
-                participants_resource["schema"], heading_type[0], PATIENT_FIELDS
+                participants_resource["schema"],
+                heading_type[0],
+                PATIENT_FIELDS,
             )
 
             report = validate(os.path.join(temp_dir, "datapackage.json"))
@@ -3604,7 +3619,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             self.assertIn("schema", diagnosis_resource)
             self.assertIn("fields", diagnosis_resource["schema"])
             self._assert_participants_related_fields_table_schema(
-                diagnosis_resource["schema"], heading_type, DIAGNOSIS_FIELDS
+                diagnosis_resource["schema"],
+                heading_type,
+                DIAGNOSIS_FIELDS,
             )
 
             report = validate(os.path.join(temp_dir, "datapackage.json"))
@@ -3855,7 +3872,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                     open(
                         "export/tests/example.raw",
                         "rb",
-                    )
+                    ),
                 ) as f:
                     eegfile.file.save("example.raw", f)
                 eegfile.save()
@@ -4496,7 +4513,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_questionnaire_metadata_table_schema_info_to_questionnaire_metadata_resource(
-        self, mockServer
+        self,
+        mockServer,
     ):
         self._create_questionnaire_export_data()
 
@@ -4661,7 +4679,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         for heading_type in "code", "full", "abbreviated":
@@ -4724,7 +4742,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_questionnaire_responses_table_schema_info_to_datapackage_json_file1(
-        self, mockServer
+        self,
+        mockServer,
     ):
         """In Per_questionnaire subdir"""
 
@@ -4747,7 +4766,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         for heading_type in "code", "full", "abbreviated":
@@ -4793,7 +4812,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_questionnaire_responses_table_schema_info_to_datapackage_json_file2(
-        self, mockServer
+        self,
+        mockServer,
     ):
         """In Per_participant subdir"""
 
@@ -4816,7 +4836,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         for heading_type in "code", "full", "abbreviated":
@@ -4881,7 +4901,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         set_mocks11(mockServer)
@@ -4933,7 +4953,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_entrance_questionnaire_metadata_table_schema_info_to_datapackage(
-        self, mockServer
+        self,
+        mockServer,
     ):
         self._create_questionnaire_export_data()
         UtilTests.create_response_survey(self.user, self.patient, self.survey, token_id=1)
@@ -4953,7 +4974,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         set_mocks11(mockServer)
@@ -4992,7 +5013,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_entrance_questionnaire_responses_file_to_datapackage_json_file1(
-        self, mockServer
+        self,
+        mockServer,
     ):
         """In Per_questionnaire subdir"""
         self._create_questionnaire_export_data()
@@ -5013,7 +5035,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         for heading_type in "code", "full", "abbreviated":
@@ -5076,7 +5098,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_entrance_questionnaire_responses_file_to_datapackage_json_file2(
-        self, mockServer
+        self,
+        mockServer,
     ):
         """In Per_participant subdir"""
 
@@ -5098,7 +5121,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         for heading_type in "code", "full", "abbreviated":
@@ -5163,7 +5186,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_entrance_questionnaire_responses_table_schema_info_to_datapackage1(
-        self, mockServer
+        self,
+        mockServer,
     ):
         """In Per_questionnaire subdir"""
         self._create_questionnaire_export_data()
@@ -5184,7 +5208,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         for heading_type in "code", "full", "abbreviated":
@@ -5229,7 +5253,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_experiment_adds_entrance_questionnaire_responses_table_schema_info_to_datapackage2(
-        self, mockServer
+        self,
+        mockServer,
     ):
         """In Per_participant subdir"""
 
@@ -5251,7 +5276,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         for heading_type in "code", "full", "abbreviated":
@@ -5310,7 +5335,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         data = {
@@ -5350,7 +5375,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         data = {
@@ -5553,7 +5578,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_participant_adds_participant_data_file_info_to_datapackage_json_resources_field(
-        self, mockServer
+        self,
+        mockServer,
     ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
@@ -5614,7 +5640,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_participant_adds_participants_table_schema_info_to_datapackage_json_participants_resource(
-        self, mockServer
+        self,
+        mockServer,
     ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
@@ -5669,7 +5696,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             self.assertIn("schema", participants_resource)
             self.assertIn("fields", participants_resource["schema"])
             self._assert_participants_related_fields_table_schema(
-                participants_resource["schema"], heading_type, PATIENT_FIELDS
+                participants_resource["schema"],
+                heading_type,
+                PATIENT_FIELDS,
             )
 
             report = validate(os.path.join(temp_dir, "datapackage.json"))
@@ -5680,7 +5709,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_participant_adds_participants_diagnosis_file_info_to_datapackage_json_resources_field(
-        self, mockServer
+        self,
+        mockServer,
     ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
@@ -5746,7 +5776,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_participant_adds_participants_diagnosis_table_schema_info_to_datapackage_json_participants_resource(
-        self, mockServer
+        self,
+        mockServer,
     ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
@@ -5796,7 +5827,9 @@ class ExportFrictionlessDataTest(ExportTestCase):
             self.assertIn("schema", diagnosis_resource)
             self.assertIn("fields", diagnosis_resource["schema"])
             self._assert_participants_related_fields_table_schema(
-                diagnosis_resource["schema"], heading_type, DIAGNOSIS_FIELDS
+                diagnosis_resource["schema"],
+                heading_type,
+                DIAGNOSIS_FIELDS,
             )
 
             report = validate(os.path.join(temp_dir, "datapackage.json"))
@@ -5876,7 +5909,8 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")
     def test_export_per_participant_adds_questionnaire_metadata_table_schema_to_questionnaire_metadata_resource(
-        self, mockServer
+        self,
+        mockServer,
     ):
         # It's important to keep the order: first 'Q5050' then 'Q2121'.
         # See comment in export.process_per_participant method
@@ -6022,7 +6056,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         patient_selected = [
@@ -6188,7 +6222,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
                 + "*"
                 + question[0]["code"]
                 + "*"
-                + question[0]["code"]
+                + question[0]["code"],
             )
 
         patient_selected = [

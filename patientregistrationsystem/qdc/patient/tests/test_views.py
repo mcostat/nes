@@ -119,7 +119,7 @@ class QuestionnaireFillTest(TestCase):
         self.assertTrue(
             response.context["patient_questionnaires_data_list"][0]["questionnaire_responses"][0][
                 "acquisitiondate_updated"
-            ]
+            ],
         )
 
     @patch("survey.abc_search_engine.Server")

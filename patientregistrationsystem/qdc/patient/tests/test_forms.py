@@ -54,7 +54,7 @@ class PatientFormValidation(TestCase):
                 "name": self.data["name"],
                 "date_birth": self.data["date_birth"],
                 "gender": self.data["gender"],
-            }
+            },
         )
         self.assertTrue(patient.is_valid())
 
@@ -66,7 +66,7 @@ class PatientFormValidation(TestCase):
                 "anonymous": True,
                 "date_birth": self.data["date_birth"],
                 "gender": self.data["gender"],
-            }
+            },
         )
         self.assertTrue(patient.is_valid())
 
@@ -82,7 +82,7 @@ class PatientFormValidation(TestCase):
                 "name": "",
                 "date_birth": self.data["date_birth"],
                 "gender": self.data["gender"],
-            }
+            },
         )
         self.assertFalse(patient.is_valid())
         self.assertEqual(patient.errors["name"], ["Nome deve ser preenchido"])
@@ -94,7 +94,7 @@ class PatientFormValidation(TestCase):
                 "name": self.data["name"],
                 "date_birth": "",
                 "gender": self.data["gender"],
-            }
+            },
         )
         self.assertFalse(patient.is_valid())
         self.assertEqual(patient.errors["date_birth"], ["Este campo é obrigatório."])
@@ -106,7 +106,7 @@ class PatientFormValidation(TestCase):
                 "name": self.data["name"],
                 "date_birth": self.data["date_birth"],
                 "gender": "",
-            }
+            },
         )
         self.assertFalse(patient.is_valid())
         self.assertEqual(patient.errors["gender"], ["Este campo é obrigatório."])
@@ -139,7 +139,7 @@ class TelephoneFormValidation(TestCase):
                 "number": self.data["number"],
                 "type": self.data["type"],
                 "note": self.data["note"],
-            }
+            },
         )
         self.assertTrue(telephone.is_valid())
 

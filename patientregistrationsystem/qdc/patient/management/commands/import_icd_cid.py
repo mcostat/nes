@@ -43,7 +43,9 @@ def import_classification_of_icd_cid(file_name: str) -> None:
         next(reader, None)
         for row in reader:
             classifications_of_diseases = ClassificationOfDiseases.objects.create(
-                code=row[0], description=row[2], abbreviated_description=row[3]
+                code=row[0],
+                description=row[2],
+                abbreviated_description=row[3],
             )
 
             # colunas _en

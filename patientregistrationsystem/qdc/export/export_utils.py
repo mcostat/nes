@@ -21,8 +21,8 @@ def create_list_of_trees(block_id, component_type, numeration=""):
                         configuration.name,
                         configuration.component.identification,
                         sub_numeration,
-                    ]
-                ]
+                    ],
+                ],
             )
 
         # Look for steps in descendant blocks

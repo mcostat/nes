@@ -675,7 +675,10 @@ class QuestionnaireResponse(models.Model):
         validators=[validate_date_questionnaire_response],
     )
     questionnaire_responsible = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, null=False, related_name="+"
+        get_user_model(),
+        on_delete=models.CASCADE,
+        null=False,
+        related_name="+",
     )
     is_completed = models.CharField(null=False, max_length=50, default="")
 

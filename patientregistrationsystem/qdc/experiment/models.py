@@ -88,7 +88,9 @@ class Experiment(models.Model):
 
     source_code_url = models.URLField(null=True, blank=True)
     ethics_committee_project_url = models.URLField(
-        _("URL of the project approved by the ethics committee"), null=True, blank=True
+        _("URL of the project approved by the ethics committee"),
+        null=True,
+        blank=True,
     )
     ethics_committee_project_file = models.FileField(
         _("Project file approved by the ethics committee"),
@@ -230,7 +232,10 @@ class Amplifier(Equipment):
     input_impedance = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
     input_impedance_unit = models.CharField(null=True, blank=True, max_length=15, choices=IMPEDANCE_UNIT)
     amplifier_detection_type = models.ForeignKey(
-        AmplifierDetectionType, on_delete=models.CASCADE, null=True, blank=True
+        AmplifierDetectionType,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     tethering_system = models.ForeignKey(TetheringSystem, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -295,7 +300,10 @@ class ElectrodeModel(models.Model):
     tags = models.ManyToManyField(Tag)
     inter_electrode_distance = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
     inter_electrode_distance_unit = models.CharField(
-        null=True, blank=True, max_length=10, choices=ELECTRODE_DISTANCE_UNIT
+        null=True,
+        blank=True,
+        max_length=10,
+        choices=ELECTRODE_DISTANCE_UNIT,
     )
     electrode_configuration = models.ForeignKey(ElectrodeConfiguration, on_delete=models.CASCADE, null=True, blank=True)
     electrode_type = models.CharField(max_length=50, choices=ELECTRODE_TYPES)
@@ -375,10 +383,14 @@ class NeedleElectrode(ElectrodeModel):
     size = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0)])
     size_unit = models.CharField(max_length=10, choices=SIZE_UNIT, null=True, blank=True)
     number_of_conductive_contact_points_at_the_tip = models.IntegerField(
-        null=True, blank=True, validators=[MinValueValidator(0)]
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
     )
     size_of_conductive_contact_points_at_the_tip = models.FloatField(
-        null=True, blank=True, validators=[MinValueValidator(0)]
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
     )
 
     def save(self, *args, **kwargs) -> None:
@@ -442,7 +454,11 @@ class EEGElectrodePosition(models.Model):
     coordinate_x = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
     coordinate_y = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
     position_reference = models.ForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="children",
     )
     channel_default_index = models.IntegerField()
 
@@ -459,7 +475,7 @@ class EEGElectrodePosition(models.Model):
         if not self.pk and not self.channel_default_index:
             top = (
                 EEGElectrodePosition.objects.filter(
-                    eeg_electrode_localization_system=self.eeg_electrode_localization_system
+                    eeg_electrode_localization_system=self.eeg_electrode_localization_system,
                 )
                 .order_by("-channel_default_index")
                 .first()
@@ -715,7 +731,11 @@ class EMGElectrodePlacement(models.Model):
     )
     muscle_subdivision = models.ForeignKey(MuscleSubdivision, on_delete=models.CASCADE)
     placement_reference = models.ForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="children",
     )
     photo = models.ImageField(upload_to=get_emg_placement_dir, null=True, blank=True)
     location = models.TextField(null=True, blank=True)
@@ -1303,7 +1323,7 @@ def get_data_file_dir(instance, filename: str) -> str:
             str(
                 instance.additional_data.data_configuration_tree.id
                 if instance.additional_data.data_configuration_tree
-                else 0
+                else 0,
             ),
             "additional",
         )
@@ -1317,7 +1337,7 @@ def get_data_file_dir(instance, filename: str) -> str:
             str(
                 instance.generic_data_collection_data.data_configuration_tree.id
                 if instance.generic_data_collection_data.data_configuration_tree
-                else 0
+                else 0,
             ),
             "generic_data_collection",
         )
@@ -1331,7 +1351,7 @@ def get_data_file_dir(instance, filename: str) -> str:
             str(
                 instance.media_collection_data.data_configuration_tree.id
                 if instance.media_collection_data.data_configuration_tree
-                else 0
+                else 0,
             ),
             "media_collection",
         )
@@ -1345,7 +1365,7 @@ def get_data_file_dir(instance, filename: str) -> str:
             str(
                 instance.digital_game_phase_data.data_configuration_tree.id
                 if instance.digital_game_phase_data.data_configuration_tree
-                else 0
+                else 0,
             ),
             "digital_game_phase",
         )
@@ -1447,7 +1467,10 @@ class DataCollection(models.Model):
 class QuestionnaireResponse(DataCollection):
     token_id = models.IntegerField(null=False)
     questionnaire_responsible = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, null=False, related_name="+"
+        get_user_model(),
+        on_delete=models.CASCADE,
+        null=False,
+        related_name="+",
     )
 
     is_completed = models.CharField(max_length=50, default="")
@@ -1517,7 +1540,9 @@ class SourceCode(models.Model):
     description = models.TextField()
 
     source_code_data = models.ForeignKey(
-        SourceCodeFileFormat, on_delete=models.CASCADE, related_name="source_code_files"
+        SourceCodeFileFormat,
+        on_delete=models.CASCADE,
+        related_name="source_code_files",
     )
     file = models.FileField(upload_to=get_experiment_dir)
 
@@ -1580,7 +1605,10 @@ class TMSData(DataCollection):
     coil_orientation = models.ForeignKey(CoilOrientation, on_delete=models.CASCADE, null=True, blank=True)
     coil_orientation_angle = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
     direction_of_induced_current = models.ForeignKey(
-        DirectionOfTheInducedCurrent, on_delete=models.CASCADE, null=True, blank=True
+        DirectionOfTheInducedCurrent,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     description = models.TextField(null=False, blank=False)
 
@@ -1606,7 +1634,9 @@ class HotSpot(models.Model):
     hot_spot_map = models.FileField(upload_to=get_data_file_dir, null=True, blank=True)
     tms_data = models.OneToOneField(TMSData, on_delete=models.CASCADE, primary_key=True)
     tms_localization_system = models.ForeignKey(
-        TMSLocalizationSystem, on_delete=models.CASCADE, related_name="hotspots"
+        TMSLocalizationSystem,
+        on_delete=models.CASCADE,
+        related_name="hotspots",
     )
 
     def __str__(self) -> str:

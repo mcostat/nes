@@ -32,7 +32,7 @@ from survey.models import Survey
 
 LIMESURVEY_ERROR_MSG = _(
     "Error: some thing went wrong consuming LimeSurvey API. Please try again. "
-    "If problem persists please contact System Administrator."
+    "If problem persists please contact System Administrator.",
 )
 
 
@@ -215,7 +215,7 @@ def select_participants(request: HttpRequest, experiment_id: int) -> HttpRespons
             questionnaire = Questionnaire.objects.get(pk=component.id)
             if questionnaire.survey == admission:
                 questionnaire_responses = ExperimentResponse.objects.filter(
-                    data_configuration_tree__component_configuration__component=questionnaire
+                    data_configuration_tree__component_configuration__component=questionnaire,
                 )
                 for questionnaire_response in questionnaire_responses:
                     subject_of_group = questionnaire_response.subject_of_group
@@ -227,12 +227,9 @@ def select_participants(request: HttpRequest, experiment_id: int) -> HttpRespons
                                 "participant_name": subject_of_group.subject.patient.name,
                                 "group_id": subject_of_group.group.id,
                                 "group_name": subject_of_group.group.title,
-                            }
+                            },
                         )
-    if participants:
-        json_participants = json.dumps(participants)
-    else:
-        json_participants = json.dumps({})
+    json_participants = json.dumps(participants) if participants else json.dumps({})
 
     return HttpResponse(json_participants, content_type=JsonResponse)
 
@@ -258,7 +255,10 @@ def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_pl
                 messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
             limesurvey_error, zip_file = build_zip_file(
-                request, subjects_of_groups, participants_headers, questionnaires
+                request,
+                subjects_of_groups,
+                participants_headers,
+                questionnaires,
             )
             if limesurvey_error:
                 messages.error(request, LIMESURVEY_ERROR_MSG)
@@ -303,7 +303,11 @@ def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_pl
                 messages.error(request, LIMESURVEY_ERROR_MSG)
                 return redirect(reverse("send-to-plugin"))
             limesurvey_error, zip_file = build_zip_file(
-                request, participants, participants_headers, questionnaires, False
+                request,
+                participants,
+                participants_headers,
+                questionnaires,
+                False,
             )
             if limesurvey_error:
                 messages.error(request, LIMESURVEY_ERROR_MSG)
@@ -400,10 +404,10 @@ def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_pl
         followup = Survey.objects.get(pk=random_forests.followup_assessment.pk)
         questionnaires = Questionnaire.objects.filter(survey__in=[admission, surgical, followup])
         questionnaire_responses = ExperimentResponse.objects.filter(
-            data_configuration_tree__component_configuration__component__in=questionnaires
+            data_configuration_tree__component_configuration__component__in=questionnaires,
         )
         experiments = Experiment.objects.filter(
-            groups__subjectofgroup__questionnaireresponse__in=questionnaire_responses
+            groups__subjectofgroup__questionnaireresponse__in=questionnaire_responses,
         ).distinct()
 
         context["experiments"] = experiments

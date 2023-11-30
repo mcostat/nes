@@ -1,3 +1,9 @@
+[project]
+name = "nes"
+readme = "README.md"
+requires-python = ">3.11,<3.12"
+
+
 [tool.ruff]
 line-length = 120
 target-version = "py311"
@@ -14,6 +20,18 @@ select = [
     "B",
     # flake8-simplify
     "SIM",
+    # flake8-django
+    "DJ",
+    # flake8-comprehensions
+    "C4",
+    # flake8-implicit-str-concat
+    "ISC",
+    # flake8-quotes
+    "Q",
+    # flake8-type-checking
+    "TCH",
+    # Perflint
+    "PERF",
 ]
 ignore = ["F401", "F841"]
 unfixable = ["B"]

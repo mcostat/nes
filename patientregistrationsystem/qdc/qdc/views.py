@@ -20,7 +20,9 @@ from packaging.version import Version
 
 
 def qdc_permission_denied_view(
-    request: HttpRequest, exception, template_name: str = "admin/qdc_403.html"
+    request: HttpRequest,
+    exception,
+    template_name: str = "admin/qdc_403.html",
 ) -> HttpResponse:
     context = {"exception": exception}
 
@@ -88,7 +90,7 @@ def check_upgrade(request: HttpRequest) -> bool:
             _(
                 "You dont have NES Git installation. Automatic upgrade can be done with git "
                 "installation. "
-                "Please contact your system administrator to upgrade NES to a new version."
+                "Please contact your system administrator to upgrade NES to a new version.",
             ),
         )
 

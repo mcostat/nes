@@ -207,12 +207,12 @@ class ExportExperiment:
         questionnaire_ids = Questionnaire.objects.filter(experiment=self.experiment).values_list("survey_id", flat=True)
         surveys = Survey.objects.filter(id__in=questionnaire_ids)
         ls_interface = Questionnaires(
-            settings.LIMESURVEY["URL_API"] + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action"
+            settings.LIMESURVEY["URL_API"] + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action",
         )
         if ls_interface.session_key is None:
             return self.LIMESURVEY_ERROR, _(
                 "Could not export LimeSurvey data. Please try again. If problem persists "
-                "please contact the system administator"
+                "please contact the system administator",
             )
         archive_paths = []
         for survey in surveys:
@@ -220,7 +220,7 @@ class ExportExperiment:
             if result is None:
                 return self.LIMESURVEY_ERROR, _(
                     "Could not export LimeSurvey data. Please try again. If problem persists "
-                    "please contact the system administator"
+                    "please contact the system administator",
                 )
             decoded_archive = b64decode(result)
             lsa_archive_path = validate_path(self.temp_dir, str(survey.lime_survey_id) + ".lsa")
@@ -690,7 +690,8 @@ class ImportExperiment:
             try:
                 if data[i]["fields"]["cpf"]:
                     patient_already_in_database = Patient.objects.get(
-                        name=data[i]["fields"]["name"], cpf=data[i]["fields"]["cpf"]
+                        name=data[i]["fields"]["name"],
+                        cpf=data[i]["fields"]["cpf"],
                     )
                 else:
                     patient_already_in_database = Patient.objects.get(code=data[i]["fields"]["code"])
@@ -709,7 +710,7 @@ class ImportExperiment:
                         "code_new": data[i]["fields"]["code"],
                         "cpf_new": data[i]["fields"]["cpf"],
                         "selected": None,
-                    }
+                    },
                 )
 
         return 0, "", participants_with_conflict
@@ -718,7 +719,7 @@ class ImportExperiment:
         indexes = [index for (index, dict_) in enumerate(self.data) if dict_["model"] == "patient.diagnosis"]
         for index in indexes:
             class_of_diseases = ClassificationOfDiseases.objects.filter(
-                code=self.data[index]["fields"]["classification_of_diseases"][0]
+                code=self.data[index]["fields"]["classification_of_diseases"][0],
             ).first()
             if not class_of_diseases:
                 ClassificationOfDiseases.objects.create(
@@ -878,8 +879,8 @@ class ImportExperiment:
                 token_ids_survey[limesurvey_id] = []
             token_ids = list(
                 QuestionnaireResponse.objects.filter(
-                    data_configuration_tree__component_configuration__component=questionnaire.id
-                ).values_list("token_id", flat=True)
+                    data_configuration_tree__component_configuration__component=questionnaire.id,
+                ).values_list("token_id", flat=True),
             )
             token_ids_survey[limesurvey_id] += token_ids
         for limesurvey_id, token_ids in token_ids_survey.items():
@@ -914,7 +915,7 @@ class ImportExperiment:
                         response_ids.append(int(response[0]))
                     ls_interface = Questionnaires(
                         settings.LIMESURVEY["URL_API"]
-                        + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action"
+                        + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action",
                     )
                     status = ls_interface.delete_responses(limesurvey_id, response_ids)
                     if status is None:
@@ -933,13 +934,13 @@ class ImportExperiment:
         result = 0, ""
         indexes = self._get_indexes("experiment", "questionnaire")
         ls_interface = Questionnaires(
-            settings.LIMESURVEY["URL_API"] + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action"
+            settings.LIMESURVEY["URL_API"] + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action",
         )
         questionnaire_utils = QuestionnaireUtils()
         for index in indexes:
             questionnaire = Questionnaire.objects.get(id=self.data[index]["pk"])
             questionnaire_responses = QuestionnaireResponse.objects.filter(
-                data_configuration_tree__component_configuration__component=questionnaire.id
+                data_configuration_tree__component_configuration__component=questionnaire.id,
             )
             limesurvey_id = questionnaire.survey.lime_survey_id
             for response in questionnaire_responses:
@@ -956,7 +957,10 @@ class ImportExperiment:
                 # TODO (NES-956): get the language. By now put 'en' to test
                 ls_subject_id_column_name = (
                     questionnaire_utils.get_response_column_name_for_identification_group_questions(
-                        ls_interface, limesurvey_id, "subjectid", "en"
+                        ls_interface,
+                        limesurvey_id,
+                        "subjectid",
+                        "en",
                     )
                 )
                 if isinstance(ls_subject_id_column_name, tuple):  # Returned error
@@ -967,7 +971,10 @@ class ImportExperiment:
                     continue
                 ls_responsible_id_column_name = (
                     questionnaire_utils.get_response_column_name_for_identification_group_questions(
-                        ls_interface, limesurvey_id, "responsibleid", "en"
+                        ls_interface,
+                        limesurvey_id,
+                        "responsibleid",
+                        "en",
                     )
                 )
                 if isinstance(ls_responsible_id_column_name, tuple):  # Returned error
@@ -1003,7 +1010,7 @@ class ImportExperiment:
                 _(
                     "Could not import survey(s) to LimeSurvey. Only Experiment data was "
                     "imported. You can remove experiment imported and try again. If problem "
-                    "persists please contact system administrator"
+                    "persists please contact system administrator",
                 ),
             )
             return result
@@ -1026,7 +1033,7 @@ class ImportExperiment:
                                     "Could not import survey(s) to LimeSurvey. Only "
                                     "Experiment data was imported. You can remove experiment "
                                     "imported and try again. If problem persists please "
-                                    "contact system administrator"
+                                    "contact system administrator",
                                 ),
                             )
                             return result

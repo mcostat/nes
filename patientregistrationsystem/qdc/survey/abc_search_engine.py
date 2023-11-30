@@ -125,7 +125,10 @@ class ABCSearchEngine(ABC):
 
         if self.session_key:
             survey_title = self.server.get_language_properties(
-                self.session_key, sid, {"method": "surveyls_title"}, language
+                self.session_key,
+                sid,
+                {"method": "surveyls_title"},
+                language,
             )
 
             if "surveyls_title" in survey_title:
@@ -284,12 +287,22 @@ class ABCSearchEngine(ABC):
         else:
             try:
                 responses = self.server.export_responses_by_token(
-                    self.session_key, sid, doctype, token, language, "complete"
+                    self.session_key,
+                    sid,
+                    doctype,
+                    token,
+                    language,
+                    "complete",
                 )
             except AttributeError:
                 if doctype == "csv-allanswer":
                     responses = self.server.export_responses_by_token(
-                        self.session_key, sid, "csv", token, language, "complete"
+                        self.session_key,
+                        sid,
+                        "csv",
+                        token,
+                        language,
+                        "complete",
                     )
 
         if isinstance(responses, dict):
@@ -459,7 +472,10 @@ class ABCSearchEngine(ABC):
         :return: properties of a question of a survey
         """
         properties = self.server.get_question_properties(
-            self.session_key, question_id, self.QUESTION_PROPERTIES, language
+            self.session_key,
+            question_id,
+            self.QUESTION_PROPERTIES,
+            language,
         )
 
         if "status" in properties and properties["status"] in [

@@ -131,7 +131,7 @@ class ExperimentForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "source_code_url": URLInput(attrs={"class": "form-control"}),
             "ethics_committee_project_url": URLInput(attrs={"class": "form-control"}),
@@ -151,7 +151,7 @@ class GroupForm(ModelForm):
                     "required": "",
                     "data-error": _("Title must be filled."),
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -160,7 +160,7 @@ class GroupForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "inclusion_description": Textarea(
                 attrs={
@@ -168,7 +168,7 @@ class GroupForm(ModelForm):
                     "style": "resize: vertical;",
                     "rows": "4",
                     "placeholder": _("Other inclusion criteria"),
-                }
+                },
             ),
         }
 
@@ -188,7 +188,7 @@ class QuestionnaireResponseForm(ModelForm):
                     "required": "",
                     "data-error": _("Fill date must be filled."),
                 },
-            )
+            ),
         }
 
 
@@ -213,7 +213,7 @@ class ComponentForm(ModelForm):
                     "data-error": _("Identification must be filled."),
                     # "autofocus": "",
                     "maxlength": "50",
-                }
+                },
             ),
             # Even though maxlength is already set in the model, it has be be repeated here, because the form dos not
             # respect that information.
@@ -224,7 +224,7 @@ class ComponentForm(ModelForm):
                     "min": 0,
                     "max": 999,
                     "placeholder": _("Time"),
-                }
+                },
             ),
             "duration_unit": Select(attrs={"class": "form-select"}),
         }
@@ -271,7 +271,7 @@ class ComponentConfigurationForm(ModelForm):
                 attrs={
                     "class": "form-control",
                     "maxlength": "50",
-                }
+                },
             ),
             "number_of_repetitions": NumberInput(
                 attrs={
@@ -280,7 +280,7 @@ class ComponentConfigurationForm(ModelForm):
                     "max": "99999",
                     "data-error": _("Quantity of repetitions must be filled."),
                     "placeholder": _("Repetitions"),
-                }
+                },
             ),
             "interval_between_repetitions_value": NumberInput(
                 attrs={
@@ -290,19 +290,19 @@ class ComponentConfigurationForm(ModelForm):
                     "max": "99999",
                     "data-error": _("Interval must be filled."),
                     "placeholder": _("Time"),
-                }
+                },
             ),
             "interval_between_repetitions_unit": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Interval unit must be filled."),
-                }
+                },
             ),
             "requires_start_and_end_datetime": CheckboxInput(
                 attrs={
                     "class": "form-check-input",
-                }
+                },
             ),
         }
 
@@ -320,7 +320,7 @@ class InstructionForm(ModelForm):
                     "required": "",
                     "rows": "6",
                     "data-error": _("Instruction must be filled."),
-                }
+                },
             ),
         }
 
@@ -336,14 +336,14 @@ class StimulusForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Stimulus type must be filled."),
-                }
+                },
             ),
             "stimuli_setting": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Stimulus setting must be filled."),
-                }
+                },
             ),
         }
 
@@ -361,8 +361,8 @@ class EEGForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("EEG setting type must be filled."),
-                }
-            )
+                },
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -385,8 +385,8 @@ class EMGForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("EMG setting type must be filled."),
-                }
-            )
+                },
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -409,8 +409,8 @@ class TMSForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("TMS setting type must be filled."),
-                }
-            )
+                },
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -433,14 +433,14 @@ class DigitalGamePhaseForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Software version must be filled."),
-                }
+                },
             ),
             "context_tree": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Context tree must be filled."),
-                }
+                },
             ),
         }
 
@@ -462,7 +462,7 @@ class GenericDataCollectionForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Information type must be filled."),
-                }
+                },
             ),
         }
 
@@ -478,7 +478,7 @@ class MediaCollectionForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Information type must be filled."),
-                }
+                },
             ),
         }
 
@@ -494,7 +494,7 @@ class BlockForm(ModelForm):
                 "id": "id_type",
                 "required": "",
                 "data-error": _("Organization type must be filled in."),
-            }
+            },
         ),
     )
 
@@ -510,7 +510,7 @@ class BlockForm(ModelForm):
                     "max": "99999",
                     "required": "",
                     "data-error": _("Quantity must be filled."),
-                }
+                },
             ),
         }
 
@@ -547,7 +547,7 @@ class ResearchProjectForm(ModelForm):
                     "data-error": _("Title must be filled."),
                     # "autofocus": "",
                     "maxlength": "255",
-                }
+                },
             ),
             # Even though maxlength is already set in the model, it has be
             # repeated here, because the form dos not respect that information.
@@ -559,7 +559,7 @@ class ResearchProjectForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "start_date": TextInput(
                 # format=_("%m/%d/%Y"),
@@ -615,7 +615,7 @@ class PublicationForm(ModelForm):
                     "rows": "2",
                     "data-error": _("Title must be filled."),
                     # "autofocus": "",
-                }
+                },
             ),
             "citation": Textarea(
                 attrs={
@@ -624,7 +624,7 @@ class PublicationForm(ModelForm):
                     "required": "",
                     "rows": "6",
                     "data-error": _("Citation must be filled."),
-                }
+                },
             ),
             "url": URLInput(attrs={"class": "form-control"}),
             "publication_type": Select(
@@ -632,12 +632,12 @@ class PublicationForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Publication type must be filled."),
-                }
+                },
             ),
             "file": ClearableFileInput(
                 attrs={
                     "class": "form-control",
-                }
+                },
             ),
         }
 
@@ -654,7 +654,7 @@ class NumberOfUsesToInsertForm(Form):
                 "max": "9999",
                 "required": "",
                 "data-error": _("Quantity must be filled."),
-            }
+            },
         ),
     )
 
@@ -696,28 +696,28 @@ class EEGDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "eeg_setting": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("EEG setting type must be filled."),
-                }
+                },
             ),
             "eeg_cap_size": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Cap size type must be filled."),
-                }
+                },
             ),
             "file_format": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("File format must be chosen."),
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -726,7 +726,7 @@ class EEGDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "file_format_description": Textarea(
                 attrs={
@@ -735,7 +735,7 @@ class EEGDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("File format description must be filled."),
-                }
+                },
             ),
             "eeg_setting_reason_for_change": Textarea(
                 attrs={
@@ -744,7 +744,7 @@ class EEGDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Reason for change must be filled."),
-                }
+                },
             ),
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
@@ -768,7 +768,7 @@ class EEGDataForm(ModelForm):
                 # if the electrode net is a cap
                 if EEGElectrodeCap.objects.filter(id=eeg_electrode_net_id):
                     self.fields["eeg_cap_size"].queryset = EEGCapSize.objects.filter(
-                        eeg_electrode_cap_id=eeg_electrode_net_id
+                        eeg_electrode_cap_id=eeg_electrode_net_id,
                     )
 
 
@@ -806,14 +806,14 @@ class StimuliDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "file_format": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("File format must be chosen."),
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -822,7 +822,7 @@ class StimuliDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "file_format_description": Textarea(
                 attrs={
@@ -831,7 +831,7 @@ class StimuliDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("File format description must be filled."),
-                }
+                },
             ),
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
@@ -862,7 +862,7 @@ class SourceCodeForm(ModelForm):
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -871,7 +871,7 @@ class SourceCodeForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "source_code_data": Select(attrs={"class": "form-select", "required": ""}),
         }
@@ -891,7 +891,7 @@ class EEGSettingForm(ModelForm):
                     "maxlength": "150",
                     "data-error": _("Name must be filled."),
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -900,7 +900,7 @@ class EEGSettingForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
         }
 
@@ -940,9 +940,9 @@ class EEGAmplifierSettingForm(ModelForm):
                     "required": "",
                     "min": "0",
                     "data-error": _(
-                        "Number of channels should be between 0 and the number of channels of the EEG machine."
+                        "Number of channels should be between 0 and the number of channels of the EEG machine.",
                     ),
-                }
+                },
             ),
         }
 
@@ -960,8 +960,8 @@ class EEGSolutionForm(ModelForm):
                     "class": "form-control",
                     "rows": "4",
                     "disabled": "",
-                }
-            )
+                },
+            ),
         }
 
 
@@ -1018,7 +1018,7 @@ class EEGElectrodeLocalizationSystemRegisterForm(ModelForm):
                     "data-error": _("Name field must be filled."),
                     "maxlength": "150",
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
         }
@@ -1037,7 +1037,7 @@ class TMSLocalizationSystemForm(ModelForm):
                     "data-error": _("Name field must be filled."),
                     "maxlength": "150",
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "brain_area": Select(attrs={"class": "form-select", "required": ""}),
@@ -1058,7 +1058,7 @@ class EEGElectrodePositionForm(ModelForm):
                     "data-error": _("Name field must be filled."),
                     "maxlength": "150",
                     # "autofocus": "",
-                }
+                },
             ),
             "coordinate_x": NumberInput(attrs={"class": "form-control"}),
             "coordinate_y": NumberInput(attrs={"class": "form-control"}),
@@ -1077,8 +1077,8 @@ class ManufacturerRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
-            )
+                },
+            ),
         }
 
 
@@ -1108,14 +1108,14 @@ class AmplifierRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Manufacturer must be filled."),
-                }
+                },
             ),
             "identification": TextInput(
                 attrs={
                     "class": "form-control",
                     "required": "",
                     "data-error": _("Identification must be filled."),
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "serial_number": TextInput(attrs={"class": "form-control"}),
@@ -1141,7 +1141,7 @@ class EEGSolutionRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "components": Textarea(attrs={"id": "id_description", "class": "form-control", "rows": "4"}),
             "manufacturer": Select(
@@ -1149,7 +1149,7 @@ class EEGSolutionRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Manufacturer must be filled."),
-                }
+                },
             ),
         }
 
@@ -1166,7 +1166,7 @@ class FilterTypeRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
         }
@@ -1193,7 +1193,7 @@ class ElectrodeModelRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "material": Select(attrs={"class": "form-select"}),
@@ -1205,7 +1205,7 @@ class ElectrodeModelRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Electrode type is required"),
-                }
+                },
             ),
         }
 
@@ -1222,7 +1222,7 @@ class MaterialRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
         }
@@ -1240,7 +1240,7 @@ class CoilModelRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "material": Select(attrs={"class": "form-select"}),
@@ -1249,7 +1249,7 @@ class CoilModelRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Coil shape must be filled."),
-                }
+                },
             ),
             "coil_design": Select(attrs={"class": "form-select"}),
         }
@@ -1272,14 +1272,14 @@ class StimuliEqRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Manufacturer must be filled."),
-                }
+                },
             ),
             "identification": TextInput(
                 attrs={
                     "class": "form-control",
                     "required": "",
                     "data-error": _("Identification must be filled."),
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "serial_number": TextInput(attrs={"class": "form-control"}),
@@ -1304,14 +1304,14 @@ class TMSDeviceRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Manufacturer must be filled."),
-                }
+                },
             ),
             "identification": TextInput(
                 attrs={
                     "class": "form-control",
                     "required": "",
                     "data-error": _("Identification must be filled."),
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             # 'coil_model': Select(attrs={'class': 'form-select', 'required': "",
@@ -1340,14 +1340,14 @@ class EEGElectrodeNETRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Manufacturer must be filled."),
-                }
+                },
             ),
             "identification": TextInput(
                 attrs={
                     "class": "form-control",
                     "required": "",
                     "data-error": _("Identification must be filled."),
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "serial_number": TextInput(attrs={"class": "form-control"}),
@@ -1356,7 +1356,7 @@ class EEGElectrodeNETRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Electrode model default must be filled in."),
-                }
+                },
             ),
         }
 
@@ -1376,8 +1376,8 @@ class EEGElectrodeCapRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Material must be filled."),
-                }
-            )
+                },
+            ),
         }
 
 
@@ -1393,13 +1393,13 @@ class EEGCapSizeRegisterForm(ModelForm):
                     "class": "form-control",
                     "required": "",
                     "data-error": _("Size must be filled."),
-                }
+                },
             ),
             "electrode_adjacent_distance": TextInput(
                 attrs={
                     "class": "form-control",
                     "data-error": _("Electrode adjacent distance must be filled."),
-                }
+                },
             ),
         }
 
@@ -1424,14 +1424,14 @@ class ADConverterRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Manufacturer must be filled."),
-                }
+                },
             ),
             "identification": TextInput(
                 attrs={
                     "class": "form-control",
                     "required": "",
                     "data-error": _("Identification must be filled."),
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "serial_number": TextInput(attrs={"class": "form-control"}),
@@ -1453,7 +1453,7 @@ class StandardizationSystemRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
         }
@@ -1480,7 +1480,7 @@ class EMGSurfacePlacementRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Muscle subdivision is required."),
-                }
+                },
             ),
             "location": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "start_posture": Textarea(attrs={"class": "form-control", "rows": "4"}),
@@ -1509,7 +1509,7 @@ class EMGIntramuscularPlacementRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Muscle subdivision is required."),
-                }
+                },
             ),
             "location": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "method_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4"}),
@@ -1529,7 +1529,7 @@ class EMGNeedlePlacementRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Muscle subdivision is required."),
-                }
+                },
             ),
             "location": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "depth_of_insertion": Textarea(attrs={"class": "form-control", "rows": "4"}),
@@ -1548,7 +1548,7 @@ class MuscleRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
         }
 
@@ -1565,7 +1565,7 @@ class MuscleSubdivisionRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "anatomy_origin": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "anatomy_insertion": Textarea(attrs={"class": "form-control", "rows": "4"}),
@@ -1585,7 +1585,7 @@ class MuscleSideRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
         }
 
@@ -1601,7 +1601,7 @@ class SoftwareRegisterForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Manufacturer must be filled."),
-                }
+                },
             ),
             "name": TextInput(
                 attrs={
@@ -1609,7 +1609,7 @@ class SoftwareRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "description": Textarea(attrs={"class": "form-control", "rows": "4"}),
         }
@@ -1627,7 +1627,7 @@ class SoftwareVersionRegisterForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
         }
 
@@ -1668,21 +1668,21 @@ class EMGDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "emg_setting": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("EMG setting type must be filled."),
-                }
+                },
             ),
             "file_format": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("File format must be chosen."),
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -1690,7 +1690,7 @@ class EMGDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "file_format_description": Textarea(
                 attrs={
@@ -1698,7 +1698,7 @@ class EMGDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("File format description must be filled."),
-                }
+                },
             ),
             "emg_setting_reason_for_change": Textarea(
                 attrs={
@@ -1706,7 +1706,7 @@ class EMGDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Reason for change must be filled."),
-                }
+                },
             ),
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
@@ -1755,7 +1755,7 @@ class AdditionalDataForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("File format must be chosen."),
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -1763,7 +1763,7 @@ class AdditionalDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "file_format_description": Textarea(
                 attrs={
@@ -1771,7 +1771,7 @@ class AdditionalDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("File format description must be filled."),
-                }
+                },
             ),
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
@@ -1803,7 +1803,7 @@ class SubjectStepDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "end_date": TextInput(
                 # format=_("%m/%d/%Y"),
@@ -1823,7 +1823,7 @@ class SubjectStepDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
         }
 
@@ -1842,7 +1842,7 @@ class EMGSettingForm(ModelForm):
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -1850,7 +1850,7 @@ class EMGSettingForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
         }
 
@@ -1884,7 +1884,7 @@ class EMGDigitalFilterSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Filter type is required"),
-                }
+                },
             ),
             "low_pass": TextInput(attrs={"class": "form-control"}),
             "high_pass": TextInput(attrs={"class": "form-control"}),
@@ -1908,7 +1908,7 @@ class EMGADConverterSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("AD converter is required"),
-                }
+                },
             ),
             "sampling_rate": TextInput(attrs={"class": "form-control"}),
         }
@@ -1928,8 +1928,8 @@ class EMGElectrodeSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Electrode is required"),
-                }
-            )
+                },
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -1950,7 +1950,7 @@ class EMGElectrodePlacementSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Electrode placement is required"),
-                }
+                },
             ),
             "remarks": Textarea(attrs={"class": "form-control", "rows": "4"}),
             "muscle_side": Select(
@@ -1958,7 +1958,7 @@ class EMGElectrodePlacementSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Muscle side is required"),
-                }
+                },
             ),
         }
 
@@ -1977,7 +1977,7 @@ class EMGPreamplifierSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Amplifier is required"),
-                }
+                },
             ),
             "gain": TextInput(attrs={"class": "form-control"}),
         }
@@ -2036,7 +2036,7 @@ class EMGAmplifierSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Amplifier is required"),
-                }
+                },
             ),
             "gain": TextInput(attrs={"class": "form-control"}),
         }
@@ -2093,7 +2093,7 @@ class ElectrodeModelForm(ModelForm):
                     "required": "",
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -2101,14 +2101,14 @@ class ElectrodeModelForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "electrode_type": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Electrode type is required"),
-                }
+                },
             ),
         }
 
@@ -2198,14 +2198,14 @@ class TMSDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "tms_setting": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("TMS setting type must be filled."),
-                }
+                },
             ),
             "coil_orientation": Select(attrs={"class": "form-select"}),
             "coil_orientation_angle": TextInput(attrs={"class": "form-control"}),
@@ -2225,7 +2225,7 @@ class TMSDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
         }
 
@@ -2252,21 +2252,21 @@ class HotSpotForm(ModelForm):
                 attrs={
                     "class": "form-control",
                     "maxlength": "50",
-                }
+                },
             ),
             "coordinate_x": TextInput(
                 attrs={
                     "class": "form-control",
                     "required": "",
                     "data-error": _("The coordinate must be filled."),
-                }
+                },
             ),
             "coordinate_y": TextInput(
                 attrs={
                     "class": "form-control",
                     "required": "",
                     "data-error": _("The coordinate must be filled."),
-                }
+                },
             ),
         }
 
@@ -2285,14 +2285,14 @@ class StimuliEqSettingForm(ModelForm):
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
                     # "autofocus": "",
-                }
+                },
             ),
             "stimuli_eq": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Stimuli Equipment must be filled."),
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -2301,7 +2301,7 @@ class StimuliEqSettingForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
         }
 
@@ -2320,7 +2320,7 @@ class TMSSettingForm(ModelForm):
                     "data-error": _("Name must be filled."),
                     "maxlength": "150",
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -2329,7 +2329,7 @@ class TMSSettingForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
         }
 
@@ -2346,14 +2346,14 @@ class TMSDeviceSettingForm(ModelForm):
                     "class": "form-select",
                     "required": "",
                     "data-error": _("TMS device is required"),
-                }
+                },
             ),
             "coil_model": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("Coil model is required"),
-                }
+                },
             ),
             "pulse_stimulus_type": Select(attrs={"class": "form-select"}),
         }
@@ -2373,8 +2373,8 @@ class CoilModelForm(ModelForm):
                     "rows": "4",
                     "disabled": "",
                     "id": "id_coil_description",
-                }
-            )
+                },
+            ),
         }
 
 
@@ -2392,7 +2392,7 @@ class ContextTreeForm(ModelForm):
                     "data-error": _("Name must be filled."),
                     "maxlength": "50",
                     # "autofocus": "",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -2401,7 +2401,7 @@ class ContextTreeForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "setting_text": Textarea(attrs={"class": "form-control", "rows": "6"}),
         }
@@ -2440,14 +2440,14 @@ class DigitalGamePhaseDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "file_format": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("File format must be chosen."),
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -2456,7 +2456,7 @@ class DigitalGamePhaseDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "file_format_description": Textarea(
                 attrs={
@@ -2465,7 +2465,7 @@ class DigitalGamePhaseDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("File format description must be filled."),
-                }
+                },
             ),
             "sequence_used_in_context_tree": Textarea(attrs={"class": "form-control", "rows": "4"}),
             # It is not possible to set the 'required' attribute because it affects the edit screen
@@ -2510,14 +2510,14 @@ class GenericDataCollectionDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "file_format": Select(
                 attrs={
                     "class": "form-select",
                     "required": "",
                     "data-error": _("File format must be chosen."),
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -2525,7 +2525,7 @@ class GenericDataCollectionDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             "file_format_description": Textarea(
                 attrs={
@@ -2534,7 +2534,7 @@ class GenericDataCollectionDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("File format description must be filled."),
-                }
+                },
             ),
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
@@ -2580,7 +2580,7 @@ class MediaCollectionDataForm(ModelForm):
                     "class": "form-control",
                     "placeholder": "HH:mm",
                     "pattern": r"\d{2}:\d{2}",
-                }
+                },
             ),
             "description": Textarea(
                 attrs={
@@ -2588,7 +2588,7 @@ class MediaCollectionDataForm(ModelForm):
                     "rows": "4",
                     "required": "",
                     "data-error": _("Description must be filled."),
-                }
+                },
             ),
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
@@ -2615,6 +2615,6 @@ class ResendExperimentForm(ModelForm):
                     "required": "",
                     "data-error": _("Reason must be filled."),
                     # "autofocus": "",
-                }
+                },
             ),
         }

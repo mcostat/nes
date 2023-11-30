@@ -392,7 +392,8 @@ def export_create(
             export.get_input_data("participants")["data_list"] = export_rows_participants
             # Create file participants.csv and diagnosis.csv
             error_msg = export.build_participant_export_data(
-                "group_selected_list" in request.session, request.POST.get("headings")
+                "group_selected_list" in request.session,
+                request.POST.get("headings"),
             )
             if error_msg != "":
                 messages.error(request, error_msg)
@@ -438,7 +439,8 @@ def export_create(
                 if export.get_input_data("export_per_questionnaire"):
                     # 'headings' == ['code'], ['full'] or ['abbreviated'], so request.POST.get('headings')[0]
                     error_msg = export.process_per_experiment_questionnaire(
-                        request.POST.get("headings"), per_experiment_plugin
+                        request.POST.get("headings"),
+                        per_experiment_plugin,
                     )
                     if error_msg != "":
                         messages.error(request, error_msg)
@@ -726,7 +728,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
             if group.experimental_protocol is not None:
                 component_list = get_component_with_data_and_metadata(group, component_list)
                 questionnaire_response_list = ExperimentQuestionnaireResponse.objects.filter(
-                    subject_of_group__group=group
+                    subject_of_group__group=group,
                 )
                 questionnaire_in_list = []
                 for path_experiment in create_list_of_trees(group.experimental_protocol, "questionnaire"):
@@ -753,7 +755,8 @@ def export_view(request, template_name: str = "export/export_data.html"):
 
         if questionnaires_experiment_list_final:
             questionnaires_experiment_fields_list = get_questionnaire_experiment_fields(
-                questionnaires_experiment_list_final, language_code
+                questionnaires_experiment_list_final,
+                language_code,
             )
 
     if surveys:
@@ -766,7 +769,7 @@ def export_view(request, template_name: str = "export/export_data.html"):
         # Obter a lista dos participantes filtrados que têm questionários de
         # entrada preenchidos.
         patient_questionnaire_response_list = QuestionnaireResponse.objects.filter(
-            patient_id__in=request.session["filtered_participant_data"]
+            patient_id__in=request.session["filtered_participant_data"],
         )
 
         surveys_with_ev_list = []
@@ -776,7 +779,9 @@ def export_view(request, template_name: str = "export/export_data.html"):
             lime_survey_id = patient_questionnaire_response.survey.lime_survey_id
             if lime_survey_id not in surveys_id_list:
                 completed = surveys.get_participant_properties(
-                    lime_survey_id, patient_questionnaire_response.token_id, "completed"
+                    lime_survey_id,
+                    patient_questionnaire_response.token_id,
+                    "completed",
                 )
                 # if completed is a data
                 if completed is not None and completed != "N" and completed != "":
@@ -924,13 +929,13 @@ def get_experiment_questionnaire_response_list(group_id):
                 experiment_questionnaire_response_dict[lime_survey_id] = []
 
             configuration_tree_list = DataConfigurationTree.objects.filter(
-                component_configuration=questionnaire_configuration
+                component_configuration=questionnaire_configuration,
             )
             experiment_questionnaire_response_list = []
 
             for data_configuration_tree in configuration_tree_list:
                 experiment_questionnaire_response_list = ExperimentQuestionnaireResponse.objects.filter(
-                    data_configuration_tree_id=data_configuration_tree.id
+                    data_configuration_tree_id=data_configuration_tree.id,
                 )
 
             if experiment_questionnaire_response_list:
@@ -962,7 +967,10 @@ def get_questionnaire_experiment_header(
     if not isinstance(responses_string, dict):
         questionnaire_questions = QuestionnaireUtils.responses_to_csv(responses_string)
         responses_heading_type = questionnaire_lime_survey.get_header_response(
-            questionnaire_id, language_new, token, heading_type=heading_type
+            questionnaire_id,
+            language_new,
+            token,
+            heading_type=heading_type,
         )
         questionnaire_questions_heading_type = QuestionnaireUtils.responses_to_csv(responses_heading_type)
         if heading_type == "abbreviated":
@@ -1056,7 +1064,10 @@ def get_questionnaire_header(
         if not isinstance(responses_string, dict):
             questionnaire_questions = QuestionnaireUtils.responses_to_csv(responses_string)
             responses_heading_type = questionnaire_lime_survey.get_header_response(
-                questionnaire_id, language_new, token, heading_type=heading_type
+                questionnaire_id,
+                language_new,
+                token,
+                heading_type=heading_type,
             )
             questionnaire_questions_heading_type = QuestionnaireUtils.responses_to_csv(responses_heading_type)
             if heading_type == "abbreviated":
@@ -1100,7 +1111,10 @@ def get_questionnaire_experiment_fields(questionnaire_code_list, language_curren
 
             questionnaire_questions = QuestionnaireUtils.responses_to_csv(responses_string)
             responses_full = questionnaire_lime_survey.get_header_response(
-                questionnaire_id, language_new, token, heading_type="full"
+                questionnaire_id,
+                language_new,
+                token,
+                heading_type="full",
             )
             questionnaire_questions_full = QuestionnaireUtils.responses_to_csv(responses_full)
 
@@ -1113,7 +1127,7 @@ def get_questionnaire_experiment_fields(questionnaire_code_list, language_curren
                             "field": question,
                             "header": question,
                             "description": description,
-                        }
+                        },
                     )
                 index += 1
             questionnaires_included.append(record_question)
@@ -1124,7 +1138,8 @@ def get_questionnaire_experiment_fields(questionnaire_code_list, language_curren
 
 
 def get_questionnaire_fields(
-    questionnaire_code_list: list[int], current_language: str = "pt-BR"
+    questionnaire_code_list: list[int],
+    current_language: str = "pt-BR",
 ) -> tuple[int, list[dict[str, dict[str, Any]]]]:
     """
     :param questionnaire_code_list: list with questionnaire id to be
@@ -1162,7 +1177,10 @@ def get_questionnaire_fields(
             }
             questionnaire_questions = QuestionnaireUtils.responses_to_csv(responses_string)
             responses_full = questionnaire_lime_survey.get_header_response(
-                questionnaire_id, result, token, heading_type="full"
+                questionnaire_id,
+                result,
+                token,
+                heading_type="full",
             )
             if responses_full is None:
                 return Questionnaires.ERROR_CODE, []
@@ -1177,7 +1195,7 @@ def get_questionnaire_fields(
                             "field": question,
                             "header": question,
                             "description": description,
-                        }
+                        },
                     )
                 index += 1
             questionnaires_included.append(record_question)
@@ -1193,12 +1211,14 @@ def get_some_token(questionnaire_lime_survey, questionnaire_id):
     some_patient_response: QuestionnaireResponse | None = QuestionnaireResponse.objects.filter(survey=survey).first()
     if not some_patient_response:
         some_patient_response = ExperimentQuestionnaireResponse.objects.filter(
-            data_configuration_tree__component_configuration__component__questionnaire__survey_id=survey.id
+            data_configuration_tree__component_configuration__component__questionnaire__survey_id=survey.id,
         ).first()
 
     assert some_patient_response is not None
     token = questionnaire_lime_survey.get_participant_properties(
-        questionnaire_id, some_patient_response.token_id, "token"
+        questionnaire_id,
+        some_patient_response.token_id,
+        "token",
     )
     return token
 
@@ -1252,7 +1272,7 @@ def filter_participants(request):
                     classification_of_diseases_list = request.POST.getlist("selected_diagnosis")
 
                     participants_list = participants_list.filter(
-                        medicalrecorddata__diagnosis__classification_of_diseases__in=classification_of_diseases_list
+                        medicalrecorddata__diagnosis__classification_of_diseases__in=classification_of_diseases_list,
                     ).distinct()
 
                 # putting the list of participants in the user session
@@ -1376,7 +1396,7 @@ def get_block_tree(component_id, language_code=None):
                 {
                     "component_configuration_attributes": component_configuration_attributes,
                     "component": component_info,
-                }
+                },
             )
 
     return {
@@ -1399,10 +1419,10 @@ def get_component_configuration_attributes(configuration):
             attributes.append({_("Interval between repetitions unit"): configuration.interval_between_repetitions_unit})
     attributes.append({_("Order"): configuration.order})
     attributes.append(
-        {_("Position in the set of steps "): _("Random") if configuration.random_position else _("Fixed")}
+        {_("Position in the set of steps "): _("Random") if configuration.random_position else _("Fixed")},
     )
     attributes.append(
-        {_("Requires start and end datetime"): _("Yes") if configuration.requires_start_and_end_datetime else _("No")}
+        {_("Requires start and end datetime"): _("Yes") if configuration.requires_start_and_end_datetime else _("No")},
     )
 
     return attributes
@@ -1565,7 +1585,7 @@ def search_diagnosis(request: HttpRequest) -> HttpResponse:
                 .filter(
                     Q(abbreviated_description__icontains=search_text)
                     | Q(description__icontains=search_text)
-                    | Q(code__icontains=search_text)
+                    | Q(code__icontains=search_text),
                 )
                 .distinct()
                 .order_by("code")

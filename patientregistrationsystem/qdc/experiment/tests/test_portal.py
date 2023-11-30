@@ -133,7 +133,9 @@ class PortalAPITest(TestCase):
         group = ObjectsFactory.create_group(experiment, experimental_protocol)
         survey = create_survey(212121)  # fake number
         questionnaire_step = ObjectsFactory.create_component(
-            experiment, Component.QUESTIONNAIRE, kwargs={"survey": survey}
+            experiment,
+            Component.QUESTIONNAIRE,
+            kwargs={"survey": survey},
         )
         ObjectsFactory.create_component_configuration(experimental_protocol, questionnaire_step)
         tree = get_block_tree(group.experimental_protocol, "en")
@@ -168,7 +170,7 @@ class PortalAPITest(TestCase):
                     {"hidden", "1"},
                     "N",
                 ],
-            )
+            ),
         )
         mockServerClass.return_value.get_question_properties.return_value = question_properties
         # mock list_groups LimeSurvey API method (fake values)
@@ -184,7 +186,7 @@ class PortalAPITest(TestCase):
                 "gid": group_id,
                 "language": language,
                 "grelevance": "",
-            }
+            },
         ]
 
         send_steps_to_portal(21, tree, None, None, None, None, "en")

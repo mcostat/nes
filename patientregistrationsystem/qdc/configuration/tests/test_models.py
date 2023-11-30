@@ -16,7 +16,9 @@ class LocalInstiutionTest(TestCase):
 
     def test_valid_LocalInstitution(self) -> None:
         localinstitution = LocalInstitution.objects.create(
-            code="1234", institution=Institution.objects.first(), url="https://ufrj.br/"
+            code="1234",
+            institution=Institution.objects.first(),
+            url="https://ufrj.br/",
         )
 
         self.assertEqual(str(localinstitution), "Local Institution")
@@ -35,7 +37,9 @@ class LocalInstiutionTest(TestCase):
 
     def test_get_institution_logo_dir(self) -> None:
         institution = LocalInstitution.objects.create(
-            code="1234", institution=Institution.objects.first(), url="https://ufrj.br/"
+            code="1234",
+            institution=Institution.objects.first(),
+            url="https://ufrj.br/",
         )
 
         self.assertEqual(

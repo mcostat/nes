@@ -121,13 +121,12 @@ class QuestionnaireUtils:
         fields,
         considers_questionnaires,
         considers_questionnaires_from_experiment,
-    ):
+    ) -> None:
         # Only one header, field instance
         for field in fields:
-            if considers_questionnaires:
-                if field not in self.questionnaires_data[questionnaire_id]["fields"]:
-                    self.questionnaires_data[questionnaire_id]["header"].append(header[fields.index(field)])
-                    self.questionnaires_data[questionnaire_id]["fields"].append(field)
+            if considers_questionnaires and field not in self.questionnaires_data[questionnaire_id]["fields"]:
+                self.questionnaires_data[questionnaire_id]["header"].append(header[fields.index(field)])
+                self.questionnaires_data[questionnaire_id]["fields"].append(field)
             if (
                 considers_questionnaires_from_experiment
                 and field not in self.questionnaires_experiment_data[questionnaire_id]["fields"]
@@ -147,7 +146,7 @@ class QuestionnaireUtils:
             if field not in self.questionnaires_experiment_data[questionnaire_id]["fields"]:
                 self.questionnaires_experiment_data[questionnaire_id]["header"].append(header[fields.index(field)])
                 self.questionnaires_experiment_data[questionnaire_id]["header_questionnaire"].append(
-                    header[fields.index(field)]
+                    header[fields.index(field)],
                 )
                 self.questionnaires_experiment_data[questionnaire_id]["fields"].append(field)
 
@@ -164,12 +163,10 @@ class QuestionnaireUtils:
         considers_questionnaires_from_experiments,
     ):
         fields = []
-        if entrance_questionnaire:
-            if questionnaire_id in self.questionnaires_data:
-                fields = self.questionnaires_data[questionnaire_id]["fields"]
-        if considers_questionnaires_from_experiments:
-            if questionnaire_id in self.questionnaires_experiment_data:
-                fields = self.questionnaires_experiment_data[questionnaire_id]["fields"]
+        if entrance_questionnaire and questionnaire_id in self.questionnaires_data:
+            fields = self.questionnaires_data[questionnaire_id]["fields"]
+        if considers_questionnaires_from_experiments and questionnaire_id in self.questionnaires_experiment_data:
+            fields = self.questionnaires_experiment_data[questionnaire_id]["fields"]
 
         return fields
 
@@ -378,7 +375,7 @@ class QuestionnaireUtils:
                                 + question_list
                                 + sub_question
                                 + scale
-                                + option
+                                + option,
                             )
 
         if len(fields_cleared) != len(fields_from_questions):
@@ -426,15 +423,15 @@ class QuestionnaireUtils:
         return 0, questions
 
     @staticmethod
-    def responses_to_csv(responses_string):
+    def responses_to_csv(responses_string) -> list[list[str]]:
         """
         :param responses_string:
         :return:
         """
         response_reader = reader(StringIO(responses_string), delimiter=",")
-        responses_list = []
-        for row in response_reader:
-            responses_list.append(row)
+        responses_list = list(response_reader)
+        # for row in response_reader:
+        #     responses_list.append(row)
         return responses_list
 
     @staticmethod
@@ -480,7 +477,7 @@ class QuestionnaireUtils:
             None,
         )
         if index is None:
-            return self.LIMESURVEY_ERROR, _("There's no question with name %s" % question_title)
+            return self.LIMESURVEY_ERROR, _("There's no question with name {}").format(question_title)
         else:
             return str(limesurvey_id) + "X" + str(group["gid"]) + "X" + str(questions[index]["qid"])
 

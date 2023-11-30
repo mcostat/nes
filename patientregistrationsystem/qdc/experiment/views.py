@@ -315,7 +315,8 @@ class EEGReading:
 @login_required
 @permission_required("experiment.view_researchproject")
 def research_project_list(
-    request: HttpRequest, template_name: str = "experiment/research_project_list.html"
+    request: HttpRequest,
+    template_name: str = "experiment/research_project_list.html",
 ) -> HttpResponse:
     research_projects = ResearchProject.objects.prefetch_related("owner").order_by("start_date")
 
@@ -371,7 +372,7 @@ def check_can_change(user, research_project):
 
 def get_can_change(user, research_project):
     return (user.has_perm("experiment.change_researchproject") and user == research_project.owner) or user.has_perm(
-        "experiment.change_researchproject_from_others"
+        "experiment.change_researchproject_from_others",
     )
 
 
@@ -401,7 +402,7 @@ def research_project_view(
         if request.POST["action"] == "remove":
             if (
                 QuestionnaireResponse.objects.filter(
-                    subject_of_group__group__experiment__research_project_id=research_project_id
+                    subject_of_group__group__experiment__research_project_id=research_project_id,
                 ).count()
                 == 0
             ):
@@ -1063,7 +1064,7 @@ def experiment_import(
                         reverse(
                             "experiment_import",
                             kwargs={"research_project_id": research_project_id},
-                        )
+                        ),
                     )
                 else:
                     return HttpResponseRedirect(reverse("experiment_import"))
@@ -1093,7 +1094,7 @@ def experiment_import(
                     reverse(
                         "experiment_import",
                         kwargs={"research_project_id": research_project_id},
-                    )
+                    ),
                 )
             else:
                 return HttpResponseRedirect(reverse("experiment_import"))
@@ -1144,13 +1145,16 @@ def experiment_schedule_of_sending(
             questionnaire = Questionnaire.objects.get(pk=component_id)
             if questionnaire.survey.lime_survey_id not in experiment_questionnaires:
                 language = get_questionnaire_language(
-                    surveys, questionnaire.survey.lime_survey_id, request.LANGUAGE_CODE
+                    surveys,
+                    questionnaire.survey.lime_survey_id,
+                    request.LANGUAGE_CODE,
                 )
                 questionnaire_title = find_questionnaire_name(questionnaire.survey, language)["name"]
 
                 current_sensitive_questions = SensitiveQuestion.objects.filter(survey=questionnaire.survey)
                 current_portal_selected_questions = PortalSelectedQuestion.objects.filter(
-                    experiment=experiment, survey=questionnaire.survey
+                    experiment=experiment,
+                    survey=questionnaire.survey,
                 )
 
                 field_code = get_survey_header(surveys, questionnaire.survey, language, "code")
@@ -1176,9 +1180,9 @@ def experiment_schedule_of_sending(
                                 "is_sensitive": current_sensitive_questions.filter(code=field_code[counter]).exists(),
                                 "select_to_send": select_to_send,
                                 "is_selected_in_db": current_portal_selected_questions.filter(
-                                    question_code=field_code[counter]
+                                    question_code=field_code[counter],
                                 ).exists(),
-                            }
+                            },
                         )
                     counter += 1
 
@@ -1381,7 +1385,8 @@ def send_all_experiments_to_portal() -> None:
 
                 # context trees
                 list_of_digital_game_phase_configuration = create_list_of_trees(
-                    group.experimental_protocol, "digital_game_phase"
+                    group.experimental_protocol,
+                    "digital_game_phase",
                 )
                 for path_tree in list_of_digital_game_phase_configuration:
                     component_id = ComponentConfiguration.objects.get(pk=path_tree[-1][0]).component_id
@@ -1505,11 +1510,15 @@ def send_all_experiments_to_portal() -> None:
                             questionnaire = Questionnaire.objects.get(pk=component_id)
                             limesurvey_id = questionnaire.survey.lime_survey_id
                             token = surveys.get_participant_properties(
-                                limesurvey_id, questionnaire_response.token_id, "token"
+                                limesurvey_id,
+                                questionnaire_response.token_id,
+                                "token",
                             )
                             questionnaire_language = get_questionnaire_language(surveys, limesurvey_id, language_code)
                             responses_string = surveys.get_responses_by_token(
-                                limesurvey_id, token, questionnaire_language
+                                limesurvey_id,
+                                token,
+                                questionnaire_language,
                             )
                             limesurvey_response: dict[str, Any] = {
                                 "questions": "",
@@ -1525,7 +1534,9 @@ def send_all_experiments_to_portal() -> None:
                                 # Need multiple choice questions types to make replacement just below
                                 # TODO (NES-991): make a test for getting multiple choice questions
                                 error, question_list = QuestionnaireUtils.get_questions(
-                                    surveys, limesurvey_id, questionnaire_language
+                                    surveys,
+                                    limesurvey_id,
+                                    questionnaire_language,
                                 )
                                 if question_list:
                                     # Import here because of ImportError
@@ -1586,7 +1597,7 @@ def send_all_experiments_to_portal() -> None:
 
                     # Generic data collection data
                     generic_data_collection_data_list = GenericDataCollectionData.objects.filter(
-                        subject_of_group__group=group
+                        subject_of_group__group=group,
                     )
 
                     for generic_data_collection_data in generic_data_collection_data_list:
@@ -1675,10 +1686,14 @@ def group_create(request, experiment_id, template_name: str = "experiment/group_
 
 
 def recursively_create_list_of_questionnaires_and_statistics(
-    block_id, list_of_questionnaires_configuration, num_participants, language_code
+    block_id,
+    list_of_questionnaires_configuration,
+    num_participants,
+    language_code,
 ):
     for questionnaire_configuration in ComponentConfiguration.objects.filter(
-        parent_id=block_id, component__component_type="questionnaire"
+        parent_id=block_id,
+        component__component_type="questionnaire",
     ):
         if questionnaire_configuration.number_of_repetitions is not None:
             fills_per_participant = questionnaire_configuration.number_of_repetitions
@@ -1692,7 +1707,7 @@ def recursively_create_list_of_questionnaires_and_statistics(
         questionnaire = Questionnaire.objects.get(id=questionnaire_configuration.component.id)
 
         for subject_response in QuestionnaireResponse.objects.filter(
-            data_configuration_tree__component_configuration=questionnaire_configuration
+            data_configuration_tree__component_configuration=questionnaire_configuration,
         ):
             if subject_response.is_completed == "N" or subject_response.is_completed == "":
                 surveys = Questionnaires()
@@ -1720,11 +1735,12 @@ def recursively_create_list_of_questionnaires_and_statistics(
                 "total_fills_needed": total_fills_needed,
                 "total_fills_done": amount_of_completed_questionnaires,
                 "id": questionnaire_configuration.id,
-            }
+            },
         )
 
     for block_configuration in ComponentConfiguration.objects.filter(
-        parent_id=block_id, component__component_type="block"
+        parent_id=block_id,
+        component__component_type="block",
     ):
         list_of_questionnaires_configuration = recursively_create_list_of_questionnaires_and_statistics(
             Block.objects.get(id=block_configuration.component.id),
@@ -1858,7 +1874,7 @@ def group_update(request, group_id, template_name: str = "experiment/group_regis
                             _(
                                 '<a href="/experiment/schedule_of_sending/{!s}">'
                                 "This experiment was previously sent to the Portal. Click here to resend it."
-                                "</a>"
+                                "</a>",
                             ).format(str(group.experiment.id)),
                         )
 
@@ -2335,7 +2351,7 @@ def view_eeg_setting_type(request, eeg_setting_id, eeg_setting_type):
                 eeg_electrode_net = EEGElectrodeNet.objects.get(pk=request.POST["equipment_selection"])
 
                 eeg_electrode_localization_system = EEGElectrodeLocalizationSystem.objects.get(
-                    pk=request.POST["localization_system_selection"]
+                    pk=request.POST["localization_system_selection"],
                 )
 
                 eeg_electrode_net_system = EEGElectrodeNetSystem.objects.get(
@@ -2416,7 +2432,7 @@ def view_eeg_setting_type(request, eeg_setting_id, eeg_setting_type):
 
     if eeg_setting_type == "eeg_electrode_net_system":
         localization_system_list = EEGElectrodeLocalizationSystem.objects.filter(
-            set_of_electrode_net_system__isnull=False
+            set_of_electrode_net_system__isnull=False,
         )
 
         if hasattr(eeg_setting, "eeg_electrode_layout_setting"):
@@ -2588,7 +2604,7 @@ def edit_eeg_setting_type(request, eeg_setting_id, eeg_setting_type):
                 eeg_electrode_net = EEGElectrodeNet.objects.get(pk=request.POST["equipment_selection"])
 
                 eeg_electrode_localization_system = EEGElectrodeLocalizationSystem.objects.get(
-                    pk=request.POST["localization_system_selection"]
+                    pk=request.POST["localization_system_selection"],
                 )
 
                 eeg_electrode_net_system = EEGElectrodeNetSystem.objects.get(
@@ -2671,7 +2687,7 @@ def edit_eeg_setting_type(request, eeg_setting_id, eeg_setting_type):
         localization_system_selected = setting.eeg_electrode_net_system.eeg_electrode_localization_system
 
         localization_system_list = EEGElectrodeLocalizationSystem.objects.filter(
-            set_of_electrode_net_system__eeg_electrode_net_id=equipment_selected.id
+            set_of_electrode_net_system__eeg_electrode_net_id=equipment_selected.id,
         )
 
     # Settings related to equipment
@@ -2805,7 +2821,7 @@ def get_json_filter_attributes(request, filter_id):
 @permission_required("experiment.change_experiment")
 def get_localization_system_by_electrode_net(request, equipment_id):
     list_of_localization_system = EEGElectrodeLocalizationSystem.objects.filter(
-        set_of_electrode_net_system__eeg_electrode_net_id=equipment_id
+        set_of_electrode_net_system__eeg_electrode_net_id=equipment_id,
     )
     json_equipment = serializers.serialize("json", list_of_localization_system)
     return HttpResponse(json_equipment, content_type=JsonResponse)
@@ -2815,7 +2831,7 @@ def get_localization_system_by_electrode_net(request, equipment_id):
 @permission_required("experiment.change_experiment")
 def get_equipment_by_manufacturer_and_localization_system(request, manufacturer_id, eeg_localization_system_id):
     set_of_net_system = EEGElectrodeNetSystem.objects.filter(
-        eeg_electrode_localization_system_id=eeg_localization_system_id
+        eeg_electrode_localization_system_id=eeg_localization_system_id,
     )
     list_of_electrode_net = [item.eeg_electrode_net_id for item in set_of_net_system]
     # equipment = Equipment.objects.in_bulk(list_of_electrode_net)
@@ -2845,7 +2861,7 @@ def eeg_electrode_position_setting(
                 "position": position_setting.eeg_electrode_position.name,
                 "x": position_setting.eeg_electrode_position.coordinate_x,
                 "y": position_setting.eeg_electrode_position.coordinate_y,
-            }
+            },
         )
 
     context = {
@@ -2862,7 +2878,8 @@ def eeg_electrode_position_setting(
 
 def number_of_used_positions(eeg_setting):
     return EEGElectrodePositionSetting.objects.filter(
-        eeg_electrode_layout_setting=eeg_setting.eeg_electrode_layout_setting, used=True
+        eeg_electrode_layout_setting=eeg_setting.eeg_electrode_layout_setting,
+        used=True,
     ).count()
 
 
@@ -2898,7 +2915,7 @@ def edit_eeg_electrode_position_setting(
                 "position": position_setting.eeg_electrode_position.name,
                 "x": position_setting.eeg_electrode_position.coordinate_x,
                 "y": position_setting.eeg_electrode_position.coordinate_y,
-            }
+            },
         )
 
     if request.method == "POST":
@@ -2988,7 +3005,7 @@ def eeg_electrode_position_setting_change_the_order(request, eeg_electrode_posit
     position_setting = get_object_or_404(EEGElectrodePositionSetting, pk=eeg_electrode_position_setting_id)
 
     all_position_settings = EEGElectrodePositionSetting.objects.filter(
-        eeg_electrode_layout_setting=position_setting.eeg_electrode_layout_setting
+        eeg_electrode_layout_setting=position_setting.eeg_electrode_layout_setting,
     )
 
     if command == "down":
@@ -3351,17 +3368,16 @@ def eegsolution_update(request, eegsolution_id, template_name: str = "experiment
 
     eegsolution_form = EEGSolutionRegisterForm(request.POST or None, instance=eegsolution)
 
-    if request.method == "POST":
-        if request.POST["action"] == "save":
-            if eegsolution_form.is_valid():
-                if eegsolution_form.has_changed():
-                    eegsolution_form.save()
-                    messages.success(request, _("EEG solution updated successfully."))
-                else:
-                    messages.success(request, _("There is no changes to save."))
+    if request.method == "POST" and request.POST["action"] == "save":
+        if eegsolution_form.is_valid():
+            if eegsolution_form.has_changed():
+                eegsolution_form.save()
+                messages.success(request, _("EEG solution updated successfully."))
+            else:
+                messages.success(request, _("There is no changes to save."))
 
-                redirect_url = reverse("eegsolution_view", args=(eegsolution.id,))
-                return HttpResponseRedirect(redirect_url)
+            redirect_url = reverse("eegsolution_view", args=(eegsolution.id,))
+            return HttpResponseRedirect(redirect_url)
 
     context = {
         "equipment": eegsolution,
@@ -3570,7 +3586,8 @@ def standardization_system_update(
     standardization_system = get_object_or_404(StandardizationSystem, pk=standardization_system_id)
 
     standardization_system_form = StandardizationSystemRegisterForm(
-        request.POST or None, instance=standardization_system
+        request.POST or None,
+        instance=standardization_system,
     )
 
     if request.method == "POST":
@@ -3650,17 +3667,20 @@ def emg_electrode_placement_view(request, emg_electrode_placement_id):
     if emg_electrode_placement.placement_type == "surface":
         emg_electrode_placement = get_object_or_404(EMGSurfacePlacement, pk=emg_electrode_placement_id)
         emg_electrode_placement_form = EMGSurfacePlacementRegisterForm(
-            request.POST or None, instance=emg_electrode_placement
+            request.POST or None,
+            instance=emg_electrode_placement,
         )
     elif emg_electrode_placement.placement_type == "intramuscular":
         emg_electrode_placement = get_object_or_404(EMGIntramuscularPlacement, pk=emg_electrode_placement_id)
         emg_electrode_placement_form = EMGIntramuscularPlacementRegisterForm(
-            request.POST or None, instance=emg_electrode_placement
+            request.POST or None,
+            instance=emg_electrode_placement,
         )
     elif emg_electrode_placement.placement_type == "needle":
         emg_electrode_placement = get_object_or_404(EMGNeedlePlacement, pk=emg_electrode_placement_id)
         emg_electrode_placement_form = EMGNeedlePlacementRegisterForm(
-            request.POST or None, instance=emg_electrode_placement
+            request.POST or None,
+            instance=emg_electrode_placement,
         )
 
     for field in emg_electrode_placement_form.fields:
@@ -3701,17 +3721,20 @@ def emg_electrode_placement_update(request, emg_electrode_placement_id):
     if emg_electrode_placement.placement_type == "surface":
         emg_electrode_placement = get_object_or_404(EMGSurfacePlacement, pk=emg_electrode_placement_id)
         emg_electrode_placement_form = EMGSurfacePlacementRegisterForm(
-            request.POST or None, instance=emg_electrode_placement
+            request.POST or None,
+            instance=emg_electrode_placement,
         )
     elif emg_electrode_placement.placement_type == "intramuscular":
         emg_electrode_placement = get_object_or_404(EMGIntramuscularPlacement, pk=emg_electrode_placement_id)
         emg_electrode_placement_form = EMGIntramuscularPlacementRegisterForm(
-            request.POST or None, instance=emg_electrode_placement
+            request.POST or None,
+            instance=emg_electrode_placement,
         )
     elif emg_electrode_placement.placement_type == "needle":
         emg_electrode_placement = get_object_or_404(EMGNeedlePlacement, pk=emg_electrode_placement_id)
         emg_electrode_placement_form = EMGNeedlePlacementRegisterForm(
-            request.POST or None, instance=emg_electrode_placement
+            request.POST or None,
+            instance=emg_electrode_placement,
         )
 
     if request.method == "POST":
@@ -3764,7 +3787,8 @@ def standardization_system_view(
     standardization_system = get_object_or_404(StandardizationSystem, pk=standardization_system_id)
 
     standardization_system_form = StandardizationSystemRegisterForm(
-        request.POST or None, instance=standardization_system
+        request.POST or None,
+        instance=standardization_system,
     )
 
     for field in standardization_system_form.fields:
@@ -4898,7 +4922,7 @@ def eegelectrodenet_update(
                         # check if the net_system is not been used by some layout_setting
                         # (the used net_system was rendered as disabled)
                         if not EEGElectrodeLayoutSetting.objects.filter(
-                            eeg_electrode_net_system=eeg_electrode_net_system
+                            eeg_electrode_net_system=eeg_electrode_net_system,
                         ).exists():
                             eeg_electrode_net_system.delete()
                             changed = True
@@ -5007,7 +5031,7 @@ def eegelectrodenet_view(
                                     request,
                                     _(
                                         "EEG electrode net cannot be removed because "
-                                        "cap size is associated with EEG data."
+                                        "cap size is associated with EEG data.",
                                     ),
                                 )
                                 redirect_url = reverse("eegelectrodenet_view", args=(eegelectrodenet_id,))
@@ -5277,7 +5301,7 @@ def search_cid10_ajax(request):
             cid_10_list = ClassificationOfDiseases.objects.filter(
                 Q(abbreviated_description__icontains=search_text)
                 | Q(description__icontains=search_text)
-                | Q(code__icontains=search_text)
+                | Q(code__icontains=search_text),
             )
 
         if group_id:
@@ -5360,7 +5384,10 @@ def questionnaire_view(
             completed = False
 
             acquisitiondate_updated = update_acquisition_date(
-                survey.lime_survey_id, properties["token"], subject_response, language
+                survey.lime_survey_id,
+                properties["token"],
+                subject_response,
+                language,
             )
 
             if subject_response.is_completed != "N" and subject_response.is_completed != "":
@@ -5372,7 +5399,7 @@ def questionnaire_view(
                     "questionnaire_response": subject_response,
                     "completed": completed,
                     "acquisitiondate_updated": acquisitiondate_updated,
-                }
+                },
             )
 
         # If unlimited fills, percentage is related to the number of completed
@@ -5401,7 +5428,7 @@ def questionnaire_view(
                 "denominator": denominator,
                 "percentage": int(percentage),
                 "questionnaire_responses": questionnaire_responses_with_status,
-            }
+            },
         )
 
     surveys.release_session_key()
@@ -5441,7 +5468,7 @@ def subjects(request, group_id, template_name: str = "experiment/subjects.html")
     if request.method == "POST" and request.POST["action"][:6] == "remove":
         subject_id = request.POST["action"][7:]
         subject_list = SubjectOfGroup.objects.filter(group=group, subject_id=subject_id).order_by(
-            "subject__patient__name"
+            "subject__patient__name",
         )
     else:
         subject_list = SubjectOfGroup.objects.filter(group=group).order_by("subject__patient__name")
@@ -5462,10 +5489,12 @@ def subjects(request, group_id, template_name: str = "experiment/subjects.html")
         list_of_tms_configuration = create_list_of_trees(group.experimental_protocol, "tms")
         list_of_stimuli_configuration = create_list_of_trees(group.experimental_protocol, "stimuli")
         list_of_digital_game_phase_configuration = create_list_of_trees(
-            group.experimental_protocol, "digital_game_phase"
+            group.experimental_protocol,
+            "digital_game_phase",
         )
         list_of_generic_data_collection_configuration = create_list_of_trees(
-            group.experimental_protocol, "generic_data_collection"
+            group.experimental_protocol,
+            "generic_data_collection",
         )
         list_of_media_collection_configuration = create_list_of_trees(group.experimental_protocol, "media_collection")
 
@@ -5513,7 +5542,7 @@ def subjects(request, group_id, template_name: str = "experiment/subjects.html")
                             is_completed = (
                                 surveys.get_participant_properties(
                                     Questionnaire.objects.get(
-                                        id=questionnaire_configuration.component.id
+                                        id=questionnaire_configuration.component.id,
                                     ).survey.lime_survey_id,
                                     subject_response.token_id,
                                     "completed",
@@ -5723,20 +5752,20 @@ def subjects(request, group_id, template_name: str = "experiment/subjects.html")
                     "number_of_digital_game_phase_data_files_uploaded": number_of_digital_game_phase_data_files_uploaded,
                     "total_of_digital_game_phase_data_files": len(list_of_digital_game_phase_configuration),
                     "percentage_of_digital_game_phase_data_files_uploaded": int(
-                        percentage_of_digital_game_phase_data_files_uploaded
+                        percentage_of_digital_game_phase_data_files_uploaded,
                     ),
                     "number_of_generic_data_collection_data_files_uploaded": number_of_generic_data_collection_data_files_uploaded,
                     "total_of_generic_data_collection_data_files": len(list_of_generic_data_collection_configuration),
                     "percentage_of_generic_data_collection_data_files_uploaded": int(
-                        percentage_of_generic_data_collection_data_files_uploaded
+                        percentage_of_generic_data_collection_data_files_uploaded,
                     ),
                     "number_of_media_collection_data_files_uploaded": number_of_media_collection_data_files_uploaded,
                     "total_of_media_collection_data_files": len(list_of_media_collection_configuration),
                     "percentage_of_media_collection_data_files_uploaded": int(
-                        percentage_of_media_collection_data_files_uploaded
+                        percentage_of_media_collection_data_files_uploaded,
                     ),
                     "number_of_additional_data_uploaded": AdditionalData.objects.filter(
-                        subject_of_group=subject_of_group
+                        subject_of_group=subject_of_group,
                     ).count(),
                 },
             )
@@ -5751,9 +5780,9 @@ def subjects(request, group_id, template_name: str = "experiment/subjects.html")
                     "percentage_of_questionnaires": 0,
                     "consent": subject_of_group.consent_form,
                     "number_of_additional_data_uploaded": AdditionalData.objects.filter(
-                        subject_of_group=subject_of_group
+                        subject_of_group=subject_of_group,
                     ).count(),
-                }
+                },
             )
 
     surveys.release_session_key()
@@ -5802,7 +5831,8 @@ def get_data_collections_from_group(group, data_type=None):
 
     if data_type is None or data_type == "additional_data":
         additional_data_list = AdditionalData.objects.filter(
-            subject_of_group__group=group, data_configuration_tree=None
+            subject_of_group__group=group,
+            data_configuration_tree=None,
         )
 
         data_list = (
@@ -5812,7 +5842,7 @@ def get_data_collections_from_group(group, data_type=None):
                     "icon_class": ICON_CLASS["additional_data"],
                     "description": _("Additional"),
                     "count": additional_data_list.values("subject_of_group__subject").distinct().count(),
-                }
+                },
             ]
             if additional_data_list
             else []
@@ -5823,7 +5853,7 @@ def get_data_collections_from_group(group, data_type=None):
                 "path": None,
                 "data_list": data_list,
                 "icon_class": ICON_CLASS["experimental_protocol"],
-            }
+            },
         )
 
     list_of_paths = create_list_of_trees(
@@ -5833,7 +5863,8 @@ def get_data_collections_from_group(group, data_type=None):
     for path in list_of_paths:
         component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
         data_configuration_tree_id = list_data_configuration_tree(
-            component_configuration.id, [item[0] for item in path]
+            component_configuration.id,
+            [item[0] for item in path],
         )
         participant_quantity = (
             AdditionalData.objects.filter(
@@ -5854,7 +5885,7 @@ def get_data_collections_from_group(group, data_type=None):
                     "icon_class": ICON_CLASS["additional_data"],
                     "description": _("Additional"),
                     "count": participant_quantity,
-                }
+                },
             ]
             if participant_quantity
             else []
@@ -5879,7 +5910,7 @@ def get_data_collections_from_group(group, data_type=None):
                         "icon_class": ICON_CLASS["eeg"],
                         "description": _("EEG"),
                         "count": participant_quantity,
-                    }
+                    },
                 )
         elif component_configuration.component.component_type == "emg":
             participant_quantity = (
@@ -5900,7 +5931,7 @@ def get_data_collections_from_group(group, data_type=None):
                         "icon_class": ICON_CLASS["emg"],
                         "description": _("EMG"),
                         "count": participant_quantity,
-                    }
+                    },
                 )
         elif component_configuration.component.component_type == "tms":
             participant_quantity = (
@@ -5921,7 +5952,7 @@ def get_data_collections_from_group(group, data_type=None):
                         "icon_class": ICON_CLASS["tms"],
                         "description": _("TMS"),
                         "count": participant_quantity,
-                    }
+                    },
                 )
         elif component_configuration.component.component_type == "digital_game_phase":
             participant_quantity = (
@@ -5942,7 +5973,7 @@ def get_data_collections_from_group(group, data_type=None):
                         "icon_class": ICON_CLASS["digital_game_phase"],
                         "description": _("Game"),
                         "count": participant_quantity,
-                    }
+                    },
                 )
         elif component_configuration.component.component_type == "generic_data_collection":
             participant_quantity = (
@@ -5963,7 +5994,7 @@ def get_data_collections_from_group(group, data_type=None):
                         "icon_class": ICON_CLASS["generic_data_collection"],
                         "description": _("Data collection"),
                         "count": participant_quantity,
-                    }
+                    },
                 )
         elif component_configuration.component.component_type == "media_collection":
             participant_quantity = (
@@ -5984,7 +6015,7 @@ def get_data_collections_from_group(group, data_type=None):
                         "icon_class": ICON_CLASS["media_collection"],
                         "description": _("Data collection"),
                         "count": participant_quantity,
-                    }
+                    },
                 )
         elif component_configuration.component.component_type == "questionnaire":
             participant_quantity = (
@@ -6005,7 +6036,7 @@ def get_data_collections_from_group(group, data_type=None):
                         "icon_class": ICON_CLASS["questionnaire"],
                         "description": _("Response"),
                         "count": participant_quantity,
-                    }
+                    },
                 )
 
         data_collections.append(
@@ -6014,7 +6045,7 @@ def get_data_collections_from_group(group, data_type=None):
                 "path": path,
                 "data_list": data_list,
                 "icon_class": ICON_CLASS[component_configuration.component.component_type],
-            }
+            },
         )
     return data_collections
 
@@ -6084,7 +6115,7 @@ def search_subjects(request, group_id, template_name: str = "experiment/search_s
                     classification_of_diseases_list = request.POST.getlist("selected_diagnosis")
 
                     participants_list = participants_list.filter(
-                        medicalrecorddata__diagnosis__classification_of_diseases__in=classification_of_diseases_list
+                        medicalrecorddata__diagnosis__classification_of_diseases__in=classification_of_diseases_list,
                     ).distinct()
 
             # participants that not is in group
@@ -6161,7 +6192,11 @@ def search_subjects(request, group_id, template_name: str = "experiment/search_s
 
 
 def subject_questionnaire_response_start_fill_questionnaire(
-    request, subject_id, group_id, questionnaire_id, list_of_path
+    request,
+    subject_id,
+    group_id,
+    questionnaire_id,
+    list_of_path,
 ):
     questionnaire_response_form = QuestionnaireResponseForm(request.POST)
 
@@ -6223,12 +6258,14 @@ def get_limesurvey_response_url(questionnaire_response) -> str:
 
     questionnaire_lime_survey = Questionnaires()
     token = questionnaire_lime_survey.get_participant_properties(
-        questionnaire.survey.lime_survey_id, questionnaire_response.token_id, "token"
+        questionnaire.survey.lime_survey_id,
+        questionnaire_response.token_id,
+        "token",
     )
 
     questionnaire_lime_survey.release_session_key()
 
-    redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/" "acquisitiondate/%s/subjectid/%s/newtest/Y" % (
+    redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/acquisitiondate/%s/subjectid/%s/newtest/Y" % (
         settings.LIMESURVEY["URL_WEB"],
         questionnaire.survey.lime_survey_id,
         token,
@@ -6275,7 +6312,11 @@ def subject_questionnaire_response_create(
                 redirect_url,
                 questionnaire_response_id,
             ) = subject_questionnaire_response_start_fill_questionnaire(
-                request, subject_id, group_id, questionnaire_id, list_of_path
+                request,
+                subject_id,
+                group_id,
+                questionnaire_id,
+                list_of_path,
             )
 
         if request.POST.get("action") == "send_invite":
@@ -6295,7 +6336,11 @@ def subject_questionnaire_response_create(
                     redirect_url,
                     questionnaire_response_id,
                 ) = subject_questionnaire_response_start_fill_questionnaire(
-                    request, subject_id, group_id, questionnaire_id, list_of_path
+                    request,
+                    subject_id,
+                    group_id,
+                    questionnaire_id,
+                    list_of_path,
                 )
 
                 # TODO: self.update_questionnaire_response()
@@ -6320,7 +6365,7 @@ def subject_questionnaire_response_create(
                         "group_id": group_id,
                         "component_configuration_id": questionnaire_id,
                     },
-                )
+                ),
             )
 
         fail = True if not redirect_url else False
@@ -6348,7 +6393,11 @@ def subject_questionnaire_response_create(
 @login_required
 @permission_required("experiment.add_questionnaireresponse")
 def subject_questionnaire_response_reuse(
-    request, group_id, subject_id, questionnaire_id, patient_questionnaire_response_id
+    request,
+    group_id,
+    subject_id,
+    questionnaire_id,
+    patient_questionnaire_response_id,
 ):
     group = get_object_or_404(Group, id=group_id)
 
@@ -6358,7 +6407,8 @@ def subject_questionnaire_response_reuse(
     check_can_change(request.user, group.experiment.research_project)
 
     patient_questionnaire_response = get_object_or_404(
-        PatientQuestionnaireResponse, id=patient_questionnaire_response_id
+        PatientQuestionnaireResponse,
+        id=patient_questionnaire_response_id,
     )
 
     data_configuration_tree_id = list_data_configuration_tree(questionnaire_id, list_of_path)
@@ -6399,7 +6449,7 @@ def questionnaire_response_edit(
 ):
     questionnaire_response = get_object_or_404(QuestionnaireResponse, id=questionnaire_response_id)
     questionnaire = Questionnaire.objects.get(
-        id=questionnaire_response.data_configuration_tree.component_configuration.component.id
+        id=questionnaire_response.data_configuration_tree.component_configuration.component.id,
     )
     group = questionnaire_response.subject_of_group.group
     subject = questionnaire_response.subject_of_group.subject
@@ -6591,7 +6641,7 @@ def questionnaire_response_view(
 ):
     questionnaire_response = get_object_or_404(QuestionnaireResponse, id=questionnaire_response_id)
     questionnaire = Questionnaire.objects.get(
-        id=questionnaire_response.data_configuration_tree.component_configuration.component.id
+        id=questionnaire_response.data_configuration_tree.component_configuration.component.id,
     )
     group = questionnaire_response.subject_of_group.group
     subject = questionnaire_response.subject_of_group.subject
@@ -6736,7 +6786,8 @@ def subject_questionnaire_view(
 
         # Questionnaire Responses (in the experiment)
         data_configuration_tree_id = list_data_configuration_tree(
-            questionnaire_configuration.id, [item[0] for item in path]
+            questionnaire_configuration.id,
+            [item[0] for item in path],
         )
         questionnaire_responses = QuestionnaireResponse.objects.filter(
             subject_of_group=subject_of_group,
@@ -6749,7 +6800,8 @@ def subject_questionnaire_view(
         questionnaire_responses_with_status = []
         for questionnaire_response in questionnaire_responses:
             properties = surveys.get_participant_properties(
-                questionnaire.survey.lime_survey_id, questionnaire_response.token_id
+                questionnaire.survey.lime_survey_id,
+                questionnaire_response.token_id,
             )
             update_completed_status(
                 questionnaire.survey.lime_survey_id,
@@ -6769,7 +6821,7 @@ def subject_questionnaire_view(
                     if questionnaire_response.is_completed is None
                     else questionnaire_response.is_completed != "N" and questionnaire_response.is_completed != "",
                     "acquisitiondate_updated": acquisitiondate_updated,
-                }
+                },
             )
 
             # saving used tokens by questionnaire
@@ -6787,7 +6839,7 @@ def subject_questionnaire_view(
                 "title": find_questionnaire_name(questionnaire.survey, request.LANGUAGE_CODE)["name"],
                 "path": path,
                 "questionnaire_responses": questionnaire_responses_with_status,
-            }
+            },
         )
 
     # Responses that could be reused
@@ -6801,12 +6853,14 @@ def subject_questionnaire_view(
         )
 
         patient_questionnaire_responses = PatientQuestionnaireResponse.objects.filter(
-            patient=subject_of_group.subject.patient, survey=questionnaire.survey
+            patient=subject_of_group.subject.patient,
+            survey=questionnaire.survey,
         ).exclude(token_id__in=tokens_already_used)
         patient_questionnaire_responses_with_status = []
         for questionnaire_response in patient_questionnaire_responses:
             properties = surveys.get_participant_properties(
-                questionnaire.survey.lime_survey_id, questionnaire_response.token_id
+                questionnaire.survey.lime_survey_id,
+                questionnaire_response.token_id,
             )
             update_completed_status(
                 questionnaire.survey.lime_survey_id,
@@ -6819,7 +6873,7 @@ def subject_questionnaire_view(
                     {
                         "patient_questionnaire_response": questionnaire_response,
                         "completed": True if questionnaire_response.is_completed != "N" else False,
-                    }
+                    },
                 )
         subject_questionnaire["patient_questionnaire_responses"] = patient_questionnaire_responses_with_status
 
@@ -6851,7 +6905,7 @@ def load_questionnaire_data(request, group_id):
     for path_ in list_of_paths:
         questionnaire_configuration = ComponentConfiguration.objects.get(pk=path_[-1][0])
         questionnaire_responses = QuestionnaireResponse.objects.filter(
-            data_configuration_tree__component_configuration=questionnaire_configuration
+            data_configuration_tree__component_configuration=questionnaire_configuration,
         )
         for questionnaire_response in questionnaire_responses:
             questionnaire = get_object_or_404(
@@ -6867,7 +6921,8 @@ def load_questionnaire_data(request, group_id):
         questionnaire_configuration = ComponentConfiguration.objects.get(pk=path_[-1][0])
 
         data_configuration_tree_id = list_data_configuration_tree(
-            questionnaire_configuration.id, [item[0] for item in path_]
+            questionnaire_configuration.id,
+            [item[0] for item in path_],
         )
 
         if not data_configuration_tree_id:
@@ -7021,7 +7076,7 @@ def subject_eeg_view(
                 "eeg_configuration": eeg_configuration,
                 "path": path,
                 "eeg_data_list": eeg_data_list,
-            }
+            },
         )
 
     context = {
@@ -7324,7 +7379,7 @@ def eeg_data_view(
     positions = []
     if hasattr(eeg_data.eeg_setting, "eeg_electrode_layout_setting"):
         for position_worked in eeg_data.electrode_positions.all().order_by(
-            "eeg_electrode_position_setting__eeg_electrode_position__name"
+            "eeg_electrode_position_setting__eeg_electrode_position__name",
         ):
             point_setting = position_worked.eeg_electrode_position_setting.eeg_electrode_position
             positions.append(
@@ -7335,7 +7390,7 @@ def eeg_data_view(
                     "y": point_setting.coordinate_y,
                     "status": True,  # 'status' indicates if the point exist at the DB
                     "worked": position_worked.worked,
-                }
+                },
             )
         if len(positions) > 0:
             image = True
@@ -7344,7 +7399,9 @@ def eeg_data_view(
     sensors_positions_filepath = get_sensors_position(eeg_data)
     if sensors_positions_filepath:
         sensors_positions_relativepath = os.path.join(
-            settings.MEDIA_URL, "temp", os.path.basename(sensors_positions_filepath)
+            settings.MEDIA_URL,
+            "temp",
+            os.path.basename(sensors_positions_filepath),
         )
     else:
         sensors_positions_relativepath = None
@@ -7493,7 +7550,7 @@ def eeg_data_edit(
     image = False
     if hasattr(eeg_data.eeg_setting, "eeg_electrode_layout_setting"):
         for position_status in eeg_data.electrode_positions.all().order_by(
-            "eeg_electrode_position_setting__eeg_electrode_position__name"
+            "eeg_electrode_position_setting__eeg_electrode_position__name",
         ):
             point_setting = position_status.eeg_electrode_position_setting.eeg_electrode_position
             positions.append(
@@ -7505,7 +7562,7 @@ def eeg_data_edit(
                     # 'status' indicates if the point exist at the DB
                     "status": True,
                     "worked": position_status.worked,
-                }
+                },
             )
         if positions.__len__() > 0:
             image = True
@@ -7544,7 +7601,7 @@ def eeg_image_edit(
     positions = []
     if hasattr(eeg_setting, "eeg_electrode_layout_setting"):
         for position_status in eeg_data.electrode_positions.all().order_by(
-            "eeg_electrode_position_setting__eeg_electrode_position__name"
+            "eeg_electrode_position_setting__eeg_electrode_position__name",
         ):
             point_setting = position_status.eeg_electrode_position_setting.eeg_electrode_position
             positions.append(
@@ -7556,7 +7613,7 @@ def eeg_image_edit(
                     # 'status' indicates if the point exist at the DB
                     "status": True,
                     "worked": position_status.worked,
-                }
+                },
             )
 
     if request.method == "POST":
@@ -7684,7 +7741,7 @@ def create_nwb_file(
         "Participant: "
         + subject_of_group.subject.patient.code
         + "; NES experiment: "
-        + clean(eeg_data.subject_of_group.group.experiment.title)
+        + clean(eeg_data.subject_of_group.group.experiment.title),
     )
     # indicate that it's OK to overwrite exting file
     # nwb_file_settings["overwrite"] = True
@@ -7982,7 +8039,9 @@ def get_nwb_eeg_amplifier_impedance_description(eeg_amplifier_setting):
 @login_required
 @permission_required("experiment.change_experiment")
 def eeg_electrode_position_collection_status_change_the_order(
-    request, eeg_electrode_position_collection_status_id, command
+    request,
+    eeg_electrode_position_collection_status_id,
+    command,
 ):
     position_status = get_object_or_404(
         EEGElectrodePositionCollectionStatus,
@@ -8300,7 +8359,7 @@ def subject_tms_view(
                 "tms_configuration": tms_configuration,
                 "path": path,
                 "tms_data_files": tms_data_files,
-            }
+            },
         )
 
     context = {
@@ -8569,7 +8628,8 @@ def subject_digital_game_phase_view(
         digital_game_phase_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
 
         data_configuration_tree_id = list_data_configuration_tree(
-            digital_game_phase_configuration.id, [item[0] for item in path]
+            digital_game_phase_configuration.id,
+            [item[0] for item in path],
         )
 
         digital_game_phase_data_list = DigitalGamePhaseData.objects.filter(
@@ -8582,7 +8642,7 @@ def subject_digital_game_phase_view(
                 "digital_game_phase_configuration": digital_game_phase_configuration,
                 "path": path,
                 "digital_game_phase_data_list": digital_game_phase_data_list,
-            }
+            },
         )
 
     context = {
@@ -8624,7 +8684,8 @@ def subject_digital_game_phase_data_create(
 
             if digital_game_phase_data_form.is_valid():
                 data_configuration_tree_id = list_data_configuration_tree(
-                    digital_game_phase_configuration_id, list_of_path
+                    digital_game_phase_configuration_id,
+                    list_of_path,
                 )
                 if not data_configuration_tree_id:
                     data_configuration_tree_id = create_data_configuration_tree(list_of_path)
@@ -8741,7 +8802,9 @@ def digital_game_phase_data_edit(request, digital_game_phase_data_id):
 
     if request.method == "POST" and request.POST["action"] == "save":
         digital_game_phase_data_form = DigitalGamePhaseDataForm(
-            request.POST, request.FILES, instance=digital_game_phase_data
+            request.POST,
+            request.FILES,
+            instance=digital_game_phase_data,
         )
 
         has_changed = False
@@ -8765,7 +8828,8 @@ def digital_game_phase_data_edit(request, digital_game_phase_data_id):
         for file_to_upload in files_to_upload_list:
             has_changed = True
             digital_game_phase_file = DigitalGamePhaseFile(
-                digital_game_phase_data=digital_game_phase_data, file=file_to_upload
+                digital_game_phase_data=digital_game_phase_data,
+                file=file_to_upload,
             )
             digital_game_phase_file.save()
 
@@ -8836,7 +8900,8 @@ def group_goalkeeper_game_data(request, group_id, template_name: str = "experime
         digital_game_phase_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
 
         data_configuration_tree_id = list_data_configuration_tree(
-            digital_game_phase_configuration.id, [item[0] for item in path]
+            digital_game_phase_configuration.id,
+            [item[0] for item in path],
         )
 
         data_configuration_tree = DataConfigurationTree.objects.filter(id=data_configuration_tree_id).first()
@@ -8852,7 +8917,7 @@ def group_goalkeeper_game_data(request, group_id, template_name: str = "experime
                 "path": path,
                 "data_configuration_tree": data_configuration_tree,
                 "game_and_phase": game_and_phase,
-            }
+            },
         )
 
         if not enable_upload and group.code and game_and_phase and LocalInstitution.get_solo().code:
@@ -8944,7 +9009,7 @@ def create_csv_for_goalkeeper(complete_filename, config, results):
                 result.movementtime,
                 result.decisiontime,
                 config.sequexecuted,
-            ]
+            ],
         )
 
     with open(complete_filename.encode("utf-8"), "w", newline="", encoding="UTF-8") as csv_file:
@@ -8971,7 +9036,8 @@ def load_group_goalkeeper_game_data(request, group_id):
             digital_game_phase_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
 
             data_configuration_tree_id = list_data_configuration_tree(
-                digital_game_phase_configuration.id, [item[0] for item in path]
+                digital_game_phase_configuration.id,
+                [item[0] for item in path],
             )
 
             if data_configuration_tree_id:
@@ -9037,7 +9103,7 @@ def load_group_goalkeeper_game_data(request, group_id):
 
                                         if game == "AQ":
                                             digital_game_phase_data.description = _(
-                                                "Team or structure: %s \nGame code: %s \nParticipant: %s"
+                                                "Team or structure: %s \nGame code: %s \nParticipant: %s",
                                             ) % (
                                                 goalkeeper_game_configuration.soccerteam,
                                                 game,
@@ -9045,7 +9111,7 @@ def load_group_goalkeeper_game_data(request, group_id):
                                             )
                                         else:
                                             digital_game_phase_data.description = _(
-                                                "Team or structure: %s\nGame code: %s\nPhase: %s\nParticipant: %s"
+                                                "Team or structure: %s\nGame code: %s\nPhase: %s\nParticipant: %s",
                                             ) % (
                                                 goalkeeper_game_configuration.soccerteam,
                                                 game,
@@ -9054,7 +9120,8 @@ def load_group_goalkeeper_game_data(request, group_id):
                                             )
 
                                         digital_game_phase_data.file_format = get_object_or_404(
-                                            FileFormat, nes_code="other"
+                                            FileFormat,
+                                            nes_code="other",
                                         )
 
                                         digital_game_phase_data.sequence_used_in_context_tree = (
@@ -9075,13 +9142,10 @@ def load_group_goalkeeper_game_data(request, group_id):
                                             results,
                                         )
 
-                                        with open(complete_file_name, encoding="utf-8") as file:
-                                            file_content = file.read()
-
                                         digital_game_phase_file = DigitalGamePhaseFile(
-                                            digital_game_phase_data=digital_game_phase_data
+                                            digital_game_phase_data=digital_game_phase_data,
                                         )
-                                        digital_game_phase_file.file.save(file_name, ContentFile(file_content))
+                                        digital_game_phase_file.file.save(file_name, ContentFile(complete_file_name))
                                         digital_game_phase_file.save()
 
                                         number_of_imported_data += 1
@@ -9128,7 +9192,8 @@ def subject_generic_data_collection_view(
         generic_data_collection_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
 
         data_configuration_tree_id = list_data_configuration_tree(
-            generic_data_collection_configuration.id, [item[0] for item in path]
+            generic_data_collection_configuration.id,
+            [item[0] for item in path],
         )
 
         generic_data_collection_data_list = GenericDataCollectionData.objects.filter(
@@ -9141,7 +9206,7 @@ def subject_generic_data_collection_view(
                 "generic_data_collection_configuration": generic_data_collection_configuration,
                 "path": path,
                 "generic_data_collection_data_list": generic_data_collection_data_list,
-            }
+            },
         )
 
     context = {
@@ -9175,7 +9240,8 @@ def subject_media_collection_view(
         media_collection_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
 
         data_configuration_tree_id = list_data_configuration_tree(
-            media_collection_configuration.id, [item[0] for item in path]
+            media_collection_configuration.id,
+            [item[0] for item in path],
         )
 
         media_collection_data_list = MediaCollectionData.objects.filter(
@@ -9188,7 +9254,7 @@ def subject_media_collection_view(
                 "media_collection_configuration": media_collection_configuration,
                 "path": path,
                 "media_collection_data_list": media_collection_data_list,
-            }
+            },
         )
 
     context = {
@@ -9230,7 +9296,8 @@ def subject_media_collection_data_create(
 
             if media_collection_data_form.is_valid():
                 data_configuration_tree_id = list_data_configuration_tree(
-                    media_collection_configuration_id, list_of_path
+                    media_collection_configuration_id,
+                    list_of_path,
                 )
                 if not data_configuration_tree_id:
                     data_configuration_tree_id = create_data_configuration_tree(list_of_path)
@@ -9349,7 +9416,8 @@ def subject_generic_data_collection_data_create(
     check_can_change(request.user, group.experiment.research_project)
 
     generic_data_collection_configuration = get_object_or_404(
-        ComponentConfiguration, id=generic_data_collection_configuration_id
+        ComponentConfiguration,
+        id=generic_data_collection_configuration_id,
     )
 
     redirect_url = None
@@ -9363,7 +9431,8 @@ def subject_generic_data_collection_data_create(
 
             if generic_data_collection_data_form.is_valid():
                 data_configuration_tree_id = list_data_configuration_tree(
-                    generic_data_collection_configuration_id, list_of_path
+                    generic_data_collection_configuration_id,
+                    list_of_path,
                 )
                 if not data_configuration_tree_id:
                     data_configuration_tree_id = create_data_configuration_tree(list_of_path)
@@ -9426,7 +9495,8 @@ def generic_data_collection_data_view(
     generic_data_collection_data = get_object_or_404(GenericDataCollectionData, pk=generic_data_collection_data_id)
 
     generic_data_collection_data_form = GenericDataCollectionDataForm(
-        request.POST or None, instance=generic_data_collection_data
+        request.POST or None,
+        instance=generic_data_collection_data,
     )
 
     for field in generic_data_collection_data_form.fields:
@@ -9483,7 +9553,9 @@ def generic_data_collection_data_edit(request, generic_data_collection_data_id):
 
     if request.method == "POST" and request.POST["action"] == "save":
         generic_data_collection_data_form = GenericDataCollectionDataForm(
-            request.POST, request.FILES, instance=generic_data_collection_data
+            request.POST,
+            request.FILES,
+            instance=generic_data_collection_data,
         )
 
         has_changed = False
@@ -9652,7 +9724,8 @@ def tms_data_position_setting_view(
             hotspot_form = HotSpotForm(request.POST or None, instance=tms_data.hotspot)
 
             localization_system_selected = get_object_or_404(
-                TMSLocalizationSystem, pk=tms_data.hotspot.tms_localization_system_id
+                TMSLocalizationSystem,
+                pk=tms_data.hotspot.tms_localization_system_id,
             )
 
         else:
@@ -9777,7 +9850,7 @@ def data_collection_manage(
             if data_type == "questionnaire":
                 if (
                     Questionnaire.objects.get(
-                        id=ComponentConfiguration.objects.get(id=step_to_transfer["path"][-1][0]).component_id
+                        id=ComponentConfiguration.objects.get(id=step_to_transfer["path"][-1][0]).component_id,
                     ).survey
                     != origin_survey
                 ):
@@ -9795,7 +9868,7 @@ def data_collection_manage(
                 if checkbox_name in request.POST and request.POST[checkbox_name] == "on":
                     if data_type == "questionnaire":
                         questionnaire = Questionnaire.objects.get(
-                            id=data_collection.data_configuration_tree.component_configuration.component_id
+                            id=data_collection.data_configuration_tree.component_configuration.component_id,
                         )
                         has_changed = delete_questionnaire_response(questionnaire, data_collection)
 
@@ -9909,7 +9982,7 @@ def subject_emg_view(
                 "emg_configuration": emg_configuration,
                 "path": path,
                 "emg_data_list": emg_data_list,
-            }
+            },
         )
 
     context = {
@@ -10134,7 +10207,8 @@ def subject_additional_data_view(
 
     # First element of the list is associated to the whole experimental protocol
     subject_step_data_query = SubjectStepData.objects.filter(
-        subject_of_group=subject_of_group, data_configuration_tree=None
+        subject_of_group=subject_of_group,
+        data_configuration_tree=None,
     )
     data_collections = [
         {
@@ -10142,10 +10216,11 @@ def subject_additional_data_view(
             "path": None,
             "subject_step_data": subject_step_data_query[0] if subject_step_data_query else None,
             "additional_data_list": AdditionalData.objects.filter(
-                subject_of_group=subject_of_group, data_configuration_tree=None
+                subject_of_group=subject_of_group,
+                data_configuration_tree=None,
             ),
             "icon_class": ICON_CLASS["experimental_protocol"],
-        }
+        },
     ]
 
     list_of_paths = create_list_of_trees(group.experimental_protocol, None)
@@ -10154,7 +10229,8 @@ def subject_additional_data_view(
         component_configuration = ComponentConfiguration.objects.get(pk=path[-1][0])
 
         data_configuration_tree_id = list_data_configuration_tree(
-            component_configuration.id, [item[0] for item in path]
+            component_configuration.id,
+            [item[0] for item in path],
         )
 
         subject_step_data_query = SubjectStepData.objects.filter(
@@ -10176,7 +10252,7 @@ def subject_additional_data_view(
                 "subject_step_data": subject_step_data_query[0] if subject_step_data_query else None,
                 "additional_data_list": additional_data_list,
                 "icon_class": ICON_CLASS[component_configuration.component.component_type],
-            }
+            },
         )
 
     context = {
@@ -10290,7 +10366,7 @@ def get_subgraph(tree, node_identifier=""):
                     + component.identification
                     + " ("
                     + get_component_name(component.component_type)
-                    + ")"
+                    + ")",
                 ),
                 style="filled",
                 fillcolor=color_node,
@@ -10425,7 +10501,7 @@ def get_block_tree(component, language_code=None, numeration=""):
                     "component_configuration_attributes": component_configuration_attributes,
                     "component": component_info,
                     "id": configuration.id,
-                }
+                },
             )
             counter += 1
 
@@ -10540,8 +10616,8 @@ def get_component_configuration_attributes(configuration):
         {
             _("Number of repetitions"): configuration.number_of_repetitions
             if configuration.number_of_repetitions
-            else _("Unlimited")
-        }
+            else _("Unlimited"),
+        },
     )
 
     if configuration.interval_between_repetitions_value:
@@ -10550,10 +10626,10 @@ def get_component_configuration_attributes(configuration):
             attributes.append({_("Interval between repetitions unit"): configuration.interval_between_repetitions_unit})
     attributes.append({_("Order"): configuration.order})
     attributes.append(
-        {_("Position in the set of steps "): _("Random") if configuration.random_position else _("Fixed")}
+        {_("Position in the set of steps "): _("Random") if configuration.random_position else _("Fixed")},
     )
     attributes.append(
-        {_("Requires start and end datetime"): _("Yes") if configuration.requires_start_and_end_datetime else _("No")}
+        {_("Requires start and end datetime"): _("Yes") if configuration.requires_start_and_end_datetime else _("No")},
     )
 
     return attributes
@@ -10607,7 +10683,8 @@ def subject_additional_data_create(
                 files_to_upload_list = request.FILES.getlist("additional_data_files")
                 for file_to_upload in files_to_upload_list:
                     additional_data_file = AdditionalDataFile(
-                        additional_data=additional_data_added, file=file_to_upload
+                        additional_data=additional_data_added,
+                        file=file_to_upload,
                     )
                     additional_data_file.save()
 
@@ -10881,7 +10958,7 @@ def set_worked_positions(request):
     json_response.append(
         {
             "new": 128,
-        }
+        },
     )
     return HttpResponse(json.dumps(json_response), content_type=JsonResponse)
 
@@ -11038,7 +11115,7 @@ def component_list(request, experiment_id, template_name: str = "experiment/comp
                 component,
                 component.get_component_type_display(),
                 component.identification,
-            )
+            ),
         )
 
     temp_list_of_tuples.sort(key=itemgetter(1, 2))
@@ -11265,7 +11342,7 @@ def component_create(request, experiment_id, component_type):
             {
                 "sid": questionnaire.lime_survey_id,
                 "name": find_questionnaire_name(questionnaire, request.LANGUAGE_CODE)["name"],
-            }
+            },
         )
 
     context = {
@@ -11309,7 +11386,7 @@ def create_list_of_breadcrumbs(list_of_ids_of_components_and_configurations):
                         view_name,
                         args=(DELIMITER.join(list_of_ids_of_components_and_configurations[: idx + 1]),),
                     ),
-                }
+                },
             )
 
     return list_of_breadcrumbs
@@ -11551,7 +11628,9 @@ def access_objects_for_view_and_update(request, path_of_the_components, updating
 
 
 def remove_component_and_related_configurations(
-    component, list_of_ids_of_components_and_configurations, path_of_the_components
+    component,
+    list_of_ids_of_components_and_configurations,
+    path_of_the_components,
 ):
     # Before removing anything, we need to know where we should redirect to.
 
@@ -11681,7 +11760,7 @@ def get_uses_of_step_with_data(experiment):
     steps_questionnaire = [
         item["data_configuration_tree__component_configuration"]
         for item in QuestionnaireResponse.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11690,7 +11769,7 @@ def get_uses_of_step_with_data(experiment):
     steps_eeg = [
         item["data_configuration_tree__component_configuration"]
         for item in EEGData.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11699,7 +11778,7 @@ def get_uses_of_step_with_data(experiment):
     steps_emg = [
         item["data_configuration_tree__component_configuration"]
         for item in EMGData.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11708,7 +11787,7 @@ def get_uses_of_step_with_data(experiment):
     steps_tms = [
         item["data_configuration_tree__component_configuration"]
         for item in TMSData.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11717,7 +11796,7 @@ def get_uses_of_step_with_data(experiment):
     steps_goalkeeper_game = [
         item["data_configuration_tree__component_configuration"]
         for item in DigitalGamePhaseData.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11726,7 +11805,7 @@ def get_uses_of_step_with_data(experiment):
     steps_additional_data = [
         item["data_configuration_tree__component_configuration"]
         for item in AdditionalData.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11735,7 +11814,7 @@ def get_uses_of_step_with_data(experiment):
     steps_generic_data_collection = [
         item["data_configuration_tree__component_configuration"]
         for item in GenericDataCollectionData.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11744,7 +11823,7 @@ def get_uses_of_step_with_data(experiment):
     steps_media_collection = [
         item["data_configuration_tree__component_configuration"]
         for item in MediaCollectionData.objects.filter(
-            data_configuration_tree__component_configuration__component__experiment=experiment
+            data_configuration_tree__component_configuration__component__experiment=experiment,
         )
         .values("data_configuration_tree__component_configuration")
         .distinct()
@@ -11779,7 +11858,7 @@ def clone_electrode_positions(old_eeg_data, orig_and_clone):
         eepcs.pk = None
         new_eeg_data = EEGData.objects.get(pk=orig_and_clone["eeg_data"][old_eeg_data.id])
         new_eeg_electrode_position_setting = EEGElectrodePositionSetting.objects.get(
-            pk=orig_and_clone["eeg_electrode_position_setting"][eepcs.eeg_electrode_position_setting.id]
+            pk=orig_and_clone["eeg_electrode_position_setting"][eepcs.eeg_electrode_position_setting.id],
         )
         eepcs.eeg_data = new_eeg_data
         eepcs.eeg_electrode_position_setting = new_eeg_electrode_position_setting
@@ -11792,10 +11871,10 @@ def clone_eeg_data(eeg_data, orig_and_clone):
     eeg_data.pk = None
     new_eeg_setting = EEGSetting.objects.get(pk=orig_and_clone["eeg_setting"][eeg_data.eeg_setting.id])
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][eeg_data.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][eeg_data.subject_of_group.id],
     )
     new_data_configuration_tree = DataConfigurationTree.objects.get(
-        pk=orig_and_clone["dct"][eeg_data.data_configuration_tree.id]
+        pk=orig_and_clone["dct"][eeg_data.data_configuration_tree.id],
     )
     eeg_data.eeg_setting = new_eeg_setting
     eeg_data.subject_of_group = new_subject_of_group
@@ -11825,10 +11904,10 @@ def clone_emg_data(emg_data, orig_and_clone):
     emg_data.pk = None
     new_emg_setting = EMGSetting.objects.get(pk=orig_and_clone["emg_setting"][emg_data.emg_setting.id])
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][emg_data.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][emg_data.subject_of_group.id],
     )
     new_data_configuration_tree = DataConfigurationTree.objects.get(
-        pk=orig_and_clone["dct"][emg_data.data_configuration_tree.id]
+        pk=orig_and_clone["dct"][emg_data.data_configuration_tree.id],
     )
     emg_data.emg_setting = new_emg_setting
     emg_data.subject_of_group = new_subject_of_group
@@ -11853,11 +11932,11 @@ def clone_additional_data(additional_data, orig_and_clone):
     old_additional_data_id = additional_data.id
     additional_data.pk = None
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][additional_data.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][additional_data.subject_of_group.id],
     )
     if additional_data.data_configuration_tree:
         new_data_configuration_tree = DataConfigurationTree.objects.get(
-            pk=orig_and_clone["dct"][additional_data.data_configuration_tree.id]
+            pk=orig_and_clone["dct"][additional_data.data_configuration_tree.id],
         )
     else:
         new_data_configuration_tree = None
@@ -11870,7 +11949,7 @@ def clone_additional_data(additional_data, orig_and_clone):
 def clone_additional_data_file(additional_data_file, orig_and_clone):
     additional_data_file.pk = None
     new_additional_data = AdditionalData.objects.get(
-        pk=orig_and_clone["additional_data"][additional_data_file.additional_data.id]
+        pk=orig_and_clone["additional_data"][additional_data_file.additional_data.id],
     )
     additional_data_file.additional_data = new_additional_data
     f = open(os.path.join(settings.MEDIA_ROOT, additional_data_file.file.name), "rb")
@@ -11884,10 +11963,10 @@ def clone_digital_game_phase_data(dgp_data, orig_and_clone):
     old_dgp_data_id = dgp_data.id
     dgp_data.pk = None
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][dgp_data.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][dgp_data.subject_of_group.id],
     )
     new_data_configuration_tree = DataConfigurationTree.objects.get(
-        pk=orig_and_clone["dct"][dgp_data.data_configuration_tree.id]
+        pk=orig_and_clone["dct"][dgp_data.data_configuration_tree.id],
     )
     dgp_data.subject_of_group = new_subject_of_group
     dgp_data.data_configuration_tree = new_data_configuration_tree
@@ -11898,7 +11977,7 @@ def clone_digital_game_phase_data(dgp_data, orig_and_clone):
 def clone_digital_game_phase_file(dgp_file, orig_and_clone):
     dgp_file.pk = None
     new_dgp_data = DigitalGamePhaseData.objects.get(
-        pk=orig_and_clone["digital_game_phase_data"][dgp_file.digital_game_phase_data.id]
+        pk=orig_and_clone["digital_game_phase_data"][dgp_file.digital_game_phase_data.id],
     )
     dgp_file.digital_game_phase_data = new_dgp_data
     f = open(os.path.join(settings.MEDIA_ROOT, dgp_file.file.name), "rb")
@@ -11912,10 +11991,10 @@ def clone_generic_data_collection_data(gdc_data, orig_and_clone):
     old_gdc_data_id = gdc_data.id
     gdc_data.pk = None
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][gdc_data.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][gdc_data.subject_of_group.id],
     )
     new_data_configuration_tree = DataConfigurationTree.objects.get(
-        pk=orig_and_clone["dct"][gdc_data.data_configuration_tree.id]
+        pk=orig_and_clone["dct"][gdc_data.data_configuration_tree.id],
     )
     gdc_data.subject_of_group = new_subject_of_group
     gdc_data.data_configuration_tree = new_data_configuration_tree
@@ -11926,7 +12005,7 @@ def clone_generic_data_collection_data(gdc_data, orig_and_clone):
 def clone_generic_data_collection_file(gdc_file, orig_and_clone):
     gdc_file.pk = None
     new_gdc_data = GenericDataCollectionData.objects.get(
-        pk=orig_and_clone["generic_data_collection_data"][gdc_file.generic_data_collection_data.id]
+        pk=orig_and_clone["generic_data_collection_data"][gdc_file.generic_data_collection_data.id],
     )
     gdc_file.generic_data_collection_data = new_gdc_data
     f = open(os.path.join(settings.MEDIA_ROOT, gdc_file.file.name), "rb")
@@ -11940,10 +12019,10 @@ def clone_media_collection_data(gdc_data, orig_and_clone):
     old_gdc_data_id = gdc_data.id
     gdc_data.pk = None
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][gdc_data.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][gdc_data.subject_of_group.id],
     )
     new_data_configuration_tree = DataConfigurationTree.objects.get(
-        pk=orig_and_clone["dct"][gdc_data.data_configuration_tree.id]
+        pk=orig_and_clone["dct"][gdc_data.data_configuration_tree.id],
     )
     gdc_data.subject_of_group = new_subject_of_group
     gdc_data.data_configuration_tree = new_data_configuration_tree
@@ -11954,7 +12033,7 @@ def clone_media_collection_data(gdc_data, orig_and_clone):
 def clone_media_collection_file(gdc_file, orig_and_clone):
     gdc_file.pk = None
     new_gdc_data = MediaCollectionData.objects.get(
-        pk=orig_and_clone["media_collection_data"][gdc_file.media_collection_data.id]
+        pk=orig_and_clone["media_collection_data"][gdc_file.media_collection_data.id],
     )
     gdc_file.media_collection_data = new_gdc_data
     f = open(os.path.join(settings.MEDIA_ROOT, gdc_file.file.name), "rb")
@@ -12002,10 +12081,10 @@ def clone_tms_data(tms_data, orig_and_clone):
     tms_data.pk = None
     new_tms_setting = TMSSetting.objects.get(pk=orig_and_clone["tms_setting"][tms_data.tms_setting.id])
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][tms_data.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][tms_data.subject_of_group.id],
     )
     new_data_configuration_tree = DataConfigurationTree.objects.get(
-        pk=orig_and_clone["dct"][tms_data.data_configuration_tree.id]
+        pk=orig_and_clone["dct"][tms_data.data_configuration_tree.id],
     )
     tms_data.tms_setting = new_tms_setting
     tms_data.subject_of_group = new_subject_of_group
@@ -12022,10 +12101,10 @@ def clone_tms_data(tms_data, orig_and_clone):
 def clone_questionnaire_response_data(q_response, orig_and_clone):
     q_response.pk = None
     new_subject_of_group = SubjectOfGroup.objects.get(
-        pk=orig_and_clone["subject_of_group"][q_response.subject_of_group.id]
+        pk=orig_and_clone["subject_of_group"][q_response.subject_of_group.id],
     )
     new_data_configuration_tree = DataConfigurationTree.objects.get(
-        pk=orig_and_clone["dct"][q_response.data_configuration_tree.id]
+        pk=orig_and_clone["dct"][q_response.data_configuration_tree.id],
     )
     q_response.subject_of_group = new_subject_of_group
     q_response.data_configuration_tree = new_data_configuration_tree
@@ -12091,7 +12170,7 @@ def copy_experiment(experiment, copy_data_collection=False):
 
     # component configuration
     for component_configuration in ComponentConfiguration.objects.filter(
-        component_id__experiment_id=experiment_id
+        component_id__experiment_id=experiment_id,
     ).order_by("parent_id", "order"):
         old_component_id = component_configuration.component_id
         parent_id = component_configuration.parent_id
@@ -12146,7 +12225,7 @@ def copy_experiment(experiment, copy_data_collection=False):
         # TODO: 2) explain that orig_and_clone is modified in method
         dct_new_list = []
         for data_configuration_tree in DataConfigurationTree.objects.filter(
-            component_configuration_id__component_id__experiment_id=experiment_id
+            component_configuration_id__component_id__experiment_id=experiment_id,
         ):
             dct_new_list.append(clone_data_configuration_tree(data_configuration_tree, orig_and_clone))
         for dct in dct_new_list:
@@ -12168,47 +12247,47 @@ def copy_experiment(experiment, copy_data_collection=False):
             clone_emg_file(emg_file, orig_and_clone)
         # additional_data
         for additional_data in AdditionalData.objects.filter(
-            subject_of_group_id__group_id__experiment_id=experiment_id
+            subject_of_group_id__group_id__experiment_id=experiment_id,
         ):
             clone_additional_data(additional_data, orig_and_clone)
         # additional_data_file
         for additional_data_file in AdditionalDataFile.objects.filter(
-            additional_data_id__subject_of_group_id__group_id__experiment_id=experiment_id
+            additional_data_id__subject_of_group_id__group_id__experiment_id=experiment_id,
         ):
             clone_additional_data_file(additional_data_file, orig_and_clone)
         # digital_game_phase_data
         for digital_game_phase_data in DigitalGamePhaseData.objects.filter(
-            data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id
+            data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id,
         ):
             clone_digital_game_phase_data(digital_game_phase_data, orig_and_clone)
         # digital_game_phase_file
         for digital_game_phase_file in DigitalGamePhaseFile.objects.filter(
-            digital_game_phase_data_id__data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id
+            digital_game_phase_data_id__data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id,
         ):
             clone_digital_game_phase_file(digital_game_phase_file, orig_and_clone)
         # generic_data_collection_data
         for generic_data_collection_data in GenericDataCollectionData.objects.filter(
-            data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id
+            data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id,
         ):
             clone_generic_data_collection_data(generic_data_collection_data, orig_and_clone)
         # generic_data_collection_file
         for generic_data_collection_file in GenericDataCollectionFile.objects.filter(
-            generic_data_collection_data_id__data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id
+            generic_data_collection_data_id__data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id,
         ):
             clone_generic_data_collection_file(generic_data_collection_file, orig_and_clone)
         # media_collection_data
         for media_collection_data in MediaCollectionData.objects.filter(
-            data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id
+            data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id,
         ):
             clone_media_collection_data(media_collection_data, orig_and_clone)
         # media_collection_file
         for media_collection_file in MediaCollectionFile.objects.filter(
-            media_collection_data_id__data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id
+            media_collection_data_id__data_configuration_tree_id__component_configuration_id__component_id__experiment_id=experiment_id,
         ):
             clone_media_collection_file(media_collection_file, orig_and_clone)
         # component_additional_file
         for component_additional_file in ComponentAdditionalFile.objects.filter(
-            component_id__experiment_id=experiment_id
+            component_id__experiment_id=experiment_id,
         ):
             clone_component_additional_file(component_additional_file, orig_and_clone)
         # tms_data
@@ -12217,7 +12296,7 @@ def copy_experiment(experiment, copy_data_collection=False):
 
         # questionnaire_response_data
         for questionnaire_response_data in QuestionnaireResponse.objects.filter(
-            subject_of_group_id__group_id__experiment_id=experiment_id
+            subject_of_group_id__group_id__experiment_id=experiment_id,
         ):
             clone_questionnaire_response_data(questionnaire_response_data, orig_and_clone)
 
@@ -12237,7 +12316,7 @@ def copy_eeg_setting(eeg_setting, new_experiment, orig_and_clone):
         new_eeg_electrode_layout_setting.save()
 
         for position_setting in EEGElectrodePositionSetting.objects.filter(
-            eeg_electrode_layout_setting_id=eeg_setting_id
+            eeg_electrode_layout_setting_id=eeg_setting_id,
         ):
             old_position_setting_id = position_setting.id
             new_position_setting = position_setting
@@ -12310,10 +12389,11 @@ def copy_emg_setting(emg_setting, new_experiment):
 
             # EMGPreamplifierFilterSetting
             if EMGPreamplifierFilterSetting.objects.filter(
-                emg_preamplifier_filter_setting_id=emg_electrode_setting_id
+                emg_preamplifier_filter_setting_id=emg_electrode_setting_id,
             ).exists():
                 new_emg_preamplifier_filter_setting = get_object_or_404(
-                    EMGPreamplifierFilterSetting, pk=emg_electrode_setting_id
+                    EMGPreamplifierFilterSetting,
+                    pk=emg_electrode_setting_id,
                 )
                 new_emg_preamplifier_filter_setting.pk = None
                 new_emg_preamplifier_filter_setting.emg_preamplifier_filter_setting = new_emg_preamplifier_setting
@@ -12336,7 +12416,8 @@ def copy_emg_setting(emg_setting, new_experiment):
         # EMGElectrodePlacementSetting
         if EMGElectrodePlacementSetting.objects.filter(emg_electrode_setting_id=emg_electrode_setting_id).exists():
             new_emg_electrode_placement_setting = get_object_or_404(
-                EMGElectrodePlacementSetting, pk=emg_electrode_setting_id
+                EMGElectrodePlacementSetting,
+                pk=emg_electrode_setting_id,
             )
             new_emg_electrode_placement_setting.pk = None
             new_emg_electrode_placement_setting.emg_electrode_setting_id = new_emg_electrode_setting.id
@@ -12639,7 +12720,7 @@ def sort_without_using_order(configuration_list_of_random_components):
                 cc.component.get_component_type_display(),
                 cc.component.identification,
                 (cc.name if cc.name else ""),
-            )
+            ),
         )
 
     temp_list_of_tuples.sort(key=itemgetter(1, 2, 3))
@@ -12702,7 +12783,7 @@ def create_configuration_list_of_random_components(block):
     if block.type == "sequence":
         # As it is not possible to sort_by get_component_type_display, filter without sorting and sort later.
         configuration_list_of_random_components = sort_without_using_order(
-            ComponentConfiguration.objects.filter(parent=block, random_position=True)
+            ComponentConfiguration.objects.filter(parent=block, random_position=True),
         )
     else:
         configuration_list_of_random_components = []
@@ -12840,7 +12921,9 @@ def component_update(request, path_of_the_components):
                         if component_type == "stimulus":
                             stimulus = get_object_or_404(Stimulus, pk=component.id)
                             specific_form: StimulusForm = StimulusForm(
-                                request.POST or None, request.FILES, instance=stimulus
+                                request.POST or None,
+                                request.FILES,
+                                instance=stimulus,
                             )
 
                         # Only save if there was a change.
@@ -13071,7 +13154,8 @@ def component_add_new(request, path_of_the_components, component_type):
 
     if not is_configuring_new_experimental_protocol:
         number_of_uses_form = NumberOfUsesToInsertForm(
-            request.POST or None, initial={"number_of_uses_to_insert": number_of_uses}
+            request.POST or None,
+            initial={"number_of_uses_to_insert": number_of_uses},
         )
 
     questionnaires_list = []
@@ -13257,7 +13341,8 @@ def component_reuse(request, path_of_the_components, component_id):
 
     if not is_configuring_new_experimental_protocol:
         number_of_uses_form = NumberOfUsesToInsertForm(
-            request.POST or None, initial={"number_of_uses_to_insert": number_of_uses}
+            request.POST or None,
+            initial={"number_of_uses_to_insert": number_of_uses},
         )
 
     questionnaire_id = None
@@ -13452,7 +13537,8 @@ def eeg_electrode_localization_system_test(
 ):
     localization_system = get_object_or_404(EEGElectrodeLocalizationSystem, pk=eeg_electrode_localization_system_id)
     localization_system_form = EEGElectrodeLocalizationSystemRegisterForm(
-        request.POST or None, instance=localization_system
+        request.POST or None,
+        instance=localization_system,
     )
 
     for field in localization_system_form.fields:
@@ -13472,7 +13558,7 @@ def eeg_electrode_position_change_the_order(request, eeg_electrode_position_id, 
     eeg_electrode_position = get_object_or_404(EEGElectrodePosition, pk=eeg_electrode_position_id)
 
     all_positions = EEGElectrodePosition.objects.filter(
-        eeg_electrode_localization_system=eeg_electrode_position.eeg_electrode_localization_system
+        eeg_electrode_localization_system=eeg_electrode_position.eeg_electrode_localization_system,
     )
 
     if command == "down":
@@ -13557,7 +13643,8 @@ def eeg_electrode_localization_system_view(
 ):
     localization_system = get_object_or_404(EEGElectrodeLocalizationSystem, pk=eeg_electrode_localization_system_id)
     localization_system_form = EEGElectrodeLocalizationSystemRegisterForm(
-        request.POST or None, instance=localization_system
+        request.POST or None,
+        instance=localization_system,
     )
 
     for field in localization_system_form.fields:
@@ -13607,13 +13694,16 @@ def eeg_electrode_localization_system_update(
 ):
     localization_system = get_object_or_404(EEGElectrodeLocalizationSystem, pk=eeg_electrode_localization_system_id)
     localization_system_form = EEGElectrodeLocalizationSystemRegisterForm(
-        request.POST or None, instance=localization_system
+        request.POST or None,
+        instance=localization_system,
     )
 
     if request.method == "POST":
         if request.POST["action"] == "save":
             localization_system_form = EEGElectrodeLocalizationSystemRegisterForm(
-                request.POST, request.FILES, instance=localization_system
+                request.POST,
+                request.FILES,
+                instance=localization_system,
             )
 
             if localization_system_form.is_valid():
@@ -13665,7 +13755,7 @@ def eeg_electrode_coordinates_create(
                 "delete": False,
                 # 'update' indicates if this point will be updated
                 "update": False,
-            }
+            },
         )
 
     if request.method == "POST":
@@ -13955,7 +14045,8 @@ def emg_setting_digital_filter(
         emg_digital_filter_setting = EMGDigitalFilterSetting.objects.get(emg_setting=emg_setting)
 
         emg_digital_filter_setting_form = EMGDigitalFilterSettingForm(
-            request.POST or None, instance=emg_digital_filter_setting
+            request.POST or None,
+            instance=emg_digital_filter_setting,
         )
 
         filter_selected = emg_digital_filter_setting.filter_type
@@ -14008,7 +14099,8 @@ def emg_setting_digital_filter_edit(
 
     emg_digital_filter_setting = emg_setting.emg_digital_filter_setting
     emg_digital_filter_setting_form = EMGDigitalFilterSettingForm(
-        request.POST or None, instance=emg_digital_filter_setting
+        request.POST or None,
+        instance=emg_digital_filter_setting,
     )
 
     filter_selected = emg_digital_filter_setting.filter_type
@@ -14057,7 +14149,8 @@ def emg_setting_ad_converter(
         emg_ad_converter_setting = EMGADConverterSetting.objects.get(emg_setting=emg_setting)
 
         emg_ad_converter_setting_form = EMGADConverterSettingForm(
-            request.POST or None, instance=emg_ad_converter_setting
+            request.POST or None,
+            instance=emg_ad_converter_setting,
         )
 
         emg_ad_converter_selected = emg_ad_converter_setting.ad_converter
@@ -14181,7 +14274,7 @@ def get_anatomical_description_by_placement(request, emg_electrode_type, emg_ele
 @permission_required("experiment.change_experiment")
 def get_json_muscle_side_by_electrode_placement(request, emg_electrode_placement_id):
     muscle_side_list = MuscleSide.objects.filter(
-        muscle__musclesubdivision__emgelectrodeplacement__in=emg_electrode_placement_id
+        muscle__musclesubdivision__emgelectrodeplacement__in=emg_electrode_placement_id,
     )
 
     json_muscle_side = serializers.serialize("json", muscle_side_list)
@@ -14250,7 +14343,7 @@ def get_electrode_placement_by_type(request, electrode_type):
                     "fixation_on_the_skin": fixation_on_the_skin,
                     "reference_electrode": reference_electrode,
                     "clinical_test": clinical_test,
-                }
+                },
             )
 
     return HttpResponse(json.dumps(placements), content_type=JsonResponse)
@@ -14445,14 +14538,16 @@ def emg_electrode_setting_preamplifier(
     creating = False
 
     list_of_manufacturers = Manufacturer.objects.filter(
-        set_of_equipment__equipment_type="amplifier", set_of_equipment__tags__name="EMG"
+        set_of_equipment__equipment_type="amplifier",
+        set_of_equipment__tags__name="EMG",
     ).distinct()
 
     if hasattr(emg_electrode_setting, "emg_preamplifier_setting"):
         emg_preamplifier_setting = EMGPreamplifierSetting.objects.get(emg_electrode_setting=emg_electrode_setting)
 
         emg_preamplifier_setting_form = EMGPreamplifierSettingForm(
-            request.POST or None, instance=emg_preamplifier_setting
+            request.POST or None,
+            instance=emg_preamplifier_setting,
         )
 
         equipment_selected = emg_preamplifier_setting.amplifier
@@ -14461,11 +14556,12 @@ def emg_electrode_setting_preamplifier(
 
         if hasattr(emg_preamplifier_setting, "emg_preamplifier_filter_setting"):
             emg_preamplifier_filter_setting = EMGPreamplifierFilterSetting.objects.get(
-                emg_preamplifier_filter_setting=emg_preamplifier_setting
+                emg_preamplifier_filter_setting=emg_preamplifier_setting,
             )
 
             emg_preamplifier_filter_setting_form = EMGPreamplifierFilterSettingForm(
-                request.POST or None, instance=emg_preamplifier_filter_setting
+                request.POST or None,
+                instance=emg_preamplifier_filter_setting,
             )
 
         else:
@@ -14539,13 +14635,15 @@ def emg_electrode_setting_preamplifier_edit(
     equipment_form = EquipmentForm(request.POST or None, instance=emg_preamplifier_selected)
 
     list_of_manufacturers = Manufacturer.objects.filter(
-        set_of_equipment__equipment_type="amplifier", set_of_equipment__tags__name="EMG"
+        set_of_equipment__equipment_type="amplifier",
+        set_of_equipment__tags__name="EMG",
     ).distinct()
 
     if hasattr(emg_preamplifier_setting, "emg_preamplifier_filter_setting"):
         emg_preamplifier_filter_setting = emg_electrode_setting.emg_preamplifier_setting.emg_preamplifier_filter_setting
         emg_preamplifier_filter_setting_form = EMGPreamplifierFilterSettingForm(
-            request.POST or None, instance=emg_preamplifier_filter_setting
+            request.POST or None,
+            instance=emg_preamplifier_filter_setting,
         )
     else:
         emg_preamplifier_filter_setting_form = EMGPreamplifierFilterSettingForm(request.POST or None)
@@ -14611,7 +14709,8 @@ def emg_electrode_setting_amplifier(
     creating = False
 
     list_of_manufacturers = Manufacturer.objects.filter(
-        set_of_equipment__equipment_type="amplifier", set_of_equipment__tags__name="EMG"
+        set_of_equipment__equipment_type="amplifier",
+        set_of_equipment__tags__name="EMG",
     ).distinct()
 
     if hasattr(emg_electrode_setting, "emg_amplifier_setting"):
@@ -14627,7 +14726,8 @@ def emg_electrode_setting_amplifier(
             emg_analog_filter_setting = EMGAnalogFilterSetting.objects.get(emg_electrode_setting=emg_amplifier_setting)
 
             emg_analog_filter_setting_form = EMGAnalogFilterSettingForm(
-                request.POST or None, instance=emg_analog_filter_setting
+                request.POST or None,
+                instance=emg_analog_filter_setting,
             )
 
         else:
@@ -14701,13 +14801,15 @@ def emg_electrode_setting_amplifier_edit(
     equipment_form = EquipmentForm(request.POST or None, instance=emg_amplifier_selected)
 
     list_of_manufacturers = Manufacturer.objects.filter(
-        set_of_equipment__equipment_type="amplifier", set_of_equipment__tags__name="EMG"
+        set_of_equipment__equipment_type="amplifier",
+        set_of_equipment__tags__name="EMG",
     ).distinct()
 
     if hasattr(emg_amplifier_setting, "emg_analog_filter_setting"):
         emg_analog_filter_setting = emg_electrode_setting.emg_amplifier_setting.emg_analog_filter_setting
         emg_analog_filter_setting_form = EMGAnalogFilterSettingForm(
-            request.POST or None, instance=emg_analog_filter_setting
+            request.POST or None,
+            instance=emg_analog_filter_setting,
         )
     else:
         emg_analog_filter_setting_form = EMGAnalogFilterSettingForm(request.POST or None)
@@ -15095,7 +15197,9 @@ def tms_localization_system_update(
     if request.method == "POST":
         if request.POST["action"] == "save":
             localization_system_form = TMSLocalizationSystemForm(
-                request.POST, request.FILES, instance=localization_system
+                request.POST,
+                request.FILES,
+                instance=localization_system,
             )
 
             if localization_system_form.is_valid():

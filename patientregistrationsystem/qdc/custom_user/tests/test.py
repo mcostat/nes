@@ -154,7 +154,7 @@ class FormUserValidation(TestCase):
             str(messages[0]),
             _(
                 "A researcher with this email address has already been registered before. "
-                "Please contact your system administrator if you want to reactivate this account."
+                "Please contact your system administrator if you want to reactivate this account.",
             ),
         )
         self.assertEqual(User.objects.filter(username="email_registered").count(), 0)
@@ -351,7 +351,7 @@ class FormUserValidation(TestCase):
                 args=[
                     user_to_delete.pk,
                 ],
-            )
+            ),
         )
         request.user = self.user
 

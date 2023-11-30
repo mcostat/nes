@@ -356,7 +356,7 @@ class ObjectsFactory:
         try:
             component.save()
         except IntegrityError:
-            print("Have you remembered to give specific attribute for " "the specific component?")
+            print("Have you remembered to give specific attribute for the specific component?")
 
         return component
 
@@ -492,7 +492,8 @@ class ObjectsFactory:
     @staticmethod
     def create_eeg_electrode_layout_setting(eeg_setting, eeg_electrode_net_system):
         return EEGElectrodeLayoutSetting.objects.create(
-            eeg_setting=eeg_setting, eeg_electrode_net_system=eeg_electrode_net_system
+            eeg_setting=eeg_setting,
+            eeg_electrode_net_system=eeg_electrode_net_system,
         )
 
     @staticmethod
@@ -838,7 +839,9 @@ class ObjectsFactory:
         ObjectsFactory.create_component_configuration(rootcomponent, component3)
         stimulus_type = ObjectsFactory.create_stimulus_type()
         component4 = ObjectsFactory.create_component(
-            experiment, Component.STIMULUS, kwargs={"stimulus_type": stimulus_type}
+            experiment,
+            Component.STIMULUS,
+            kwargs={"stimulus_type": stimulus_type},
         )
         ObjectsFactory.create_component_configuration(rootcomponent, component4)
         component5 = ObjectsFactory.create_component(experiment, Component.TASK)
@@ -898,7 +901,9 @@ class ObjectsFactory:
         medical_record = MedicalRecordData.objects.create(patient=patient, record_responsible=user)
         diagnosis = Diagnosis.objects.create(medical_record_data=medical_record, classification_of_diseases=cid10)
         complementary_exam = ComplementaryExam.objects.create(
-            diagnosis=diagnosis, date=datetime.date.today(), description=fake.text()
+            diagnosis=diagnosis,
+            date=datetime.date.today(),
+            description=fake.text(),
         )
 
         with tempfile.TemporaryDirectory() as tmpdirname:

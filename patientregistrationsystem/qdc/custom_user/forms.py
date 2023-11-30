@@ -28,7 +28,7 @@ class UserForm(ModelForm):
                 "placeholder": _("Type first name"),
                 "oninput": "this.value = this.value.toUpperCase()",
                 "data-maxlength": "150",
-            }
+            },
         ),
     )
     last_name = CharField(
@@ -39,7 +39,7 @@ class UserForm(ModelForm):
                 "placeholder": _("Type last name"),
                 "oninput": "this.value = this.value.toUpperCase()",
                 "data-maxlength": "150",
-            }
+            },
         ),
     )
     email = CharField(
@@ -51,7 +51,7 @@ class UserForm(ModelForm):
                 "id": "id_email",
                 "type": "email",
                 "data-error": _("Invalid e-mail"),
-            }
+            },
         ),
     )
 
@@ -71,10 +71,10 @@ class UserForm(ModelForm):
                     "data-minlength": "5",
                     "data-maxlength": "30",
                     "data-error": _(
-                        "Username must start with a letter and contain only alphanumeric characters (5-30)"
+                        "Username must start with a letter and contain only alphanumeric characters (5-30)",
                     ),
                     "pattern": USERNAME_REGEX,
-                }
+                },
             ),
             "password": PasswordInput(
                 attrs={
@@ -90,7 +90,7 @@ class UserForm(ModelForm):
                     "data-error": _("Password must contain at least a number and a lowercase letter (8-127)"),
                     "pattern": PASSWORD_REGEX,
                     "onkeyup": "passwordForce(); if(beginCheckPassword1)checkPassExt();",
-                }
+                },
             ),
             "groups": CheckboxSelectMultiple(),
         }
@@ -129,7 +129,7 @@ class UserFormUpdate(UserForm):
                 "data-error": _("Password must contain at least a number and a lowercase letter (8-127)"),
                 "pattern": PASSWORD_REGEX,
                 "onkeyup": "passwordForce(); if(beginCheckPassword1)checkPassExt();",
-            }
+            },
         ),
     )
 
@@ -187,7 +187,7 @@ class ResearcherForm(ModelForm):
                     "data-error": _("Only use letters and spaces"),
                     "oninput": "this.value = this.value.toUpperCase()",
                     "data-maxlength": "150",
-                }
+                },
             ),
             "last_name": TextInput(
                 attrs={
@@ -197,7 +197,7 @@ class ResearcherForm(ModelForm):
                     "data-error": _("Only use letters and spaces"),
                     "oninput": "this.value = this.value.toUpperCase()",
                     "data-maxlength": "150",
-                }
+                },
             ),
             "email": TextInput(
                 attrs={
@@ -208,7 +208,7 @@ class ResearcherForm(ModelForm):
                     "id": "id_email",
                     "type": "email",
                     "data-error": _("Invalid e-mail"),
-                }
+                },
             ),
             "citation_name": TextInput(attrs={"class": "form-control", "placeholder": _("Type citation name")}),
         }
@@ -235,13 +235,13 @@ class InstitutionForm(ModelForm):
                     "class": "form-control",
                     "required": "",
                     "maxlength": "150",
-                }
+                },
             ),
             "acronym": TextInput(
                 attrs={
                     "class": "form-control",
                     "maxlength": "30",
-                }
+                },
             ),
             "country": Select(attrs={"class": "form-select"}),
             "parent": Select(attrs={"class": "form-select"}),
