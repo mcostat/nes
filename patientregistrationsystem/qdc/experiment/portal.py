@@ -71,7 +71,7 @@ from .models import (
 )
 
 
-class RestApiClient(object):
+class RestApiClient:
     client: coreapi.Client = None
     schema: Any = None
     active = False

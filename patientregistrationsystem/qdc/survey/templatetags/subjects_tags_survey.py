@@ -1,5 +1,4 @@
 from django import template
-
 from patient.models import Patient
 
 register = template.Library()

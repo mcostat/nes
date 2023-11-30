@@ -1,15 +1,9 @@
-# -*- coding: UTF-8 -*-
-
 from django.contrib.auth import get_user_model
 from django.db import models
 
 
 def get_export_dir(instance, filename):
-    return "export/%(user)s/%(export)s/%(filename)s" % {
-        "user": instance.export.user.id,
-        "export": instance.export.pk,
-        "filename": filename,
-    }
+    return f"export/{instance.export.user.id}/{instance.export.pk}/{filename}"
 
 
 class Export(models.Model):

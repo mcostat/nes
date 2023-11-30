@@ -1,5 +1,5 @@
-# coding=utf-8
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from custom_user.models import Institution, UserProfile
 from django.contrib.auth import get_user_model

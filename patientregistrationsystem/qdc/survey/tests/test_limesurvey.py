@@ -24,11 +24,14 @@ class LimeSurveyAPITest(TestCase):
             "other",
         }
         (
-            session_key,
-            question_id,
-            properties,
-            language,
-        ), kwargs = mockServer.return_value.get_question_properties.call_args
+            (
+                session_key,
+                question_id,
+                properties,
+                language,
+            ),
+            kwargs,
+        ) = mockServer.return_value.get_question_properties.call_args
         self.assertTrue(
             set(question_properties).issubset(properties),
             str(set(question_properties)) + " is not a subset of " + str(set(properties)),

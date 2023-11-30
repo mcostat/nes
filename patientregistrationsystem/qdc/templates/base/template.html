@@ -31,7 +31,6 @@
         {% endcompress %}
 
         {% compress css file base_nes_css %}
-            <link rel="stylesheet" href="{% static "site/bootstrap-5.3.2-dist/css/bootstrap.min.css" %}" charset="utf-8">
             <link rel="stylesheet" href="{% static "site/font-awesome-4.7.0/css/font-awesome.min.css" %}" charset="utf-8">
             <link rel="stylesheet" href="{% static "site/css/nes.css" %}" charset="utf-8">
             <link rel="stylesheet" href="{% static "site/css/breadcrumb.css" %}" charset="utf-8">
@@ -114,7 +113,7 @@
             <div class="row">
                 <div class="col-12 col-lg-3 col-xl-2 mt-0">
                     <nav class="nav nav-pills flex-column flex-sm-row flex-md-row sticky-top my-auto sticky-offset d-lg-block">
-                        <a href="{% url "home" %}" class="nav-link 
+                        <a href="{% url "home" %}" class="nav-link
                             {% block activeContact %}{% endblock activeContact %}
                              ">
                             <span class="fa-fw fa fa-home fa-md"></span>
@@ -122,7 +121,7 @@
                         </a>
 
                         {% if perms.patient.view_patient %}
-                            <a href="/patient/find/" class="nav-link 
+                            <a href="/patient/find/" class="nav-link
                                 {% block activePatient %}{% endblock activePatient %}
                                  " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Add people that participated in the experiments" %}">
                                 <span class="fa-fw fa fa-users fa-md"></span>
@@ -131,7 +130,7 @@
                         {% endif %}
 
                         {% if perms.experiment.view_researchproject %}
-                            <a href="/experiment/research_project/list/" class="nav-link 
+                            <a href="/experiment/research_project/list/" class="nav-link
                                 {% block activeAdvancedResearchProject %}{% endblock activeAdvancedResearchProject %}
                                  " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Add publications" %}">
                                 <span class="fa-fw fa fa-graduation-cap fa-md"></span>
@@ -140,7 +139,7 @@
                         {% endif %}
 
                         {% if perms.experiment.view_researchproject %}
-                            <a href="/experiment/publication/list/" class="nav-link 
+                            <a href="/experiment/publication/list/" class="nav-link
                                 {% block activeAdvancedPublication %}{% endblock activeAdvancedPublication %}
                                  " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Add publications" %}">
                                 <span class="fa-fw fa fa-book fa-md"></span>
@@ -149,7 +148,7 @@
                         {% endif %}
 
                         {% if perms.survey.view_survey %}
-                            <a href="/survey/list/" class="nav-link 
+                            <a href="/survey/list/" class="nav-link
                                 {% block activeAdvancedSurvey %}{% endblock activeAdvancedSurvey %}
                                  " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Add users and institutions to the database" %}">
                                 <span class="fa-fw fa fa-list-alt fa-md"></span>
@@ -158,7 +157,7 @@
                         {% endif %}
 
                         {% if perms.auth.add_user and perms.auth.change_user %}
-                            <a href="/user/list/" class="nav-link 
+                            <a href="/user/list/" class="nav-link
                                 {% block activeUser %}{% endblock activeUser %}
                                  " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Add users and institutions to the database" %}">
                                 <span class="fa-fw fa fa-user fa-md"></span>
@@ -167,7 +166,7 @@
                         {% endif %}
 
                         {% if perms.patient.export_patient or perms.patient.export_questionnaireresponse or perms.patient.export_medicalrecorddata %}
-                            <a href="/export/" class="nav-link 
+                            <a href="/export/" class="nav-link
                                 {% block activeExport %}{% endblock activeExport %}
                                  " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Export your projects" %}">
                                 <span class="fa-fw fa fa-upload fa-md"></span>
@@ -176,7 +175,7 @@
                         {% endif %}
 
                         {% if perms.experiment.register_equipment %}
-                            <a href="/experiment/setup/" class="nav-link 
+                            <a href="/experiment/setup/" class="nav-link
                                 {% block activeSetup %}{% endblock activeSetup %}
                                  " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Here you can setup the equipments used in the projects" %}">
                                 <span class="fa-fw fa fa-pencil fa-md"></span>
@@ -188,7 +187,7 @@
                         {% get_solo 'plugin.RandomForests' as random_forests %}
                     {% endcache %}
                     {% if perms.plugin.can_send_data_to_plugin and random_forests.admission_assessment and random_forests.surgical_evaluation and random_forests.followup_assessment and random_forests.plugin_url %}
-                        <a href={% url "send-to-plugin" %} class="nav-link 
+                        <a href={% url "send-to-plugin" %} class="nav-link
                             {% block activePlugin %}{% endblock activePlugin %}
                              ">
                             <span class="fa-fw fa fa-cloud-upload fa-md"></span>
@@ -196,7 +195,7 @@
                         </a>
                     {% endif %}
 
-                    <a href={% url "useful_links" %} class="nav-link 
+                    <a href={% url "useful_links" %} class="nav-link
                         {% block activeLinks %}{% endblock activeLinks %}
                          " data-bs-toggle="tooltip" data-bs-placement="right" title="{% trans "Useful links of tools" %}">
                         <span class="fa-fw fa fa-link fa-md"></span>

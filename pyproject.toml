@@ -1,2 +1,43 @@
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+]
+ignore = ["F401", "F841"]
+unfixable = ["B"]
+
+
 [tool.black]
 line-length = 120
+include = '\.pyi?$'
+
+
+[tool.isort]
+line_length = 120
+profile = "black"
+combine_as_imports = true
+include_trailing_comma = true
+
+
+[tool.djlint]
+profile = "django"
+format_js = false
+format_css = true
+max_line_length = 200
+max_blank_lines = 1
+use_gitignore = true
+blank_line_after_tag = "endblock,load,extends,include"
+blank_line_before_tag = "load,block,include"
+close_void_tags = false

@@ -1,4 +1,3 @@
-# coding=utf-8
 # from django.shortcuts import render
 
 import csv
@@ -18,15 +17,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from experiment.models import (
-    Block,
-    ComponentConfiguration,
-    Group,
-    Questionnaire,
-    QuestionnaireResponse,
-)
-from patient.models import Patient
-from patient.models import QuestionnaireResponse as PatientQuestionnaireResponse
+from experiment.models import Block, ComponentConfiguration, Group, Questionnaire, QuestionnaireResponse
+from patient.models import Patient, QuestionnaireResponse as PatientQuestionnaireResponse
 from survey.abc_search_engine import Questionnaires
 
 from .forms import SurveyForm

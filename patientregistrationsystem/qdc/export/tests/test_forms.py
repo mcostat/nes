@@ -1,8 +1,6 @@
-# coding=utf-8
 from django.contrib.auth.models import User
 from django.test import TestCase
-
-from export.forms import *
+from export.forms import AgeIntervalForm, DiagnosisSelectionForm, ParticipantsSelectionForm
 from patient.models import Gender, MaritalStatus
 
 USER_USERNAME = "myadmin"
@@ -105,4 +103,5 @@ class DiagnosisSelectionFormValidation(TestCase):
     def test_DiagnosisSelectionForm_is_not_valid(self):
         self.data["description"] = ""
         export = DiagnosisSelectionForm(data=self.data)
+        self.assertFalse(export.is_valid())
         self.assertFalse(export.is_valid())

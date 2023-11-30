@@ -1,5 +1,3 @@
-# coding=utf-8
-
 import re
 from abc import ABC, abstractmethod
 from base64 import b64decode, b64encode
@@ -82,7 +80,7 @@ class ABCSearchEngine(ABC):
         list_survey = self.server.list_surveys(self.session_key, None)
 
         try:
-            survey = next((survey for survey in list_survey if survey["sid"] == sid))
+            survey = next(survey for survey in list_survey if survey["sid"] == sid)
         except StopIteration:
             survey = None
         return survey

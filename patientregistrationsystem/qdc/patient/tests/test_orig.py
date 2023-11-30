@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-
-
 import os
 import shutil
 import sys
@@ -34,9 +32,11 @@ from experiment.models import (
     Experiment,
     Group,
     Questionnaire,
+    QuestionnaireResponse as ExperimentQuestionnaireResponse,
+    ResearchProject,
+    Subject,
+    SubjectOfGroup,
 )
-from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
-from experiment.models import ResearchProject, Subject, SubjectOfGroup
 from faker import Factory
 from patient.management.commands.import_icd import import_classification_of_diseases
 from patient.models import (
@@ -55,10 +55,7 @@ from patient.models import (
     Schooling,
     Telephone,
 )
-from patient.tests.update_english_data import (
-    translate_fixtures_into_english,
-    update_translated_data,
-)
+from patient.tests.update_english_data import translate_fixtures_into_english, update_translated_data
 from patient.validation import CPF
 from patient.views import (
     diagnosis_create,
@@ -356,7 +353,7 @@ class PatientFormValidation(TestCase):
 
         response = self.client.post(reverse(PATIENT_NEW), self.data)
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, "patient_form", "cpf", "CPF " + cpf + _(" is not valid"))
+        self.assertFormError(response.context["patient_form"], "cpf", "CPF " + cpf + _(" is not valid"))
 
     def test_patient_empty_cpf(self):
         """

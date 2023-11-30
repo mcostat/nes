@@ -2,7 +2,6 @@ from xml.etree import ElementTree
 
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.translation.trans_real import activate, deactivate
-
 from patient.models import ClassificationOfDiseases
 
 
@@ -61,7 +60,7 @@ def icd_english_translation(tree):
 
 
 def import_classification_of_diseases(file_name):
-    with open(file_name, "rt", encoding="utf-8") as f:
+    with open(file_name, encoding="utf-8") as f:
         tree = ElementTree.parse(f)
 
     return icd_english_translation(tree)
@@ -78,7 +77,7 @@ class Command(BaseCommand):
             filename_english = options["en"]
             try:
                 import_classification_of_diseases(filename_english)
-            except IOError:
+            except OSError:
                 raise CommandError('Filename "%s" does not exist.' % filename_english)
             except UnicodeDecodeError:
                 raise CommandError('Filename "%s" has incorrect format.' % filename_english)

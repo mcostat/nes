@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 import datetime
 from os import path
 from typing import Any
@@ -1382,7 +1381,7 @@ class SubjectOfGroup(models.Model):
         )
 
     def save(self, *args, **kwargs) -> None:
-        super(SubjectOfGroup, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.group.experiment.save()
 
 
@@ -1392,7 +1391,7 @@ class DataConfigurationTree(models.Model):
     code = models.IntegerField(null=True, blank=True)
 
     def save(self, *args, **kwargs) -> None:
-        super(DataConfigurationTree, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.component_configuration.component.experiment.save()
 
 
@@ -1420,7 +1419,7 @@ class SubjectStepData(models.Model):
     end_time = models.TimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs) -> None:
-        super(SubjectStepData, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.subject_of_group.group.experiment.save()
 
 
@@ -1530,7 +1529,7 @@ class SourceCode(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs) -> None:
-        super(SourceCode, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.experiment.save()
 
     # @property
@@ -1773,7 +1772,10 @@ class GoalkeeperPhase(models.Model):
 
     def __str__(self) -> str:
         if self.phase:
-            return _("%(game) - phase %(phase)") % {"game": self.game.name, "phase": self.phase}
+            return _("%(game) - phase %(phase)") % {
+                "game": self.game.name,
+                "phase": self.phase,
+            }
 
         return self.game.name
 

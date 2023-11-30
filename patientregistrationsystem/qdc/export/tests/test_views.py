@@ -82,12 +82,7 @@ from export.tests.mocks import (
     update_mocks11_full,
 )
 from export.tests.tests_helper import ExportTestCase
-from export.views import (
-    DIAGNOSIS_FIELDS,
-    EXPORT_DIRECTORY,
-    PATIENT_FIELDS,
-    abbreviated_data,
-)
+from export.views import DIAGNOSIS_FIELDS, EXPORT_DIRECTORY, PATIENT_FIELDS, abbreviated_data
 from goodtables import validate
 from patient.tests.test_orig import UtilTests
 from survey.survey_utils import HEADER_EXPLANATION_FIELDS
@@ -2688,7 +2683,7 @@ class ExportFrictionlessDataTest(ExportTestCase):
     @staticmethod
     def _set_validation_for_goodtables(path, heading_type):
         skip_checks = ["duplicate-row"]  # For questionnaire metadata files
-        if heading_type == "full" or "abbreviated":
+        if heading_type == "full" or heading_type == "abbreviated":
             # For questionnaire responses: there is one header repeated for one question type.
             # We don't solve this by now.
             skip_checks.append("duplicate-header")

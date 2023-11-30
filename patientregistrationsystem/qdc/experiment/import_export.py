@@ -885,18 +885,27 @@ class ImportExperiment:
         for limesurvey_id, token_ids in token_ids_survey.items():
             all_participants = ls_interface.find_tokens_by_questionnaire(limesurvey_id)
             if all_participants is None:
-                result = self.LIMESURVEY_ERROR, _("Could not clear all extra survey participants data.")
+                result = (
+                    self.LIMESURVEY_ERROR,
+                    _("Could not clear all extra survey participants data."),
+                )
                 continue
             # TODO (NES-956): don't remove participants of other experiment of this NES.
             for participant in all_participants:
                 if participant["tid"] not in token_ids:
                     status_delete = ls_interface.delete_participants(limesurvey_id, [participant["tid"]])
                     if status_delete is None:
-                        result = self.LIMESURVEY_ERROR, _("Could not clear all extra survey participants data.")
+                        result = (
+                            self.LIMESURVEY_ERROR,
+                            _("Could not clear all extra survey participants data."),
+                        )
                         continue
                     responses = ls_interface.get_responses_by_token(sid=limesurvey_id, token=participant["token"])
                     if responses is None:
-                        result = self.LIMESURVEY_ERROR, _("Could not clear all extra survey participants data.")
+                        result = (
+                            self.LIMESURVEY_ERROR,
+                            _("Could not clear all extra survey participants data."),
+                        )
                         continue
                     responses = QuestionnaireUtils.responses_to_csv(responses)
                     del responses[0]  # First line is the header line
@@ -909,7 +918,10 @@ class ImportExperiment:
                     )
                     status = ls_interface.delete_responses(limesurvey_id, response_ids)
                     if status is None:
-                        result = self.LIMESURVEY_ERROR, _("Could not clear all extra survey participants data.")
+                        result = (
+                            self.LIMESURVEY_ERROR,
+                            _("Could not clear all extra survey participants data."),
+                        )
                     ls_interface = Questionnaires()  # Return to access core RPC
 
         ls_interface.release_session_key()
@@ -936,7 +948,10 @@ class ImportExperiment:
                 token_id = response.token_id
                 token = ls_interface.get_participant_properties(limesurvey_id, token_id, "token")
                 if token is None:
-                    result = self.LIMESURVEY_ERROR, _("Could not update identification questions for all responses.")
+                    result = (
+                        self.LIMESURVEY_ERROR,
+                        _("Could not update identification questions for all responses."),
+                    )
                     continue
                 # TODO (NES-956): get the language. By now put 'en' to test
                 ls_subject_id_column_name = (
@@ -945,8 +960,9 @@ class ImportExperiment:
                     )
                 )
                 if isinstance(ls_subject_id_column_name, tuple):  # Returned error
-                    result = ls_subject_id_column_name[0], _(
-                        "Could not update identification questions for all responses."
+                    result = (
+                        ls_subject_id_column_name[0],
+                        _("Could not update identification questions for all responses."),
                     )
                     continue
                 ls_responsible_id_column_name = (
@@ -955,8 +971,9 @@ class ImportExperiment:
                     )
                 )
                 if isinstance(ls_responsible_id_column_name, tuple):  # Returned error
-                    result = ls_responsible_id_column_name[0], _(
-                        "Could not update identification questions for all responses."
+                    result = (
+                        ls_responsible_id_column_name[0],
+                        _("Could not update identification questions for all responses."),
                     )
                     continue
                 result_update = ls_interface.update_response(
@@ -981,10 +998,13 @@ class ImportExperiment:
         result = 0, ""
         ls_interface = Questionnaires()
         if ls_interface.session_key is None:
-            result = self.LIMESURVEY_ERROR, _(
-                "Could not import survey(s) to LimeSurvey. Only Experiment data was "
-                "imported. You can remove experiment imported and try again. If problem "
-                "persists please contact system administrator"
+            result = (
+                self.LIMESURVEY_ERROR,
+                _(
+                    "Could not import survey(s) to LimeSurvey. Only Experiment data was "
+                    "imported. You can remove experiment imported and try again. If problem "
+                    "persists please contact system administrator"
+                ),
             )
             return result
         limesurvey_ids = []
@@ -1000,11 +1020,14 @@ class ImportExperiment:
                         encoded_string = encoded_string.decode("utf-8")
                         new_ls_id = ls_interface.import_survey(encoded_string)
                         if new_ls_id is None:
-                            result = self.LIMESURVEY_ERROR, _(
-                                "Could not import survey(s) to LimeSurvey. Only "
-                                "Experiment data was imported. You can remove experiment "
-                                "imported and try again. If problem persists please "
-                                "contact system administrator"
+                            result = (
+                                self.LIMESURVEY_ERROR,
+                                _(
+                                    "Could not import survey(s) to LimeSurvey. Only "
+                                    "Experiment data was imported. You can remove experiment "
+                                    "imported and try again. If problem persists please "
+                                    "contact system administrator"
+                                ),
                             )
                             return result
                         survey = Survey.objects.get(lime_survey_id=dummy_ls_id)

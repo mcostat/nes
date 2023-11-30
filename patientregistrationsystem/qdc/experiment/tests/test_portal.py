@@ -2,10 +2,9 @@ import csv
 from io import StringIO
 from unittest.mock import patch
 
+from custom_user.tests.tests_helper import create_user
 from django.contrib.auth.models import Group
 from django.test import TestCase
-
-from custom_user.tests.tests_helper import create_user
 from experiment.models import Component, ScheduleOfSending
 from experiment.portal import (
     send_experiment_researcher_to_portal,
@@ -52,9 +51,12 @@ class PortalAPITest(TestCase):
         }
 
         (
-            api_schema,
-            action_keys,
-        ), kwargs = mockRestApiClientClass.return_value.client.action.call_args
+            (
+                api_schema,
+                action_keys,
+            ),
+            kwargs,
+        ) = mockRestApiClientClass.return_value.client.action.call_args
         self.assertTrue(
             set(kwargs["params"].keys()).issubset(api_fields),
             str(set(kwargs["params"].keys())) + " not in " + str(api_fields),
@@ -74,9 +76,12 @@ class PortalAPITest(TestCase):
         api_fields = {"id", "first_name", "last_name", "email", "citation_name"}
 
         (
-            api_schema,
-            action_keys,
-        ), kwargs = mockRestApiClientClass.return_value.client.action.call_args
+            (
+                api_schema,
+                action_keys,
+            ),
+            kwargs,
+        ) = mockRestApiClientClass.return_value.client.action.call_args
         self.assertTrue(
             set(kwargs["params"].keys()).issubset(api_fields),
             str(set(kwargs["params"].keys())) + " not in " + str(api_fields),
@@ -104,9 +109,12 @@ class PortalAPITest(TestCase):
         }
 
         (
-            api_schema,
-            action_keys,
-        ), kwargs = mockRestApiClientClass.return_value.client.action.call_args
+            (
+                api_schema,
+                action_keys,
+            ),
+            kwargs,
+        ) = mockRestApiClientClass.return_value.client.action.call_args
         self.assertTrue(
             set(kwargs["params"].keys()).issubset(api_fields),
             str(set(kwargs["params"].keys())) + " not in " + str(api_fields),
@@ -183,9 +191,12 @@ class PortalAPITest(TestCase):
 
         # use mockRestApiClientClass to get metadata value that will be sent
         (
-            api_schema,
-            action_keys,
-        ), kwargs = mockRestApiClientClass.return_value.client.action.call_args
+            (
+                api_schema,
+                action_keys,
+            ),
+            kwargs,
+        ) = mockRestApiClientClass.return_value.client.action.call_args
         for field in [item[0] for item in HEADER_EXPLANATION_FIELDS]:
             self.assertIn(field, kwargs["params"]["survey_metadata"])
         survey_metadata = csv.reader(StringIO(kwargs["params"]["survey_metadata"]))

@@ -77,9 +77,7 @@ from experiment.models import (
     FileFormat,
     FilterType,
     GenericDataCollectionFile,
-)
-from experiment.models import Group as ExperimentGroup
-from experiment.models import (
+    Group as ExperimentGroup,
     HotSpot,
     Instruction,
     Keyword,
@@ -766,7 +764,7 @@ class ExportExperimentTest(TestCase):
         file_path = self.experiment.ethics_committee_project_file.name
         self.assertTrue(
             file_path in [subdir for subdir in zipped_file.namelist()],
-            "%s not in %s" % (file_path, zipped_file.namelist()),
+            f"{file_path} not in {zipped_file.namelist()}",
         )
 
         shutil.rmtree(self.TEMP_MEDIA_ROOT)
@@ -778,7 +776,7 @@ class ExportExperimentTest(TestCase):
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertTrue(
                 ExportExperiment.FILE_NAME_JSON in [file for file in zipped_file.namelist()],
-                "%s not in %s" % (ExportExperiment.FILE_NAME_JSON, zipped_file.namelist()),
+                f"{ExportExperiment.FILE_NAME_JSON} not in {zipped_file.namelist()}",
             )
             self.assertEqual(1, len(zipped_file.namelist()))
 
@@ -809,11 +807,11 @@ class ExportExperimentTest(TestCase):
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertTrue(
                 eeg_file.file.name in [subdir for subdir in zipped_file.namelist()],
-                "%s not in %s" % (eeg_file.file.name, zipped_file.namelist()),
+                f"{eeg_file.file.name} not in {zipped_file.namelist()}",
             )
             self.assertTrue(
                 eeg_els.map_image_file.name in [subdir for subdir in zipped_file.namelist()],
-                "%s not in %s" % (eeg_els.map_image_file.name, zipped_file.namelist()),
+                f"{eeg_els.map_image_file.name} not in {zipped_file.namelist()}",
             )
 
         shutil.rmtree(self.TEMP_MEDIA_ROOT)
@@ -877,11 +875,11 @@ class ExportExperimentTest(TestCase):
         with zipfile.ZipFile(io.BytesIO(response.content), "r") as zipped_file:
             self.assertTrue(
                 emg_file.file.name in [subdir for subdir in zipped_file.namelist()],
-                "%s not in %s" % (emg_file.file.name, zipped_file.namelist()),
+                f"{emg_file.file.name} not in {zipped_file.namelist()}",
             )
             self.assertTrue(
                 emg_ep.photo.name in [subdir for subdir in zipped_file.namelist()],
-                "%s not in %s" % (emg_ep.photo.name, zipped_file.namelist()),
+                f"{emg_ep.photo.name} not in {zipped_file.namelist()}",
             )
 
         shutil.rmtree(self.TEMP_MEDIA_ROOT)
@@ -2586,7 +2584,7 @@ class ImportExperimentTest(TestCase):
                 self.assertEqual(
                     reference,
                     model_instance,
-                    "%s not equal %s" % (reference, model_instance),
+                    f"{reference} not equal {model_instance}",
                 )
 
     # Components tests
@@ -3819,7 +3817,7 @@ class ImportExperimentTest(TestCase):
                     self.assertEqual(
                         reference.pk,
                         model_instance.pk,
-                        "%s not equal %s" % (reference, model_instance),
+                        f"{reference} not equal {model_instance}",
                     )
 
     def test_object_imported_does_not_exist_create_new_emg(self):
@@ -3856,7 +3854,7 @@ class ImportExperimentTest(TestCase):
                     self.assertEqual(
                         reference.pk,
                         model_instance.pk,
-                        "%s not equal %s" % (reference, model_instance),
+                        f"{reference} not equal {model_instance}",
                     )
 
     @staticmethod
@@ -3959,7 +3957,7 @@ class ImportExperimentTest(TestCase):
                     self.assertEqual(
                         reference,
                         model_instance,
-                        "%s not equal %s" % (reference, model_instance),
+                        f"{reference} not equal {model_instance}",
                     )
 
     def test_import_eegelectrodelocalizationsystem_has_some_different_position_create_new(
@@ -4036,7 +4034,7 @@ class ImportExperimentTest(TestCase):
                     self.assertEqual(
                         reference,
                         model_instance,
-                        "%s not equal %s" % (reference, model_instance),
+                        f"{reference} not equal {model_instance}",
                     )
 
     def test_object_imported_does_not_exist_create_new_tms(self):
@@ -4070,7 +4068,7 @@ class ImportExperimentTest(TestCase):
                     self.assertEqual(
                         reference,
                         model_instance,
-                        "%s not equal %s" % (reference, model_instance),
+                        f"{reference} not equal {model_instance}",
                     )
 
     def test_preloaded_material_is_equal_to_the_one_imported_keeps_object_and_references2(
@@ -4879,7 +4877,7 @@ class ImportExperimentTest(TestCase):
                 self.assertEqual(
                     reference,
                     model_instance,
-                    "%s not equal %s" % (reference, model_instance),
+                    f"{reference} not equal {model_instance}",
                 )
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)

@@ -7,8 +7,7 @@ from io import BufferedWriter
 
 from custom_user.tests.tests_helper import create_user
 from django.apps import apps
-from django.contrib.auth.models import Group as UserGroup
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group as UserGroup, User
 from django.core.files import File
 from django.db import IntegrityError
 from django.test import RequestFactory, TestCase
@@ -88,14 +87,7 @@ from experiment.models import (
     TMSSetting,
 )
 from faker import Factory
-from patient.models import (
-    ClassificationOfDiseases,
-    ComplementaryExam,
-    Diagnosis,
-    ExamFile,
-    MedicalRecordData,
-    Patient,
-)
+from patient.models import ClassificationOfDiseases, ComplementaryExam, Diagnosis, ExamFile, MedicalRecordData, Patient
 from patient.tests.test_orig import UtilTests
 from survey.tests.tests_helper import create_survey
 
@@ -122,7 +114,7 @@ USER_USERNAME = "myadmin"
 USER_PWD = "mypassword"
 
 
-class ObjectsFactory(object):
+class ObjectsFactory:
     @staticmethod
     def create_research_project(owner=None):
         """Create a research project to be used in the test

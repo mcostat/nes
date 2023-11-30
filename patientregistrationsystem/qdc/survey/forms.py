@@ -1,4 +1,3 @@
-# coding=utf-8
 from django.forms import CharField, CheckboxInput, ModelForm, TextInput
 
 from .models import Survey

@@ -565,7 +565,7 @@
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
         document.addEventListener("DOMContentLoaded", () => {
             searchAndTable("/experiment/subject/search/", {"group_id": $("#group_id").val()});
-        
+
             if ("{{ per_steps_tab_active }}") {
                 // make per_steps_of_experimental_protocol tab active if redirected from
                 // remove or transfer data collections

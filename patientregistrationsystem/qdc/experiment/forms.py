@@ -1,4 +1,3 @@
-# coding=utf-8
 from typing import Any
 
 from django.contrib.auth import get_user_model
@@ -2468,7 +2467,7 @@ class DigitalGamePhaseDataForm(ModelForm):
                     "data-error": _("File format description must be filled."),
                 }
             ),
-            "sequence_used_in_context_tree": Textarea(attrs={"class": "form-control", "rows": "4"})
+            "sequence_used_in_context_tree": Textarea(attrs={"class": "form-control", "rows": "4"}),
             # It is not possible to set the 'required' attribute because it affects the edit screen
             # 'file': FileInput(attrs={'required': ""})
         }

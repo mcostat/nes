@@ -1,6 +1,5 @@
 from django.db import models
 from solo.models import SingletonModel
-
 from survey.models import Survey
 
 

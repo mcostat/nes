@@ -5,7 +5,6 @@ import sys
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.translation.trans_real import activate, deactivate
-
 from patient.models import ClassificationOfDiseases
 
 
@@ -20,10 +19,10 @@ class Command(BaseCommand):
             filename = options["file"]
             try:
                 import_classification_of_icd_cid(filename)
-            except IOError:
-                raise CommandError(f'Filename "{filename}" does not exist.')
-            except UnicodeDecodeError:
-                raise CommandError(f'Filename "{filename}" has incorrect format.')
+            except OSError as exc:
+                raise CommandError(f'Filename "{filename}" does not exist.') from exc
+            except UnicodeDecodeError as exc:
+                raise CommandError(f'Filename "{filename}" has incorrect format.') from exc
 
 
 def import_classification_of_icd_cid(file_name: str) -> None:
@@ -39,7 +38,7 @@ def import_classification_of_icd_cid(file_name: str) -> None:
     if not total_lines:
         return print("File Empty")
 
-    with open(filename, "r", encoding="utf-8") as csvFile:
+    with open(filename, encoding="utf-8") as csvFile:
         reader = csv.reader(csvFile)
         next(reader, None)
         for row in reader:
@@ -66,5 +65,5 @@ def progress_bar(count, tot_lines, status="") -> None:
     percents = round(100.0 * count / float(tot_lines), 1)
     bar = "=" * filled_len + "-" * (bar_len - filled_len)
 
-    sys.stdout.write("[%s] %s%s ...%s\r" % (bar, percents, "%", status))
+    sys.stdout.write("[{}] {}{} ...{}\r".format(bar, percents, "%", status))
     sys.stdout.flush()

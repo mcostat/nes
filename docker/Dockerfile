@@ -4,9 +4,9 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8  
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 
 ARG NES_BRANCH
@@ -55,9 +55,9 @@ FROM python:3.11-slim-bookworm
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONOPTIMIZE=1
 
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8  
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 ENV NES_DIR="/usr/local/nes"
 
@@ -93,7 +93,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #     apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
 #     apt-get -y install --no-install-recommends redis
 
-RUN echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf 
+RUN echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
 
 
 COPY --from=wheeler $NES_DIR $NES_DIR
@@ -118,7 +118,7 @@ RUN sed -i -r 's@ErrorLog .*@Errorlog /dev/stderr@i' /etc/apache2/apache2.conf &
 # RUN python3 -m venv /opt/certbot/ && \
 #     /opt/certbot/bin/pip install --upgrade pip && \
 #     /opt/certbot/bin/pip install certbot certbot-apache && \
-#     ln -s /opt/certbot/bin/certbot /usr/bin/certbot 
+#     ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 
 RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
     chmod +x mkcert-v*-linux-amd64 && \
@@ -135,4 +135,3 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["/bin/bash", "-c", "service apache2 start"]
-

@@ -27,53 +27,51 @@ admin.site.register(SocialDemographicData, SimpleHistoryAdmin)
 admin.site.register(SocialHistoryData, SimpleHistoryAdmin)
 
 
+@admin.register(Schooling)
 class SchoolingAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(Payment)
 class PaymentAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(Religion)
 class ReligionAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(FleshTone)
 class FleshToneAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(MaritalStatus)
 class MaritalStatusAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(Gender)
 class GenderAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(AmountCigarettes)
 class AmountCigarettesAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(AlcoholFrequency)
 class AlcoholFrequencyAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(AlcoholPeriod)
 class AlcoholPeriodAdmin(TranslationAdmin):
     pass
 
 
+@admin.register(ClassificationOfDiseases)
 class ClassificationOfDiseasesAdmin(TranslationAdmin):
     pass
-
-
-admin.site.register(Schooling, SchoolingAdmin)
-admin.site.register(Payment, PaymentAdmin)
-admin.site.register(Religion, ReligionAdmin)
-admin.site.register(FleshTone, FleshToneAdmin)
-admin.site.register(MaritalStatus, MaritalStatusAdmin)
-admin.site.register(Gender, GenderAdmin)
-admin.site.register(AmountCigarettes, AmountCigarettesAdmin)
-admin.site.register(AlcoholFrequency, AlcoholFrequencyAdmin)
-admin.site.register(AlcoholPeriod, AlcoholPeriodAdmin)
-admin.site.register(ClassificationOfDiseases, ClassificationOfDiseasesAdmin)

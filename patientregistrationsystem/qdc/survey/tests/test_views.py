@@ -46,7 +46,7 @@ class ABCSearchEngineTest(TestCase):
             self.test_sid = lime_survey.add_survey(9999, title_survey, "en", "G")
 
             # Importar grupo de questoes
-            with open("static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8") as handle_file_import:
+            with open("static_data/tests/limesurvey_groups.lsg", encoding="utf-8") as handle_file_import:
                 questions_data = handle_file_import.read()
 
             lime_survey.insert_questions(self.test_sid, questions_data, "lsg")
@@ -91,7 +91,7 @@ class ABCSearchEngineTest(TestCase):
             self.assertEqual(survey_admin, None)
 
             # Importar grupo de questoes
-            with open("static_data/tests/limesurvey_groups.lsg", "r", encoding="utf-8") as handle_file_import:
+            with open("static_data/tests/limesurvey_groups.lsg", encoding="utf-8") as handle_file_import:
                 questions_data = handle_file_import.read()
 
             questions_id = lime_survey.insert_questions(sid, questions_data, "lsg")

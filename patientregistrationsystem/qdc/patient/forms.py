@@ -1,14 +1,6 @@
-# -*- coding: UTF-8 -*-
 from django import forms
 from django.core.validators import EMPTY_VALUES
-from django.forms import (
-    CheckboxInput,
-    ModelForm,
-    RadioSelect,
-    Select,
-    TextInput,
-    TypedChoiceField,
-)
+from django.forms import CheckboxInput, ModelForm, RadioSelect, Select, TextInput, TypedChoiceField
 from django.forms.widgets import Textarea
 from django.utils.translation import gettext as _
 from patient.models import (

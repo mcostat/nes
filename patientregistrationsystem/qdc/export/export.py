@@ -14,14 +14,7 @@ from typing import Any
 from django.apps import apps
 from django.conf import settings
 from django.core.files import File
-from django.db.models import (
-    BooleanField,
-    CharField,
-    DateField,
-    FloatField,
-    QuerySet,
-    TextField,
-)
+from django.db.models import BooleanField, CharField, DateField, FloatField, QuerySet, TextField
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_str
@@ -49,9 +42,7 @@ from experiment.models import (
     MediaCollectionData,
     NeedleElectrode,
     Questionnaire,
-)
-from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
-from experiment.models import (
+    QuestionnaireResponse as ExperimentQuestionnaireResponse,
     ResearchProject,
     Stimulus,
     SubjectOfGroup,
@@ -90,11 +81,7 @@ from patient.models import (
 from plugin.models import RandomForests
 from qdc.utils import validate_path
 from survey.abc_search_engine import Questionnaires
-from survey.survey_utils import (
-    HEADER_EXPLANATION_FIELDS,
-    QUESTION_TYPES,
-    QuestionnaireUtils,
-)
+from survey.survey_utils import HEADER_EXPLANATION_FIELDS, QUESTION_TYPES, QuestionnaireUtils
 from survey.views import limesurvey_available
 
 DEFAULT_LANGUAGE = "pt-BR"
@@ -171,7 +158,12 @@ def to_number(value: str) -> int:
     return int(float(value))
 
 
-def save_to_csv(complete_filename: str, rows_to_be_saved: list, filesformat_type: str, mode: str = "w") -> None:
+def save_to_csv(
+    complete_filename: str,
+    rows_to_be_saved: list,
+    filesformat_type: str,
+    mode: str = "w",
+) -> None:
     """
     :param complete_filename: filename and directory structure where file is
     going to be saved
@@ -270,7 +262,7 @@ class LogMessages:
     def log_message(self, text, param1="", param2=""):
         current_time = datetime.now()
 
-        text_message = "%s %s %s %s %s" % (
+        text_message = "{} {} {} {} {}".format(
             smart_str(current_time),
             smart_str(self.user),
             smart_str(text),
@@ -1347,10 +1339,7 @@ class ExportExecution:
             if not plugin:
                 # Ex. Per_questionnaire.Q123_aaa
                 questionnaire_title = self.get_title_reduced(questionnaire_id=questionnaire_id)
-                path_questionnaire = "%s_%s" % (
-                    str(questionnaire_code),
-                    questionnaire_title,
-                )
+                path_questionnaire = f"{str(questionnaire_code)}_{questionnaire_title}"
             else:
                 random_forest = RandomForests.objects.first()
                 if questionnaire_id == random_forest.admission_assessment.lime_survey_id:
@@ -1389,24 +1378,24 @@ class ExportExecution:
                 # <per_questionnaire>/<q_code_title>
                 if self.get_input_data("export_per_questionnaire") and (len(result) > 1):
                     if not plugin:
-                        export_filename = "%s_%s_%s" % (
+                        export_filename = "{}_{}_{}".format(
                             questionnaire["prefix_filename_responses"],
                             str(questionnaire_code),
                             language,
                         )
                     else:
                         if questionnaire_id == RandomForests.objects.first().admission_assessment.lime_survey_id:
-                            export_filename = "%s_%s" % (
+                            export_filename = "{}_{}".format(
                                 questionnaire["prefix_filename_responses"],
                                 "QA_en",
                             )
                         elif questionnaire_id == RandomForests.objects.first().surgical_evaluation.lime_survey_id:
-                            export_filename = "%s_%s" % (
+                            export_filename = "{}_{}".format(
                                 questionnaire["prefix_filename_responses"],
                                 "QS_en",
                             )
                         elif questionnaire_id == RandomForests.objects.first().followup_assessment.lime_survey_id:
-                            export_filename = "%s_%s" % (
+                            export_filename = "{}_{}".format(
                                 questionnaire["prefix_filename_responses"],
                                 "QF_en",
                             )
@@ -1483,7 +1472,7 @@ class ExportExecution:
                 if error:
                     return Questionnaires.ERROR_CODE  # TODO (NES-971): patternalize this
 
-                export_filename = "%s_%s_%s.%s" % (
+                export_filename = "{}_{}_{}.{}".format(
                     questionnaire["prefix_filename_fields"],
                     str(questionnaire_code),
                     language,
@@ -1578,10 +1567,7 @@ class ExportExecution:
             questionnaire_id = questionnaire["id"]
             questionnaire_code = self.questionnaire_utils.get_questionnaire_code_from_id(questionnaire_id)
             questionnaire_title = self.get_title_reduced(questionnaire_id=questionnaire_id)
-            path_questionnaire = "%s_%s" % (
-                str(questionnaire_code),
-                questionnaire_title,
-            )
+            path_questionnaire = f"{str(questionnaire_code)}_{questionnaire_title}"
 
             # Path ex. data/Participant_data/Per_questionnaire/Q123_aaa/
             error_msg, export_path = create_directory(path_per_questionnaire, path_questionnaire)
@@ -1625,7 +1611,7 @@ class ExportExecution:
                 # per_participant_data is updated by define_questionnaire method
                 fields_description = self.define_questionnaire(questionnaire, questionnaire_lime_survey, language)
                 if self.get_input_data("export_per_questionnaire") and (len(fields_description) > 1):
-                    export_filename = "%s_%s_%s" % (
+                    export_filename = "{}_{}_{}".format(
                         questionnaire["prefix_filename_responses"],
                         str(questionnaire_code),
                         language,
@@ -1679,7 +1665,7 @@ class ExportExecution:
                     fields,
                     entrance_questionnaire,
                 )
-                export_filename = "%s_%s_%s" % (
+                export_filename = "{}_{}_{}".format(
                     questionnaire["prefix_filename_fields"],
                     str(questionnaire_code),
                     language,
@@ -1944,7 +1930,8 @@ class ExportExecution:
                             if fields_description:
                                 field_type = "fields" if heading_type == "code" else "header_questionnaire"
                                 header = self.build_header_questionnaire_per_participant(
-                                    rows_participant_data[0], answer_list[0][field_type]
+                                    rows_participant_data[0],
+                                    answer_list[0][field_type],
                                 )
                                 fields_description.insert(0, header)
 
@@ -1974,7 +1961,10 @@ class ExportExecution:
                                         filesformat_type,
                                     )
                                     # TODO (NES-991): treat possible error
-                                    _error, questions = QuestionnaireUtils.get_questions(
+                                    (
+                                        _error,
+                                        questions,
+                                    ) = QuestionnaireUtils.get_questions(
                                         questionnaire_lime_survey,
                                         questionnaire_id,
                                         language,
@@ -2024,7 +2014,7 @@ class ExportExecution:
                         )
 
                         # Build metadata export - Fields_Q123.csv
-                        export_filename = "%s_%s_%s.%s" % (
+                        export_filename = "{}_{}_{}.{}".format(
                             prefix_filename_fields,
                             str(questionnaire_code),
                             language,
@@ -2033,14 +2023,14 @@ class ExportExecution:
                         if per_experiment_plugin:
                             randomforests = RandomForests.objects.first()
                             if questionnaire_id == randomforests.admission_assessment.lime_survey_id:
-                                export_filename = "%s_%s_%s.%s" % (
+                                export_filename = "{}_{}_{}.{}".format(
                                     prefix_filename_fields,
                                     "QA",
                                     language,
                                     filesformat_type,
                                 )
                             elif questionnaire_id == randomforests.surgical_evaluation.lime_survey_id:
-                                export_filename = "%s_%s_%s.%s" % (
+                                export_filename = "{}_{}_{}.{}".format(
                                     prefix_filename_fields,
                                     "QS",
                                     language,
@@ -2110,10 +2100,7 @@ class ExportExecution:
                 for questionnaire_code in ordered_questionnaires:
                     questionnaire_id = int(self.questionnaire_utils.get_questionnaire_id_from_code(questionnaire_code))
                     title = self.get_title_reduced(questionnaire_id=int(questionnaire_id))
-                    questionnaire_directory_name = "%s_%s" % (
-                        str(questionnaire_code),
-                        title,
-                    )
+                    questionnaire_directory_name = f"{str(questionnaire_code)}_{title}"
                     if participants_plugin:
                         randomforests = RandomForests.objects.first()
                         if questionnaire_id == randomforests.admission_assessment.lime_survey_id:
@@ -2152,7 +2139,7 @@ class ExportExecution:
                         language_list = [questionnaire_language["output_language"]]
 
                     for language in language_list:
-                        export_filename = "%s_%s_%s" % (
+                        export_filename = "{}_{}_{}".format(
                             "Responses",
                             str(questionnaire_code),
                             language,
@@ -2280,10 +2267,7 @@ class ExportExecution:
                                 else:
                                     language_list = [questionnaire_language["output_language"]]
                                 # Create questionnaire directory
-                                path_questionnaire = "%s_%s" % (
-                                    str(questionnaire_code),
-                                    title,
-                                )
+                                path_questionnaire = f"{str(questionnaire_code)}_{title}"
                                 # /data/Participant_data/Per_participant/Participant_P123/Q123_title
                                 (
                                     error_msg,
@@ -2296,7 +2280,7 @@ class ExportExecution:
                                 export_directory = path.join(export_participant_directory, path_questionnaire)
 
                                 for language in language_list:
-                                    export_filename = "%s_%s_%s" % (
+                                    export_filename = "{}_{}_{}".format(
                                         questionnaire["prefix_filename_responses"],
                                         str(questionnaire_code),
                                         language,
@@ -2340,7 +2324,10 @@ class ExportExecution:
                                         answer_list["header_questionnaire"].append(question["header"])
                                     # TODO (NES-991): treat error!
                                     # TODO (NES-991): QuestionnaireUtils already in self.questionnaire_utils
-                                    _error, questions = QuestionnaireUtils.get_questions(
+                                    (
+                                        _error,
+                                        questions,
+                                    ) = QuestionnaireUtils.get_questions(
                                         questionnaire_lime_survey,
                                         questionnaire_id,
                                         language,
@@ -2434,11 +2421,7 @@ class ExportExecution:
                         for language in language_list:
                             if response_english_plugin_done:
                                 break
-                            export_filename = "%s_%s_%s" % (
-                                str(questionnaire_code),
-                                slugify(questionnaire_title),
-                                language,
-                            )
+                            export_filename = f"{str(questionnaire_code)}_{slugify(questionnaire_title)}_{language}"
                             if per_experiment_plugin:
                                 randomforests = RandomForests.objects.first()
                                 if questionnaire_id == randomforests.admission_assessment.lime_survey_id:
@@ -3003,7 +2986,6 @@ class ExportExecution:
 
                                     with open(
                                         complete_goalkeeper_game_filename,
-                                        "r",
                                         encoding="utf-8",
                                     ) as infile, open(complete_digital_filename, "a", encoding="utf-8") as outfile:
                                         header = next(infile)
@@ -3431,7 +3413,7 @@ class ExportExecution:
             file_extension = "csv"
             separator = ","
 
-        export_filename = "%s.%s" % (
+        export_filename = "{}.{}".format(
             self.get_input_data("participants")["output_filename"],
             file_extension,
         )
@@ -3675,7 +3657,10 @@ class ExportExecution:
             # i + 2: currently in export, question headers are inserted between
             # [participant_code, age] and the rest of participant fields
             # when those exists
-            fields.insert(i + 2, {"name": title, "title": title, "type": q_type, "format": q_format})
+            fields.insert(
+                i + 2,
+                {"name": title, "title": title, "type": q_type, "format": q_format},
+            )
 
         return fields
 

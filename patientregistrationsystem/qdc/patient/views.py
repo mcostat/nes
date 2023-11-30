@@ -16,9 +16,12 @@ from django.http.response import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from experiment.models import Questionnaire
-from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
-from experiment.models import Subject, SubjectOfGroup
+from experiment.models import (
+    Questionnaire,
+    QuestionnaireResponse as ExperimentQuestionnaireResponse,
+    Subject,
+    SubjectOfGroup,
+)
 from patient.forms import (
     ComplementaryExamForm,
     ExamFileForm,
@@ -43,12 +46,7 @@ from patient.models import (
 from survey.abc_search_engine import Questionnaires
 from survey.models import Survey
 from survey.survey_utils import find_questionnaire_name
-from survey.views import (
-    check_limesurvey_access,
-    csv_to_list,
-    get_questionnaire_language,
-    get_questionnaire_responses,
-)
+from survey.views import check_limesurvey_access, csv_to_list, get_questionnaire_language, get_questionnaire_responses
 
 # mypy: disable-error-code="misc"
 permission_required = partial(permission_required, raise_exception=True)
@@ -748,10 +746,7 @@ def medical_record_create(
 ) -> HttpResponse:
     current_patient = get_object_or_404(Patient, pk=patient_id)
 
-    if current_patient.name:
-        patient = current_patient.name
-    else:
-        patient = current_patient.code
+    patient = current_patient.name if current_patient.name else current_patient.code
 
     return render(
         request,
@@ -973,7 +968,13 @@ def diagnosis_delete(request, patient_id, diagnosis_id):
 
 @login_required
 @permission_required("patient.add_medicalrecorddata")
-def exam_create(request, patient_id, record_id, diagnosis_id, template_name: str = "patient/exams.html"):
+def exam_create(
+    request,
+    patient_id,
+    record_id,
+    diagnosis_id,
+    template_name: str = "patient/exams.html",
+):
     form = ComplementaryExamForm(request.POST or None)
 
     status = ""
@@ -1069,10 +1070,7 @@ def exam_edit(
     if "mr" in request.GET:
         new_medical_record = True
 
-    if current_patient.name:
-        patient = current_patient.name
-    else:
-        patient = current_patient.code
+    patient = current_patient.name if current_patient.name else current_patient.code
 
     if complementary_exam:
         complementary_exam_form = ComplementaryExamForm(request.POST or None, instance=complementary_exam)
@@ -1483,7 +1481,7 @@ def questionnaire_response_update(
         if request.POST["action"] == "save":
             redirect_url = get_limesurvey_response_url(questionnaire_response)
 
-            fail = True if not redirect_url else False
+            fail = bool(redirect_url)
 
         elif request.POST["action"] == "remove":
             if request.user.has_perm("patient.delete_questionnaireresponse"):
@@ -1639,7 +1637,7 @@ def get_limesurvey_response_url(questionnaire_response: QuestionnaireResponse) -
         "token",
     )
 
-    redirect_url = "%s/index.php/%s/token/%s/responsibleid/%s/acquisitiondate/%s/subjectid/%s/newtest/Y" % (
+    redirect_url = "{}/index.php/{}/token/{}/responsibleid/{}/acquisitiondate/{}/subjectid/{}/newtest/Y".format(
         settings.LIMESURVEY["URL_WEB"],
         questionnaire_response.survey.lime_survey_id,
         token,

@@ -1,14 +1,12 @@
-# -*- coding: UTF-8 -*-
 import re
 from http import HTTPStatus
 from typing import Any
 
+from custom_user.models import Institution, UserProfile
+from custom_user.views import institution_create, institution_update, institution_view, user_update
 from django.conf import settings
 from django.contrib.auth.models import Group, User
-from django.contrib.auth.tokens import (
-    PasswordResetTokenGenerator,
-    default_token_generator,
-)
+from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
 from django.contrib.messages import get_messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
@@ -19,14 +17,6 @@ from django.test.client import RequestFactory
 from django.urls import resolve, reverse
 from django.utils.http import int_to_base36
 from django.utils.translation import gettext as _
-
-from custom_user.models import Institution, UserProfile
-from custom_user.views import (
-    institution_create,
-    institution_update,
-    institution_view,
-    user_update,
-)
 
 from .tests_helper import create_user
 
@@ -139,7 +129,7 @@ class FormUserValidation(TestCase):
 
         response = self.client.post(reverse(USER_NEW), self.data, follow=True)
 
-        self.assertFormError(response, "form", "username", "Este campo é obrigatório.")
+        self.assertFormError(response.context["form"], "username", "Este campo é obrigatório.")
         self.assertEqual(User.objects.filter(username="").count(), 0)
 
     def test_user_invalid_email(self):
@@ -147,7 +137,7 @@ class FormUserValidation(TestCase):
         self.data["login_enabled"] = True
 
         response = self.client.post(reverse(USER_NEW), self.data, follow=True)
-        self.assertFormError(response, "form", "email", "Informe um endereço de email válido.")
+        self.assertFormError(response.context["form"], "email", "Informe um endereço de email válido.")
         self.assertEqual(User.objects.filter(username="").count(), 0)
 
     def test_user_email_already_registered(self):
@@ -196,7 +186,7 @@ class FormUserValidation(TestCase):
 
         response = self.client.post(reverse(USER_NEW), self.data, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, "form", "password", "Este campo é obrigatório.")
+        self.assertFormError(response.context["form"], "password", "Este campo é obrigatório.")
         self.assertEqual(User.objects.filter(username=user_pwd).count(), 0)
 
     def test_user_create(self):

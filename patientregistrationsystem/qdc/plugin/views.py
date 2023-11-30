@@ -11,9 +11,14 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from experiment.models import Component, Experiment, Group, Questionnaire
-from experiment.models import QuestionnaireResponse as ExperimentResponse
-from experiment.models import SubjectOfGroup
+from experiment.models import (
+    Component,
+    Experiment,
+    Group,
+    Questionnaire,
+    QuestionnaireResponse as ExperimentResponse,
+    SubjectOfGroup,
+)
 from experiment.views import get_block_tree
 from export.forms import ExportForm
 from export.input_export import build_complete_export_structure
@@ -406,7 +411,7 @@ def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_pl
         if "experiment_selected_id" in request.session:
             del request.session["experiment_selected_id"]
 
-        context["participants_from"] = dict((el, "") for el in request.session.get("participants_from", []))
+        context["participants_from"] = {el: "" for el in request.session.get("participants_from", [])}
         for key in context["participants_from"]:
             subject_of_group = SubjectOfGroup.objects.get(pk=key)
             patient = subject_of_group.subject.patient
@@ -414,7 +419,7 @@ def send_to_plugin(request: HttpRequest, template_name: str = "plugin/send_to_pl
         if "participants_from" in request.session:
             del request.session["participants_from"]
 
-        context["participants_to"] = dict((el, "") for el in request.session.get("participants_to", []))
+        context["participants_to"] = {el: "" for el in request.session.get("participants_to", [])}
         for key in context["participants_to"]:
             subject_of_group = SubjectOfGroup.objects.get(pk=key)
             patient = subject_of_group.subject.patient

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from json import dump, load
 from typing import Any
 
@@ -31,7 +30,7 @@ class InputExport:
         self.data: dict[str, Any] = {}
 
     def read(self, input_filename, update_input_data=True) -> dict[str, Any]:
-        with open(input_filename.encode("utf-8"), "r", encoding="utf-8") as input_file:
+        with open(input_filename.encode("utf-8"), encoding="utf-8") as input_file:
             input_data_temp = load(input_file)
 
             if update_input_data:

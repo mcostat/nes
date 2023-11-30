@@ -1,5 +1,4 @@
 from faker import Factory
-
 from survey.models import Survey
 
 

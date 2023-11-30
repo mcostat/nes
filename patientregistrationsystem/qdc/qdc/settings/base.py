@@ -18,7 +18,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY: str = os.getenv("NES_SECRET_KEY", "django-insecure-&llnw)2g1lqmm3n*wv2+9x03se4g+%e#@x8@_2m_#zz!e%b#=n")
+SECRET_KEY: str = os.getenv(
+    "NES_SECRET_KEY",
+    "django-insecure-&llnw)2g1lqmm3n*wv2+9x03se4g+%e#@x8@_2m_#zz!e%b#=n",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -239,7 +242,6 @@ TIME_ZONE = "America/Sao_Paulo"
 
 USE_I18N = True
 
-USE_L10N = True
 
 # Database Translation
 MODELTRANSLATION_LANGUAGES = (

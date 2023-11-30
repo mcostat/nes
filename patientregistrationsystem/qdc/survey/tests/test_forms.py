@@ -2,7 +2,6 @@ from typing import Any
 
 from django.contrib.auth.models import User
 from django.test import TestCase
-
 from survey.forms import SurveyForm
 
 USER_USERNAME = "myadmin"

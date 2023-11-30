@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 from datetime import datetime
 from os import mkdir, path, remove
@@ -421,7 +420,7 @@ class AdvancedSearchTest(TestCase):
                 gender_name = "Male"
 
             birthday = datetime.now() - relativedelta(years=delta)
-            date_birth = "%s-%s-%s" % (birthday.year, birthday.month, birthday.day)
+            date_birth = f"{birthday.year}-{birthday.month}-{birthday.day}"
             self.util.create_patient_mock(
                 name=self._testMethodName + str(index),
                 user=self.user,
@@ -492,16 +491,8 @@ class AdvancedSearchTest(TestCase):
         birthday_min = datetime.now() - relativedelta(years=5)
         birthday_max = datetime.now() - relativedelta(years=17)
 
-        date_birth_min = "%s-%s-%s" % (
-            birthday_min.year,
-            birthday_min.month,
-            birthday_min.day,
-        )
-        date_birth_max = "%s-%s-%s" % (
-            birthday_max.year,
-            birthday_max.month,
-            birthday_max.day,
-        )
+        date_birth_min = f"{birthday_min.year}-{birthday_min.month}-{birthday_min.day}"
+        date_birth_max = f"{birthday_max.year}-{birthday_max.month}-{birthday_max.day}"
 
         self.assertEqual(len(response.wsgi_request.session["filtered_participant_data"]), 3)
 

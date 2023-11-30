@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-
-
 import datetime
 import random
 from typing import Any
@@ -654,11 +652,7 @@ class ComplementaryExam(models.Model):
 
 
 def get_user_dir(instance, filename: str) -> str:
-    return "exams/%(patient)s/%(exam)s/%(filename)s" % {
-        "patient": instance.exam.diagnosis.medical_record_data.patient.pk,
-        "exam": instance.exam.pk,
-        "filename": filename,
-    }
+    return f"exams/{instance.exam.diagnosis.medical_record_data.patient.pk}/{instance.exam.pk}/{filename}"
 
 
 class ExamFile(models.Model):

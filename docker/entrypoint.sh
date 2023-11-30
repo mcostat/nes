@@ -32,4 +32,3 @@ service apache2 start
 echo "INFO: entrypoint.sh finished"
 
 exec "$@"
-

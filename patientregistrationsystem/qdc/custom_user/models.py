@@ -48,7 +48,7 @@ class UserProfile(models.Model):
     def cached_force_password_change(_user) -> bool:
         key = f"pw_change_{_user.username}"
         cache = caches["redis"]
-        pw_change = cache.get(key, None)
+        pw_change = cache.get(key)
 
         if isinstance(pw_change, bool):
             return pw_change

@@ -1,4 +1,4 @@
-from django.urls import re_path
+from django.urls import path
 
 from .views import (
     experiment_selection,
@@ -13,20 +13,20 @@ from .views import (
 )
 
 urlpatterns = [
-    re_path(r"^$", export_menu, name="export_menu"),
-    re_path(r"^create/$", export_create, name="export_create"),
-    re_path(r"^view/$", export_view, name="export_view"),
-    re_path(r"^filter_participants/$", filter_participants, name="filter_participants"),
-    re_path(r"^experiment_selection/$", experiment_selection, name="experiment_selection"),
+    path("", export_menu, name="export_menu"),
+    path("create/", export_create, name="export_create"),
+    path("view/", export_view, name="export_view"),
+    path("filter_participants/", filter_participants, name="filter_participants"),
+    path("experiment_selection/", experiment_selection, name="experiment_selection"),
     # export (ajax)
-    re_path(r"^get_locations/$", search_locations, name="search_locations"),
-    re_path(r"^get_diagnosis/$", search_diagnosis, name="search_diagnosis"),
-    re_path(
-        r"^get_experiments_by_study/(?P<study_id>\d+)/$",
+    path("get_locations/", search_locations, name="search_locations"),
+    path("get_diagnosis/", search_diagnosis, name="search_diagnosis"),
+    path(
+        "get_experiments_by_study/<int:study_id>/",
         select_experiments_by_study,
     ),
-    re_path(
-        r"^get_groups_by_experiment/(?P<experiment_id>\d+)/$",
+    path(
+        "get_groups_by_experiment/<int:experiment_id>/",
         select_groups_by_experiment,
     ),
 ]

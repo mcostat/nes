@@ -73,7 +73,7 @@
             {% if editing %}
                 <div class="btn-group float-end">
                     <button type="submit" name="action" value="save" class="btn btn-primary">{% trans "Save" %}</button>
-                    
+
                     <a href="/experiment/manufacturer/{% if creating %}list{% else %}{{ equipment.id }}{% endif %}"
                         class="btn btn-light">{% trans "Cancel" %}</a>
                 </div>

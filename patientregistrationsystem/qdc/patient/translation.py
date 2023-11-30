@@ -1,5 +1,4 @@
 from modeltranslation.translator import TranslationOptions, translator
-
 from patient.models import (
     AlcoholFrequency,
     AlcoholPeriod,

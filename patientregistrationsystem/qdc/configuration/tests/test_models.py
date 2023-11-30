@@ -1,15 +1,14 @@
-from django.db.utils import IntegrityError
-from django.test import TestCase
-
 from configuration.models import Contact, LocalInstitution, get_institution_logo_dir
 from custom_user.models import Institution
+from django.db.utils import IntegrityError
+from django.test import TestCase
 
 
 class LocalInstiutionTest(TestCase):
     def setUp(self) -> None:
         super().setUp()
 
-        institution: Institution = Institution.objects.create(
+        Institution.objects.create(
             name="Universidade Federal do Rio de Janeiro",
             acronym="UFRJ",
             country="BR",
@@ -26,11 +25,13 @@ class LocalInstiutionTest(TestCase):
         LocalInstitution.objects.create(code="1234", institution=Institution.objects.first(), url="https://ufrj.br/")
 
         with self.assertRaises(IntegrityError):
-            LocalInstitution.objects.create(
-                code="1234",
-                institution=Institution.objects.first(),
-                url="https://ufrj.br/",
-            ),
+            (
+                LocalInstitution.objects.create(
+                    code="1234",
+                    institution=Institution.objects.first(),
+                    url="https://ufrj.br/",
+                ),
+            )
 
     def test_get_institution_logo_dir(self) -> None:
         institution = LocalInstitution.objects.create(

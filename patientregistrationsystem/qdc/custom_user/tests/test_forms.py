@@ -1,14 +1,7 @@
-# -*- coding: UTF-8 -*-
-from django.contrib.auth.models import Group, User
+from custom_user.forms import CustomPasswordResetForm, InstitutionForm, ResearcherForm, UserForm
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.test import TestCase
-
-from custom_user.forms import (
-    CustomPasswordResetForm,
-    InstitutionForm,
-    ResearcherForm,
-    UserForm,
-)
-from custom_user.views import *
 
 USER_USERNAME = "myadmin"
 USER_PWD = "mypassword"
@@ -17,7 +10,9 @@ USER_PWD = "mypassword"
 # Tests of the form of institutions
 class InstitutionFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user: get_user_model() = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -72,7 +67,9 @@ class InstitutionFormValidation(TestCase):
 # Tests of the form of users with login and password
 class UserFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user: get_user_model() = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -144,7 +141,9 @@ class UserFormValidation(TestCase):
 # Tests of the form of researchers (users without login and password)
 class ResearcherFormValidation(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.save()
@@ -183,7 +182,9 @@ class CustomPasswordResetFormTest(TestCase):
     data: dict[str, str] = {}
 
     def setUp(self) -> None:
-        self.user: User = User.objects.create_user(username=USER_USERNAME, email="test@dummy.com", password=USER_PWD)
+        self.user: get_user_model() = get_user_model().objects.create_user(
+            username=USER_USERNAME, email="test@dummy.com", password=USER_PWD
+        )
         self.user.is_staff = True
         self.user.is_superuser = True
         self.user.is_active = True

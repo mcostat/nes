@@ -1,5 +1,3 @@
-from modeltranslation.translator import TranslationOptions, translator
-
 from experiment.models import (
     AmplifierDetectionType,
     CoilShape,
@@ -14,6 +12,7 @@ from experiment.models import (
     StimulusType,
     TetheringSystem,
 )
+from modeltranslation.translator import TranslationOptions, translator
 
 
 class PublicationTypeTranslationOptions(TranslationOptions):

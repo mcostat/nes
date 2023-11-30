@@ -10,10 +10,11 @@ django-coverage-plugin
 
 
 # Development
+pre-commit
 types-python-dateutil
 mypy
 django-stubs[compatible-mypy]
-django-stubs-ext 
+django-stubs-ext
 flake8
 flake8-django
 pylint

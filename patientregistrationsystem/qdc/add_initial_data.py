@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # This file was created based on what is explained in:
 # https://code.djangoproject.com/wiki/InitialSQLDataDiangoORMWay
 from os import environ

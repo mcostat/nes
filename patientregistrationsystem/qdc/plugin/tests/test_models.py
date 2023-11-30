@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from plugin.models import RandomForests
 
 

@@ -2,8 +2,14 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.test import TestCase
-
-from patient.forms import *
+from patient.forms import (
+    ComplementaryExamForm,
+    PatientForm,
+    QuestionnaireResponseForm,
+    SocialDemographicDataForm,
+    SocialHistoryDataForm,
+    TelephoneForm,
+)
 from patient.models import (
     AlcoholFrequency,
     AlcoholPeriod,
@@ -360,4 +366,12 @@ class QuestionnaireResponseFormValidation(TestCase):
     def test_questionnaire_response_is_not_valid_with_future_date(self):
         self.data["date"] = str(datetime.date.today() + datetime.timedelta(1))
         questionnaire_response = QuestionnaireResponseForm(data=self.data)
+        self.assertFalse(questionnaire_response.is_valid())
+        questionnaire_response = QuestionnaireResponseForm(data=self.data)
+        self.assertFalse(questionnaire_response.is_valid())
+
+    def test_questionnaire_response_is_not_valid_with_future_date(self):
+        self.data["date"] = str(datetime.date.today() + datetime.timedelta(1))
+        questionnaire_response = QuestionnaireResponseForm(data=self.data)
+        self.assertFalse(questionnaire_response.is_valid())
         self.assertFalse(questionnaire_response.is_valid())

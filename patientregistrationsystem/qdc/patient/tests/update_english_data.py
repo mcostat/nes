@@ -27,7 +27,7 @@ def translate_fixtures_into_english(filename):
                 result[element["model"]] = {}
 
             # field_name = ''
-            for field in element["fields"].keys():
+            for field in element["fields"]:
                 if field in settings.MODELTRANSLATION_CUSTOM_FIELDS:
                     # print(field)
                     field_name = field

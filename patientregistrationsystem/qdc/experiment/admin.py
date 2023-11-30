@@ -30,11 +30,11 @@ from .models import (
 admin.site.register(QuestionnaireResponse, SimpleHistoryAdmin)
 
 
+@admin.register(StimulusType)
 class StimulusTypeAdmin(TranslationAdmin):
     pass
 
 
-admin.site.register(StimulusType, StimulusTypeAdmin)
 admin.site.register(Tag)
 
 admin.site.register(ElectrodeShape)
