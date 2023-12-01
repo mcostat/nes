@@ -68,13 +68,16 @@ class ExportExperiment:
 
     def _generate_fixture(self, filename, elements, app="experiment.") -> None:
         sysout = sys.stdout
-        sys.stdout = open(path.join(self.temp_dir, filename + ".json"), "w", encoding="utf-8")
-        call_command(
-            "dump_object",
-            app + elements[0],
-            "--query",
-            '{"' + elements[1] + '": ' + str([self.experiment.id]) + "}",
-        )
+        with open(path.join(self.temp_dir, filename + ".json"), "w", encoding="utf-8") as file:
+            sys.stdout = file
+
+            call_command(
+                "dump_object",
+                app + elements[0],
+                "--query",
+                '{"' + elements[1] + '": ' + str([self.experiment.id]) + "}",
+            )
+
         sys.stdout = sysout
 
     def _generate_detached_fixture(self, filename: str, elements: tuple) -> None:
@@ -83,25 +86,29 @@ class ExportExperiment:
         parent_ids = [dict_["pk"] for index, dict_ in enumerate(data) if dict_["model"] == elements[2]]
 
         sysout = sys.stdout
-        sys.stdout = open(path.join(self.temp_dir, filename + ".json"), "w", encoding="utf-8")
-        call_command(
-            "dump_object",
-            "experiment." + elements[0],
-            "--query",
-            '{"' + elements[1] + '": ' + str(parent_ids) + "}",
-        )
+        with open(path.join(self.temp_dir, filename + ".json"), "w", encoding="utf-8") as file:
+            sys.stdout = file
+
+            call_command(
+                "dump_object",
+                "experiment." + elements[0],
+                "--query",
+                '{"' + elements[1] + '": ' + str(parent_ids) + "}",
+            )
         sys.stdout = sysout
 
     def _generate_keywords_fixture(self) -> None:
         # Generate fixture to keywords of the research project
         sysout = sys.stdout
-        sys.stdout = open(path.join(self.temp_dir, "keywords.json"), "w", encoding="utf-8")
-        call_command(
-            "dump_object",
-            "experiment.researchproject_keywords",
-            "--query",
-            '{"researchproject_id__in": ' + str([self.experiment.research_project.id]) + "}",
-        )
+        with open(path.join(self.temp_dir, "keywords.json"), "w", encoding="utf-8") as file:
+            sys.stdout = file
+
+            call_command(
+                "dump_object",
+                "experiment.researchproject_keywords",
+                "--query",
+                '{"researchproject_id__in": ' + str([self.experiment.research_project.id]) + "}",
+            )
         sys.stdout = sysout
 
     def _remove_auth_user_model_from_json(self) -> None:
@@ -287,8 +294,11 @@ class ExportExperiment:
             fixtures.append(path.join(self.temp_dir, filename + ".json"))
 
         sysout = sys.stdout
-        sys.stdout = open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8")
-        call_command("merge_fixtures", *fixtures)
+        with open(path.join(self.temp_dir, self.FILE_NAME_JSON), "w", encoding="utf-8") as file:
+            sys.stdout = file
+
+            call_command("merge_fixtures", *fixtures)
+
         sys.stdout = sysout
 
         self._remove_researchproject_keywords_model_from_json()
@@ -440,9 +450,10 @@ class ImportExperiment:
                         next_numerical_part += 1
 
         for i in indexes:
-            if str(self.data[i]["pk"]) not in patients_to_update:
-                if Patient.objects.filter(cpf=self.data[i]["fields"]["cpf"]):
-                    self.data[i]["fields"]["cpf"] = None
+            if str(self.data[i]["pk"]) not in patients_to_update and Patient.objects.filter(
+                cpf=self.data[i]["fields"]["cpf"]
+            ):
+                self.data[i]["fields"]["cpf"] = None
 
     def _update_references_to_user(self, request):
         for model in MODELS_WITH_RELATION_TO_AUTH_USER:
@@ -458,11 +469,9 @@ class ImportExperiment:
         indexes = [index for index, dict_ in enumerate(self.data) if dict_["model"] == "survey.survey"]
         if indexes:
             min_limesurvey_id = Survey.objects.order_by("lime_survey_id")[0].lime_survey_id
-            if min_limesurvey_id >= 0:
-                dummy_limesurvey_id = -99
-            else:
-                # TODO (NES-956): testar isso
-                dummy_limesurvey_id = min_limesurvey_id - 1
+
+            dummy_limesurvey_id = -99 if min_limesurvey_id >= 0 else min_limesurvey_id - 1
+
             for index in indexes:
                 self.limesurvey_relations[self.data[index]["fields"]["lime_survey_id"]] = dummy_limesurvey_id
                 self.data[index]["fields"]["lime_survey_id"] = dummy_limesurvey_id
@@ -597,10 +606,9 @@ class ImportExperiment:
                 filter_ = {}
                 for field in model[1]:
                     filter_[field] = self.data[i]["fields"][field]
-                if not filter_:  # If not filter_, instance have only relational fields
-                    instance = model_class.objects.first()
-                else:
-                    instance = model_class.objects.filter(**filter_).first()
+
+                instance = model_class.objects.first() if not filter_ else model_class.objects.filter(**filter_).first()
+
                 if instance:
                     # Deal with models that inherit from Multi-table inheritance mode
                     if self.data[i]["model"] in PRE_LOADED_MODELS_INHERITANCE:
@@ -755,19 +763,22 @@ class ImportExperiment:
         """Recursive function to update models pks based on a directed graph representing
         model relations
         """
-        if self.data[successor]["model"] not in ONE_TO_ONE_RELATION and not digraph.nodes[successor]["pre_loaded"]:
-            if not digraph.nodes[successor]["updated"]:
-                self.data[successor]["pk"] = next_id
+        if (
+            self.data[successor]["model"] not in ONE_TO_ONE_RELATION
+            and not digraph.nodes[successor]["pre_loaded"]
+            and not digraph.nodes[successor]["updated"]
+        ):
+            self.data[successor]["pk"] = next_id
 
-                # Patch for repeated next_id in same models
-                model = self.data[successor]["model"]
-                updated_ids = [dict_["pk"] for (index, dict_) in enumerate(self.data) if dict_["model"] == model]
-                if next_id in updated_ids:
-                    # Prevent from duplicated pks in same model: this is done in the recursive path
-                    # TODO: verify better way to update next_id
-                    next_id = max(updated_ids) + 1
-                    self.data[successor]["pk"] = next_id
-                digraph.nodes[successor]["updated"] = True
+            # Patch for repeated next_id in same models
+            model = self.data[successor]["model"]
+            updated_ids = [dict_["pk"] for (index, dict_) in enumerate(self.data) if dict_["model"] == model]
+            if next_id in updated_ids:
+                # Prevent from duplicated pks in same model: this is done in the recursive path
+                # TODO: verify better way to update next_id
+                next_id = max(updated_ids) + 1
+                self.data[successor]["pk"] = next_id
+            digraph.nodes[successor]["updated"] = True
         for predecessor in digraph.predecessors(successor):
             if "relation" in digraph[predecessor][successor]:
                 relation = digraph[predecessor][successor]["relation"]
@@ -910,9 +921,7 @@ class ImportExperiment:
                         continue
                     responses = QuestionnaireUtils.responses_to_csv(responses)
                     del responses[0]  # First line is the header line
-                    response_ids = []
-                    for response in responses:
-                        response_ids.append(int(response[0]))
+                    response_ids = [int(response[0]) for response in responses]
                     ls_interface = Questionnaires(
                         settings.LIMESURVEY["URL_API"]
                         + "/index.php/plugins/unsecure?plugin=extendRemoteControl&function=action",

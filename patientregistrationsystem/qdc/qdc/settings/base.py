@@ -290,6 +290,7 @@ STORAGES = {
     },
 }
 
+
 STATICFILES_DIRS: list[str] = [
     os.path.join(BASE_DIR, "static_data"),
 ]

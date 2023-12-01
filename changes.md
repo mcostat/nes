@@ -16,6 +16,8 @@ added cache (redis)
 
 added CSP (Content Security Policy) and CORS
 
+improved test speed
+
 ## Improved project structure
 
     https://studygyaan.com/django/best-practice-to-structure-django-project-directories-and-files
@@ -35,6 +37,10 @@ added a modular settings system
 improved deploy
 
 added CI using GitHub actions
+
+added pre-commit hook
+
+added separeted requirements into requirements-dev.txt
 
 ## TODO
 

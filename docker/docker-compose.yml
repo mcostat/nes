@@ -6,11 +6,11 @@ services:
     container_name: limesurvey_db
     hostname: limesurvey_db
     image: postgres:11-bookworm
+    restart: unless-stopped
     networks:
       - nes_network
     volumes:
       - limesurvey_pgdata:/var/lib/postgresql/data:delegated
-    restart: unless-stopped
     expose:
       - 5432
     env_file:
@@ -24,11 +24,11 @@ services:
     container_name: limesurvey.nes
     hostname: limesurvey
     image: neuromat/nes-compose:limesurvey
+    restart: unless-stopped
     networks:
       - nes_network
     volumes:
       - "limesurvey_data:/var/www/limesurvey"
-    restart: unless-stopped
     expose:
       - 8080
     ports:
@@ -78,10 +78,12 @@ services:
   nes_base:
     container_name: nes
     hostname: nes
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
     networks:
       - nes_network
-    command: sleep infinity
-    restart: unless-stopped
     environment:
       NES_DIR: /usr/local/nes
       NES_DB_TYPE: pgsql
@@ -107,13 +109,11 @@ services:
     extends:
       service: nes_base
     build:
-      context: ..
-      dockerfile: docker/Dockerfile
       args:
         DEBUG: 0
+    containerUser: nes_user
     volumes:
       - nes_data:/usr/local/nes
-    tty: true
     ports:
       - "80:80"
       - "443:443"
@@ -129,7 +129,6 @@ volumes:
   limesurvey_pgdata:
   limesurvey_data:
 
-
 networks:
-  nes-network:
+  nes_network:
     name: nes_network

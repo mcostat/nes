@@ -14,7 +14,7 @@ ENV NES_BRANCH="jupyter"
 ENV NES_DIR="/usr/local/nes"
 
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update -q -y && apt-get install -y --no-install-recommends \
     python3-dev \
     libjpeg-dev \
     libpng-dev \
@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git && \
     apt-get autoremove -y && \
     apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt-get/lists/* && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 
@@ -61,7 +61,7 @@ ENV LC_ALL en_US.UTF-8
 
 ENV NES_DIR="/usr/local/nes"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update -q -y && apt-get install -y --no-install-recommends \
     curl \
     python3-pip \
     python3-psycopg \
@@ -84,14 +84,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get purge -y imagemagick imagemagick-6-common && \
     apt-get autoremove -y && \
     apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt-get/lists/* && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
-
-# RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
-#     echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list && \
-#     apt-get -y update --no-install-recommends && export DEBIAN_FRONTEND=noninteractive && \
-#     apt-get -y install --no-install-recommends redis
 
 RUN echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
 
@@ -125,6 +120,7 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
     cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert && \
     /usr/local/bin/mkcert -install
 
+RUN mkdir -p $NES_DIR/patientregistrationsystem/qdc/media && mkdir -p $NES_DIR/patientregistrationsystem/qdc/static
 
 WORKDIR $NES_DIR
 

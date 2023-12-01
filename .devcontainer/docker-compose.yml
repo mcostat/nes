@@ -3,10 +3,10 @@ version: '3.8'
 services:
   jupyterhub:
     container_name: jupyterhub.nes
+    hostname: jupyterhub
     build: https://github.com/mcostat/nes-jupyterhub.git
     image: nes-jupyterhub
     restart: unless-stopped
-    hostname: jupyterhub
     volumes:
       - nes_media:/nes/media:ro
       - /var/run/docker.sock:/var/run/docker.sock:rw
@@ -56,14 +56,17 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    command: sleep infinity
+    stdin_open: true
+    tty: true
     volumes:
       - ../..:/workspaces:cached
       - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media:rw
-    stdin_open: true
     env_file:
       - .env
     environment:
       DEBUG: true
+      DJANGO_SETTINGS_MODULE: qdc.settings.dev
       NES_HOSTNAME: localhost
       LIMESURVEY_URL_WEB: localhost
     depends_on:
@@ -76,7 +79,6 @@ volumes:
   nes_pgdata:
   nes_media:
   jupyterhub_data:
-
 
 networks:
   nes_network:

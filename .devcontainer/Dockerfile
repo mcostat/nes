@@ -31,25 +31,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean -y && \
     # Remove imagemagick due to https://security-tracker.debian.org/tracker/CVE-2019-10131
     apt-get purge -y imagemagick imagemagick-6-common && \
-    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt-get/lists/* && \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
-
-
-# RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
-#     echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list && \
-#     apt-get update && apt-get install -y --no-install-recommends redis && \
-#     apt-get autoremove -y && \
-#     apt-get clean -y && \
-#     rm -rf /var/lib/apt/lists/*
 
 
 COPY $NES_DIR/patientregistrationsystem/qdc/requirements.txt /tmp/pip-tmp/
 COPY $NES_DIR/patientregistrationsystem/qdc/requirements-dev.txt /tmp/pip-tmp/
-RUN pip3 --no-cache-dir --disable-pip-version-check install -r /tmp/pip-tmp/requirements.txt -r /tmp/pip-tmp/requirements-dev.txt \
+RUN pip3 --no-cache-dir --disable-pip-version-check install -r /tmp/pip-tmp/requirements-dev.txt \
     && rm -rf /tmp/pip-tmp
 
-
-ENV DEBIAN_FRONTEND=dialog
 
 COPY .devcontainer/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
