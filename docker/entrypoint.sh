@@ -18,16 +18,12 @@ while ! nc -z "$LIMESURVEY_HOSTNAME" "$LIMESURVEY_PORT"; do
 done
 echo "INFO: Limesurvey OK"
 
-sh "$NES_DIR/scripts/setup_nes.sh" vscode
+sh "$NES_DIR/scripts/setup_nes.sh" "$USERNAME"
 
 echo "INFO: Done initializing data"
 
 echo "INFO: Starting Redis"
 service redis-server start
-
-echo "INFO: entrypoint.sh finished"
-
-exec "$@"
 
 echo "INFO: entrypoint.sh finished"
 

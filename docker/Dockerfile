@@ -10,8 +10,8 @@ ENV LC_ALL en_US.UTF-8
 
 
 ARG NES_BRANCH
-ENV NES_BRANCH="jupyter"
-ENV NES_DIR="/usr/local/nes"
+ENV NES_BRANCH=jupyter
+ENV NES_DIR=/usr/local/nes
 
 
 RUN apt-get update -q -y && apt-get install -y --no-install-recommends \
@@ -59,7 +59,19 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-ENV NES_DIR="/usr/local/nes"
+ENV NES_DIR=/usr/local/nes
+
+ENV USERNAME=nes
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# Create the user
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 RUN apt-get update -q -y && apt-get install -y --no-install-recommends \
     curl \
@@ -127,6 +139,7 @@ WORKDIR $NES_DIR
 COPY docker/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
+USER ${USERNAME}
 
 ENTRYPOINT ["/entrypoint.sh"]
 
