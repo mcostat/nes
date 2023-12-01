@@ -6,7 +6,7 @@ from .base import *  # noqa: F401
 
 django_stubs_ext.monkeypatch()
 
-DEBUG = True
+DEBUG = False
 IS_TESTING = True
 
 AXES_ENABLED = True

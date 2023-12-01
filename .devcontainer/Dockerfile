@@ -44,8 +44,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 
 COPY $NES_DIR/patientregistrationsystem/qdc/requirements.txt /tmp/pip-tmp/
-COPY $NES_DIR/patientregistrationsystem/qdc/requirements_dev.txt /tmp/pip-tmp/
-RUN pip3 --no-cache-dir --disable-pip-version-check install -r /tmp/pip-tmp/requirements.txt -r /tmp/pip-tmp/requirements_dev.txt \
+COPY $NES_DIR/patientregistrationsystem/qdc/requirements-dev.txt /tmp/pip-tmp/
+RUN pip3 --no-cache-dir --disable-pip-version-check install -r /tmp/pip-tmp/requirements.txt -r /tmp/pip-tmp/requirements-dev.txt \
     && rm -rf /tmp/pip-tmp
 
 

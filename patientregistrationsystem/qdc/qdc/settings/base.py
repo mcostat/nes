@@ -195,7 +195,7 @@ CACHES: dict[str, Any] = {
 COMPRESS_CACHE_BACKEND = "redis"
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
-COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
+COMPRESS_STORAGE = "compressor.storage.BrotliCompressorFileStorage"
 
 COMPRESS_FILTERS = {
     "css": [

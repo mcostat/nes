@@ -77,7 +77,9 @@ from experiment.models import (
     FileFormat,
     FilterType,
     GenericDataCollectionFile,
-    Group as ExperimentGroup,
+)
+from experiment.models import Group as ExperimentGroup
+from experiment.models import (
     HotSpot,
     Instruction,
     Keyword,

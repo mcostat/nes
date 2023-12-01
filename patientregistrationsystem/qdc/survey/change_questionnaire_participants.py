@@ -3,7 +3,8 @@ import os
 import sys
 
 import django
-from experiment.models import Questionnaire, QuestionnaireResponse as EQuestionnaireResponse
+from experiment.models import Questionnaire
+from experiment.models import QuestionnaireResponse as EQuestionnaireResponse
 from patient.models import QuestionnaireResponse as PQuestionnaireResponse
 from survey.abc_search_engine import Questionnaires
 

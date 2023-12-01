@@ -11,14 +11,9 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from experiment.models import (
-    Component,
-    Experiment,
-    Group,
-    Questionnaire,
-    QuestionnaireResponse as ExperimentResponse,
-    SubjectOfGroup,
-)
+from experiment.models import Component, Experiment, Group, Questionnaire
+from experiment.models import QuestionnaireResponse as ExperimentResponse
+from experiment.models import SubjectOfGroup
 from experiment.views import get_block_tree
 from export.forms import ExportForm
 from export.input_export import build_complete_export_structure

@@ -42,7 +42,9 @@ from experiment.models import (
     MediaCollectionData,
     NeedleElectrode,
     Questionnaire,
-    QuestionnaireResponse as ExperimentQuestionnaireResponse,
+)
+from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
+from experiment.models import (
     ResearchProject,
     Stimulus,
     SubjectOfGroup,

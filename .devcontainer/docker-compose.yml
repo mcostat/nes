@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  jupyterhub:
+    container_name: jupyterhub.nes
+    build: https://github.com/mcostat/nes-jupyterhub.git
+    image: nes-jupyterhub
+    restart: unless-stopped
+    hostname: jupyterhub
+    volumes:
+      - nes_media:/nes/media:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - jupyterhub_data:/data
+    networks:
+      - nes_network
+      - jupyterhub_network
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    environment:
+      DOCKER_NETWORK_NAME: jupyterhub_network
+    depends_on:
+      - nes
 
   limesurvey_db:
     extends:
@@ -17,28 +38,6 @@ services:
       - .env
     depends_on:
       - limesurvey_db
-
-  jupyterhub:
-    container_name: jupyterhub.nes
-    build: https://github.com/mcostat/nes-jupyterhub.git
-    image: nes-jupyterhub
-    restart: unless-stopped
-    hostname: jupyterhub
-    volumes:
-      - nes_media:/nes/media:ro
-      - /var/run/docker.sock:/var/run/docker.sock:rw
-      - jupyterhub_data:/data
-    networks:
-      - nes_network
-      - jupyterhub-network
-    expose:
-      - 8000
-    ports:
-      - 8000:8000
-    environment:
-      DOCKER_NETWORK_NAME: jupyterhub-network
-    depends_on:
-      - nes
 
   nes_db:
     extends:
@@ -59,7 +58,7 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - ../..:/workspaces:cached
-      - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media
+      - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media:rw
     stdin_open: true
     env_file:
       - .env
@@ -82,5 +81,5 @@ volumes:
 networks:
   nes_network:
     name: nes_network
-  jupyterhub-network:
-    name: jupyterhub-network
+  jupyterhub_network:
+    name: jupyterhub_network

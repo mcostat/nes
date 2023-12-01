@@ -17,7 +17,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DATABASES["default"] = {
     "ENGINE": "django.db.backends.sqlite3",
-    "NAME": ":memory:",
+    "NAME": "db",
 }
 
 PASSWORD_HASHERS: list[str] = [

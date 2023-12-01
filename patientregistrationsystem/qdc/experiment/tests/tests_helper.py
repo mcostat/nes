@@ -7,7 +7,8 @@ from io import BufferedWriter
 
 from custom_user.tests.tests_helper import create_user
 from django.apps import apps
-from django.contrib.auth.models import Group as UserGroup, User
+from django.contrib.auth.models import Group as UserGroup
+from django.contrib.auth.models import User
 from django.core.files import File
 from django.db import IntegrityError
 from django.test import RequestFactory, TestCase

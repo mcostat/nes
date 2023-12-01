@@ -25,18 +25,9 @@ from django.test import Client, TestCase, override_settings
 from django.test.client import RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from experiment.models import (
-    Block,
-    ComponentConfiguration,
-    DataConfigurationTree,
-    Experiment,
-    Group,
-    Questionnaire,
-    QuestionnaireResponse as ExperimentQuestionnaireResponse,
-    ResearchProject,
-    Subject,
-    SubjectOfGroup,
-)
+from experiment.models import Block, ComponentConfiguration, DataConfigurationTree, Experiment, Group, Questionnaire
+from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
+from experiment.models import ResearchProject, Subject, SubjectOfGroup
 from faker import Factory
 from patient.management.commands.import_icd import import_classification_of_diseases
 from patient.models import (

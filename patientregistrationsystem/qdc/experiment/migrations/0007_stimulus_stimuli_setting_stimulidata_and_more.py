@@ -3,11 +3,10 @@
 import datetime
 
 import django.db.models.deletion
+import experiment.models
 import simple_history.models
 from django.conf import settings
 from django.db import migrations, models
-
-import experiment.models
 
 
 class Migration(migrations.Migration):

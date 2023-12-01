@@ -1,102 +1,73 @@
 {
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-        }
-    },
-    "isort.args": [
-        "--profile",
-        "black"
-    ],
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.inlayHints.functionReturnTypes": true,
-    "python.analysis.inlayHints.variableTypes": true,
-    "python.languageServer": "Default",
-    "python.analysis.typeCheckingMode": "off",
-    "python.analysis.diagnosticMode": "workspace",
-    "python.analysis.autoSearchPaths": true,
-    "python.analysis.fixAll": [
-        "source.convertImportFormat",
-        "source.unusedImports"
-    ],
-    "python.analysis.packageIndexDepths": [
-        {
-            "name": "django",
-            "depth": 2,
-            "includeAllSymbols": true
-        }
-    ],
-    "pylint.importStrategy": "fromEnvironment",
-    "python.analysis.include": [],
-    "python.analysis.exclude": [
-        "**/docs/",
-        ".git",
-        "**/migrations",
-        "**/tests"
-    ],
-    "python.analysis.extraPaths": [
-        "${localWorkspaceFolder}",
-        "patientregistrationsystem/qdc"
-    ],
-    "[dockerfile]": {
-        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-    },
-    "mypy-type-checker.reportingScope": "workspace",
-    "mypy-type-checker.preferDaemon": true,
-    "python.testing.unittestArgs": [
-        "-v",
-        "-s",
-        "./patientregistrationsystem/qdc",
-        "-p",
-        "test*.py"
-    ],
-    "python.testing.pytestEnabled": false,
-    "python.testing.unittestEnabled": true,
-    "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
-        "editor.defaultFormatter": "monosans.djlint"
-    },
-    "djlint.enableLinting": false,
-    "djlint.maxLineLength": 180,
-    "djlint.useGitignore": true,
-    "djlint.lineBreakAfterMultilineTag": true,
-    "djlint.maxBlankLines": 1,
-    "djlint.formatAttributeTemplateTags": false,
-    "djlint.maxAttributeLength": 160,
-    "djlint.blankLineAfterTag": [
-        "endblock",
-        "include",
-        "extends",
-        "load"
-    ],
-    "djlint.blankLineBeforeTag": [
-        "block",
-        "include",
-        "load"
-    ],
-    "djlint.profile": "django",
-    "djlint.ignore": [
-        "D018",
-        "H031"
-    ],
-    "djlint.extendExclude": [
-        "*.py"
-    ],
-    "[django-html]": {
-        "editor.defaultFormatter": "monosans.djlint"
-    },
+  "[django-html]": {
+    "editor.defaultFormatter": "monosans.djlint"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
+    "editor.defaultFormatter": "monosans.djlint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[python]": {
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+      "source.organizeImports": true
     },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "editor.formatOnSave": true,
-    "prettier.printWidth": 120
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+  "djlint.enableLinting": false,
+  "djlint.extendExclude": [
+    "*.py"
+  ],
+  "djlint.formatAttributeTemplateTags": false,
+  "djlint.ignore": [
+    "D018",
+    "H031"
+  ],
+  "djlint.lineBreakAfterMultilineTag": true,
+  "djlint.maxAttributeLength": 160,
+  "djlint.maxBlankLines": 1,
+  "djlint.maxLineLength": 180,
+  "djlint.profile": "django",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "mypy-type-checker.preferDaemon": true,
+  "mypy-type-checker.reportingScope": "workspace",
+  "prettier.printWidth": 120,
+  "pylint.importStrategy": "fromEnvironment",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.exclude": [
+    "**/docs/",
+    ".git",
+    "**/migrations",
+    "**/tests"
+  ],
+  "python.analysis.extraPaths": [
+    "${localWorkspaceFolder}",
+    "patientregistrationsystem/qdc"
+  ],
+  "python.analysis.include": [],
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.packageIndexDepths": [
+    {
+      "depth": 2,
+      "includeAllSymbols": true,
+      "name": "django"
+    }
+  ],
+  "python.analysis.typeCheckingMode": "off",
+  "python.languageServer": "Default"
 }

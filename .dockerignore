@@ -15,7 +15,7 @@ docker-compose.yml
 
 *.md
 
-.placeholder
+*.placeholder
 
 *.pyc
 *.pyo
@@ -40,6 +40,7 @@ env
 logs
 node_modules
 media
+static
 stats
 Dockerfile
 

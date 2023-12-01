@@ -1,48 +1,48 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: Django",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
-            "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
-            "args": [
-                "runserver",
-                "0.0.0.0:80"
-            ],
-            "django": true,
-            "justMyCode": true,
-            "env": {
-                "DEBUG": "true"
-            }
-        },
-        {
-            "name": "Python: Django Test",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
-            "args": [
-                "test",
-                "--exclude-tag=integration"
-            ],
-            "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
-            "django": true,
-            "justMyCode": true,
-        },
-        {
-            "name": "Python: Coverage",
-            "type": "python",
-            "request": "launch",
-            "module": "coverage",
-            "args": [
-                "run",
-                "manage.py",
-                "test",
-            ],
-            "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
-            "django": true,
-            "justMyCode": true,
-        }
-    ]
+  "configurations": [
+    {
+      "args": [
+        "runserver",
+        "0.0.0.0:80"
+      ],
+      "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
+      "django": true,
+      "env": {
+        "DEBUG": "true"
+      },
+      "justMyCode": true,
+      "name": "Python: Django",
+      "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
+      "request": "launch",
+      "type": "python"
+    },
+    {
+      "args": [
+        "test",
+        "--exclude-tag=integration"
+      ],
+      "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
+      "django": true,
+      "justMyCode": true,
+      "name": "Python: Django Test",
+      "program": "${workspaceFolder}/patientregistrationsystem/qdc/manage.py",
+      "request": "launch",
+      "type": "python"
+    },
+    {
+      "args": [
+        "run",
+        "manage.py",
+        "test"
+      ],
+      "cwd": "${workspaceFolder}/patientregistrationsystem/qdc",
+      "django": true,
+      "justMyCode": true,
+      "module": "coverage",
+      "name": "Python: Coverage",
+      "request": "launch",
+      "type": "python"
+    }
+  ],
+  "version": "0.2.0"
 }

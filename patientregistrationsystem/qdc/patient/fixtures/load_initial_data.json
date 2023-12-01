@@ -1,179 +1,179 @@
 [
   {
     "fields": {
-      "name_pt_br": "Todos os dias",
+      "name": "Todos os dias",
       "name_en": "Every day",
-      "name": "Todos os dias"
+      "name_pt_br": "Todos os dias"
     },
     "model": "patient.alcoholfrequency",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "Todos os finais de semana",
+      "name": "Todos os finais de semana",
       "name_en": "Every weekend",
-      "name": "Todos os finais de semana"
+      "name_pt_br": "Todos os finais de semana"
     },
     "model": "patient.alcoholfrequency",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "Esporadicamente",
+      "name": "Esporadicamente",
       "name_en": "Occasionally",
-      "name": "Esporadicamente"
+      "name_pt_br": "Esporadicamente"
     },
     "model": "patient.alcoholfrequency",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Mais de 10 anos",
+      "name": "Mais de 10 anos",
       "name_en": "More than 10 years",
-      "name": "Mais de 10 anos"
+      "name_pt_br": "Mais de 10 anos"
     },
     "model": "patient.alcoholperiod",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "5-10 anos",
+      "name": "5-10 anos",
       "name_en": "5-10 years",
-      "name": "5-10 anos"
+      "name_pt_br": "5-10 anos"
     },
     "model": "patient.alcoholperiod",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "1-5 anos",
+      "name": "1-5 anos",
       "name_en": "1-5 years",
-      "name": "1-5 anos"
+      "name_pt_br": "1-5 anos"
     },
     "model": "patient.alcoholperiod",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Menos de 1 ano",
+      "name": "Menos de 1 ano",
       "name_en": "Less than 1 year",
-      "name": "Menos de 1 ano"
+      "name_pt_br": "Menos de 1 ano"
     },
     "model": "patient.alcoholperiod",
     "pk": 4
   },
   {
     "fields": {
-      "name_pt_br": "Mais de 3 ma\u00e7os",
+      "name": "Mais de 3 ma\u00e7os",
       "name_en": "More than 3 packes",
-      "name": "Mais de 3 ma\u00e7os"
+      "name_pt_br": "Mais de 3 ma\u00e7os"
     },
     "model": "patient.amountcigarettes",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "1-2 ma\u00e7os",
+      "name": "1-2 ma\u00e7os",
       "name_en": "1-2 packes",
-      "name": "1-2 ma\u00e7os"
+      "name_pt_br": "1-2 ma\u00e7os"
     },
     "model": "patient.amountcigarettes",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "Menos de 1 ma\u00e7o",
+      "name": "Menos de 1 ma\u00e7o",
       "name_en": "Less than 1 pack",
-      "name": "Menos de 1 ma\u00e7o"
+      "name_pt_br": "Menos de 1 ma\u00e7o"
     },
     "model": "patient.amountcigarettes",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Amarelo",
+      "name": "Amarelo",
       "name_en": "Yellow",
-      "name": "Amarelo"
+      "name_pt_br": "Amarelo"
     },
     "model": "patient.fleshtone",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "Branco",
+      "name": "Branco",
       "name_en": "White",
-      "name": "Branco"
+      "name_pt_br": "Branco"
     },
     "model": "patient.fleshtone",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "Ind\u00edgena",
+      "name": "Ind\u00edgena",
       "name_en": "Indian",
-      "name": "Ind\u00edgena"
+      "name_pt_br": "Ind\u00edgena"
     },
     "model": "patient.fleshtone",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Pardo",
+      "name": "Pardo",
       "name_en": "Brown",
-      "name": "Pardo"
+      "name_pt_br": "Pardo"
     },
     "model": "patient.fleshtone",
     "pk": 4
   },
   {
     "fields": {
-      "name_pt_br": "Preto",
+      "name": "Preto",
       "name_en": "Black",
-      "name": "Preto"
+      "name_pt_br": "Preto"
     },
     "model": "patient.fleshtone",
     "pk": 5
   },
   {
     "fields": {
-      "name_pt_br": "Feminino",
+      "name": "Female",
       "name_en": "Female",
-      "name": "Female"
+      "name_pt_br": "Feminino"
     },
     "model": "patient.gender",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "Masculino",
+      "name": "Male",
       "name_en": "Male",
-      "name": "Male"
+      "name_pt_br": "Masculino"
     },
     "model": "patient.gender",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "Intersexo",
+      "name": "Intersex",
       "name_en": "Intersex",
-      "name": "Intersex"
+      "name_pt_br": "Intersexo"
     },
     "model": "patient.gender",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Outro",
+      "name": "Other",
       "name_en": "Other",
-      "name": "Other"
+      "name_pt_br": "Outro"
     },
     "model": "patient.gender",
     "pk": 4
   },
   {
     "fields": {
-      "name_en": "Not informed",
       "name": "N\u00e3o Informado",
+      "name_en": "Not informed",
       "name_pt_br": "N\u00e3o Informado"
     },
     "model": "patient.maritalstatus",
@@ -181,8 +181,8 @@
   },
   {
     "fields": {
-      "name_en": "Widower",
       "name": "Vi\u00favo",
+      "name_en": "Widower",
       "name_pt_br": "Vi\u00favo"
     },
     "model": "patient.maritalstatus",
@@ -190,8 +190,8 @@
   },
   {
     "fields": {
-      "name_en": "Separated/Divorced",
       "name": "Separado/Divorciado",
+      "name_en": "Separated/Divorced",
       "name_pt_br": "Separado/Divorciado"
     },
     "model": "patient.maritalstatus",
@@ -199,8 +199,8 @@
   },
   {
     "fields": {
-      "name_en": "Married/Live together",
       "name": "Casado/Convive Junto",
+      "name_en": "Married/Live together",
       "name_pt_br": "Casado/Convive Junto"
     },
     "model": "patient.maritalstatus",
@@ -208,198 +208,198 @@
   },
   {
     "fields": {
-      "name_pt_br": "Solteiro",
+      "name": "Solteiro",
       "name_en": "Single",
-      "name": "Solteiro"
+      "name_pt_br": "Solteiro"
     },
     "model": "patient.maritalstatus",
     "pk": 5
   },
   {
     "fields": {
-      "name_pt_br": "Particular",
+      "name": "Particular",
       "name_en": "Private",
-      "name": "Particular"
+      "name_pt_br": "Particular"
     },
     "model": "patient.payment",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "Conv\u00eanio",
+      "name": "Conv\u00eanio",
       "name_en": "Medical assistance",
-      "name": "Conv\u00eanio"
+      "name_pt_br": "Conv\u00eanio"
     },
     "model": "patient.payment",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "SUS",
+      "name": "SUS",
       "name_en": "SUS",
-      "name": "SUS"
+      "name_pt_br": "SUS"
     },
     "model": "patient.payment",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Budismo",
+      "name": "Budismo",
       "name_en": "Budism",
-      "name": "Budismo"
+      "name_pt_br": "Budismo"
     },
     "model": "patient.religion",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "Candombl\u00e9",
+      "name": "Candombl\u00e9",
       "name_en": "Candomble",
-      "name": "Candombl\u00e9"
+      "name_pt_br": "Candombl\u00e9"
     },
     "model": "patient.religion",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "Cat\u00f3lica",
+      "name": "Cat\u00f3lica",
       "name_en": "Catholic",
-      "name": "Cat\u00f3lica"
+      "name_pt_br": "Cat\u00f3lica"
     },
     "model": "patient.religion",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Esp\u00edrita",
+      "name": "Esp\u00edrita",
       "name_en": "Spiritualist",
-      "name": "Esp\u00edrita"
+      "name_pt_br": "Esp\u00edrita"
     },
     "model": "patient.religion",
     "pk": 4
   },
   {
     "fields": {
-      "name_pt_br": "Evang\u00e9lica",
+      "name": "Evang\u00e9lica",
       "name_en": "Evangelical",
-      "name": "Evang\u00e9lica"
+      "name_pt_br": "Evang\u00e9lica"
     },
     "model": "patient.religion",
     "pk": 5
   },
   {
     "fields": {
-      "name_pt_br": "Igreja de JC dos Santos dos \u00daltimos Dias",
+      "name": "Igreja de JC dos Santos dos \u00daltimos Dias",
       "name_en": "The Church of JC of Latter-day Saints",
-      "name": "Igreja de JC dos Santos dos \u00daltimos Dias"
+      "name_pt_br": "Igreja de JC dos Santos dos \u00daltimos Dias"
     },
     "model": "patient.religion",
     "pk": 6
   },
   {
     "fields": {
-      "name_pt_br": "Judaismo",
+      "name": "Judaismo",
       "name_en": "Judaism",
-      "name": "Judaismo"
+      "name_pt_br": "Judaismo"
     },
     "model": "patient.religion",
     "pk": 7
   },
   {
     "fields": {
-      "name_pt_br": "Protestante",
+      "name": "Protestante",
       "name_en": "Protestant",
-      "name": "Protestante"
+      "name_pt_br": "Protestante"
     },
     "model": "patient.religion",
     "pk": 8
   },
   {
     "fields": {
-      "name_pt_br": "Religi\u00f5es Orientais",
+      "name": "Religi\u00f5es Orientais",
       "name_en": " Eastern religions",
-      "name": "Religi\u00f5es Orientais"
+      "name_pt_br": "Religi\u00f5es Orientais"
     },
     "model": "patient.religion",
     "pk": 9
   },
   {
     "fields": {
-      "name_pt_br": "Sem religi\u00e3o",
+      "name": "Sem religi\u00e3o",
       "name_en": "No religion",
-      "name": "Sem religi\u00e3o"
+      "name_pt_br": "Sem religi\u00e3o"
     },
     "model": "patient.religion",
     "pk": 10
   },
   {
     "fields": {
-      "name_pt_br": "Testemunha de Jeov\u00e1",
+      "name": "Testemunha de Jeov\u00e1",
       "name_en": "Jehovah's Witness",
-      "name": "Testemunha de Jeov\u00e1"
+      "name_pt_br": "Testemunha de Jeov\u00e1"
     },
     "model": "patient.religion",
     "pk": 11
   },
   {
     "fields": {
-      "name_pt_br": "Umbanda",
+      "name": "Umbanda",
       "name_en": "Umbanda",
-      "name": "Umbanda"
+      "name_pt_br": "Umbanda"
     },
     "model": "patient.religion",
     "pk": 12
   },
   {
     "fields": {
-      "name_pt_br": "Analfabeto / Ensino Fundamental Incompleto",
+      "name": "Analfabeto / Ensino Fundamental Incompleto",
       "name_en": "Illiterate / until 3th Year Elementary ",
-      "name": "Analfabeto / Ensino Fundamental Incompleto"
+      "name_pt_br": "Analfabeto / Ensino Fundamental Incompleto"
     },
     "model": "patient.schooling",
     "pk": 1
   },
   {
     "fields": {
-      "name_pt_br": "Fundamental Completo",
+      "name": "Fundamental Completo",
       "name_en": "4th Year Elementary",
-      "name": "Fundamental Completo"
+      "name_pt_br": "Fundamental Completo"
     },
     "model": "patient.schooling",
     "pk": 2
   },
   {
     "fields": {
-      "name_pt_br": "Médio Incompleto",
+      "name": "M\u00e9dio Incompleto",
       "name_en": "College Incomplete",
-      "name": "Médio Incompleto"
+      "name_pt_br": "M\u00e9dio Incompleto"
     },
     "model": "patient.schooling",
     "pk": 3
   },
   {
     "fields": {
-      "name_pt_br": "Médio Completo",
+      "name": "M\u00e9dio Completo",
       "name_en": "College Complete",
-      "name": "Médio Completo"
+      "name_pt_br": "M\u00e9dio Completo"
     },
     "model": "patient.schooling",
     "pk": 4
   },
   {
     "fields": {
-      "name_pt_br": "Superior Incompleto",
+      "name": "Superior Incompleto",
       "name_en": "Undergraduation Incomplete",
-      "name": "Superior Incompleto"
+      "name_pt_br": "Superior Incompleto"
     },
     "model": "patient.schooling",
     "pk": 5
   },
   {
     "fields": {
-      "name_pt_br": "Superior Completo",
+      "name": "Superior Completo",
       "name_en": "Undergraduation Complete",
-      "name": "Superior Completo"
+      "name_pt_br": "Superior Completo"
     },
     "model": "patient.schooling",
     "pk": 6

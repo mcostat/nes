@@ -42,12 +42,9 @@ from experiment.import_export import ExportExperiment, ImportExperiment
 from export.directory_utils import create_directory
 from export.forms import AgeIntervalForm, ParticipantsSelectionForm
 from mne.channels import DigMontage
-from patient.models import (
-    ClassificationOfDiseases,
-    Patient,
-    QuestionnaireResponse as PatientQuestionnaireResponse,
-    SocialDemographicData,
-)
+from patient.models import ClassificationOfDiseases, Patient
+from patient.models import QuestionnaireResponse as PatientQuestionnaireResponse
+from patient.models import SocialDemographicData
 from patient.views import update_acquisition_date, update_completed_status
 from survey.abc_search_engine import Questionnaires
 from survey.models import SensitiveQuestion, Survey

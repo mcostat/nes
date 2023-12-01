@@ -15,7 +15,8 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.translation import gettext as ug_, gettext_lazy as _
+from django.utils.translation import gettext as ug_
+from django.utils.translation import gettext_lazy as _
 from experiment.models import (
     AdditionalData,
     Block,
@@ -31,12 +32,9 @@ from experiment.models import (
     Instruction,
     MediaCollectionData,
     Questionnaire,
-    QuestionnaireResponse as ExperimentQuestionnaireResponse,
-    ResearchProject,
-    Stimulus,
-    SubjectOfGroup,
-    TMSData,
 )
+from experiment.models import QuestionnaireResponse as ExperimentQuestionnaireResponse
+from experiment.models import ResearchProject, Stimulus, SubjectOfGroup, TMSData
 from export.export import ExportExecution, create_directory
 from export.export_utils import can_export_nwb, create_list_of_trees
 from export.input_export import build_complete_export_structure

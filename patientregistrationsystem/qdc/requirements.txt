@@ -15,7 +15,8 @@ django-cors-headers
 django-csp
 django_compressor
 django-oauth-toolkit
-whitenoise[brotli]
+whitenoise
+brotli
 
 jsonrpclib==0.2.1
 

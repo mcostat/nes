@@ -8,10 +8,14 @@ repos:
       - id: check-ast
       - id: check-yaml
       - id: check-toml
+      - id: check-json
       - id: check-executables-have-shebangs
       - id: check-shebang-scripts-are-executable
+      - id: pretty-format-json
+        args: [--autofix]
       - id: fix-encoding-pragma
         args: [--remove]
+      - id: mixed-line-ending
       - id: end-of-file-fixer
       - id: trailing-whitespace
 

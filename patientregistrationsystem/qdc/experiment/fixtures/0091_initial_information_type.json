@@ -1,98 +1,98 @@
 [
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Medidas cinem\u00e1ticas",
+      "description": "Medidas cinem\u00e1ticas",
       "description_en": "Kinematic measures",
       "description_pt_br": "Medidas cinem\u00e1ticas",
-      "description": "Medidas cinem\u00e1ticas",
-      "name_pt_br": "Medidas cinem\u00e1ticas",
-      "name_en": "Kinematic measures"
+      "name": "Medidas cinem\u00e1ticas",
+      "name_en": "Kinematic measures",
+      "name_pt_br": "Medidas cinem\u00e1ticas"
     },
+    "model": "experiment.informationtype",
     "pk": 1
   },
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Estabilometria",
+      "description": "Estabilometria",
       "description_en": "Stabilometry",
       "description_pt_br": "Estabilometria",
-      "description": "Estabilometria",
-      "name_pt_br": "Estabilometria",
-      "name_en": "Stabilometry"
+      "name": "Estabilometria",
+      "name_en": "Stabilometry",
+      "name_pt_br": "Estabilometria"
     },
+    "model": "experiment.informationtype",
     "pk": 2
   },
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Tempo de resposta",
+      "description": "Tempo de resposta",
       "description_en": "Response time",
       "description_pt_br": "Tempo de resposta",
-      "description": "Tempo de resposta",
-      "name_pt_br": "Tempo de resposta",
-      "name_en": "Response time"
+      "name": "Tempo de resposta",
+      "name_en": "Response time",
+      "name_pt_br": "Tempo de resposta"
     },
+    "model": "experiment.informationtype",
     "pk": 3
   },
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Medidas psicof\u00edsicas",
+      "description": "Medidas psicof\u00edsicas",
       "description_en": "Psychophysical measures",
       "description_pt_br": "Medidas psicof\u00edsicas",
-      "description": "Medidas psicof\u00edsicas",
-      "name_pt_br": "Medidas psicof\u00edsicas",
-      "name_en": "Psychophysical measures"
+      "name": "Medidas psicof\u00edsicas",
+      "name_en": "Psychophysical measures",
+      "name_pt_br": "Medidas psicof\u00edsicas"
     },
+    "model": "experiment.informationtype",
     "pk": 4
   },
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Resposta verbal",
+      "description": "Resposta verbal",
       "description_en": "Verbal response",
       "description_pt_br": "Resposta verbal",
-      "description": "Resposta verbal",
-      "name_pt_br": "Resposta verbal",
-      "name_en": "Verbal response"
+      "name": "Resposta verbal",
+      "name_en": "Verbal response",
+      "name_pt_br": "Resposta verbal"
     },
+    "model": "experiment.informationtype",
     "pk": 5
   },
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Escalas psicom\u00e9tricas",
+      "description": "Escalas psicom\u00e9tricas",
       "description_en": "Psychometric scales",
       "description_pt_br": "Escalas psicom\u00e9tricas",
-      "description": "Escalas psicom\u00e9tricas",
-      "name_pt_br": "Escalas psicom\u00e9tricas",
-      "name_en": "Psychometric scales"
+      "name": "Escalas psicom\u00e9tricas",
+      "name_en": "Psychometric scales",
+      "name_pt_br": "Escalas psicom\u00e9tricas"
     },
+    "model": "experiment.informationtype",
     "pk": 6
   },
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Registro unit\u00e1rio",
+      "description": "Registro unit\u00e1rio",
       "description_en": "Unit recording",
       "description_pt_br": "Registro unit\u00e1rio",
-      "description": "Registro unit\u00e1rio",
-      "name_pt_br": "Registro unit\u00e1rio",
-      "name_en": "Unit recording"
+      "name": "Registro unit\u00e1rio",
+      "name_en": "Unit recording",
+      "name_pt_br": "Registro unit\u00e1rio"
     },
+    "model": "experiment.informationtype",
     "pk": 7
   },
   {
-    "model": "experiment.informationtype",
     "fields": {
-      "name": "Registro multiunit\u00e1rio",
+      "description": "Registro multiunit\u00e1rio",
       "description_en": "Multiunit recording",
       "description_pt_br": "Registro multiunit\u00e1rio",
-      "description": "Registro multiunit\u00e1rio",
-      "name_pt_br": "Registro multiunit\u00e1rio",
-      "name_en": "Multiunit recording"
+      "name": "Registro multiunit\u00e1rio",
+      "name_en": "Multiunit recording",
+      "name_pt_br": "Registro multiunit\u00e1rio"
     },
+    "model": "experiment.informationtype",
     "pk": 8
   }
 ]

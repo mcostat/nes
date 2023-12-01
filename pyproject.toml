@@ -1,7 +1,48 @@
 [project]
 name = "nes"
 readme = "README.md"
-requires-python = ">3.11,<3.12"
+requires-python = ">=3.11,<3.12"
+
+
+[tool.pylint.main]
+analyse-fallback-blocks = "no"
+clear-cache-post-run = "no"
+fail-on = "E"
+fail-under = 9
+ignore = ["CVS", "tests", "migrations", "settings"]
+ignore-paths = "migrations|tests"
+jobs = 0
+load-plugins = ["pylint_django", "pylint_django.checkers.migrations"]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "raw-checker-failed",
+    "bad-inline-option",
+    "locally-disabled",
+    "file-ignored",
+    "suppressed-message",
+    "useless-suppression",
+    "deprecated-pragma",
+    "use-symbolic-message-instead",
+    "django-not-configured",
+    "multiple-statements",
+    "fixme",
+    "line-too-long",
+    "too-many-locals",
+    "consider-using-dict-items",
+    "missing-function-docstring",
+    "missing-class-docstring",
+    "missing-module-docstring",
+    "too-many-nested-blocks",
+    "too-many-statements",
+    "too-many-branches",
+    "unused-argument",
+    "too-many-public-methods",
+    "too-many-lines",
+]
 
 
 [tool.ruff]
@@ -45,8 +86,8 @@ include = '\.pyi?$'
 [tool.isort]
 line_length = 120
 profile = "black"
-combine_as_imports = true
 include_trailing_comma = true
+force_grid_wrap = 0
 
 
 [tool.djlint]
