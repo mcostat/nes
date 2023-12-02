@@ -80,8 +80,10 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("home/check_upgrade/", qdcviews.contact, name="check_upgrade"),
     path("home/upgrade_nes/", qdcviews.upgrade_nes, name="upgrade_nes"),
-    path("__debug__/", include("debug_toolbar.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))
 
 
 # internationalization
