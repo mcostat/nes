@@ -21,7 +21,7 @@ services:
     environment:
       DOCKER_NETWORK_NAME: jupyterhub_network
     depends_on:
-      - nes
+      - nes_dev
 
   limesurvey_db:
     extends:
@@ -49,16 +49,18 @@ services:
       POSTGRES_HOST_AUTH_METHOD: md5
       POSTGRES_INITDB_ARGS: --auth-host=md5
 
-  nes:
+  nes_dev:
     extends:
       file: ../docker/docker-compose.yml
-      service: nes_base
+      service: nes
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     command: sleep infinity
     stdin_open: true
     tty: true
+    ports:
+      - 80:80
     volumes:
       - ../..:/workspaces:cached
       - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media:rw
@@ -79,6 +81,8 @@ volumes:
   nes_pgdata:
   nes_media:
   jupyterhub_data:
+  nes_data:
+
 
 networks:
   nes_network:

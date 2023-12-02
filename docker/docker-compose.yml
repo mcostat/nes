@@ -75,16 +75,26 @@ services:
       PGDATA: /var/lib/postgresql/data
       PGCLIENTENCODING: UTF8
 
-  nes_base:
+  nes:
     container_name: nes
     hostname: nes
     build:
       context: ..
       dockerfile: docker/Dockerfile
+      args:
+        DEBUG: 0
+    volumes:
+      - nes_data:/usr/local/nes
+    ports:
+      - 80:80
+      - 443:443
+    env_file:
+      - .env
     restart: unless-stopped
     networks:
       - nes_network
     environment:
+      DJANGO_SETTINGS_MODULE: qdc.settings.prod
       NES_DB_TYPE: pgsql
       NES_DB_HOSTNAME: nes_db
       NES_DB: nes_db
@@ -103,21 +113,6 @@ services:
       LIMESURVEY_HOSTNAME: limesurvey
       LIMESURVEY_PORT: 8080
       LIMESURVEY_URL_WEB: lapisnes.local
-
-  nes:
-    extends:
-      service: nes_base
-    build:
-      args:
-        DEBUG: 0
-    containerUser: nes_user
-    volumes:
-      - nes_data:/usr/local/nes
-    ports:
-      - "80:80"
-      - "443:443"
-    env_file:
-      - .env
     depends_on:
       - nes_db
       - limesurvey
@@ -127,6 +122,7 @@ volumes:
   nes_pgdata:
   limesurvey_pgdata:
   limesurvey_data:
+
 
 networks:
   nes_network:

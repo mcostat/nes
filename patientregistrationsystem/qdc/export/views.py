@@ -688,10 +688,10 @@ def export_view(request, template_name: str = "export/export_data.html"):
                     # export_create method failed
                     shutil.rmtree(path.dirname(input_filename))
                     return result
-                elif path.exists(result):
+                if path.exists(result):
                     messages.success(request, _("Export was finished correctly"))
-                    zip_file = open(result, "rb")
-                    response = HttpResponse(zip_file, content_type="application/zip")
+                    with open(result, "rb") as zip_file:
+                        response = HttpResponse(zip_file, content_type="application/zip")
                     response["Content-Disposition"] = 'attachment; filename="export.zip"'
                     response["Content-Length"] = path.getsize(result)
                     return response
@@ -1161,11 +1161,10 @@ def get_questionnaire_fields(
         # questionnaire
         token = get_some_token(questionnaire_lime_survey, questionnaire_id)
         responses_string = questionnaire_lime_survey.get_header_response(questionnaire_id, result, token)
-        if token is None:
-            # (NES-971) In current version of export views responses_string accepts None token.
-            # So we allow to token being None by now.
-            if responses_string is None:
-                return Questionnaires.ERROR_CODE, []
+        # (NES-971) In current version of export views responses_string accepts None token.
+        # So we allow to token being None by now.
+        if token is None and responses_string is None:
+            return Questionnaires.ERROR_CODE, []
         questionnaire_title = questionnaire_lime_survey.get_survey_title(questionnaire_id, result)
         if not isinstance(responses_string, dict):
             record_question = {
@@ -1261,10 +1260,9 @@ def filter_participants(request):
                     date_birth_max = datetime.now() - relativedelta(years=int(request.POST["min_age"]))
                     participants_list = participants_list.filter(date_birth__range=(date_birth_min, date_birth_max))
 
-                if "location_checkbox" in request.POST:
-                    if "selected_locals" in request.POST:
-                        locations_selected = request.POST.getlist("selected_locals")
-                        participants_list = participants_list.filter(city__in=locations_selected)
+                if "location_checkbox" in request.POST and "selected_locals" in request.POST:
+                    locations_selected = request.POST.getlist("selected_locals")
+                    participants_list = participants_list.filter(city__in=locations_selected)
 
                 if "diagnosis_checkbox" in request.POST:
                     classification_of_diseases_list = request.POST.getlist("selected_diagnosis")
@@ -1309,13 +1307,13 @@ def filter_participants(request):
 
 
 @login_required
-def export_main(request):
+def export_main(request: HttpRequest):
     redirect_url = reverse("export_menu", args=())
     return HttpResponseRedirect(redirect_url)
 
 
 @login_required
-def export_menu(request, template_name: str = "export/export_menu.html"):
+def export_menu(request: HttpRequest, template_name: str = "export/export_menu.html"):
     export_type_list = [
         {
             "item": _("Per participant"),
@@ -1328,7 +1326,7 @@ def export_menu(request, template_name: str = "export/export_menu.html"):
             "enabled": True,
         },
     ]
-    if "group_selected_list" in request.session.keys():
+    if "group_selected_list" in request.session:
         del request.session["group_selected_list"]
 
     context = {"export_type_list": export_type_list}
@@ -1427,9 +1425,9 @@ def get_component_configuration_attributes(configuration):
 
 
 def get_component_attributes(component, language_code):
-    attributes = []
-    for attribute in get_general_component_attributes(component):
-        attributes.append(attribute)
+    attributes = list(get_general_component_attributes(component))
+    # for attribute in get_general_component_attributes(component):
+    #     attributes.append(attribute)
 
     specific_attributes = []
     if component.component_type == "block":

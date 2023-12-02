@@ -5,7 +5,6 @@ from django.db.models import signals
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django_stubs_ext.db.models import TypedModelMeta
 from patient.models import COUNTRIES
 
 LOGIN = (
@@ -26,7 +25,7 @@ class Institution(models.Model):  # type: ignore [django-manager-missing]
         related_name="children+",
     )
 
-    class Meta(TypedModelMeta):
+    class Meta:
         ordering = ["name"]
 
         constraints = [

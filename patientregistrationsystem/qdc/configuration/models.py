@@ -2,7 +2,6 @@ from typing import Any
 
 from custom_user.models import Institution
 from django.db import models
-from django_stubs_ext.db.models import TypedModelMeta
 from solo.models import SingletonModel
 
 
@@ -20,7 +19,7 @@ class LocalInstitution(SingletonModel):
     def __str__(self) -> str:
         return "Local Institution"
 
-    class Meta(TypedModelMeta):
+    class Meta:
         verbose_name = "Local Institution"
 
 
@@ -31,12 +30,12 @@ class Contact(SingletonModel):
     def __str__(self) -> str:
         return f"{self.name}"
 
-    class Meta(TypedModelMeta):
+    class Meta:
         verbose_name = "Contact"
 
 
 class RightsSupport(models.Model):
-    class Meta(TypedModelMeta):
+    class Meta:
         managed = False
 
         permissions = [

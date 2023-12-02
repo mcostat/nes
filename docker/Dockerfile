@@ -65,13 +65,6 @@ ENV USERNAME=nes
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-# Create the user
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && apt-get update \
-    && apt-get install -y sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 RUN apt-get update -q -y && apt-get install -y --no-install-recommends \
     curl \
@@ -103,9 +96,20 @@ RUN apt-get update -q -y && apt-get install -y --no-install-recommends \
 RUN echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
 
 
-COPY --from=wheeler $NES_DIR $NES_DIR
+COPY --from=wheeler ${NES_DIR} ${NES_DIR}
 
 COPY --from=wheeler /wheels /wheels
+
+
+RUN groupadd --gid ${USER_GID} ${USERNAME} \
+    && useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME} \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
+    && chmod 0440 /etc/sudoers.d/${USERNAME} \
+    && chmod 740 ${NES_DIR} \
+    && chown -R ${USERNAME} ${NES_DIR}
+
 
 RUN pip3 --no-cache-dir --disable-pip-version-check install -U pip setuptools wheel && \
     pip3 --no-cache-dir --disable-pip-version-check install -r /wheels/requirement/requirements.txt -f /wheels && \
@@ -132,14 +136,14 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
     cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert && \
     /usr/local/bin/mkcert -install
 
-RUN mkdir -p $NES_DIR/patientregistrationsystem/qdc/media && mkdir -p $NES_DIR/patientregistrationsystem/qdc/static
 
-WORKDIR $NES_DIR
+WORKDIR ${NES_DIR}
 
 COPY docker/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 USER ${USERNAME}
+
 
 ENTRYPOINT ["/entrypoint.sh"]
 

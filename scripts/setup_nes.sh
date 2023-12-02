@@ -49,6 +49,10 @@ except:
     echo "	INFO: populate_history"
     python3 -u manage.py populate_history --auto || true
 
+    # If NES was installed from a release it won"t have a .git directory
+    chown -R "$1" "$NES_DIR"/.git || true
+    chown -R "$1" "$NES_DIR"/patientregistrationsystem/qdc
+
     mkdir -p "$NES_PROJECT_PATH"/media/eeg_electrode_system_files/1/
     mkdir -p "$NES_PROJECT_PATH"/media/eeg_electrode_system_files/2/
     mkdir -p "$NES_PROJECT_PATH"/media/eeg_electrode_system_files/3/
@@ -59,10 +63,6 @@ except:
 
 
     rm /tmp/create_superuser.py
-
-    # If NES was installed from a release it won"t have a .git directory
-    chown -R "$1" "$NES_DIR"/.git || true
-    chown -R "$1" "$NES_DIR"/patientregistrationsystem
 
     touch "$NES_DIR"/.nes_initialization.placeholder
     chown -R nobody "$NES_DIR"/.nes_initialization.placeholder

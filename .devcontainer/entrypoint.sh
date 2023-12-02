@@ -23,7 +23,7 @@ sh "$NES_DIR/scripts/setup_nes.sh" vscode
 echo "INFO: Done initializing data"
 
 echo "INFO: Starting Redis"
-service redis-server start
+sudo service redis-server start
 
 echo "INFO: entrypoint.sh finished"
 
