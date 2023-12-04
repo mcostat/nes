@@ -95,6 +95,7 @@ services:
       - nes_network
     environment:
       DJANGO_SETTINGS_MODULE: qdc.settings.prod
+      NES_DIR: /usr/local/nes
       NES_DB_TYPE: pgsql
       NES_DB_HOSTNAME: nes_db
       NES_DB: nes_db

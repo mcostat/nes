@@ -69,6 +69,7 @@ services:
     environment:
       DEBUG: true
       DJANGO_SETTINGS_MODULE: qdc.settings.dev
+      NES_DIR: /workspaces/nes
       NES_HOSTNAME: localhost
       LIMESURVEY_URL_WEB: localhost
     depends_on:

@@ -2,7 +2,7 @@
 set -e
 
 # Entrypoint only variable
-NES_PROJECT_PATH="$NES_DIR/patientregistrationsystem/qdc"
+NES_PROJECT_PATH="$NES_DIR"/patientregistrationsystem/qdc
 
 echo "INFO: Setup NES"
 
