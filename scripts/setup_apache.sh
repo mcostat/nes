@@ -10,8 +10,8 @@ if [ -f /etc/apache2/sites-available/nes.conf ]; then
     echo "INFO: Apache data has already been initialized"
 else
     echo "INFO: Initializing Apache data"
-    sudo mkdir -p /etc/apache2/ssl-certs
-    sudo cat <<-EOF >/etc/apache2/sites-available/nes.conf
+    mkdir -p /etc/apache2/ssl-certs
+    cat <<-EOF >/etc/apache2/sites-available/nes.conf
 <VirtualHost *:$NES_PORT>
     ServerName $NES_IP
     ServerAlias $NES_HOSTNAME
@@ -57,7 +57,7 @@ else
 </VirtualHost>
 	EOF
 
-    sudo cat <<-EOF >/etc/apache2/sites-available/nes-ssl.conf
+    cat <<-EOF >/etc/apache2/sites-available/nes-ssl.conf
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
     Protocols h2 h2c http/1.1
@@ -121,7 +121,7 @@ else
 </IfModule>
 	EOF
 
-    sudo mkcert -key-file /etc/apache2/ssl-certs/key.pem -cert-file /etc/apache2/ssl-certs/cert.pem "$NES_HOSTNAME" "$NES_IP" localhost 0.0.0.0
+    mkcert -key-file /etc/apache2/ssl-certs/key.pem -cert-file /etc/apache2/ssl-certs/cert.pem "$NES_HOSTNAME" "$NES_IP" localhost 0.0.0.0
 
     a2enmod ssl
     a2enmod http2
