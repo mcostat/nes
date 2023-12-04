@@ -11,7 +11,7 @@ if [ -f /etc/apache2/sites-available/nes.conf ]; then
 else
     echo "INFO: Initializing Apache data"
     sudo mkdir -p /etc/apache2/ssl-certs
-    cat <<-EOF >/etc/apache2/sites-available/nes.conf
+    sudo cat <<-EOF >/etc/apache2/sites-available/nes.conf
 <VirtualHost *:$NES_PORT>
     ServerName $NES_IP
     ServerAlias $NES_HOSTNAME
@@ -57,7 +57,7 @@ else
 </VirtualHost>
 	EOF
 
-    cat <<-EOF >/etc/apache2/sites-available/nes-ssl.conf
+    sudo cat <<-EOF >/etc/apache2/sites-available/nes-ssl.conf
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
     Protocols h2 h2c http/1.1
