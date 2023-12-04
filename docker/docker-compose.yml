@@ -3,7 +3,6 @@ version: '3.8'
 services:
 
   limesurvey_db:
-    container_name: limesurvey_db
     hostname: limesurvey_db
     image: postgres:11-bookworm
     restart: unless-stopped
@@ -21,7 +20,6 @@ services:
       POSTGRES_PASSWORD: ${LIMESURVEY_DB_PASSWORD:-lime_password}
 
   limesurvey:
-    container_name: limesurvey.nes
     hostname: limesurvey
     image: neuromat/nes-compose:limesurvey
     restart: unless-stopped
@@ -54,7 +52,6 @@ services:
       - limesurvey_db
 
   nes_db:
-    container_name: nes_db
     hostname: nes_db
     image: postgres:16-bookworm
     restart: unless-stopped
@@ -76,7 +73,6 @@ services:
       PGCLIENTENCODING: UTF8
 
   nes:
-    container_name: nes
     hostname: nes
     build:
       context: ..

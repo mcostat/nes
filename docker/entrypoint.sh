@@ -18,8 +18,8 @@ while ! nc -z "$LIMESURVEY_HOSTNAME" "$LIMESURVEY_PORT"; do
 done
 echo "INFO: Limesurvey OK"
 
-sudo sh "$NES_DIR/scripts/setup_nes.sh" "$USERNAME"
-sudo sh "$NES_DIR/scripts/setup_apache.sh" "$USERNAME"
+sh "$NES_DIR/scripts/setup_nes.sh" "$USERNAME"
+sh "$NES_DIR/scripts/setup_apache.sh" "$USERNAME"
 
 echo "INFO: Done initializing data"
 
