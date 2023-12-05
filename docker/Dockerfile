@@ -142,7 +142,7 @@ WORKDIR ${NES_DIR}
 COPY docker/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-USER ${USERNAME}
+#USER ${USERNAME}
 
 
 ENTRYPOINT ["/entrypoint.sh"]
