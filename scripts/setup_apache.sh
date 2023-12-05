@@ -121,8 +121,10 @@ else
 </IfModule>
 	EOF
 
+    echo "INFO: Creating keys"
     mkcert -key-file /etc/apache2/ssl-certs/key.pem -cert-file /etc/apache2/ssl-certs/cert.pem "$NES_HOSTNAME" "$NES_IP" localhost 0.0.0.0
 
+    echo "INFO: setup Apache"
     a2enmod ssl
     a2enmod http2
     a2enmod headers

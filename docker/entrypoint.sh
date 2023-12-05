@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "INFO: Starting Development entrypoint.sh"
+echo "INFO: Starting Production entrypoint.sh"
 
 if [ "$NES_DB_TYPE" != "pgsql" ]; then
     echo "Unfortunately, for the time being, NES only works with PostgreSQL."
@@ -18,13 +18,13 @@ while ! nc -z "$LIMESURVEY_HOSTNAME" "$LIMESURVEY_PORT"; do
 done
 echo "INFO: Limesurvey OK"
 
-sh "$NES_DIR/scripts/setup_nes.sh" "$USERNAME"
+sudo sh "$NES_DIR/scripts/setup_nes.sh" "$USERNAME"
 sudo sh "$NES_DIR/scripts/setup_apache.sh" "$USERNAME"
 
 echo "INFO: Done initializing data"
 
 echo "INFO: Starting Redis"
-service redis-server start
+sudo service redis-server start
 
 echo "INFO: entrypoint.sh finished"
 
