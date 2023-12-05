@@ -107,7 +107,7 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
     && apt-get install -y sudo \
     && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
     && chmod 0440 /etc/sudoers.d/${USERNAME} \
-    && chmod 740 ${NES_DIR} \
+    && chmod 744 ${NES_DIR} \
     && chown -R ${USERNAME} ${NES_DIR}
 
 
@@ -142,7 +142,7 @@ WORKDIR ${NES_DIR}
 COPY docker/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-#USER ${USERNAME}
+USER ${USERNAME}
 
 
 ENTRYPOINT ["/entrypoint.sh"]
