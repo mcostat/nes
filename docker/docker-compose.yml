@@ -79,6 +79,7 @@ services:
       dockerfile: docker/Dockerfile
       args:
         DEBUG: 0
+    command: sleep infinity
     tty: true
     volumes:
       - nes_media:${NES_DIR}/patientregistrationsystem/qdc/media

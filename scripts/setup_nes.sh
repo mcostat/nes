@@ -36,7 +36,7 @@ except:
     echo "	INFO: create_super_user.py"
     python3 -u manage.py shell < /tmp/create_superuser.py || true
     echo "	INFO: import cid10"
-    #python3 -u manage.py import_icd_cid --file icd10cid10v2017.csv || true
+    python3 -u manage.py import_icd_cid --file icd10cid10v2017.csv || true
 
     mkdir -p static || true
     echo "	INFO: colectstatic"
@@ -51,7 +51,7 @@ except:
 
     # If NES was installed from a release it won"t have a .git directory
     chown -R "$1" "$NES_DIR"/.git || true
-    #chown -R "$1" "$NES_DIR"/patientregistrationsystem/qdc
+    chown -R "$1" "$NES_DIR"/patientregistrationsystem/qdc
 
     mkdir -p "$NES_PROJECT_PATH"/media/eeg_electrode_system_files/1/
     mkdir -p "$NES_PROJECT_PATH"/media/eeg_electrode_system_files/2/
