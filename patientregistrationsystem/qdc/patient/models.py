@@ -610,6 +610,12 @@ class ClassificationOfDiseases(models.Model):  # type: ignore [django-manager-mi
 
     objects: ClassificationOfDiseasesManager = ClassificationOfDiseasesManager()
 
+    class Meta:
+        unique_together = (
+            "code",
+            "parent",
+        )
+
     def __str__(self) -> str:
         return str(self.abbreviated_description)
 
