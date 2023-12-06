@@ -19,7 +19,7 @@ admin.autodiscover()
 
 urlpatterns = [
     re_path(r"^admin/", admin.site.urls, name="admin"),
-    path("o/", include("oauth2_provider.urls", namespace="oauth2_provider")),
+    path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     path("rosetta/", include("rosetta.urls")),
     path("patient/", include("patient.urls")),
     path("user/", include("custom_user.urls")),

@@ -1,28 +1,6 @@
 version: '3.8'
 
 services:
-  jupyterhub:
-    container_name: jupyterhub.nes
-    hostname: jupyterhub
-    build: https://github.com/mcostat/nes-jupyterhub.git
-    image: nes-jupyterhub
-    restart: unless-stopped
-    volumes:
-      - nes_media:/nes/media:ro
-      - /var/run/docker.sock:/var/run/docker.sock:rw
-      - jupyterhub_data:/data
-    networks:
-      - nes_network
-      - jupyterhub_network
-    expose:
-      - 8000
-    ports:
-      - 8000:8000
-    environment:
-      DOCKER_NETWORK_NAME: jupyterhub_network
-    depends_on:
-      - nes_dev
-
   limesurvey_db:
     extends:
       file: ../docker/docker-compose.yml
@@ -63,7 +41,7 @@ services:
       - 80:80
     volumes:
       - ../..:/workspaces:cached
-      - nes_media:/workspaces/nes/patientregistrationsystem/qdc/media:rw
+      - nes_media:${NES_DIR}/patientregistrationsystem/qdc/media
     env_file:
       - .env
     environment:
@@ -81,8 +59,8 @@ volumes:
   limesurvey_data:
   nes_pgdata:
   nes_media:
+    name: nes_media
   jupyterhub_data:
-  nes_data:
 
 
 networks:
