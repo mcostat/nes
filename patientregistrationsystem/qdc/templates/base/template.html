@@ -12,29 +12,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{% trans "Neuroscience Experiments System - NES" %}</title>
-        <link rel="icon" type="image/x-icon" href={% static "imgs/favicon.ico" %}>
+        <link rel="icon" type="image/x-icon" href="{% static "imgs/favicon.ico" %}">
         <meta name="description" content="Database system for storing data related to EEG and EMG">
         <meta name="author" content="Neuromat, PEB-Lapis">
 
-        {% compress css preload %}
-            <link rel="stylesheet" href="{% static "site/bootstrap-5.3.2-dist/css/bootstrap.min.css" %}" charset="utf-8">
-        {% endcompress %}
-        {% compress js preload %}
-            <script type="text/javascript" src="{% static "site/js/theme_picker.js" %}" charset="utf-8"></script>
-        {% endcompress %}
+        <link rel="preload" href="{% static "site/bootstrap-5.3.2-dist/css/bootstrap.min.css" %}" as="style" />
+        <link rel="modulepreload" href="{% static "site/js/theme_picker.js" %}" as="script" />
 
-        {% compress css %}
-            <link rel="stylesheet" href="{% static "site/bootstrap-5.3.2-dist/css/bootstrap.min.css" %}" charset="utf-8">
-        {% endcompress %}
-        {% compress js %}
-            <script type="text/javascript" src="{% static "site/js/theme_picker.js" %}" charset="utf-8"></script>
-        {% endcompress %}
+        <link rel="stylesheet" href="{% static "site/bootstrap-5.3.2-dist/css/bootstrap.min.css" %}" charset="utf-8">
+        <script type="text/javascript" src="{% static "site/js/theme_picker.js" %}" charset="utf-8"></script>
 
         {% compress css file base_nes_css %}
             <link rel="stylesheet" href="{% static "site/font-awesome-4.7.0/css/font-awesome.min.css" %}" charset="utf-8">
             <link rel="stylesheet" href="{% static "site/css/nes.css" %}" charset="utf-8">
             <link rel="stylesheet" href="{% static "site/css/breadcrumb.css" %}" charset="utf-8">
         {% endcompress %}
+
 
         {% block extrahead %}
         {% endblock extrahead %}
@@ -240,7 +233,7 @@
         <i class="fa fa-arrow-up"></i>
     </button>
 
-    {% compress js %}
+    {% compress js file %}
         <script type="text/javascript" defer src="{% static "site/jquery/jquery-3.7.1.slim.min.js" %}" charset="utf-8"></script>
         <script type="text/javascript" defer src="{% static "site/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js" %}" charset="utf-8"></script>
         <script type="text/javascript" defer src="{% static "site/autoComplete.js-10.2.7-dist/autoComplete.min.js" %}" charset="utf-8"></script>
