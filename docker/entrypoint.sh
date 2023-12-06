@@ -26,6 +26,9 @@ echo "INFO: Done initializing data"
 echo "INFO: Starting Redis"
 sudo service redis-server start
 
+echo "INFO: Starting Apache"
+sudo service apache2 start
+
 echo "INFO: entrypoint.sh finished"
 
 exec "$@"

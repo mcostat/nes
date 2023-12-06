@@ -137,11 +137,11 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
     /usr/local/bin/mkcert -install
 
 
-WORKDIR ${NES_DIR}
-
 COPY docker/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
+
+WORKDIR ${NES_DIR}
 #USER ${USERNAME}
 
 
