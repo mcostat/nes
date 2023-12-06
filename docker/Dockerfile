@@ -30,13 +30,13 @@ RUN apt-get update -q -y && apt-get install -y --no-install-recommends \
     ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 
-RUN mkdir -p ${NES_DIR}  && \
-    if [ ${NES_BRANCH} ]; then \
-    echo Cloning ${NES_BRANCH }branch ;\
-    git clone -j $(nproc) -b ${NES_BRANCH}  https://github.com/mcostat/nes.git ${NES_DIR} ;\
+RUN mkdir -p "$NES_DIR"  && \
+    if [ "$NES_BRANCH" ]; then \
+    echo Cloning "$NES_BRANCH "branch ;\
+    git clone -j $(nproc) -b "$NES_BRANCH"  https://github.com/mcostat/nes.git "$NES_DIR" ;\
     else \
     echo Cloning master branch ;\
-    git clone -j $(nproc) https://github.com/mcostat/nes.git ${NES_DIR} ;\
+    git clone -j $(nproc) https://github.com/mcostat/nes.git "$NES_DIR" ;\
     fi
 
 
@@ -101,14 +101,14 @@ COPY --from=wheeler ${NES_DIR} ${NES_DIR}
 COPY --from=wheeler /wheels /wheels
 
 
-RUN groupadd --gid ${USER_GID} ${USERNAME} \
-    && useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME} \
+RUN groupadd --gid "$USER_GID" "$USERNAME" \
+    && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
     && apt-get update \
     && apt-get install -y sudo \
-    && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
-    && chmod 0440 /etc/sudoers.d/${USERNAME} \
-    && chown -R ${USERNAME} ${NES_DIR} \
-    && chmod 755 ${NES_DIR}
+    && echo "$USERNAME" ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/"$USERNAME" \
+    && chmod 0440 /etc/sudoers.d/"$USERNAME" \
+    && chown -R "$USERNAME" "$NES_DIR" \
+    && chmod 755 "$NES_DIR"
 
 
 RUN pip3 --no-cache-dir --disable-pip-version-check install -U pip setuptools wheel && \
@@ -142,7 +142,7 @@ WORKDIR ${NES_DIR}
 COPY docker/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-USER ${USERNAME}
+#USER ${USERNAME}
 
 
 ENTRYPOINT ["/entrypoint.sh"]

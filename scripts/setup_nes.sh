@@ -51,7 +51,7 @@ except:
 
     # If NES was installed from a release it won"t have a .git directory
     chown -R "$1" "$NES_DIR"/.git || true
-    sudo chown -R "$1" "$NES_DIR"/patientregistrationsystem/qdc
+    chown -R "$1" "$NES_DIR"/patientregistrationsystem/qdc
 
     mkdir -p "$NES_PROJECT_PATH"/media/eeg_electrode_system_files/1/
     mkdir -p "$NES_PROJECT_PATH"/media/eeg_electrode_system_files/2/

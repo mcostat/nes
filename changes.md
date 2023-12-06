@@ -18,6 +18,14 @@ added CSP (Content Security Policy) and CORS
 
 improved test speed
 
+improved deploy
+
+added CI using GitHub actions
+
+added pre-commit hook
+
+added oauth2
+
 ## Improved project structure
 
     https://studygyaan.com/django/best-practice-to-structure-django-project-directories-and-files
@@ -32,13 +40,7 @@ moved quiz/templates to /templates
 
 added a base template to registration HTML
 
-added a modular settings system
-
-improved deploy
-
-added CI using GitHub actions
-
-added pre-commit hook
+added a modular django settings system
 
 added separeted requirements into requirements-dev.txt
 

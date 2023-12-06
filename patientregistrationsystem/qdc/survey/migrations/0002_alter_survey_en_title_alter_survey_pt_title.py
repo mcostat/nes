@@ -12,11 +12,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="survey",
             name="en_title",
-            field=models.CharField(blank=True, default=None, max_length=255),
+            field=models.CharField(blank=True, default="", max_length=255),
         ),
         migrations.AlterField(
             model_name="survey",
             name="pt_title",
-            field=models.CharField(blank=True, default=None, max_length=255),
+            field=models.CharField(blank=True, default="", max_length=255),
         ),
     ]
