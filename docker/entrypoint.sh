@@ -18,15 +18,14 @@ while ! nc -z "$LIMESURVEY_HOSTNAME" "$LIMESURVEY_PORT"; do
 done
 echo "INFO: Limesurvey OK"
 
+echo "INFO: Starting Redis"
+service redis-server start
+
 # sh "$NES_DIR/scripts/setup_nes.sh" "$USERNAME"
 # sh "$NES_DIR/scripts/setup_apache.sh" "$USERNAME"
 sh "$NES_DIR/scripts/setup_nes.sh" "www-data"
 sh "$NES_DIR/scripts/setup_apache.sh" "www-data"
-
 echo "INFO: Done initializing data"
-
-echo "INFO: Starting Redis"
-service redis-server start
 
 echo "INFO: Starting Apache"
 service apache2 start

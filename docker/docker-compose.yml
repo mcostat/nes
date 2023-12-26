@@ -111,6 +111,7 @@ services:
       LIMESURVEY_HOSTNAME: limesurvey
       LIMESURVEY_PORT: 8080
       LIMESURVEY_URL_WEB: lapisnes.local
+      GITHUB_PROJECT_REPO: https://github.com/mcostat/nes.git
     depends_on:
       - nes_db
       - limesurvey
