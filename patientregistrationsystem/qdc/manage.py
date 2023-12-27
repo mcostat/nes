@@ -10,7 +10,6 @@ if __name__ == "__main__":
     elif "runserver" in sys.argv:
         SETTINGS = "qdc.settings.dev"
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS)
     os.environ["DJANGO_SETTINGS_MODULE"] = SETTINGS
 
     try:
