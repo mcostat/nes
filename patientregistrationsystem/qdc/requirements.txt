@@ -15,6 +15,7 @@ django-cors-headers
 django-csp
 django_compressor
 django-oauth-toolkit
+django-environ
 whitenoise
 brotli
 

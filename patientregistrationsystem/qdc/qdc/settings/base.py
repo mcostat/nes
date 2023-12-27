@@ -8,9 +8,13 @@ import os
 from pathlib import Path
 from typing import Any
 
+import environ
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR: Path = Path(__file__).parent.parent.parent
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -18,7 +22,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY: str = os.getenv("NES_SECRET_KEY")
+SECRET_KEY: str = env("NES_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -72,11 +76,11 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:8080",
     "http://localhost:8000",
     "https://localhost:8000",
-    "https://" + os.getenv("NES_IP"),
-    "https://" + os.getenv("NES_HOSTNAME"),
-    "https://" + os.getenv("LIMESURVEY_HOSTNAME") + ":" + os.getenv("LIMESURVEY_PORT"),
-    "http://" + os.getenv("LIMESURVEY_HOSTNAME") + ":" + os.getenv("LIMESURVEY_PORT"),
-    "http://" + os.getenv("LIMESURVEY_URL_WEB") + ":" + os.getenv("LIMESURVEY_PORT"),
+    "https://" + env("NES_IP"),
+    "https://" + env("NES_HOSTNAME"),
+    "https://" + env("LIMESURVEY_HOSTNAME") + ":" + env("LIMESURVEY_PORT"),
+    "http://" + env("LIMESURVEY_HOSTNAME") + ":" + env("LIMESURVEY_PORT"),
+    "http://" + env("LIMESURVEY_URL_WEB") + ":" + env("LIMESURVEY_PORT"),
 ]
 
 
@@ -300,7 +304,7 @@ STATICFILES_FINDERS = (
 )
 
 STATIC_ROOT: str = os.path.join(BASE_DIR, "static")
-STATIC_HOST = os.getenv("DJANGO_STATIC_HOST")
+STATIC_HOST = env("DJANGO_STATIC_HOST")
 STATIC_URL = STATIC_HOST + "/static/"
 
 ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
@@ -316,23 +320,23 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "0.0.0.0",
     "nes",
-    os.getenv("NES_IP"),
-    os.getenv("NES_HOSTNAME"),
+    env("NES_IP"),
+    env("NES_HOSTNAME"),
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://localhost",
-    "https://" + os.getenv("NES_IP"),
-    "https://" + os.getenv("NES_HOSTNAME"),
+    "https://" + env("NES_IP"),
+    "https://" + env("NES_HOSTNAME"),
 ]
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("NES_DB"),
-        "USER": os.getenv("NES_DB_USER"),
-        "PASSWORD": os.getenv("NES_DB_PASSWORD"),
-        "HOST": os.getenv("NES_DB_HOSTNAME"),
-        "PORT": os.getenv("NES_DB_PORT"),
+        "NAME": env("NES_DB"),
+        "USER": env("NES_DB_USER"),
+        "PASSWORD": env("NES_DB_PASSWORD"),
+        "HOST": env("NES_DB_HOSTNAME"),
+        "PORT": env("NES_DB_PORT"),
         "CONN_MAX_AGE": 10 * 60,
         "CONN_HEALTH_CHECKS": True,
     },
@@ -341,14 +345,14 @@ DATABASES = {
 # LimeSurvey configuration
 LIMESURVEY = {
     "URL_API": "http://"
-    + os.getenv(
+    + env(
         "LIMESURVEY_HOSTNAME",
     )
     + ":"
-    + os.getenv("LIMESURVEY_PORT"),
-    "URL_WEB": "http://" + os.getenv("LIMESURVEY_URL_WEB") + ":" + os.getenv("LIMESURVEY_PORT"),
-    "USER": os.getenv("LIMESURVEY_ADMIN_USER"),
-    "PASSWORD": os.getenv("LIMESURVEY_ADMIN_PASSWORD"),
+    + env("LIMESURVEY_PORT"),
+    "URL_WEB": "http://" + env("LIMESURVEY_URL_WEB") + ":" + env("LIMESURVEY_PORT"),
+    "USER": env("LIMESURVEY_ADMIN_USER"),
+    "PASSWORD": env("LIMESURVEY_ADMIN_PASSWORD"),
 }
 
 # Portal API configuration
@@ -361,12 +365,12 @@ SHOW_SEND_TO_PORTAL_BUTTON = False
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
 SERVER_EMAIL = EMAIL_HOST_USER
 
-PROJECT_REPO = os.getenv("GITHUB_PROJECT_REPO")
+PROJECT_REPO = env("GITHUB_PROJECT_REPO")
 
 VERSION = "2.0.0"
 

@@ -93,26 +93,14 @@ services:
       - nes_network
     environment:
       DJANGO_SETTINGS_MODULE: qdc.settings.prod
-      NES_DB_TYPE: pgsql
-      NES_DB_HOSTNAME: nes_db
-      NES_DB: nes_db
       NES_DB_USER: ${NES_DB_USER:-nes_user}
       NES_DB_PASSWORD: ${NES_DB_PASSWORD:-nes_password}
-      NES_DB_PORT: 5432
       NES_SECRET_KEY: ${NES_SECRET_KEY:-your_secret_key}
-      NES_HOSTNAME: lapisnes.local
-      NES_IP: localhost
-      NES_PORT: 80
       NES_ADMIN_USER: ${NES_ADMIN_USER:-nes_admin}
       NES_ADMIN_EMAIL: ${NES_ADMIN_EMAIL:-nes_admin@nesmail.com}
       NES_ADMIN_PASSWORD: ${NES_ADMIN_PASSWORD:-nes_admin_password}
       LIMESURVEY_ADMIN_USER: ${LIMESURVEY_ADMIN_USER:-lime_admin}
       LIMESURVEY_ADMIN_PASSWORD: ${LIMESURVEY_ADMIN_PASSWORD:-lime_admin_password}
-      LIMESURVEY_HOSTNAME: limesurvey
-      LIMESURVEY_PORT: 8080
-      LIMESURVEY_URL_WEB: lapisnes.local
-      GITHUB_PROJECT_REPO: https://github.com/mcostat/nes.git
-      DJANGO_STATIC_HOST: ""
     depends_on:
       - nes_db
       - limesurvey

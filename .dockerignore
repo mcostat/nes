@@ -3,7 +3,6 @@
 **/.gitattributes
 **/.vscode
 **/coverage
-**/.env
 **/.aws
 **/.ssh
 Dockerfile

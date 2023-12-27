@@ -136,6 +136,7 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
     cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert && \
     /usr/local/bin/mkcert -install
 
+COPY docker/.env $NES_DIR/patientregistrationsystem/qdc
 
 COPY docker/entrypoint.sh /
 RUN chmod +x /entrypoint.sh

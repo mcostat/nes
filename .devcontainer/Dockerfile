@@ -40,6 +40,7 @@ COPY $NES_DIR/patientregistrationsystem/qdc/requirements-dev.txt /tmp/pip-tmp/
 RUN pip3 --no-cache-dir --disable-pip-version-check install -r /tmp/pip-tmp/requirements-dev.txt \
     && rm -rf /tmp/pip-tmp
 
+COPY .devcontainer/.env "$NES_DIR"/patientregistrationsystem/qdc
 
 COPY .devcontainer/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
