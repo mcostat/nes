@@ -932,7 +932,6 @@ class ExportQuestionnaireTest(ExportTestCase):
     ):
         """With reuse"""
         # by now: simply testing in browser is working (but, make this test ;)
-        pass
 
     @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
     @patch("survey.abc_search_engine.Server")

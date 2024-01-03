@@ -658,8 +658,8 @@ class ImportExperiment:
             for i in indexes:
                 list_of_filters = []
                 if self.data[i]["fields"]["cpf"]:
-                    list_of_filters.append(Q(**{"cpf": self.data[i]["fields"]["cpf"]}))
-                list_of_filters.append(Q(**{"name": self.data[i]["fields"]["name"]}))
+                    list_of_filters.append(Q(cpf=self.data[i]["fields"]["cpf"]))
+                list_of_filters.append(Q(name=self.data[i]["fields"]["name"]))
 
                 instances = Patient.objects.filter(reduce(or_, list_of_filters))
                 for instance in instances:

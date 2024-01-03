@@ -1352,7 +1352,7 @@ class ExportExecution:
             if not plugin:
                 # Ex. Per_questionnaire.Q123_aaa
                 questionnaire_title = self.get_title_reduced(questionnaire_id=questionnaire_id)
-                path_questionnaire = f"{str(questionnaire_code)}_{questionnaire_title}"
+                path_questionnaire = f"{questionnaire_code!s}_{questionnaire_title}"
             else:
                 random_forest = RandomForests.objects.first()
                 if questionnaire_id == random_forest.admission_assessment.lime_survey_id:
@@ -1587,7 +1587,7 @@ class ExportExecution:
             questionnaire_id = questionnaire["id"]
             questionnaire_code = self.questionnaire_utils.get_questionnaire_code_from_id(questionnaire_id)
             questionnaire_title = self.get_title_reduced(questionnaire_id=questionnaire_id)
-            path_questionnaire = f"{str(questionnaire_code)}_{questionnaire_title}"
+            path_questionnaire = f"{questionnaire_code!s}_{questionnaire_title}"
 
             # Path ex. data/Participant_data/Per_questionnaire/Q123_aaa/
             error_msg, export_path = create_directory(path_per_questionnaire, path_questionnaire)
@@ -1859,7 +1859,7 @@ class ExportExecution:
 
                     prefix_filename_fields = questionnaire_data["prefix_filename_fields"]
                     # Ex. Q123_aaa
-                    directory_questionnaire_name = f"{str(questionnaire_code)}_{questionnaire_title}"
+                    directory_questionnaire_name = f"{questionnaire_code!s}_{questionnaire_title}"
                     if per_experiment_plugin:
                         randomforests = RandomForests.objects.first()
                         if questionnaire_id == randomforests.admission_assessment.lime_survey_id:
@@ -2124,7 +2124,7 @@ class ExportExecution:
                 for questionnaire_code in ordered_questionnaires:
                     questionnaire_id = int(self.questionnaire_utils.get_questionnaire_id_from_code(questionnaire_code))
                     title = self.get_title_reduced(questionnaire_id=int(questionnaire_id))
-                    questionnaire_directory_name = f"{str(questionnaire_code)}_{title}"
+                    questionnaire_directory_name = f"{questionnaire_code!s}_{title}"
                     if participants_plugin:
                         randomforests = RandomForests.objects.first()
                         if questionnaire_id == randomforests.admission_assessment.lime_survey_id:
@@ -2294,7 +2294,7 @@ class ExportExecution:
                                 else:
                                     language_list = [questionnaire_language["output_language"]]
                                 # Create questionnaire directory
-                                path_questionnaire = f"{str(questionnaire_code)}_{title}"
+                                path_questionnaire = f"{questionnaire_code!s}_{title}"
                                 # /data/Participant_data/Per_participant/Participant_P123/Q123_title
                                 (
                                     error_msg,
@@ -2449,7 +2449,7 @@ class ExportExecution:
                         for language in language_list:
                             if response_english_plugin_done:
                                 break
-                            export_filename = f"{str(questionnaire_code)}_{slugify(questionnaire_title)}_{language}"
+                            export_filename = f"{questionnaire_code!s}_{slugify(questionnaire_title)}_{language}"
                             if per_experiment_plugin:
                                 randomforests = RandomForests.objects.first()
                                 if questionnaire_id == randomforests.admission_assessment.lime_survey_id:

@@ -1,4 +1,4 @@
-from .base import *  # noqa: F401
+from .base import *
 
 DEBUG = False
 IS_TESTING = False

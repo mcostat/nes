@@ -2,7 +2,7 @@ import warnings
 
 import django_stubs_ext
 
-from .base import *  # noqa: F401
+from .base import *
 
 django_stubs_ext.monkeypatch()
 

@@ -103,29 +103,6 @@ jobs:
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
 
-  flake8:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-          cache: "pip"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r patientregistrationsystem/qdc/requirements-dev.txt
-
-      - name: Run flake8
-        uses: suo/flake8-github-action@releases/v1
-        with:
-          checkName: "flake8" # NOTE: this needs to be the same as the job name
-
   pylint:
     runs-on: ubuntu-latest
 
