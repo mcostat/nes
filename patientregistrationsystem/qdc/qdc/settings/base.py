@@ -22,7 +22,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY: str = env("NES_SECRET_KEY")
+SECRET_KEY: str = env("NES_SECRET_KEY", default="django-insecure")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -76,11 +76,11 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:8080",
     "http://localhost:8000",
     "https://localhost:8000",
-    "https://" + env("NES_IP"),
-    "https://" + env("NES_HOSTNAME"),
-    "https://" + env("LIMESURVEY_HOSTNAME") + ":" + env("LIMESURVEY_PORT"),
-    "http://" + env("LIMESURVEY_HOSTNAME") + ":" + env("LIMESURVEY_PORT"),
-    "http://" + env("LIMESURVEY_URL_WEB") + ":" + env("LIMESURVEY_PORT"),
+    "https://" + env("NES_IP", default="localhost"),
+    "https://" + env("NES_HOSTNAME", default="localhost"),
+    "https://" + env("LIMESURVEY_HOSTNAME", default="limesurvey") + ":" + env("LIMESURVEY_PORT", default="8080"),
+    "http://" + env("LIMESURVEY_HOSTNAME", default="limesurvey") + ":" + env("LIMESURVEY_PORT", default="8080"),
+    "http://" + env("LIMESURVEY_URL_WEB", default="limesurvey") + ":" + env("LIMESURVEY_PORT", default="8080"),
 ]
 
 
@@ -304,7 +304,7 @@ STATICFILES_FINDERS = (
 )
 
 STATIC_ROOT: str = os.path.join(BASE_DIR, "static")
-STATIC_HOST = env("DJANGO_STATIC_HOST")
+STATIC_HOST = env("DJANGO_STATIC_HOST", default="")
 STATIC_URL = STATIC_HOST + "/static/"
 
 ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
@@ -320,23 +320,23 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "0.0.0.0",
     "nes",
-    env("NES_IP"),
-    env("NES_HOSTNAME"),
+    env("NES_IP", default="localhost"),
+    env("NES_HOSTNAME", default="localhost"),
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://localhost",
-    "https://" + env("NES_IP"),
-    "https://" + env("NES_HOSTNAME"),
+    "https://" + env("NES_IP", default="localhost"),
+    "https://" + env("NES_HOSTNAME", default="localhost"),
 ]
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("NES_DB"),
-        "USER": env("NES_DB_USER"),
-        "PASSWORD": env("NES_DB_PASSWORD"),
-        "HOST": env("NES_DB_HOSTNAME"),
-        "PORT": env("NES_DB_PORT"),
+        "NAME": env("NES_DB", default="nes_db"),
+        "USER": env("NES_DB_USER", default="nes_user"),
+        "PASSWORD": env("NES_DB_PASSWORD", default="nes_password"),
+        "HOST": env("NES_DB_HOSTNAME", default="nes_db"),
+        "PORT": env("NES_DB_PORT", default="5432"),
         "CONN_MAX_AGE": 10 * 60,
         "CONN_HEALTH_CHECKS": True,
     },
@@ -345,14 +345,15 @@ DATABASES = {
 # LimeSurvey configuration
 LIMESURVEY = {
     "URL_API": "http://"
-    + env(
-        "LIMESURVEY_HOSTNAME",
-    )
+    + env("LIMESURVEY_HOSTNAME", default="limesurvey")
     + ":"
-    + env("LIMESURVEY_PORT"),
-    "URL_WEB": "http://" + env("LIMESURVEY_URL_WEB") + ":" + env("LIMESURVEY_PORT"),
-    "USER": env("LIMESURVEY_ADMIN_USER"),
-    "PASSWORD": env("LIMESURVEY_ADMIN_PASSWORD"),
+    + env("LIMESURVEY_PORT", default="8080"),
+    "URL_WEB": "http://"
+    + env("LIMESURVEY_URL_WEB", default="limesurvey")
+    + ":"
+    + env("LIMESURVEY_PORT", default="8080"),
+    "USER": env("LIMESURVEY_ADMIN_USER", default="limesurvey_user"),
+    "PASSWORD": env("LIMESURVEY_ADMIN_PASSWORD", default="lime_password"),
 }
 
 # Portal API configuration
@@ -365,12 +366,12 @@ SHOW_SEND_TO_PORTAL_BUTTON = False
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER", default="")
 SERVER_EMAIL = EMAIL_HOST_USER
 
-PROJECT_REPO = env("GITHUB_PROJECT_REPO")
+PROJECT_REPO = env("GITHUB_PROJECT_REPO", default="https://github.com/mcostat/nes.git")
 
 VERSION = "2.0.0"
 
